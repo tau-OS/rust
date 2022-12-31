@@ -11,7 +11,7 @@ description = "FFI bindings for libhelium"
 license = "MIT"
 homepage = "https://github.com/tau-OS/rust"
 repository = "https://github.com/tau-OS/rust"
-documentation = "https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/stable/latest/docs/libadwaita_sys"
+documentation = "https://docs.developers.tauos.co/rust/libhelium_sys/"
 [package.metadata.system-deps.libhelium_1]
 name = "libhelium-1"
 version = "1"

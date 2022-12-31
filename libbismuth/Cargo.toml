@@ -8,7 +8,7 @@ homepage = "https://github.com/tau-OS/rust"
 description = "Rust bindings for libbismuth"
 license = "MIT"
 repository = "https://github.com/tau-OS/rust"
-documentation = "https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/stable/latest/docs/libadwaita"
+documentation = "https://docs.developers.tauos.co/rust/libbismuth/"
 categories = ["api-bindings", "gui"]
 keywords = ["gtk4-rs", "tauos", "GUI"]
 
