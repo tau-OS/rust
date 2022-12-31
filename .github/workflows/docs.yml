@@ -58,8 +58,6 @@ jobs:
           default: true
           components: rustfmt, clippy
 
-      - run: ls -la gir
-
       - name: Generate docs
         run: cargo install rustdoc-stripper
       - run: ./generator.py --embed-docs
