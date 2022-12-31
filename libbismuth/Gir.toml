@@ -1,0 +1,78 @@
+[external_libraries]
+Gio = {min_version = "2.66"}
+
+[options]
+girs_directories = ["../gir-files", "../"]
+library = "Bis"
+version = "1"
+min_cfg_version = "1"
+target_path = "."
+use_gi_docgen = true
+work_mode = "normal"
+generate_safety_asserts = true
+deprecate_by_min_version = true
+single_version_file = true
+generate_builder = true
+trust_return_value_nullability = true
+
+external_libraries = [
+   "GLib",
+   "GObject",
+   "Gdk",
+   "GdkPixbuf",
+   "Gtk",
+   "Pango",
+]
+
+generate = [
+  "Bis.Swipeable",
+  "Bis.AlbumPage",
+  "Bis.Album",
+  "Bis.NavigationDirection",
+  "Bis.SpringParams",
+  "Bis.FoldThresholdPolicy",
+  "Bis.AlbumTransitionType",
+  "Bis.AnimationState",
+  "Bis.Animation",
+  "Bis.AnimationTarget",
+  "Bis.Bin",
+  "Bis.CallbackAnimationTarget",
+  "Bis.AnimationTargetFunc",
+  "Bis.Carousel",
+  "Bis.CarouselIndicatorDots",
+  "Bis.CarouselIndicatorLines",
+  "Bis.Easing",
+  "Bis.EnumListItem",
+  "Bis.EnumListModel",
+  "Bis.HuggerPage",
+  "Bis.Hugger",
+  "Bis.HuggerTransitionType",
+  "Bis.Lapel",
+  "Bis.LapelFoldPolicy",
+  "Bis.LapelTransitionType",
+  "Bis.Latch",
+  "Bis.LatchLayout",
+  "Bis.LatchScrollable",
+  "Bis.PropertyAnimationTarget",
+  "Bis.SpringAnimation",
+  "Bis.SwipeTracker",
+  "Bis.TimedAnimation"
+]
+
+manual = [
+  "Gtk.Widget",
+  "GObject.InitiallyUnowned",
+  "Gtk.Accessible",
+  "Gtk.Buildable",
+  "Gtk.ConstraintTarget",
+  "Gtk.Orientable",
+  "Gtk.Scrollable",
+  "Gdk.Rectangle",
+  "Gtk.SelectionModel",
+  "GLib.DestroyNotify",
+  "Gio.ListModel",
+  "Gtk.LayoutManager",
+  "GObject.Object",
+  "GObject.ParamSpec",
+  "Gtk.PackType",
+]
