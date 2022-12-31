@@ -471,11 +471,36 @@ checksum = "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
 
 [[package]]
 name = "libhelium"
-version = "0.1.0"
+version = "1.2.4"
+dependencies = [
+ "bitflags",
+ "futures-channel",
+ "gdk-pixbuf",
+ "gdk4",
+ "gio",
+ "glib",
+ "gtk4",
+ "libc",
+ "libhelium-sys",
+ "once_cell",
+ "pango",
+]
 
 [[package]]
 name = "libhelium-sys"
-version = "0.1.0"
+version = "1.2.4"
+dependencies = [
+ "gdk4-sys",
+ "gio-sys",
+ "glib-sys",
+ "gobject-sys",
+ "gtk4-sys",
+ "libc",
+ "pango-sys",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
 
 [[package]]
 name = "log"

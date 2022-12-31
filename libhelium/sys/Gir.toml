@@ -1,0 +1,14 @@
+[options]
+work_mode = "sys"
+library = "He"
+version = "1"
+girs_directories = ["../../gir-files", "../../"]
+min_cfg_version = "1"
+external_libraries = [
+   "GLib",
+   "GObject",
+   "Gdk",
+   "Gio",
+   "Gtk",
+   "Pango"
+]

@@ -1,0 +1,119 @@
+[external_libraries]
+Gio = {min_version = "2.66"}
+
+[options]
+girs_directories = ["../gir-files", "../"]
+library = "He"
+version = "1"
+min_cfg_version = "1"
+target_path = "."
+use_gi_docgen = true
+work_mode = "normal"
+generate_safety_asserts = true
+deprecate_by_min_version = true
+single_version_file = true
+generate_builder = true
+trust_return_value_nullability = true
+
+generate = [
+  "He.ColorRGBColor",
+  "He.ColorXYZColor",
+  "He.ColorLABColor",
+  "He.ColorLCHColor",
+  "He.Colors",
+  "He.Bin",
+  "He.Button",
+  "He.ButtonContent",
+  "He.Window",
+  "He.DesktopColorScheme",
+  "He.Desktop",
+  "He.AboutWindow",
+  "He.AboutWindowLicenses",
+  "He.AppBar",
+  "He.ApplicationWindow",
+  "He.Badge",
+  "He.Banner",
+  "He.BannerStyle",
+  "He.BottomBar",
+  "He.IconicButton",
+  "He.BottomBarPosition",
+  "He.Chip",
+  "He.ContentBlock",
+  "He.ContentBlockImage",
+  "He.ContentBlockImageCluster",
+  "He.ContentBlockImageClusterImagePosition",
+  "He.ContentList",
+  "He.TextButton",
+  "He.Dialog",
+  "He.TintButton",
+  "He.FillButton",
+  "He.DisclosureButton",
+  "He.PillButton",
+  "He.EmptyPage",
+  "He.MiniContentBlock",
+  "He.ModifierBadge",
+  "He.ModifierBadgeAlignment",
+  "He.NavigationRail",
+  "He.OutlineButton",
+  "He.OverlayButtonSize",
+  "He.OverlayButton",
+  "He.OverlayButtonAlignment",
+  "He.SettingsPage",
+  "He.SettingsWindow",
+  "He.SideBar",
+  "He.Tab",
+  "He.TabPage",
+  "He.TabSwitcher",
+  "He.TabSwitcherTabBarBehavior",
+  "He.Toast",
+  "He.ViewAux",
+  "He.View",
+  "He.ViewDual",
+  "He.ViewMono",
+  "He.ViewSubTitle",
+  "He.ViewSwitcher",
+  "He.ViewTitle",
+  "He.WelcomeScreen"
+]
+
+manual = [
+  "Gtk.Application",
+  "Gio.Application",
+  "Gio.ActionGroup",
+  "Gio.ActionMap",
+  "Gio.ApplicationFlags",
+  "Gtk.Widget",
+  "GObject.InitiallyUnowned",
+  "Gtk.Accessible",
+  "Gtk.Buildable",
+  "Gtk.ConstraintTarget",
+  "Gtk.Button",
+  "Gtk.Actionable",
+  "Gtk.Window",
+  "Gtk.Native",
+  "Gtk.Root",
+  "Gtk.ShortcutManager",
+  "Gtk.Stack",
+  "GObject.Object",
+  "Gtk.ScrolledWindow",
+  "Gtk.Builder",
+  "Gio.MenuModel",
+  "Gio.Icon",
+  "Gdk.Paintable",
+  "Gio.Menu",
+  "Gio.SimpleActionGroup",
+  "GObject.BoxedCopyFunc",
+  "GLib.DestroyNotify",
+  "Gdk.RGBA",
+  "Gtk.Align"
+]
+
+[[object]]
+name = "He.Application"
+status = "generate"
+builder_postprocess = "Application::register_startup_hook(&ret);"
+trait_name = "HeApplicationExt"
+    [[object.function]]
+    name = "new"
+    manual = true
+
