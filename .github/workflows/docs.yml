@@ -43,7 +43,7 @@ jobs:
           path: libbismuth-src
       - name: Install libbismuth
         run: meson build
-        working-directory: ./libbismuth
+        working-directory: ./libbismuth-src
       - name: Build libbismuth with Ninja
         run: ninja
         working-directory: ./libbismuth-src/build
