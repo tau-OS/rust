@@ -15,6 +15,15 @@ single_version_file = true
 generate_builder = true
 trust_return_value_nullability = true
 
+external_libraries = [
+   "GLib",
+   "GObject",
+   "Gdk",
+   "GdkPixbuf",
+   "Gtk",
+   "Pango",
+]
+
 generate = [
   "He.ColorRGBColor",
   "He.ColorXYZColor",
@@ -83,7 +92,6 @@ manual = [
   "Gio.ActionMap",
   "Gio.ApplicationFlags",
   "Gtk.Widget",
-  "GObject.InitiallyUnowned",
   "Gtk.Accessible",
   "Gtk.Buildable",
   "Gtk.ConstraintTarget",
@@ -95,6 +103,8 @@ manual = [
   "Gtk.ShortcutManager",
   "Gtk.Stack",
   "GObject.Object",
+  "GObject.ParamSpec",
+  "GObject.Value",
   "Gtk.ScrolledWindow",
   "Gtk.Builder",
   "Gio.MenuModel",
@@ -105,7 +115,8 @@ manual = [
   "GObject.BoxedCopyFunc",
   "GLib.DestroyNotify",
   "Gdk.RGBA",
-  "Gtk.Align"
+  "Gtk.Align",
+  "GLib.Variant"
 ]
 
 [[object]]
@@ -115,5 +126,8 @@ builder_postprocess = "Application::register_startup_hook(&ret);"
 trait_name = "HeApplicationExt"
     [[object.function]]
     name = "new"
+    manual = true
+    [[object.function]]
+    name = "set_default_accent_color"
     manual = true
 

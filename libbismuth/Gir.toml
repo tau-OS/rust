@@ -61,7 +61,6 @@ generate = [
 
 manual = [
   "Gtk.Widget",
-  "GObject.InitiallyUnowned",
   "Gtk.Accessible",
   "Gtk.Buildable",
   "Gtk.ConstraintTarget",
