@@ -7,8 +7,8 @@ readme = "../README.md"
 homepage = "https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/"
 description = "Rust bindings for libhelium"
 license = "MIT"
-repository = "https://gitlab.gnome.org/World/Rust/libadwaita-rs"
-documentation = "https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/stable/latest/docs/libadwaita"
+repository = "https://github.com/tau-OS/rust"
+documentation = "https://github.com/tau-OS/rust"
 categories = ["api-bindings", "gui"]
 keywords = ["gtk4-rs", "tauos", "GUI"]
 

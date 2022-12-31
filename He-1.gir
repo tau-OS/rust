@@ -151,18 +151,6 @@
 			<type name="gdouble" c:type="gdouble"/>
 		</field>
 	</record>
-	<constant name="ColorBLACK" c:identifier="HE_COLOR_BLACK" c:type="HE_COLOR_BLACK" value="(null)">
-		<type name="He.ColorRGBColor" c:type="HeColorRGBColor"/>
-	</constant>
-	<constant name="ColorWHITE" c:identifier="HE_COLOR_WHITE" c:type="HE_COLOR_WHITE" value="(null)">
-		<type name="He.ColorRGBColor" c:type="HeColorRGBColor"/>
-	</constant>
-	<constant name="ColorCARD_BLACK" c:identifier="HE_COLOR_CARD_BLACK" c:type="HE_COLOR_CARD_BLACK" value="(null)">
-		<type name="He.ColorRGBColor" c:type="HeColorRGBColor"/>
-	</constant>
-	<constant name="ColorCARD_WHITE" c:identifier="HE_COLOR_CARD_WHITE" c:type="HE_COLOR_CARD_WHITE" value="(null)">
-		<type name="He.ColorRGBColor" c:type="HeColorRGBColor"/>
-	</constant>
 	<function name="color_rgb_value_to_xyz" c:identifier="he_color_rgb_value_to_xyz">
 		<return-value transfer-ownership="full">
 			<type name="gdouble" c:type="gdouble"/>

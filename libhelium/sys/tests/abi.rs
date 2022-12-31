@@ -954,9 +954,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) HE_COLORS_PURPLE", "7"),
     ("(gint) HE_COLORS_RED", "1"),
     ("(gint) HE_COLORS_YELLOW", "3"),
-    ("HE_COLOR_BLACK", "(null)"),
-    ("HE_COLOR_CARD_BLACK", "(null)"),
-    ("HE_COLOR_CARD_WHITE", "(null)"),
     ("HE_COLOR_LAB_CONSTANTS_Kn", "18"),
     ("HE_COLOR_LAB_CONSTANTS_Xn", "0.950470"),
     ("HE_COLOR_LAB_CONSTANTS_Yn", "1"),
@@ -965,7 +962,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("HE_COLOR_LAB_CONSTANTS_t1", "0.206896552"),
     ("HE_COLOR_LAB_CONSTANTS_t2", "0.128418550"),
     ("HE_COLOR_LAB_CONSTANTS_t3", "0.008856452"),
-    ("HE_COLOR_WHITE", "(null)"),
     (
         "(gint) HE_CONTENT_BLOCK_IMAGE_CLUSTER_IMAGE_POSITION_BOTTOM_LEFT",
         "1",

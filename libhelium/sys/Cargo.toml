@@ -9,8 +9,8 @@ categories = ["api-bindings", "gui"]
 keywords = ["gtk4-rs", "tauos", "GUI"]
 description = "FFI bindings for libhelium"
 license = "MIT"
-homepage = "https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/"
-repository = "https://gitlab.gnome.org/World/Rust/libadwaita-rs"
+homepage = "https://github.com/tau-OS/rust"
+repository = "https://github.com/tau-OS/rust"
 documentation = "https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/stable/latest/docs/libadwaita_sys"
 [package.metadata.system-deps.libhelium_1]
 name = "libhelium-1"

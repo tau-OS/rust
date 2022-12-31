@@ -99,10 +99,6 @@ pub const HE_COLOR_LAB_CONSTANTS_t0: c_double = 0.137931034;
 pub const HE_COLOR_LAB_CONSTANTS_t1: c_double = 0.206896552;
 pub const HE_COLOR_LAB_CONSTANTS_t2: c_double = 0.128418550;
 pub const HE_COLOR_LAB_CONSTANTS_t3: c_double = 0.008856452;
-pub const HE_COLOR_BLACK: HeColorRGBColor = (null);
-pub const HE_COLOR_WHITE: HeColorRGBColor = (null);
-pub const HE_COLOR_CARD_BLACK: HeColorRGBColor = (null);
-pub const HE_COLOR_CARD_WHITE: HeColorRGBColor = (null);
 
 // Records
 #[derive(Copy, Clone)]
