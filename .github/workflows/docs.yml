@@ -25,31 +25,31 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: tau-OS/libhelium
-          path: libhelium
+          path: libhelium-src
       - name: Install libhelium
         run: meson build
-        working-directory: ./libhelium
+        working-directory: ./libhelium-src
       - name: Build libhelium with Ninja
         run: ninja
-        working-directory: ./libhelium/build
+        working-directory: ./libhelium-src/build
       - name: Install libhelium globally
         run: sudo ninja install
-        working-directory: ./libhelium/build
+        working-directory: ./libhelium-src/build
 
       - name: Checkout libbismuth
         uses: actions/checkout@v3
         with:
           repository: tau-OS/libbismuth
-          path: libbismuth
+          path: libbismuth-src
       - name: Install libbismuth
         run: meson build
         working-directory: ./libbismuth
       - name: Build libbismuth with Ninja
         run: ninja
-        working-directory: ./libbismuth/build
+        working-directory: ./libbismuth-src/build
       - name: Install libbismuth globally
         run: sudo ninja install
-        working-directory: ./libbismuth/build
+        working-directory: ./libbismuth-src/build
 
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
