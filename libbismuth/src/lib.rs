@@ -1,3 +1,6 @@
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![allow(clippy::needless_doctest_main)]
+
 // Re-export the -sys bindings
 pub use ffi;
 pub use gdk;
