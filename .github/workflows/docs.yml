@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - run: npm install -g sass
+
+      - name: Install system level libraries
+        run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev meson ninja-build valac valadoc
+
+      - name: Checkout libhelium
+        uses: actions/checkout@v3
+        with:
+          repository: tau-OS/libhelium
+          path: libhelium
+      - name: Install libhelium
+        run: meson build
+        working-directory: ./libhelium
+      - name: Build libhelium with Ninja
+        run: ninja
+        working-directory: ./libhelium/build
+      - name: Install libhelium globally
+        run: sudo ninja install
+        working-directory: ./libhelium/build
+
+      - name: Checkout libbismuth
+        uses: actions/checkout@v3
+        with:
+          repository: tau-OS/libbismuth
+          path: libbismuth
+      - name: Install libbismuth
+        run: meson build
+        working-directory: ./libbismuth
+      - name: Build libbismuth with Ninja
+        run: ninja
+        working-directory: ./libbismuth/build
+      - name: Install libbismuth globally
+        run: sudo ninja install
+        working-directory: ./libbismuth/build
+
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          default: true
+          components: rustfmt, clippy
+
+      - name: Generate docs
+        run: cargo install rustdoc-stripper
+      - run: ./generator.py --embed-docs
+      - run: cargo doc --features dox --no-deps
+      - run: mv target/doc/ docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: docs/git
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
