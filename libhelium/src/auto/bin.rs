@@ -316,13 +316,6 @@ impl BinBuilder {
 }
 
 pub trait BinExt: 'static {
-    #[doc(alias = "he_bin_get_child")]
-    #[doc(alias = "get_child")]
-    fn child(&self) -> gtk::Widget;
-
-    #[doc(alias = "he_bin_set_child")]
-    fn set_child(&self, value: &impl IsA<gtk::Widget>);
-
     #[doc(alias = "he_bin_add_child")]
     fn add_child(
         &self,
@@ -331,24 +324,18 @@ pub trait BinExt: 'static {
         type_: Option<&str>,
     );
 
+    #[doc(alias = "he_bin_get_child")]
+    #[doc(alias = "get_child")]
+    fn child(&self) -> gtk::Widget;
+
+    #[doc(alias = "he_bin_set_child")]
+    fn set_child(&self, value: &impl IsA<gtk::Widget>);
+
     #[doc(alias = "child")]
     fn connect_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Bin>> BinExt for O {
-    fn child(&self) -> gtk::Widget {
-        unsafe { from_glib_none(ffi::he_bin_get_child(self.as_ref().to_glib_none().0)) }
-    }
-
-    fn set_child(&self, value: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_bin_set_child(
-                self.as_ref().to_glib_none().0,
-                value.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
     fn add_child(
         &self,
         builder: &gtk::Builder,
@@ -361,6 +348,19 @@ impl<O: IsA<Bin>> BinExt for O {
                 builder.to_glib_none().0,
                 child.as_ref().to_glib_none().0,
                 type_.to_glib_none().0,
+            );
+        }
+    }
+
+    fn child(&self) -> gtk::Widget {
+        unsafe { from_glib_none(ffi::he_bin_get_child(self.as_ref().to_glib_none().0)) }
+    }
+
+    fn set_child(&self, value: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_bin_set_child(
+                self.as_ref().to_glib_none().0,
+                value.as_ref().to_glib_none().0,
             );
         }
     }

@@ -398,6 +398,16 @@ impl TabSwitcherBuilder {
 }
 
 pub trait TabSwitcherExt: 'static {
+    #[doc(alias = "he_tab_switcher_get_tab_position")]
+    #[doc(alias = "get_tab_position")]
+    fn tab_position(&self, tab: &impl IsA<Tab>) -> i32;
+
+    #[doc(alias = "he_tab_switcher_insert_tab")]
+    fn insert_tab(&self, tab: &impl IsA<Tab>, index: i32) -> u32;
+
+    #[doc(alias = "he_tab_switcher_remove_tab")]
+    fn remove_tab(&self, tab: &impl IsA<Tab>);
+
     #[doc(alias = "he_tab_switcher_get_n_tabs")]
     #[doc(alias = "get_n_tabs")]
     fn n_tabs(&self) -> i32;
@@ -412,10 +422,6 @@ pub trait TabSwitcherExt: 'static {
 
     #[doc(alias = "he_tab_switcher_set_tab_bar_behavior")]
     fn set_tab_bar_behavior(&self, value: TabSwitcherTabBarBehavior);
-
-    #[doc(alias = "he_tab_switcher_get_tab_position")]
-    #[doc(alias = "get_tab_position")]
-    fn tab_position(&self, tab: &impl IsA<Tab>) -> i32;
 
     #[doc(alias = "he_tab_switcher_get_allow_duplicate_tabs")]
     #[doc(alias = "get_allow_duplicate_tabs")]
@@ -458,12 +464,6 @@ pub trait TabSwitcherExt: 'static {
 
     #[doc(alias = "he_tab_switcher_set_current")]
     fn set_current(&self, value: &impl IsA<Tab>);
-
-    #[doc(alias = "he_tab_switcher_insert_tab")]
-    fn insert_tab(&self, tab: &impl IsA<Tab>, index: i32) -> u32;
-
-    #[doc(alias = "he_tab_switcher_remove_tab")]
-    fn remove_tab(&self, tab: &impl IsA<Tab>);
 
     #[doc(alias = "he_tab_switcher_get_menu")]
     #[doc(alias = "get_menu")]
@@ -534,6 +534,34 @@ pub trait TabSwitcherExt: 'static {
 }
 
 impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
+    fn tab_position(&self, tab: &impl IsA<Tab>) -> i32 {
+        unsafe {
+            ffi::he_tab_switcher_get_tab_position(
+                self.as_ref().to_glib_none().0,
+                tab.as_ref().to_glib_none().0,
+            )
+        }
+    }
+
+    fn insert_tab(&self, tab: &impl IsA<Tab>, index: i32) -> u32 {
+        unsafe {
+            ffi::he_tab_switcher_insert_tab(
+                self.as_ref().to_glib_none().0,
+                tab.as_ref().to_glib_none().0,
+                index,
+            )
+        }
+    }
+
+    fn remove_tab(&self, tab: &impl IsA<Tab>) {
+        unsafe {
+            ffi::he_tab_switcher_remove_tab(
+                self.as_ref().to_glib_none().0,
+                tab.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn n_tabs(&self) -> i32 {
         unsafe { ffi::he_tab_switcher_get_n_tabs(self.as_ref().to_glib_none().0) }
     }
@@ -560,15 +588,6 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
                 self.as_ref().to_glib_none().0,
                 value.into_glib(),
             );
-        }
-    }
-
-    fn tab_position(&self, tab: &impl IsA<Tab>) -> i32 {
-        unsafe {
-            ffi::he_tab_switcher_get_tab_position(
-                self.as_ref().to_glib_none().0,
-                tab.as_ref().to_glib_none().0,
-            )
         }
     }
 
@@ -667,25 +686,6 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             ffi::he_tab_switcher_set_current(
                 self.as_ref().to_glib_none().0,
                 value.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    fn insert_tab(&self, tab: &impl IsA<Tab>, index: i32) -> u32 {
-        unsafe {
-            ffi::he_tab_switcher_insert_tab(
-                self.as_ref().to_glib_none().0,
-                tab.as_ref().to_glib_none().0,
-                index,
-            )
-        }
-    }
-
-    fn remove_tab(&self, tab: &impl IsA<Tab>) {
-        unsafe {
-            ffi::he_tab_switcher_remove_tab(
-                self.as_ref().to_glib_none().0,
-                tab.as_ref().to_glib_none().0,
             );
         }
     }

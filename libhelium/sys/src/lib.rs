@@ -1137,10 +1137,10 @@ pub type HeWindowPrivate = *mut _HeWindowPrivate;
 #[repr(C)]
 pub struct HeAboutWindow {
     pub parent_instance: HeWindow,
+    pub priv_: *mut HeAboutWindowPrivate,
     pub _translate_url: *mut c_char,
     pub _issue_url: *mut c_char,
     pub _more_info_url: *mut c_char,
-    pub priv_: *mut HeAboutWindowPrivate,
 }
 
 impl ::std::fmt::Debug for HeAboutWindow {
@@ -1157,9 +1157,9 @@ impl ::std::fmt::Debug for HeAboutWindow {
 #[repr(C)]
 pub struct HeAppBar {
     pub parent_instance: HeBin,
+    pub priv_: *mut HeAppBarPrivate,
     pub title: *mut gtk::GtkHeaderBar,
     pub back_button: *mut gtk::GtkButton,
-    pub priv_: *mut HeAppBarPrivate,
 }
 
 impl ::std::fmt::Debug for HeAppBar {
@@ -1337,8 +1337,8 @@ impl ::std::fmt::Debug for HeContentBlockImageCluster {
 #[repr(C)]
 pub struct HeContentList {
     pub parent_instance: HeBin,
-    pub children: *mut glib::GList,
     pub priv_: *mut HeContentListPrivate,
+    pub children: *mut glib::GList,
 }
 
 impl ::std::fmt::Debug for HeContentList {
@@ -1366,8 +1366,8 @@ impl ::std::fmt::Debug for HeDesktop {
 #[repr(C)]
 pub struct HeDialog {
     pub parent_instance: HeWindow,
-    pub cancel_button: *mut HeTextButton,
     pub priv_: *mut HeDialogPrivate,
+    pub cancel_button: *mut HeTextButton,
 }
 
 impl ::std::fmt::Debug for HeDialog {
@@ -1396,8 +1396,8 @@ impl ::std::fmt::Debug for HeDisclosureButton {
 #[repr(C)]
 pub struct HeEmptyPage {
     pub parent_instance: HeBin,
-    pub action_button: *mut HePillButton,
     pub priv_: *mut HeEmptyPagePrivate,
+    pub action_button: *mut HePillButton,
 }
 
 impl ::std::fmt::Debug for HeEmptyPage {
@@ -1563,8 +1563,8 @@ impl ::std::fmt::Debug for HeSideBar {
 #[repr(C)]
 pub struct HeTab {
     pub parent_instance: HeBin,
-    pub page_container: *mut HeTabPage,
     pub priv_: *mut HeTabPrivate,
+    pub page_container: *mut HeTabPage,
 }
 
 impl ::std::fmt::Debug for HeTab {
@@ -1592,8 +1592,8 @@ impl ::std::fmt::Debug for HeTabPage {
 #[repr(C)]
 pub struct HeTabSwitcher {
     pub parent_instance: HeBin,
-    pub notebook: *mut gtk::GtkNotebook,
     pub priv_: *mut HeTabSwitcherPrivate,
+    pub notebook: *mut gtk::GtkNotebook,
 }
 
 impl ::std::fmt::Debug for HeTabSwitcher {
@@ -1840,6 +1840,23 @@ extern "C" {
     // HeAboutWindow
     //=========================================================================
     pub fn he_about_window_get_type() -> GType;
+    pub fn he_about_window_new(
+        parent: *mut gtk::GtkWindow,
+        app_name: *const c_char,
+        app_id: *const c_char,
+        version: *const c_char,
+        icon: *const c_char,
+        translate_url: *const c_char,
+        issue_url: *const c_char,
+        more_info_url: *const c_char,
+        translators: *mut *mut c_char,
+        translators_length1: c_int,
+        developers: *mut *mut c_char,
+        developers_length1: c_int,
+        copyright_year: c_int,
+        license: HeAboutWindowLicenses,
+        color: HeColors,
+    ) -> *mut HeAboutWindow;
     pub fn he_about_window_get_color(self_: *mut HeAboutWindow) -> HeColors;
     pub fn he_about_window_set_color(self_: *mut HeAboutWindow, value: HeColors);
     pub fn he_about_window_get_license(self_: *mut HeAboutWindow) -> HeAboutWindowLicenses;
@@ -1878,28 +1895,14 @@ extern "C" {
     pub fn he_about_window_set_issue_url(self_: *mut HeAboutWindow, value: *const c_char);
     pub fn he_about_window_get_more_info_url(self_: *mut HeAboutWindow) -> *const c_char;
     pub fn he_about_window_set_more_info_url(self_: *mut HeAboutWindow, value: *const c_char);
-    pub fn he_about_window_new(
-        parent: *mut gtk::GtkWindow,
-        app_name: *const c_char,
-        app_id: *const c_char,
-        version: *const c_char,
-        icon: *const c_char,
-        translate_url: *const c_char,
-        issue_url: *const c_char,
-        more_info_url: *const c_char,
-        translators: *mut *mut c_char,
-        translators_length1: c_int,
-        developers: *mut *mut c_char,
-        developers_length1: c_int,
-        copyright_year: c_int,
-        license: HeAboutWindowLicenses,
-        color: HeColors,
-    ) -> *mut HeAboutWindow;
 
     //=========================================================================
     // HeAppBar
     //=========================================================================
     pub fn he_app_bar_get_type() -> GType;
+    pub fn he_app_bar_append(self_: *mut HeAppBar, child: *mut gtk::GtkWidget);
+    pub fn he_app_bar_remove(self_: *mut HeAppBar, child: *mut gtk::GtkWidget);
+    pub fn he_app_bar_new() -> *mut HeAppBar;
     pub fn he_app_bar_get_stack(self_: *mut HeAppBar) -> *mut gtk::GtkStack;
     pub fn he_app_bar_set_stack(self_: *mut HeAppBar, value: *mut gtk::GtkStack);
     pub fn he_app_bar_get_scroller(self_: *mut HeAppBar) -> *mut gtk::GtkScrolledWindow;
@@ -1912,14 +1915,15 @@ extern "C" {
     pub fn he_app_bar_set_show_buttons(self_: *mut HeAppBar, value: gboolean);
     pub fn he_app_bar_get_show_back(self_: *mut HeAppBar) -> gboolean;
     pub fn he_app_bar_set_show_back(self_: *mut HeAppBar, value: gboolean);
-    pub fn he_app_bar_append(self_: *mut HeAppBar, child: *mut gtk::GtkWidget);
-    pub fn he_app_bar_remove(self_: *mut HeAppBar, child: *mut gtk::GtkWidget);
-    pub fn he_app_bar_new() -> *mut HeAppBar;
 
     //=========================================================================
     // HeApplication
     //=========================================================================
     pub fn he_application_get_type() -> GType;
+    pub fn he_application_new(
+        application_id: *const c_char,
+        flags: gio::GApplicationFlags,
+    ) -> *mut HeApplication;
     pub fn he_application_get_default_accent_color(
         self_: *mut HeApplication,
     ) -> *mut HeColorRGBColor;
@@ -1933,10 +1937,6 @@ extern "C" {
         self_: *mut HeApplication,
         result: *mut HeColorRGBColor,
     );
-    pub fn he_application_new(
-        application_id: *const c_char,
-        flags: gio::GApplicationFlags,
-    ) -> *mut HeApplication;
 
     //=========================================================================
     // HeApplicationWindow
@@ -1957,33 +1957,31 @@ extern "C" {
     // HeBadge
     //=========================================================================
     pub fn he_badge_get_type() -> GType;
+    pub fn he_badge_new() -> *mut HeBadge;
     pub fn he_badge_get_child(self_: *mut HeBadge) -> *mut gtk::GtkWidget;
     pub fn he_badge_set_child(self_: *mut HeBadge, value: *mut gtk::GtkWidget);
     pub fn he_badge_get_label(self_: *mut HeBadge) -> *const c_char;
     pub fn he_badge_set_label(self_: *mut HeBadge, value: *const c_char);
-    pub fn he_badge_new() -> *mut HeBadge;
 
     //=========================================================================
     // HeBanner
     //=========================================================================
     pub fn he_banner_get_type() -> GType;
+    pub fn he_banner_add_action_button(self_: *mut HeBanner, widget: *mut gtk::GtkWidget);
+    pub fn he_banner_remove_action(self_: *mut HeBanner, widget: *mut gtk::GtkWidget);
+    pub fn he_banner_set_banner_style(self_: *mut HeBanner, style: HeBannerStyle);
+    pub fn he_banner_new(title: *const c_char, description: *const c_char) -> *mut HeBanner;
     pub fn he_banner_get_title(self_: *mut HeBanner) -> *const c_char;
     pub fn he_banner_set_title(self_: *mut HeBanner, value: *const c_char);
     pub fn he_banner_get_description(self_: *mut HeBanner) -> *const c_char;
     pub fn he_banner_set_description(self_: *mut HeBanner, value: *const c_char);
     pub fn he_banner_get_style(self_: *mut HeBanner) -> HeBannerStyle;
     pub fn he_banner_set_style(self_: *mut HeBanner, value: HeBannerStyle);
-    pub fn he_banner_add_action_button(self_: *mut HeBanner, widget: *mut gtk::GtkWidget);
-    pub fn he_banner_remove_action(self_: *mut HeBanner, widget: *mut gtk::GtkWidget);
-    pub fn he_banner_set_banner_style(self_: *mut HeBanner, style: HeBannerStyle);
-    pub fn he_banner_new(title: *const c_char, description: *const c_char) -> *mut HeBanner;
 
     //=========================================================================
     // HeBin
     //=========================================================================
     pub fn he_bin_get_type() -> GType;
-    pub fn he_bin_get_child(self_: *mut HeBin) -> *mut gtk::GtkWidget;
-    pub fn he_bin_set_child(self_: *mut HeBin, value: *mut gtk::GtkWidget);
     pub fn he_bin_add_child(
         self_: *mut HeBin,
         builder: *mut gtk::GtkBuilder,
@@ -1991,19 +1989,13 @@ extern "C" {
         type_: *const c_char,
     );
     pub fn he_bin_new() -> *mut HeBin;
+    pub fn he_bin_get_child(self_: *mut HeBin) -> *mut gtk::GtkWidget;
+    pub fn he_bin_set_child(self_: *mut HeBin, value: *mut gtk::GtkWidget);
 
     //=========================================================================
     // HeBottomBar
     //=========================================================================
     pub fn he_bottom_bar_get_type() -> GType;
-    pub fn he_bottom_bar_get_title(self_: *mut HeBottomBar) -> *const c_char;
-    pub fn he_bottom_bar_set_title(self_: *mut HeBottomBar, value: *const c_char);
-    pub fn he_bottom_bar_get_description(self_: *mut HeBottomBar) -> *const c_char;
-    pub fn he_bottom_bar_set_description(self_: *mut HeBottomBar, value: *const c_char);
-    pub fn he_bottom_bar_get_menu_model(self_: *mut HeBottomBar) -> *mut gio::GMenuModel;
-    pub fn he_bottom_bar_set_menu_model(self_: *mut HeBottomBar, value: *mut gio::GMenuModel);
-    pub fn he_bottom_bar_get_collapse_actions(self_: *mut HeBottomBar) -> gboolean;
-    pub fn he_bottom_bar_set_collapse_actions(self_: *mut HeBottomBar, value: gboolean);
     pub fn he_bottom_bar_new_with_details(
         title: *const c_char,
         description: *const c_char,
@@ -2036,6 +2028,14 @@ extern "C" {
         sibling: *mut HeIconicButton,
         position: HeBottomBarPosition,
     );
+    pub fn he_bottom_bar_get_title(self_: *mut HeBottomBar) -> *const c_char;
+    pub fn he_bottom_bar_set_title(self_: *mut HeBottomBar, value: *const c_char);
+    pub fn he_bottom_bar_get_description(self_: *mut HeBottomBar) -> *const c_char;
+    pub fn he_bottom_bar_set_description(self_: *mut HeBottomBar, value: *const c_char);
+    pub fn he_bottom_bar_get_menu_model(self_: *mut HeBottomBar) -> *mut gio::GMenuModel;
+    pub fn he_bottom_bar_set_menu_model(self_: *mut HeBottomBar, value: *mut gio::GMenuModel);
+    pub fn he_bottom_bar_get_collapse_actions(self_: *mut HeBottomBar) -> gboolean;
+    pub fn he_bottom_bar_set_collapse_actions(self_: *mut HeBottomBar, value: gboolean);
 
     //=========================================================================
     // HeButton
@@ -2050,11 +2050,11 @@ extern "C" {
     // HeButtonContent
     //=========================================================================
     pub fn he_button_content_get_type() -> GType;
+    pub fn he_button_content_new() -> *mut HeButtonContent;
     pub fn he_button_content_get_icon(self_: *mut HeButtonContent) -> *mut c_char;
     pub fn he_button_content_set_icon(self_: *mut HeButtonContent, value: *const c_char);
     pub fn he_button_content_get_label(self_: *mut HeButtonContent) -> *mut c_char;
     pub fn he_button_content_set_label(self_: *mut HeButtonContent, value: *const c_char);
-    pub fn he_button_content_new() -> *mut HeButtonContent;
 
     //=========================================================================
     // HeChip
@@ -2066,6 +2066,13 @@ extern "C" {
     // HeContentBlock
     //=========================================================================
     pub fn he_content_block_get_type() -> GType;
+    pub fn he_content_block_new(
+        title: *const c_char,
+        subtitle: *const c_char,
+        icon: *const c_char,
+        primary_button: *mut HeButton,
+        secondary_button: *mut HeButton,
+    ) -> *mut HeContentBlock;
     pub fn he_content_block_get_title(self_: *mut HeContentBlock) -> *const c_char;
     pub fn he_content_block_set_title(self_: *mut HeContentBlock, value: *const c_char);
     pub fn he_content_block_get_subtitle(self_: *mut HeContentBlock) -> *const c_char;
@@ -2077,18 +2084,12 @@ extern "C" {
     pub fn he_content_block_set_secondary_button(self_: *mut HeContentBlock, value: *mut HeButton);
     pub fn he_content_block_get_primary_button(self_: *mut HeContentBlock) -> *mut HeButton;
     pub fn he_content_block_set_primary_button(self_: *mut HeContentBlock, value: *mut HeButton);
-    pub fn he_content_block_new(
-        title: *const c_char,
-        subtitle: *const c_char,
-        icon: *const c_char,
-        primary_button: *mut HeButton,
-        secondary_button: *mut HeButton,
-    ) -> *mut HeContentBlock;
 
     //=========================================================================
     // HeContentBlockImage
     //=========================================================================
     pub fn he_content_block_image_get_type() -> GType;
+    pub fn he_content_block_image_new(file: *const c_char) -> *mut HeContentBlockImage;
     pub fn he_content_block_image_get_file(self_: *mut HeContentBlockImage) -> *const c_char;
     pub fn he_content_block_image_set_file(self_: *mut HeContentBlockImage, value: *const c_char);
     pub fn he_content_block_image_get_requested_height(self_: *mut HeContentBlockImage) -> c_int;
@@ -2101,12 +2102,25 @@ extern "C" {
         self_: *mut HeContentBlockImage,
         value: c_int,
     );
-    pub fn he_content_block_image_new(file: *const c_char) -> *mut HeContentBlockImage;
 
     //=========================================================================
     // HeContentBlockImageCluster
     //=========================================================================
     pub fn he_content_block_image_cluster_get_type() -> GType;
+    pub fn he_content_block_image_cluster_set_image(
+        self_: *mut HeContentBlockImageCluster,
+        image: *mut HeContentBlockImage,
+        position: HeContentBlockImageClusterImagePosition,
+    );
+    pub fn he_content_block_image_cluster_remove_image(
+        self_: *mut HeContentBlockImageCluster,
+        image: *mut HeContentBlockImage,
+    );
+    pub fn he_content_block_image_cluster_new(
+        title: *const c_char,
+        subtitle: *const c_char,
+        icon: *const c_char,
+    ) -> *mut HeContentBlockImageCluster;
     pub fn he_content_block_image_cluster_get_title(
         self_: *mut HeContentBlockImageCluster,
     ) -> *const c_char;
@@ -2128,45 +2142,41 @@ extern "C" {
         self_: *mut HeContentBlockImageCluster,
         value: *const c_char,
     );
-    pub fn he_content_block_image_cluster_set_image(
-        self_: *mut HeContentBlockImageCluster,
-        image: *mut HeContentBlockImage,
-        position: HeContentBlockImageClusterImagePosition,
-    );
-    pub fn he_content_block_image_cluster_remove_image(
-        self_: *mut HeContentBlockImageCluster,
-        image: *mut HeContentBlockImage,
-    );
-    pub fn he_content_block_image_cluster_new(
-        title: *const c_char,
-        subtitle: *const c_char,
-        icon: *const c_char,
-    ) -> *mut HeContentBlockImageCluster;
 
     //=========================================================================
     // HeContentList
     //=========================================================================
     pub fn he_content_list_get_type() -> GType;
+    pub fn he_content_list_add(self_: *mut HeContentList, child: *mut gtk::GtkWidget);
+    pub fn he_content_list_remove(self_: *mut HeContentList, child: *mut gtk::GtkWidget);
+    pub fn he_content_list_new() -> *mut HeContentList;
     pub fn he_content_list_get_title(self_: *mut HeContentList) -> *const c_char;
     pub fn he_content_list_set_title(self_: *mut HeContentList, value: *const c_char);
     pub fn he_content_list_get_description(self_: *mut HeContentList) -> *const c_char;
     pub fn he_content_list_set_description(self_: *mut HeContentList, value: *const c_char);
-    pub fn he_content_list_add(self_: *mut HeContentList, child: *mut gtk::GtkWidget);
-    pub fn he_content_list_remove(self_: *mut HeContentList, child: *mut gtk::GtkWidget);
-    pub fn he_content_list_new() -> *mut HeContentList;
 
     //=========================================================================
     // HeDesktop
     //=========================================================================
     pub fn he_desktop_get_type() -> GType;
+    pub fn he_desktop_new() -> *mut HeDesktop;
     pub fn he_desktop_get_prefers_color_scheme(self_: *mut HeDesktop) -> HeDesktopColorScheme;
     pub fn he_desktop_get_accent_color(self_: *mut HeDesktop) -> *mut HeColorRGBColor;
-    pub fn he_desktop_new() -> *mut HeDesktop;
 
     //=========================================================================
     // HeDialog
     //=========================================================================
     pub fn he_dialog_get_type() -> GType;
+    pub fn he_dialog_new(
+        modal: gboolean,
+        parent: *mut gtk::GtkWindow,
+        title: *const c_char,
+        subtitle: *const c_char,
+        info: *const c_char,
+        icon: *const c_char,
+        primary_button: *mut HeFillButton,
+        secondary_button: *mut HeTintButton,
+    ) -> *mut HeDialog;
     pub fn he_dialog_get_title(self_: *mut HeDialog) -> *const c_char;
     pub fn he_dialog_set_title(self_: *mut HeDialog, value: *const c_char);
     pub fn he_dialog_get_subtitle(self_: *mut HeDialog) -> *const c_char;
@@ -2179,30 +2189,21 @@ extern "C" {
     pub fn he_dialog_set_secondary_button(self_: *mut HeDialog, value: *mut HeTintButton);
     pub fn he_dialog_get_primary_button(self_: *mut HeDialog) -> *mut HeFillButton;
     pub fn he_dialog_set_primary_button(self_: *mut HeDialog, value: *mut HeFillButton);
-    pub fn he_dialog_new(
-        modal: gboolean,
-        parent: *mut gtk::GtkWindow,
-        title: *const c_char,
-        subtitle: *const c_char,
-        info: *const c_char,
-        icon: *const c_char,
-        primary_button: *mut HeFillButton,
-        secondary_button: *mut HeTintButton,
-    ) -> *mut HeDialog;
 
     //=========================================================================
     // HeDisclosureButton
     //=========================================================================
     pub fn he_disclosure_button_get_type() -> GType;
-    pub fn he_disclosure_button_get_icon(self_: *mut HeDisclosureButton) -> *const c_char;
-    pub fn he_disclosure_button_set_icon(self_: *mut HeDisclosureButton, value: *const c_char);
     pub fn he_disclosure_button_new(icon: *const c_char) -> *mut HeDisclosureButton;
     pub fn he_disclosure_button_new_from_icon(icon: *const c_char) -> *mut HeDisclosureButton;
+    pub fn he_disclosure_button_get_icon(self_: *mut HeDisclosureButton) -> *const c_char;
+    pub fn he_disclosure_button_set_icon(self_: *mut HeDisclosureButton, value: *const c_char);
 
     //=========================================================================
     // HeEmptyPage
     //=========================================================================
     pub fn he_empty_page_get_type() -> GType;
+    pub fn he_empty_page_new() -> *mut HeEmptyPage;
     pub fn he_empty_page_get_title(self_: *mut HeEmptyPage) -> *const c_char;
     pub fn he_empty_page_set_title(self_: *mut HeEmptyPage, value: *const c_char);
     pub fn he_empty_page_get_description(self_: *mut HeEmptyPage) -> *const c_char;
@@ -2211,7 +2212,6 @@ extern "C" {
     pub fn he_empty_page_set_icon(self_: *mut HeEmptyPage, value: *const c_char);
     pub fn he_empty_page_get_button(self_: *mut HeEmptyPage) -> *const c_char;
     pub fn he_empty_page_set_button(self_: *mut HeEmptyPage, value: *const c_char);
-    pub fn he_empty_page_new() -> *mut HeEmptyPage;
 
     //=========================================================================
     // HeFillButton
@@ -2223,16 +2223,22 @@ extern "C" {
     // HeIconicButton
     //=========================================================================
     pub fn he_iconic_button_get_type() -> GType;
+    pub fn he_iconic_button_new(icon: *const c_char) -> *mut HeIconicButton;
     pub fn he_iconic_button_get_icon(self_: *mut HeIconicButton) -> *const c_char;
     pub fn he_iconic_button_set_icon(self_: *mut HeIconicButton, value: *const c_char);
     pub fn he_iconic_button_get_tooltip(self_: *mut HeIconicButton) -> *const c_char;
     pub fn he_iconic_button_set_tooltip(self_: *mut HeIconicButton, value: *const c_char);
-    pub fn he_iconic_button_new(icon: *const c_char) -> *mut HeIconicButton;
 
     //=========================================================================
     // HeMiniContentBlock
     //=========================================================================
     pub fn he_mini_content_block_get_type() -> GType;
+    pub fn he_mini_content_block_new_with_details(
+        title: *const c_char,
+        subtitle: *const c_char,
+        primary_button: *mut HeButton,
+    ) -> *mut HeMiniContentBlock;
+    pub fn he_mini_content_block_new() -> *mut HeMiniContentBlock;
     pub fn he_mini_content_block_get_title(self_: *mut HeMiniContentBlock) -> *const c_char;
     pub fn he_mini_content_block_set_title(self_: *mut HeMiniContentBlock, value: *const c_char);
     pub fn he_mini_content_block_get_subtitle(self_: *mut HeMiniContentBlock) -> *const c_char;
@@ -2251,24 +2257,18 @@ extern "C" {
         self_: *mut HeMiniContentBlock,
         value: *mut HeButton,
     );
-    pub fn he_mini_content_block_new_with_details(
-        title: *const c_char,
-        subtitle: *const c_char,
-        primary_button: *mut HeButton,
-    ) -> *mut HeMiniContentBlock;
-    pub fn he_mini_content_block_new() -> *mut HeMiniContentBlock;
 
     //=========================================================================
     // HeModifierBadge
     //=========================================================================
     pub fn he_modifier_badge_get_type() -> GType;
+    pub fn he_modifier_badge_new(label: *const c_char) -> *mut HeModifierBadge;
     pub fn he_modifier_badge_get_color(self_: *mut HeModifierBadge) -> HeColors;
     pub fn he_modifier_badge_set_color(self_: *mut HeModifierBadge, value: HeColors);
     pub fn he_modifier_badge_get_tinted(self_: *mut HeModifierBadge) -> gboolean;
     pub fn he_modifier_badge_set_tinted(self_: *mut HeModifierBadge, value: gboolean);
     pub fn he_modifier_badge_get_label(self_: *mut HeModifierBadge) -> *const c_char;
     pub fn he_modifier_badge_set_label(self_: *mut HeModifierBadge, value: *const c_char);
-    pub fn he_modifier_badge_new(label: *const c_char) -> *mut HeModifierBadge;
     pub fn he_modifier_badge_get_alignment(self_: *mut HeModifierBadge)
         -> HeModifierBadgeAlignment;
     pub fn he_modifier_badge_set_alignment(
@@ -2280,9 +2280,9 @@ extern "C" {
     // HeNavigationRail
     //=========================================================================
     pub fn he_navigation_rail_get_type() -> GType;
+    pub fn he_navigation_rail_new() -> *mut HeNavigationRail;
     pub fn he_navigation_rail_get_stack(self_: *mut HeNavigationRail) -> *mut gtk::GtkStack;
     pub fn he_navigation_rail_set_stack(self_: *mut HeNavigationRail, value: *mut gtk::GtkStack);
-    pub fn he_navigation_rail_new() -> *mut HeNavigationRail;
 
     //=========================================================================
     // HeOutlineButton
@@ -2294,6 +2294,11 @@ extern "C" {
     // HeOverlayButton
     //=========================================================================
     pub fn he_overlay_button_get_type() -> GType;
+    pub fn he_overlay_button_new(
+        icon: *const c_char,
+        label: *const c_char,
+        secondary_icon: *const c_char,
+    ) -> *mut HeOverlayButton;
     pub fn he_overlay_button_get_size(self_: *mut HeOverlayButton) -> HeOverlayButtonSize;
     pub fn he_overlay_button_set_size(self_: *mut HeOverlayButton, value: HeOverlayButtonSize);
     pub fn he_overlay_button_get_color(self_: *mut HeOverlayButton) -> HeColors;
@@ -2314,11 +2319,6 @@ extern "C" {
         self_: *mut HeOverlayButton,
         value: HeOverlayButtonAlignment,
     );
-    pub fn he_overlay_button_new(
-        icon: *const c_char,
-        label: *const c_char,
-        secondary_icon: *const c_char,
-    ) -> *mut HeOverlayButton;
 
     //=========================================================================
     // HePillButton
@@ -2330,10 +2330,10 @@ extern "C" {
     // HeSettingsPage
     //=========================================================================
     pub fn he_settings_page_get_type() -> GType;
-    pub fn he_settings_page_get_title(self_: *mut HeSettingsPage) -> *const c_char;
-    pub fn he_settings_page_set_title(self_: *mut HeSettingsPage, value: *const c_char);
     pub fn he_settings_page_add_list(self_: *mut HeSettingsPage, list: *mut HeContentList);
     pub fn he_settings_page_new(title: *const c_char) -> *mut HeSettingsPage;
+    pub fn he_settings_page_get_title(self_: *mut HeSettingsPage) -> *const c_char;
+    pub fn he_settings_page_set_title(self_: *mut HeSettingsPage, value: *const c_char);
 
     //=========================================================================
     // HeSettingsWindow
@@ -2347,6 +2347,7 @@ extern "C" {
     // HeSideBar
     //=========================================================================
     pub fn he_side_bar_get_type() -> GType;
+    pub fn he_side_bar_new(title: *const c_char, subtitle: *const c_char) -> *mut HeSideBar;
     pub fn he_side_bar_get_title(self_: *mut HeSideBar) -> *const c_char;
     pub fn he_side_bar_set_title(self_: *mut HeSideBar, value: *const c_char);
     pub fn he_side_bar_get_subtitle(self_: *mut HeSideBar) -> *const c_char;
@@ -2361,12 +2362,12 @@ extern "C" {
     pub fn he_side_bar_set_scroller(self_: *mut HeSideBar, value: *mut gtk::GtkScrolledWindow);
     pub fn he_side_bar_get_has_margins(self_: *mut HeSideBar) -> gboolean;
     pub fn he_side_bar_set_has_margins(self_: *mut HeSideBar, value: gboolean);
-    pub fn he_side_bar_new(title: *const c_char, subtitle: *const c_char) -> *mut HeSideBar;
 
     //=========================================================================
     // HeTab
     //=========================================================================
     pub fn he_tab_get_type() -> GType;
+    pub fn he_tab_new(label: *const c_char, page: *mut gtk::GtkWidget) -> *mut HeTab;
     pub fn he_tab_get_label(self_: *mut HeTab) -> *const c_char;
     pub fn he_tab_set_label(self_: *mut HeTab, value: *const c_char);
     pub fn he_tab_set_tooltip(self_: *mut HeTab, value: *const c_char);
@@ -2380,20 +2381,27 @@ extern "C" {
     pub fn he_tab_set_page(self_: *mut HeTab, value: *mut gtk::GtkWidget);
     pub fn he_tab_get_menu(self_: *mut HeTab) -> *mut gio::GMenu;
     pub fn he_tab_get_actions(self_: *mut HeTab) -> *mut gio::GSimpleActionGroup;
-    pub fn he_tab_new(label: *const c_char, page: *mut gtk::GtkWidget) -> *mut HeTab;
 
     //=========================================================================
     // HeTabPage
     //=========================================================================
     pub fn he_tab_page_get_type() -> GType;
+    pub fn he_tab_page_new(tab: *mut HeTab) -> *mut HeTabPage;
     pub fn he_tab_page_get_tab(self_: *mut HeTabPage) -> *mut HeTab;
     pub fn he_tab_page_set_tab(self_: *mut HeTabPage, value: *mut HeTab);
-    pub fn he_tab_page_new(tab: *mut HeTab) -> *mut HeTabPage;
 
     //=========================================================================
     // HeTabSwitcher
     //=========================================================================
     pub fn he_tab_switcher_get_type() -> GType;
+    pub fn he_tab_switcher_get_tab_position(self_: *mut HeTabSwitcher, tab: *mut HeTab) -> c_int;
+    pub fn he_tab_switcher_insert_tab(
+        self_: *mut HeTabSwitcher,
+        tab: *mut HeTab,
+        index: c_int,
+    ) -> c_uint;
+    pub fn he_tab_switcher_remove_tab(self_: *mut HeTabSwitcher, tab: *mut HeTab);
+    pub fn he_tab_switcher_new() -> *mut HeTabSwitcher;
     pub fn he_tab_switcher_get_n_tabs(self_: *mut HeTabSwitcher) -> c_int;
     pub fn he_tab_switcher_get_tabs(self_: *mut HeTabSwitcher) -> *mut glib::GList;
     pub fn he_tab_switcher_get_tab_bar_behavior(
@@ -2403,7 +2411,6 @@ extern "C" {
         self_: *mut HeTabSwitcher,
         value: HeTabSwitcherTabBarBehavior,
     );
-    pub fn he_tab_switcher_get_tab_position(self_: *mut HeTabSwitcher, tab: *mut HeTab) -> c_int;
     pub fn he_tab_switcher_get_allow_duplicate_tabs(self_: *mut HeTabSwitcher) -> gboolean;
     pub fn he_tab_switcher_set_allow_duplicate_tabs(self_: *mut HeTabSwitcher, value: gboolean);
     pub fn he_tab_switcher_get_allow_drag(self_: *mut HeTabSwitcher) -> gboolean;
@@ -2416,15 +2423,8 @@ extern "C" {
     pub fn he_tab_switcher_set_allow_new_window(self_: *mut HeTabSwitcher, value: gboolean);
     pub fn he_tab_switcher_get_current(self_: *mut HeTabSwitcher) -> *mut HeTab;
     pub fn he_tab_switcher_set_current(self_: *mut HeTabSwitcher, value: *mut HeTab);
-    pub fn he_tab_switcher_insert_tab(
-        self_: *mut HeTabSwitcher,
-        tab: *mut HeTab,
-        index: c_int,
-    ) -> c_uint;
-    pub fn he_tab_switcher_remove_tab(self_: *mut HeTabSwitcher, tab: *mut HeTab);
     pub fn he_tab_switcher_get_menu(self_: *mut HeTabSwitcher) -> *mut gio::GMenu;
     pub fn he_tab_switcher_get_actions(self_: *mut HeTabSwitcher) -> *mut gio::GSimpleActionGroup;
-    pub fn he_tab_switcher_new() -> *mut HeTabSwitcher;
 
     //=========================================================================
     // HeTextButton
@@ -2444,17 +2444,24 @@ extern "C" {
     // HeToast
     //=========================================================================
     pub fn he_toast_get_type() -> GType;
+    pub fn he_toast_new(label: *const c_char) -> *mut HeToast;
+    pub fn he_toast_send_notification(self_: *mut HeToast);
     pub fn he_toast_get_label(self_: *mut HeToast) -> *const c_char;
     pub fn he_toast_set_label(self_: *mut HeToast, value: *const c_char);
     pub fn he_toast_get_default_action(self_: *mut HeToast) -> *const c_char;
     pub fn he_toast_set_default_action(self_: *mut HeToast, value: *const c_char);
-    pub fn he_toast_new(label: *const c_char) -> *mut HeToast;
-    pub fn he_toast_send_notification(self_: *mut HeToast);
 
     //=========================================================================
     // HeView
     //=========================================================================
     pub fn he_view_get_type() -> GType;
+    pub fn he_view_add_child(
+        self_: *mut HeView,
+        builder: *mut gtk::GtkBuilder,
+        child: *mut gobject::GObject,
+        type_: *const c_char,
+    );
+    pub fn he_view_add(self_: *mut HeView, widget: *mut gtk::GtkWidget);
     pub fn he_view_get_title(self_: *mut HeView) -> *const c_char;
     pub fn he_view_set_title(self_: *mut HeView, value: *const c_char);
     pub fn he_view_get_stack(self_: *mut HeView) -> *mut gtk::GtkStack;
@@ -2463,21 +2470,14 @@ extern "C" {
     pub fn he_view_set_subtitle(self_: *mut HeView, value: *const c_char);
     pub fn he_view_get_has_margins(self_: *mut HeView) -> gboolean;
     pub fn he_view_set_has_margins(self_: *mut HeView, value: gboolean);
-    pub fn he_view_add_child(
-        self_: *mut HeView,
-        builder: *mut gtk::GtkBuilder,
-        child: *mut gobject::GObject,
-        type_: *const c_char,
-    );
-    pub fn he_view_add(self_: *mut HeView, widget: *mut gtk::GtkWidget);
 
     //=========================================================================
     // HeViewAux
     //=========================================================================
     pub fn he_view_aux_get_type() -> GType;
+    pub fn he_view_aux_new() -> *mut HeViewAux;
     pub fn he_view_aux_get_show_aux(self_: *mut HeViewAux) -> gboolean;
     pub fn he_view_aux_set_show_aux(self_: *mut HeViewAux, value: gboolean);
-    pub fn he_view_aux_new() -> *mut HeViewAux;
 
     //=========================================================================
     // HeViewDual
@@ -2495,34 +2495,30 @@ extern "C" {
     // HeViewSubTitle
     //=========================================================================
     pub fn he_view_sub_title_get_type() -> GType;
+    pub fn he_view_sub_title_new() -> *mut HeViewSubTitle;
     pub fn he_view_sub_title_get_label(self_: *mut HeViewSubTitle) -> *const c_char;
     pub fn he_view_sub_title_set_label(self_: *mut HeViewSubTitle, value: *const c_char);
-    pub fn he_view_sub_title_new() -> *mut HeViewSubTitle;
 
     //=========================================================================
     // HeViewSwitcher
     //=========================================================================
     pub fn he_view_switcher_get_type() -> GType;
+    pub fn he_view_switcher_new() -> *mut HeViewSwitcher;
     pub fn he_view_switcher_get_stack(self_: *mut HeViewSwitcher) -> *mut gtk::GtkStack;
     pub fn he_view_switcher_set_stack(self_: *mut HeViewSwitcher, value: *mut gtk::GtkStack);
-    pub fn he_view_switcher_new() -> *mut HeViewSwitcher;
 
     //=========================================================================
     // HeViewTitle
     //=========================================================================
     pub fn he_view_title_get_type() -> GType;
+    pub fn he_view_title_new() -> *mut HeViewTitle;
     pub fn he_view_title_get_label(self_: *mut HeViewTitle) -> *const c_char;
     pub fn he_view_title_set_label(self_: *mut HeViewTitle, value: *const c_char);
-    pub fn he_view_title_new() -> *mut HeViewTitle;
 
     //=========================================================================
     // HeWelcomeScreen
     //=========================================================================
     pub fn he_welcome_screen_get_type() -> GType;
-    pub fn he_welcome_screen_get_appname(self_: *mut HeWelcomeScreen) -> *const c_char;
-    pub fn he_welcome_screen_set_appname(self_: *mut HeWelcomeScreen, value: *const c_char);
-    pub fn he_welcome_screen_get_description(self_: *mut HeWelcomeScreen) -> *const c_char;
-    pub fn he_welcome_screen_set_description(self_: *mut HeWelcomeScreen, value: *const c_char);
     pub fn he_welcome_screen_add_child(
         self_: *mut HeWelcomeScreen,
         builder: *mut gtk::GtkBuilder,
@@ -2533,11 +2529,16 @@ extern "C" {
         appname: *const c_char,
         description: *const c_char,
     ) -> *mut HeWelcomeScreen;
+    pub fn he_welcome_screen_get_appname(self_: *mut HeWelcomeScreen) -> *const c_char;
+    pub fn he_welcome_screen_set_appname(self_: *mut HeWelcomeScreen, value: *const c_char);
+    pub fn he_welcome_screen_get_description(self_: *mut HeWelcomeScreen) -> *const c_char;
+    pub fn he_welcome_screen_set_description(self_: *mut HeWelcomeScreen, value: *const c_char);
 
     //=========================================================================
     // HeWindow
     //=========================================================================
     pub fn he_window_get_type() -> GType;
+    pub fn he_window_new() -> *mut HeWindow;
     pub fn he_window_get_parent(self_: *mut HeWindow) -> *mut gtk::GtkWindow;
     pub fn he_window_set_parent(self_: *mut HeWindow, value: *mut gtk::GtkWindow);
     pub fn he_window_get_modal(self_: *mut HeWindow) -> gboolean;
@@ -2546,7 +2547,6 @@ extern "C" {
     pub fn he_window_set_has_title(self_: *mut HeWindow, value: gboolean);
     pub fn he_window_get_has_back_button(self_: *mut HeWindow) -> gboolean;
     pub fn he_window_set_has_back_button(self_: *mut HeWindow, value: gboolean);
-    pub fn he_window_new() -> *mut HeWindow;
 
     //=========================================================================
     // Other functions

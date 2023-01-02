@@ -326,6 +326,9 @@ impl SettingsPageBuilder {
 }
 
 pub trait SettingsPageExt: 'static {
+    #[doc(alias = "he_settings_page_add_list")]
+    fn add_list(&self, list: &impl IsA<ContentList>);
+
     #[doc(alias = "he_settings_page_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString;
@@ -333,14 +336,20 @@ pub trait SettingsPageExt: 'static {
     #[doc(alias = "he_settings_page_set_title")]
     fn set_title(&self, value: &str);
 
-    #[doc(alias = "he_settings_page_add_list")]
-    fn add_list(&self, list: &impl IsA<ContentList>);
-
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<SettingsPage>> SettingsPageExt for O {
+    fn add_list(&self, list: &impl IsA<ContentList>) {
+        unsafe {
+            ffi::he_settings_page_add_list(
+                self.as_ref().to_glib_none().0,
+                list.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn title(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_settings_page_get_title(
@@ -352,15 +361,6 @@ impl<O: IsA<SettingsPage>> SettingsPageExt for O {
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_settings_page_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
-        }
-    }
-
-    fn add_list(&self, list: &impl IsA<ContentList>) {
-        unsafe {
-            ffi::he_settings_page_add_list(
-                self.as_ref().to_glib_none().0,
-                list.as_ref().to_glib_none().0,
-            );
         }
     }
 

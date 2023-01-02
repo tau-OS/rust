@@ -371,6 +371,12 @@ impl AppBarBuilder {
 }
 
 pub trait AppBarExt: 'static {
+    #[doc(alias = "he_app_bar_append")]
+    fn append(&self, child: &impl IsA<gtk::Widget>);
+
+    #[doc(alias = "he_app_bar_remove")]
+    fn remove(&self, child: &impl IsA<gtk::Widget>);
+
     #[doc(alias = "he_app_bar_get_stack")]
     #[doc(alias = "get_stack")]
     fn stack(&self) -> gtk::Stack;
@@ -413,12 +419,6 @@ pub trait AppBarExt: 'static {
     #[doc(alias = "he_app_bar_set_show_back")]
     fn set_show_back(&self, value: bool);
 
-    #[doc(alias = "he_app_bar_append")]
-    fn append(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_app_bar_remove")]
-    fn remove(&self, child: &impl IsA<gtk::Widget>);
-
     #[doc(alias = "stack")]
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -439,6 +439,24 @@ pub trait AppBarExt: 'static {
 }
 
 impl<O: IsA<AppBar>> AppBarExt for O {
+    fn append(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_app_bar_append(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    fn remove(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_app_bar_remove(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn stack(&self) -> gtk::Stack {
         unsafe { from_glib_none(ffi::he_app_bar_get_stack(self.as_ref().to_glib_none().0)) }
     }
@@ -511,24 +529,6 @@ impl<O: IsA<AppBar>> AppBarExt for O {
     fn set_show_back(&self, value: bool) {
         unsafe {
             ffi::he_app_bar_set_show_back(self.as_ref().to_glib_none().0, value.into_glib());
-        }
-    }
-
-    fn append(&self, child: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_app_bar_append(
-                self.as_ref().to_glib_none().0,
-                child.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    fn remove(&self, child: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_app_bar_remove(
-                self.as_ref().to_glib_none().0,
-                child.as_ref().to_glib_none().0,
-            );
         }
     }
 

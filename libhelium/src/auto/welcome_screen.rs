@@ -340,6 +340,14 @@ impl WelcomeScreenBuilder {
 }
 
 pub trait WelcomeScreenExt: 'static {
+    #[doc(alias = "he_welcome_screen_add_child")]
+    fn add_child(
+        &self,
+        builder: &gtk::Builder,
+        child: &impl IsA<glib::Object>,
+        type_: Option<&str>,
+    );
+
     #[doc(alias = "he_welcome_screen_get_appname")]
     #[doc(alias = "get_appname")]
     fn appname(&self) -> glib::GString;
@@ -354,14 +362,6 @@ pub trait WelcomeScreenExt: 'static {
     #[doc(alias = "he_welcome_screen_set_description")]
     fn set_description(&self, value: &str);
 
-    #[doc(alias = "he_welcome_screen_add_child")]
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    );
-
     #[doc(alias = "appname")]
     fn connect_appname_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -370,6 +370,22 @@ pub trait WelcomeScreenExt: 'static {
 }
 
 impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
+    fn add_child(
+        &self,
+        builder: &gtk::Builder,
+        child: &impl IsA<glib::Object>,
+        type_: Option<&str>,
+    ) {
+        unsafe {
+            ffi::he_welcome_screen_add_child(
+                self.as_ref().to_glib_none().0,
+                builder.to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                type_.to_glib_none().0,
+            );
+        }
+    }
+
     fn appname(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_welcome_screen_get_appname(
@@ -400,22 +416,6 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
             ffi::he_welcome_screen_set_description(
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
-            );
-        }
-    }
-
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    ) {
-        unsafe {
-            ffi::he_welcome_screen_add_child(
-                self.as_ref().to_glib_none().0,
-                builder.to_glib_none().0,
-                child.as_ref().to_glib_none().0,
-                type_.to_glib_none().0,
             );
         }
     }

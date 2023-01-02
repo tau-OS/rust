@@ -335,6 +335,9 @@ impl ToastBuilder {
 }
 
 pub trait ToastExt: 'static {
+    #[doc(alias = "he_toast_send_notification")]
+    fn send_notification(&self);
+
     #[doc(alias = "he_toast_get_label")]
     #[doc(alias = "get_label")]
     fn label(&self) -> glib::GString;
@@ -348,9 +351,6 @@ pub trait ToastExt: 'static {
 
     #[doc(alias = "he_toast_set_default_action")]
     fn set_default_action(&self, value: &str);
-
-    #[doc(alias = "he_toast_send_notification")]
-    fn send_notification(&self);
 
     #[doc(alias = "closed")]
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -366,6 +366,12 @@ pub trait ToastExt: 'static {
 }
 
 impl<O: IsA<Toast>> ToastExt for O {
+    fn send_notification(&self) {
+        unsafe {
+            ffi::he_toast_send_notification(self.as_ref().to_glib_none().0);
+        }
+    }
+
     fn label(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_toast_get_label(self.as_ref().to_glib_none().0)) }
     }
@@ -390,12 +396,6 @@ impl<O: IsA<Toast>> ToastExt for O {
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
             );
-        }
-    }
-
-    fn send_notification(&self) {
-        unsafe {
-            ffi::he_toast_send_notification(self.as_ref().to_glib_none().0);
         }
     }
 

@@ -350,6 +350,16 @@ impl ContentBlockImageClusterBuilder {
 }
 
 pub trait ContentBlockImageClusterExt: 'static {
+    #[doc(alias = "he_content_block_image_cluster_set_image")]
+    fn set_image(
+        &self,
+        image: &impl IsA<ContentBlockImage>,
+        position: ContentBlockImageClusterImagePosition,
+    );
+
+    #[doc(alias = "he_content_block_image_cluster_remove_image")]
+    fn remove_image(&self, image: &impl IsA<ContentBlockImage>);
+
     #[doc(alias = "he_content_block_image_cluster_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString;
@@ -371,16 +381,6 @@ pub trait ContentBlockImageClusterExt: 'static {
     #[doc(alias = "he_content_block_image_cluster_set_icon")]
     fn set_icon(&self, value: &str);
 
-    #[doc(alias = "he_content_block_image_cluster_set_image")]
-    fn set_image(
-        &self,
-        image: &impl IsA<ContentBlockImage>,
-        position: ContentBlockImageClusterImagePosition,
-    );
-
-    #[doc(alias = "he_content_block_image_cluster_remove_image")]
-    fn remove_image(&self, image: &impl IsA<ContentBlockImage>);
-
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -392,6 +392,29 @@ pub trait ContentBlockImageClusterExt: 'static {
 }
 
 impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
+    fn set_image(
+        &self,
+        image: &impl IsA<ContentBlockImage>,
+        position: ContentBlockImageClusterImagePosition,
+    ) {
+        unsafe {
+            ffi::he_content_block_image_cluster_set_image(
+                self.as_ref().to_glib_none().0,
+                image.as_ref().to_glib_none().0,
+                position.into_glib(),
+            );
+        }
+    }
+
+    fn remove_image(&self, image: &impl IsA<ContentBlockImage>) {
+        unsafe {
+            ffi::he_content_block_image_cluster_remove_image(
+                self.as_ref().to_glib_none().0,
+                image.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn title(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_image_cluster_get_title(
@@ -439,29 +462,6 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
             ffi::he_content_block_image_cluster_set_icon(
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
-            );
-        }
-    }
-
-    fn set_image(
-        &self,
-        image: &impl IsA<ContentBlockImage>,
-        position: ContentBlockImageClusterImagePosition,
-    ) {
-        unsafe {
-            ffi::he_content_block_image_cluster_set_image(
-                self.as_ref().to_glib_none().0,
-                image.as_ref().to_glib_none().0,
-                position.into_glib(),
-            );
-        }
-    }
-
-    fn remove_image(&self, image: &impl IsA<ContentBlockImage>) {
-        unsafe {
-            ffi::he_content_block_image_cluster_remove_image(
-                self.as_ref().to_glib_none().0,
-                image.as_ref().to_glib_none().0,
             );
         }
     }

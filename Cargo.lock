@@ -471,7 +471,7 @@ checksum = "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
 
 [[package]]
 name = "libhelium"
-version = "1.2.5"
+version = "1.2.6"
 dependencies = [
  "bitflags",
  "futures-channel",
@@ -488,7 +488,7 @@ dependencies = [
 
 [[package]]
 name = "libhelium-sys"
-version = "1.2.5"
+version = "1.2.6"
 dependencies = [
  "gdk4-sys",
  "gio-sys",

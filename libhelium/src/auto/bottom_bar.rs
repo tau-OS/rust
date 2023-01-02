@@ -364,6 +364,31 @@ impl BottomBarBuilder {
 }
 
 pub trait BottomBarExt: 'static {
+    #[doc(alias = "he_bottom_bar_append_button")]
+    fn append_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
+
+    #[doc(alias = "he_bottom_bar_prepend_button")]
+    fn prepend_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
+
+    #[doc(alias = "he_bottom_bar_remove_button")]
+    fn remove_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
+
+    #[doc(alias = "he_bottom_bar_insert_button_after")]
+    fn insert_button_after(
+        &self,
+        icon: &impl IsA<IconicButton>,
+        after: &impl IsA<IconicButton>,
+        position: BottomBarPosition,
+    );
+
+    #[doc(alias = "he_bottom_bar_reorder_button_after")]
+    fn reorder_button_after(
+        &self,
+        icon: &impl IsA<IconicButton>,
+        sibling: &impl IsA<IconicButton>,
+        position: BottomBarPosition,
+    );
+
     #[doc(alias = "he_bottom_bar_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString;
@@ -392,31 +417,6 @@ pub trait BottomBarExt: 'static {
     #[doc(alias = "he_bottom_bar_set_collapse_actions")]
     fn set_collapse_actions(&self, value: bool);
 
-    #[doc(alias = "he_bottom_bar_append_button")]
-    fn append_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
-
-    #[doc(alias = "he_bottom_bar_prepend_button")]
-    fn prepend_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
-
-    #[doc(alias = "he_bottom_bar_remove_button")]
-    fn remove_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
-
-    #[doc(alias = "he_bottom_bar_insert_button_after")]
-    fn insert_button_after(
-        &self,
-        icon: &impl IsA<IconicButton>,
-        after: &impl IsA<IconicButton>,
-        position: BottomBarPosition,
-    );
-
-    #[doc(alias = "he_bottom_bar_reorder_button_after")]
-    fn reorder_button_after(
-        &self,
-        icon: &impl IsA<IconicButton>,
-        sibling: &impl IsA<IconicButton>,
-        position: BottomBarPosition,
-    );
-
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -431,67 +431,6 @@ pub trait BottomBarExt: 'static {
 }
 
 impl<O: IsA<BottomBar>> BottomBarExt for O {
-    fn title(&self) -> glib::GString {
-        unsafe { from_glib_none(ffi::he_bottom_bar_get_title(self.as_ref().to_glib_none().0)) }
-    }
-
-    fn set_title(&self, value: &str) {
-        unsafe {
-            ffi::he_bottom_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
-        }
-    }
-
-    fn description(&self) -> glib::GString {
-        unsafe {
-            from_glib_none(ffi::he_bottom_bar_get_description(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_description(&self, value: &str) {
-        unsafe {
-            ffi::he_bottom_bar_set_description(
-                self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
-        }
-    }
-
-    fn menu_model(&self) -> gio::MenuModel {
-        unsafe {
-            from_glib_none(ffi::he_bottom_bar_get_menu_model(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_menu_model(&self, value: &impl IsA<gio::MenuModel>) {
-        unsafe {
-            ffi::he_bottom_bar_set_menu_model(
-                self.as_ref().to_glib_none().0,
-                value.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    fn is_collapse_actions(&self) -> bool {
-        unsafe {
-            from_glib(ffi::he_bottom_bar_get_collapse_actions(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_collapse_actions(&self, value: bool) {
-        unsafe {
-            ffi::he_bottom_bar_set_collapse_actions(
-                self.as_ref().to_glib_none().0,
-                value.into_glib(),
-            );
-        }
-    }
-
     fn append_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_append_button(
@@ -550,6 +489,67 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
                 icon.as_ref().to_glib_none().0,
                 sibling.as_ref().to_glib_none().0,
                 position.into_glib(),
+            );
+        }
+    }
+
+    fn title(&self) -> glib::GString {
+        unsafe { from_glib_none(ffi::he_bottom_bar_get_title(self.as_ref().to_glib_none().0)) }
+    }
+
+    fn set_title(&self, value: &str) {
+        unsafe {
+            ffi::he_bottom_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    fn description(&self) -> glib::GString {
+        unsafe {
+            from_glib_none(ffi::he_bottom_bar_get_description(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_description(&self, value: &str) {
+        unsafe {
+            ffi::he_bottom_bar_set_description(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
+    fn menu_model(&self) -> gio::MenuModel {
+        unsafe {
+            from_glib_none(ffi::he_bottom_bar_get_menu_model(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_menu_model(&self, value: &impl IsA<gio::MenuModel>) {
+        unsafe {
+            ffi::he_bottom_bar_set_menu_model(
+                self.as_ref().to_glib_none().0,
+                value.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    fn is_collapse_actions(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_bottom_bar_get_collapse_actions(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_collapse_actions(&self, value: bool) {
+        unsafe {
+            ffi::he_bottom_bar_set_collapse_actions(
+                self.as_ref().to_glib_none().0,
+                value.into_glib(),
             );
         }
     }

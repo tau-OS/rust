@@ -349,6 +349,15 @@ impl BannerBuilder {
 }
 
 pub trait BannerExt: 'static {
+    #[doc(alias = "he_banner_add_action_button")]
+    fn add_action_button(&self, widget: &impl IsA<gtk::Widget>);
+
+    #[doc(alias = "he_banner_remove_action")]
+    fn remove_action(&self, widget: &impl IsA<gtk::Widget>);
+
+    #[doc(alias = "he_banner_set_banner_style")]
+    fn set_banner_style(&self, style: BannerStyle);
+
     #[doc(alias = "he_banner_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString;
@@ -370,15 +379,6 @@ pub trait BannerExt: 'static {
     #[doc(alias = "he_banner_set_style")]
     fn set_style(&self, value: BannerStyle);
 
-    #[doc(alias = "he_banner_add_action_button")]
-    fn add_action_button(&self, widget: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_banner_remove_action")]
-    fn remove_action(&self, widget: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_banner_set_banner_style")]
-    fn set_banner_style(&self, style: BannerStyle);
-
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -390,6 +390,30 @@ pub trait BannerExt: 'static {
 }
 
 impl<O: IsA<Banner>> BannerExt for O {
+    fn add_action_button(&self, widget: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_banner_add_action_button(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    fn remove_action(&self, widget: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_banner_remove_action(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    fn set_banner_style(&self, style: BannerStyle) {
+        unsafe {
+            ffi::he_banner_set_banner_style(self.as_ref().to_glib_none().0, style.into_glib());
+        }
+    }
+
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_banner_get_title(self.as_ref().to_glib_none().0)) }
     }
@@ -421,30 +445,6 @@ impl<O: IsA<Banner>> BannerExt for O {
     fn set_style(&self, value: BannerStyle) {
         unsafe {
             ffi::he_banner_set_style(self.as_ref().to_glib_none().0, value.into_glib());
-        }
-    }
-
-    fn add_action_button(&self, widget: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_banner_add_action_button(
-                self.as_ref().to_glib_none().0,
-                widget.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    fn remove_action(&self, widget: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_banner_remove_action(
-                self.as_ref().to_glib_none().0,
-                widget.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    fn set_banner_style(&self, style: BannerStyle) {
-        unsafe {
-            ffi::he_banner_set_banner_style(self.as_ref().to_glib_none().0, style.into_glib());
         }
     }
 

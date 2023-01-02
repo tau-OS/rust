@@ -335,6 +335,12 @@ impl ContentListBuilder {
 }
 
 pub trait ContentListExt: 'static {
+    #[doc(alias = "he_content_list_add")]
+    fn add(&self, child: &impl IsA<gtk::Widget>);
+
+    #[doc(alias = "he_content_list_remove")]
+    fn remove(&self, child: &impl IsA<gtk::Widget>);
+
     #[doc(alias = "he_content_list_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> Option<glib::GString>;
@@ -349,12 +355,6 @@ pub trait ContentListExt: 'static {
     #[doc(alias = "he_content_list_set_description")]
     fn set_description(&self, value: Option<&str>);
 
-    #[doc(alias = "he_content_list_add")]
-    fn add(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_content_list_remove")]
-    fn remove(&self, child: &impl IsA<gtk::Widget>);
-
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -363,6 +363,24 @@ pub trait ContentListExt: 'static {
 }
 
 impl<O: IsA<ContentList>> ContentListExt for O {
+    fn add(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_content_list_add(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    fn remove(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_content_list_remove(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn title(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_content_list_get_title(
@@ -390,24 +408,6 @@ impl<O: IsA<ContentList>> ContentListExt for O {
             ffi::he_content_list_set_description(
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
-            );
-        }
-    }
-
-    fn add(&self, child: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_content_list_add(
-                self.as_ref().to_glib_none().0,
-                child.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    fn remove(&self, child: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_content_list_remove(
-                self.as_ref().to_glib_none().0,
-                child.as_ref().to_glib_none().0,
             );
         }
     }

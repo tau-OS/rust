@@ -24,6 +24,17 @@ impl View {
 }
 
 pub trait ViewExt: 'static {
+    #[doc(alias = "he_view_add_child")]
+    fn add_child(
+        &self,
+        builder: &gtk::Builder,
+        child: &impl IsA<glib::Object>,
+        type_: Option<&str>,
+    );
+
+    #[doc(alias = "he_view_add")]
+    fn add(&self, widget: &impl IsA<gtk::Widget>);
+
     #[doc(alias = "he_view_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString;
@@ -52,17 +63,6 @@ pub trait ViewExt: 'static {
     #[doc(alias = "he_view_set_has_margins")]
     fn set_has_margins(&self, value: bool);
 
-    #[doc(alias = "he_view_add_child")]
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    );
-
-    #[doc(alias = "he_view_add")]
-    fn add(&self, widget: &impl IsA<gtk::Widget>);
-
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -77,6 +77,31 @@ pub trait ViewExt: 'static {
 }
 
 impl<O: IsA<View>> ViewExt for O {
+    fn add_child(
+        &self,
+        builder: &gtk::Builder,
+        child: &impl IsA<glib::Object>,
+        type_: Option<&str>,
+    ) {
+        unsafe {
+            ffi::he_view_add_child(
+                self.as_ref().to_glib_none().0,
+                builder.to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                type_.to_glib_none().0,
+            );
+        }
+    }
+
+    fn add(&self, widget: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_view_add(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_view_get_title(self.as_ref().to_glib_none().0)) }
     }
@@ -114,31 +139,6 @@ impl<O: IsA<View>> ViewExt for O {
     fn set_has_margins(&self, value: bool) {
         unsafe {
             ffi::he_view_set_has_margins(self.as_ref().to_glib_none().0, value.into_glib());
-        }
-    }
-
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    ) {
-        unsafe {
-            ffi::he_view_add_child(
-                self.as_ref().to_glib_none().0,
-                builder.to_glib_none().0,
-                child.as_ref().to_glib_none().0,
-                type_.to_glib_none().0,
-            );
-        }
-    }
-
-    fn add(&self, widget: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_view_add(
-                self.as_ref().to_glib_none().0,
-                widget.as_ref().to_glib_none().0,
-            );
         }
     }
 
