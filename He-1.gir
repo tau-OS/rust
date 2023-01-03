@@ -1116,6 +1116,19 @@ title bar can be made always visible. Has an optional back button. The back butt
 				</instance-parameter>
 			</parameters>
 		</method>
+		<property name="dark-mode-strength" writable="1">
+			<type name="He.DesktopDarkModeStrength" c:type="HeDesktopDarkModeStrength"/>
+		</property>
+		<method name="get_dark_mode_strength" c:identifier="he_desktop_get_dark_mode_strength">
+			<return-value transfer-ownership="none">
+				<type name="He.DesktopDarkModeStrength" c:type="HeDesktopDarkModeStrength"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Desktop" c:type="HeDesktop*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
 		<property name="accent-color" writable="1">
 			<type name="He.ColorRGBColor" c:type="HeColorRGBColor*"/>
 		</property>
@@ -1141,6 +1154,12 @@ title bar can be made always visible. Has an optional back button. The back butt
 		<member name="no_preference" c:identifier="HE_DESKTOP_COLOR_SCHEME_NO_PREFERENCE" value="0"/>
 		<member name="dark" c:identifier="HE_DESKTOP_COLOR_SCHEME_DARK" value="1"/>
 		<member name="light" c:identifier="HE_DESKTOP_COLOR_SCHEME_LIGHT" value="2"/>
+	</enumeration>
+	<enumeration name="DesktopDarkModeStrength" c:type="HeDesktopDarkModeStrength" glib:type-name="HeDesktopDarkModeStrength" glib:get-type="he_desktop_dark_mode_strength_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;The dark mode strength preference enum, which is used to determine the dark mode strength of the desktop.&lt;/para&gt;</doc>
+		<member name="medium" c:identifier="HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM" value="0"/>
+		<member name="harsh" c:identifier="HE_DESKTOP_DARK_MODE_STRENGTH_HARSH" value="1"/>
+		<member name="soft" c:identifier="HE_DESKTOP_DARK_MODE_STRENGTH_SOFT" value="2"/>
 	</enumeration>
 	<class name="AboutWindow" c:type="HeAboutWindow" c:symbol-prefix="about_window" glib:type-name="HeAboutWindow" glib:get-type="he_about_window_get_type" glib:type-struct="AboutWindowClass" parent="He.Window">
 		<doc xml:whitespace="preserve">&lt;para&gt;An AboutWindow is a window that displays information about the application.&lt;/para&gt;</doc>

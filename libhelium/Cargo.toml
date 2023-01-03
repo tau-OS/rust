@@ -1,6 +1,6 @@
 [package]
 name = "libhelium"
-version = "1.2.6"
+version = "1.2.10"
 authors = ["Lleyton Gray <lleyton@fyralabs.com>"]
 edition = "2021"
 readme = "../README.md"
