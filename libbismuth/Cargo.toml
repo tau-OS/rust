@@ -67,4 +67,4 @@ version = "0.6"
 [dependencies.ffi]
 package = "libbismuth-sys"
 path = './sys'
-version = "1.0.2"
+version = "1.0.0"

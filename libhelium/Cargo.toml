@@ -69,4 +69,4 @@ version = "0.6"
 [dependencies.ffi]
 package = "libhelium-sys"
 path = './sys'
-version = "1.2.4"
+version = "1.0.0"
