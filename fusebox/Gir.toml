@@ -1,0 +1,37 @@
+[external_libraries]
+Gio = {min_version = "2.66"}
+
+[options]
+girs_directories = ["../gir-files", "../"]
+library = "fusebox"
+version = "1"
+min_cfg_version = "1"
+target_path = "."
+use_gi_docgen = true
+work_mode = "normal"
+generate_safety_asserts = true
+deprecate_by_min_version = true
+single_version_file = true
+generate_builder = true
+trust_return_value_nullability = true
+
+external_libraries = [
+   "GLib",
+   "GObject",
+   "Gdk",
+   "GdkPixbuf",
+   "Gtk",
+   "Pango",
+]
+
+generate = [
+   "fusebox.FusesManager",
+   "fusebox.Fuse",
+   "fusebox.FuseCategory",
+]
+
+manual = [
+   "Gio.AsyncReadyCallback",
+   "Gio.AsyncResult",
+   "Gtk.Widget",
+]

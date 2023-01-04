@@ -4,5 +4,7 @@ members = [
     "libbismuth/sys",
     "libhelium",
     "libhelium/sys",
+    "fusebox",
+    "fusebox/sys",
 ]
 exclude = ["gir"]

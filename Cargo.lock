@@ -107,6 +107,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "fusebox"
+version = "1.0.0"
+dependencies = [
+ "bitflags",
+ "fusebox-sys",
+ "futures-channel",
+ "gdk-pixbuf",
+ "gdk4",
+ "gio",
+ "glib",
+ "gtk4",
+ "libc",
+ "once_cell",
+ "pango",
+]
+
+[[package]]
+name = "fusebox-sys"
+version = "1.0.0"
+dependencies = [
+ "gdk4-sys",
+ "gio-sys",
+ "glib-sys",
+ "gobject-sys",
+ "gtk4-sys",
+ "libc",
+ "pango-sys",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
 name = "futures-channel"
 version = "0.3.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"

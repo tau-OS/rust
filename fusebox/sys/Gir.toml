@@ -1,0 +1,11 @@
+[options]
+work_mode = "sys"
+library = "fusebox"
+version = "1"
+girs_directories = ["../../gir-files", "../../"]
+min_cfg_version = "1"
+external_libraries = [
+   "GLib",
+   "GObject",
+   "Gio"
+]
