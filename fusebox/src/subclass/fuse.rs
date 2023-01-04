@@ -6,6 +6,7 @@ pub trait FuseImpl: ObjectImpl {
   fn display_name(&self) -> String;
   fn description(&self) -> String;
   fn icon(&self) -> String;
+  fn get_widget(&self) -> gtk::Widget;
 }
 
 unsafe impl<T: FuseImpl> IsSubclassable<T> for Fuse {}
