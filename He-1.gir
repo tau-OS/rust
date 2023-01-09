@@ -3095,6 +3095,22 @@ Since: 1.0</doc>
 			<doc xml:whitespace="preserve">&lt;para&gt;The cancel button in the dialog.&lt;/para&gt;</doc>
 			<type name="He.TextButton" c:type="HeTextButton*"/>
 		</field>
+		<method name="add" c:identifier="he_dialog_add">
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child directly to the Dialog. Used only in code.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dialog" c:type="HeDialog*"/>
+				</instance-parameter>
+				<parameter name="widget" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
 		<constructor name="new" c:identifier="he_dialog_new">
 			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new dialog.&lt;/para&gt;
 
@@ -4008,6 +4024,35 @@ Since: 1.0</doc>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
 					<type name="Gtk.Stack" c:type="GtkStack*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="orientation" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The orientation of this switcher.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+		</property>
+		<method name="get_orientation" c:identifier="he_navigation_rail_get_orientation">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_orientation" c:identifier="he_navigation_rail_set_orientation">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Orientation" c:type="GtkOrientation"/>
 				</parameter>
 			</parameters>
 		</method>

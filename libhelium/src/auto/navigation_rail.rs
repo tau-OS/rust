@@ -52,6 +52,7 @@ impl Default for NavigationRail {
 #[must_use = "The builder must be built to be used"]
 pub struct NavigationRailBuilder {
     stack: Option<gtk::Stack>,
+    //orientation: /*Unknown type*/,
     child: Option<gtk::Widget>,
     can_focus: Option<bool>,
     can_target: Option<bool>,
@@ -333,8 +334,18 @@ pub trait NavigationRailExt: 'static {
     #[doc(alias = "he_navigation_rail_set_stack")]
     fn set_stack(&self, value: &gtk::Stack);
 
+    //#[doc(alias = "he_navigation_rail_get_orientation")]
+    //#[doc(alias = "get_orientation")]
+    //fn orientation(&self) -> /*Ignored*/gtk::Orientation;
+
+    //#[doc(alias = "he_navigation_rail_set_orientation")]
+    //fn set_orientation(&self, value: /*Ignored*/gtk::Orientation);
+
     #[doc(alias = "stack")]
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "orientation")]
+    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<NavigationRail>> NavigationRailExt for O {
@@ -355,6 +366,14 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
         }
     }
 
+    //fn orientation(&self) -> /*Ignored*/gtk::Orientation {
+    //    unsafe { TODO: call ffi:he_navigation_rail_get_orientation() }
+    //}
+
+    //fn set_orientation(&self, value: /*Ignored*/gtk::Orientation) {
+    //    unsafe { TODO: call ffi:he_navigation_rail_set_orientation() }
+    //}
+
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stack_trampoline<
             P: IsA<NavigationRail>,
@@ -374,6 +393,31 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
                 b"notify::stack\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_orientation_trampoline<
+            P: IsA<NavigationRail>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeNavigationRail,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::orientation\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_orientation_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

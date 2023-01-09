@@ -62,4 +62,4 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-dox = ["glib/dox", "gobject/dox", "gdk/dox", "gio/dox", "gtk/dox", "pango/dox"]
+dox = ["glib/dox", "gobject/dox", "gio/dox"]

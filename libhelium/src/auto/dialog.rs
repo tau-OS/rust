@@ -609,6 +609,9 @@ impl DialogBuilder {
 }
 
 pub trait DialogExt: 'static {
+    #[doc(alias = "he_dialog_add")]
+    fn add(&self, widget: &impl IsA<gtk::Widget>);
+
     #[doc(alias = "he_dialog_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString;
@@ -668,6 +671,15 @@ pub trait DialogExt: 'static {
 }
 
 impl<O: IsA<Dialog>> DialogExt for O {
+    fn add(&self, widget: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_dialog_add(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_dialog_get_title(self.as_ref().to_glib_none().0)) }
     }
