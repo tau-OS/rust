@@ -36,7 +36,7 @@ pub trait FuseExt: 'static {
     fn hidden(&self);
 
     //#[doc(alias = "fusebox_fuse_search")]
-    //fn search(&self, search: &str, _callback_: AsyncReadyCallback, _callback__target: /*Unimplemented*/Option<Basic: Pointer>);
+    //fn search(&self, search: &str, _callback_: AsyncReadyCallback);
 
     #[doc(alias = "fusebox_fuse_search_callback")]
     fn search_callback(&self, location: &str);
@@ -96,7 +96,7 @@ impl<O: IsA<Fuse>> FuseExt for O {
         }
     }
 
-    //fn search(&self, search: &str, _callback_: AsyncReadyCallback, _callback__target: /*Unimplemented*/Option<Basic: Pointer>) {
+    //fn search(&self, search: &str, _callback_: AsyncReadyCallback) {
     //    unsafe { TODO: call ffi:fusebox_fuse_search() }
     //}
 

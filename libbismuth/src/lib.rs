@@ -1,5 +1,9 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![allow(clippy::needless_doctest_main)]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/tau-OS/libbismuth/main/assets/Bismuth.svg",
+    html_favicon_url = "https://raw.githubusercontent.com/tau-OS/libbismuth/main/assets/Bismuth-sym.svg"
+)]
 
 // Re-export the -sys bindings
 pub use ffi;
