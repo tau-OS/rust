@@ -27,8 +27,11 @@ jobs:
           node-version: 14
       - run: npm install -g sass
 
+      - name: Update repos
+        run: sudo apt update
+
       - name: Install system level libraries
-        run: sudo apt update && apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev meson ninja-build valac valadoc
+        run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev meson ninja-build valac valadoc
 
       - name: Checkout libhelium
         uses: actions/checkout@v3
