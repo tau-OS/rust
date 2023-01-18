@@ -13,7 +13,7 @@ use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "HeApplicationWindow")]
-    pub struct ApplicationWindow(Object<ffi::HeApplicationWindow, ffi::HeApplicationWindowClass>) @extends gtk::Window, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager, gio::ActionGroup, gio::ActionMap;
+    pub struct ApplicationWindow(Object<ffi::HeApplicationWindow, ffi::HeApplicationWindowClass>) @extends gtk::ApplicationWindow, gtk::Window, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager, gio::ActionGroup, gio::ActionMap;
 
     match fn {
         type_ => || ffi::he_application_window_get_type(),
@@ -58,6 +58,7 @@ pub struct ApplicationWindowBuilder {
     modal: Option<bool>,
     has_title: Option<bool>,
     has_back_button: Option<bool>,
+    show_menubar: Option<bool>,
     application: Option<gtk::Application>,
     child: Option<gtk::Widget>,
     decorated: Option<bool>,
@@ -136,6 +137,9 @@ impl ApplicationWindowBuilder {
         }
         if let Some(ref has_back_button) = self.has_back_button {
             properties.push(("has-back-button", has_back_button));
+        }
+        if let Some(ref show_menubar) = self.show_menubar {
+            properties.push(("show-menubar", show_menubar));
         }
         if let Some(ref application) = self.application {
             properties.push(("application", application));
@@ -295,6 +299,11 @@ impl ApplicationWindowBuilder {
 
     pub fn has_back_button(mut self, has_back_button: bool) -> Self {
         self.has_back_button = Some(has_back_button);
+        self
+    }
+
+    pub fn show_menubar(mut self, show_menubar: bool) -> Self {
+        self.show_menubar = Some(show_menubar);
         self
     }
 

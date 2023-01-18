@@ -16,6 +16,8 @@ pub enum FuseCategory {
     Personal,
     #[doc(alias = "FUSEBOX_FUSE_CATEGORY_SYSTEM")]
     System,
+    #[doc(alias = "FUSEBOX_FUSE_CATEGORY_CUSTOM")]
+    Custom,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -29,6 +31,7 @@ impl fmt::Display for FuseCategory {
                 Self::Network => "Network",
                 Self::Personal => "Personal",
                 Self::System => "System",
+                Self::Custom => "Custom",
                 _ => "Unknown",
             }
         )
@@ -45,6 +48,7 @@ impl IntoGlib for FuseCategory {
             Self::Network => ffi::FUSEBOX_FUSE_CATEGORY_NETWORK,
             Self::Personal => ffi::FUSEBOX_FUSE_CATEGORY_PERSONAL,
             Self::System => ffi::FUSEBOX_FUSE_CATEGORY_SYSTEM,
+            Self::Custom => ffi::FUSEBOX_FUSE_CATEGORY_CUSTOM,
             Self::__Unknown(value) => value,
         }
     }
@@ -59,6 +63,7 @@ impl FromGlib<ffi::FuseboxFuseCategory> for FuseCategory {
             ffi::FUSEBOX_FUSE_CATEGORY_NETWORK => Self::Network,
             ffi::FUSEBOX_FUSE_CATEGORY_PERSONAL => Self::Personal,
             ffi::FUSEBOX_FUSE_CATEGORY_SYSTEM => Self::System,
+            ffi::FUSEBOX_FUSE_CATEGORY_CUSTOM => Self::Custom,
             value => Self::__Unknown(value),
         }
     }

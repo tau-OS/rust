@@ -692,6 +692,9 @@ Since: 1.0</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="ButtonContentPrivate" c:type="HeButtonContentPrivate*"/>
 		</field>
+		<field name="image" writable="1">
+			<type name="Gtk.Image" c:type="GtkImage*"/>
+		</field>
 		<constructor name="new" c:identifier="he_button_content_new">
 			<return-value transfer-ownership="none">
 				<type name="He.ButtonContent" c:type="HeButtonContent*"/>
@@ -1646,13 +1649,13 @@ control.&lt;/para&gt;</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="AppBarPrivate" c:type="HeAppBarPrivate*"/>
 		</field>
-		<field name="title" writable="1" nullable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title displayed in the AppBar.&lt;/para&gt;</doc>
-			<type name="Gtk.HeaderBar" c:type="GtkHeaderBar*"/>
-		</field>
 		<field name="back_button" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The button to go back one view displayed in the AppBar.&lt;/para&gt;</doc>
 			<type name="Gtk.Button" c:type="GtkButton*"/>
+		</field>
+		<field name="btn_box" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The button box in the AppBar, shows below and to the right side of the title, or alongside the window controls, based on scrollers.&lt;/para&gt;</doc>
+			<type name="Gtk.Box" c:type="GtkBox*"/>
 		</field>
 		<method name="append" c:identifier="he_app_bar_append">
 			<doc xml:whitespace="preserve">&lt;para&gt;Append a child to the AppBar. Please note that an AppBar should only have at most three children.&lt;/para&gt;</doc>
@@ -1760,6 +1763,33 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<method name="set_viewtitle_label" c:identifier="he_app_bar_set_viewtitle_label">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="viewsubtitle-label" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The title to the left on the AppBar.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_viewsubtitle_label" c:identifier="he_app_bar_get_viewsubtitle_label">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_viewsubtitle_label" c:identifier="he_app_bar_set_viewsubtitle_label">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -1967,6 +1997,122 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ApplicationWindowPrivate" c:type="HeApplicationWindowPrivate" disguised="1"/>
+	<class name="Avatar" c:type="HeAvatar" c:symbol-prefix="avatar" glib:type-name="HeAvatar" glib:get-type="he_avatar_get_type" glib:type-struct="AvatarClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;An Avatar is an element that displays an image that represents a person.&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="AvatarPrivate" c:type="HeAvatarPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_avatar_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new Avatar.&lt;/para&gt;
+
+Since: 1.1</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.Avatar" c:type="HeAvatar*"/>
+			</return-value>
+			<parameters>
+				<parameter name="size" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+				<parameter name="image" transfer-ownership="none" nullable="1">
+					<doc xml:whitespace="preserve">&lt;para&gt;The image to display &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="text" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<property name="image" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The image of the avatar.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_image" c:identifier="he_avatar_get_image">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_image" c:identifier="he_avatar_set_image">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="size" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The size of the avatar.&lt;/para&gt;</doc>
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_size" c:identifier="he_avatar_get_size">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_size" c:identifier="he_avatar_set_size">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="text" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The text of the avatar.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_text" c:identifier="he_avatar_get_text">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_text" c:identifier="he_avatar_set_text">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="AvatarClass" c:type="HeAvatarClass" glib:is-gtype-struct-for="Avatar">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="AvatarPrivate" c:type="HeAvatarPrivate" disguised="1"/>
 	<class name="Badge" c:type="HeBadge" c:symbol-prefix="badge" glib:type-name="HeBadge" glib:get-type="he_badge_get_type" glib:type-struct="BadgeClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Badge is a small status indicator that can be used to provide additional information about an object.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -4431,6 +4577,335 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="PillButtonPrivate" c:type="HePillButtonPrivate" disguised="1"/>
+	<class name="SettingsRow" c:type="HeSettingsRow" c:symbol-prefix="settings_row" glib:type-name="HeSettingsRow" glib:get-type="he_settings_row_get_type" glib:type-struct="SettingsRowClass" parent="Gtk.ListBoxRow">
+		<doc xml:whitespace="preserve">&lt;para&gt;A SettingsRow is a settings row that is used to display content in a small area that is activatable if desired.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="Gtk.ListBoxRow" c:type="GtkListBoxRow"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SettingsRowPrivate" c:type="HeSettingsRowPrivate*"/>
+		</field>
+		<constructor name="with_details" c:identifier="he_settings_row_new_with_details">
+			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new SettingsRow.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+			</return-value>
+			<parameters>
+				<parameter name="title" transfer-ownership="none" nullable="1">
+					<doc xml:whitespace="preserve">&lt;para&gt;The title of the settings row. &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="subtitle" transfer-ownership="none" nullable="1">
+					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the settings row. &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="primary_button" transfer-ownership="none" nullable="1">
+					<doc xml:whitespace="preserve">&lt;para&gt;The primary button of the settings row. &lt;/para&gt;</doc>
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<constructor name="new" c:identifier="he_settings_row_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new SettingsRow.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+			</return-value>
+		</constructor>
+		<property name="title" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the title of the settings row.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_title" c:identifier="he_settings_row_get_title">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_title" c:identifier="he_settings_row_set_title">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="subtitle" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the subtitle of the settings row.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_subtitle" c:identifier="he_settings_row_get_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_subtitle" c:identifier="he_settings_row_set_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="icon" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the settings row.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_icon" c:identifier="he_settings_row_get_icon">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_icon" c:identifier="he_settings_row_set_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="gicon" readable="0" writable="1">
+			<type name="Gio.Icon" c:type="GIcon*"/>
+		</property>
+		<method name="set_gicon" c:identifier="he_settings_row_set_gicon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gio.Icon" c:type="GIcon*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="paintable" readable="0" writable="1">
+			<type name="Gdk.Paintable" c:type="GdkPaintable*"/>
+		</property>
+		<method name="set_paintable" c:identifier="he_settings_row_set_paintable">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gdk.Paintable" c:type="GdkPaintable*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="primary-button" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The primary button of the settings row.&lt;/para&gt;</doc>
+			<type name="He.Button" c:type="HeButton*"/>
+		</property>
+		<method name="get_primary_button" c:identifier="he_settings_row_get_primary_button">
+			<return-value transfer-ownership="none">
+				<type name="He.Button" c:type="HeButton*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_primary_button" c:identifier="he_settings_row_set_primary_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="activatable-widget" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the activatable widget of the settings row, if any.&lt;/para&gt;</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_activatable_widget" c:identifier="he_settings_row_get_activatable_widget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_activatable_widget" c:identifier="he_settings_row_set_activatable_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="activated">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
+	</class>
+	<record name="SettingsRowClass" c:type="HeSettingsRowClass" glib:is-gtype-struct-for="SettingsRow">
+		<field name="parent_class" readable="0" private="1">
+			<type name="Gtk.ListBoxRowClass" c:type="GtkListBoxRowClass"/>
+		</field>
+	</record>
+	<record name="SettingsRowPrivate" c:type="HeSettingsRowPrivate" disguised="1"/>
+	<class name="SettingsList" c:type="HeSettingsList" c:symbol-prefix="settings_list" glib:type-name="HeSettingsList" glib:get-type="he_settings_list_get_type" glib:type-struct="SettingsListClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A SettingsList is a list of content blocks with an optional title and description.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SettingsListPrivate" c:type="HeSettingsListPrivate*"/>
+		</field>
+		<field name="children" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;A List of all the children of the SettingsList.&lt;/para&gt;</doc>
+			<type name="GLib.List" c:type="GList*">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</type>
+		</field>
+		<method name="add" c:identifier="he_settings_list_add">
+			<doc xml:whitespace="preserve">&lt;para&gt;Adds a new item to the SettingsList.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The item to add. &lt;/para&gt;</doc>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="remove" c:identifier="he_settings_list_remove">
+			<doc xml:whitespace="preserve">&lt;para&gt;Removes an item from the SettingsList.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The item to remove. &lt;/para&gt;</doc>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<constructor name="new" c:identifier="he_settings_list_new">
+			<return-value transfer-ownership="none">
+				<type name="He.SettingsList" c:type="HeSettingsList*"/>
+			</return-value>
+		</constructor>
+		<property name="title" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The title of the SettingsList.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_title" c:identifier="he_settings_list_get_title">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_title" c:identifier="he_settings_list_set_title">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="description" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The description of the SettingsList.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_description" c:identifier="he_settings_list_get_description">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_description" c:identifier="he_settings_list_set_description">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="SettingsListClass" c:type="HeSettingsListClass" glib:is-gtype-struct-for="SettingsList">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="SettingsListPrivate" c:type="HeSettingsListPrivate" disguised="1"/>
 	<class name="SettingsPage" c:type="HeSettingsPage" c:symbol-prefix="settings_page" glib:type-name="HeSettingsPage" glib:get-type="he_settings_page_get_type" glib:type-struct="SettingsPageClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;Auxilary Class for handling the contents of Settings Windows&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -4441,7 +4916,7 @@ Since: 1.0</doc>
 			<type name="SettingsPagePrivate" c:type="HeSettingsPagePrivate*"/>
 		</field>
 		<method name="add_list" c:identifier="he_settings_page_add_list">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a Content List to this page&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a Settings List to this page&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -4450,7 +4925,7 @@ Since: 1.0</doc>
 					<type name="He.SettingsPage" c:type="HeSettingsPage*"/>
 				</instance-parameter>
 				<parameter name="list" transfer-ownership="none">
-					<type name="He.ContentList" c:type="HeContentList*"/>
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -4502,7 +4977,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="SettingsPagePrivate" c:type="HeSettingsPagePrivate" disguised="1"/>
 	<class name="SettingsWindow" c:type="HeSettingsWindow" c:symbol-prefix="settings_window" glib:type-name="HeSettingsWindow" glib:get-type="he_settings_window_get_type" glib:type-struct="SettingsWindowClass" parent="He.Window">
-		<doc xml:whitespace="preserve">&lt;para&gt;A modal window that accepts ContentLists or SettingsPages&lt;/para&gt;</doc>
+		<doc xml:whitespace="preserve">&lt;para&gt;A modal window that accepts SettingsLists or SettingsPages&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Window" c:type="HeWindow"/>
@@ -4525,7 +5000,7 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<method name="add_list" c:identifier="he_settings_window_add_list">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a Content List to this window&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a Settings List to this window&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -4534,12 +5009,12 @@ Since: 1.0</doc>
 					<type name="He.SettingsWindow" c:type="HeSettingsWindow*"/>
 				</instance-parameter>
 				<parameter name="list" transfer-ownership="none">
-					<type name="He.ContentList" c:type="HeContentList*"/>
+					<type name="He.SettingsList" c:type="HeSettingsList*"/>
 				</parameter>
 			</parameters>
 		</method>
 		<constructor name="new" c:identifier="he_settings_window_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Create a new Settingss Window.&lt;/para&gt;
+			<doc xml:whitespace="preserve">&lt;para&gt;Create a new Settings Window.&lt;/para&gt;
 
 Since: 1.0</doc>
 			<return-value transfer-ownership="none">
@@ -5668,6 +6143,55 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ViewAuxPrivate" c:type="HeViewAuxPrivate" disguised="1"/>
+	<class name="ViewChooser" c:type="HeViewChooser" c:symbol-prefix="view_chooser" glib:type-name="HeViewChooser" glib:get-type="he_view_chooser_get_type" glib:type-struct="ViewChooserClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A ViewChooser is a chooser switcher that filters a stack&amp;apos;s view.&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ViewChooserPrivate" c:type="HeViewChooserPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_view_chooser_new">
+			<return-value transfer-ownership="none">
+				<type name="He.ViewChooser" c:type="HeViewChooser*"/>
+			</return-value>
+		</constructor>
+		<property name="stack" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The stack that is controlled by this chooser switcher.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<type name="Gtk.Stack" c:type="GtkStack*"/>
+		</property>
+		<method name="get_stack" c:identifier="he_view_chooser_get_stack">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Stack" c:type="GtkStack*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewChooser" c:type="HeViewChooser*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_stack" c:identifier="he_view_chooser_set_stack">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewChooser" c:type="HeViewChooser*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Stack" c:type="GtkStack*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="ViewChooserClass" c:type="HeViewChooserClass" glib:is-gtype-struct-for="ViewChooser">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="ViewChooserPrivate" c:type="HeViewChooserPrivate" disguised="1"/>
 	<class name="ViewDual" c:type="HeViewDual" c:symbol-prefix="view_dual" glib:type-name="HeViewDual" glib:get-type="he_view_dual_get_type" glib:type-struct="ViewDualClass" parent="He.View">
 		<doc xml:whitespace="preserve">&lt;para&gt;A ViewDual is a view that displays two views side by side.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">

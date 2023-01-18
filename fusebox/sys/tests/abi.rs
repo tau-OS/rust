@@ -236,6 +236,7 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
+    ("(gint) FUSEBOX_FUSE_CATEGORY_CUSTOM", "3"),
     ("(gint) FUSEBOX_FUSE_CATEGORY_NETWORK", "0"),
     ("(gint) FUSEBOX_FUSE_CATEGORY_PERSONAL", "1"),
     ("(gint) FUSEBOX_FUSE_CATEGORY_SYSTEM", "2"),

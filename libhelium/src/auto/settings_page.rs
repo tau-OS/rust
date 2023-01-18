@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{Bin, ContentList};
+use crate::{Bin, SettingsList};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -327,7 +327,7 @@ impl SettingsPageBuilder {
 
 pub trait SettingsPageExt: 'static {
     #[doc(alias = "he_settings_page_add_list")]
-    fn add_list(&self, list: &impl IsA<ContentList>);
+    fn add_list(&self, list: &impl IsA<SettingsList>);
 
     #[doc(alias = "he_settings_page_get_title")]
     #[doc(alias = "get_title")]
@@ -341,7 +341,7 @@ pub trait SettingsPageExt: 'static {
 }
 
 impl<O: IsA<SettingsPage>> SettingsPageExt for O {
-    fn add_list(&self, list: &impl IsA<ContentList>) {
+    fn add_list(&self, list: &impl IsA<SettingsList>) {
         unsafe {
             ffi::he_settings_page_add_list(
                 self.as_ref().to_glib_none().0,

@@ -192,6 +192,27 @@ pub type HeApplicationWindowPrivate = *mut _HeApplicationWindowPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeAvatarClass {
+    pub parent_class: HeBinClass,
+}
+
+impl ::std::fmt::Debug for HeAvatarClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeAvatarClass @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _HeAvatarPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type HeAvatarPrivate = *mut _HeAvatarPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeBadgeClass {
     pub parent_class: HeBinClass,
 }
@@ -754,6 +775,27 @@ pub type HePillButtonPrivate = *mut _HePillButtonPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeSettingsListClass {
+    pub parent_class: HeBinClass,
+}
+
+impl ::std::fmt::Debug for HeSettingsListClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeSettingsListClass @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _HeSettingsListPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type HeSettingsListPrivate = *mut _HeSettingsListPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeSettingsPageClass {
     pub parent_class: HeBinClass,
 }
@@ -772,6 +814,27 @@ pub struct _HeSettingsPagePrivate {
 }
 
 pub type HeSettingsPagePrivate = *mut _HeSettingsPagePrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeSettingsRowClass {
+    pub parent_class: gtk::GtkListBoxRowClass,
+}
+
+impl ::std::fmt::Debug for HeSettingsRowClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeSettingsRowClass @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _HeSettingsRowPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type HeSettingsRowPrivate = *mut _HeSettingsRowPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -959,6 +1022,27 @@ pub struct _HeViewAuxPrivate {
 }
 
 pub type HeViewAuxPrivate = *mut _HeViewAuxPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeViewChooserClass {
+    pub parent_class: HeBinClass,
+}
+
+impl ::std::fmt::Debug for HeViewChooserClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeViewChooserClass @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _HeViewChooserPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type HeViewChooserPrivate = *mut _HeViewChooserPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1163,15 +1247,15 @@ impl ::std::fmt::Debug for HeAboutWindow {
 pub struct HeAppBar {
     pub parent_instance: HeBin,
     pub priv_: *mut HeAppBarPrivate,
-    pub title: *mut gtk::GtkHeaderBar,
     pub back_button: *mut gtk::GtkButton,
+    pub btn_box: *mut gtk::GtkBox,
 }
 
 impl ::std::fmt::Debug for HeAppBar {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeAppBar @ {self:p}"))
-            .field("title", &self.title)
             .field("back_button", &self.back_button)
+            .field("btn_box", &self.btn_box)
             .finish()
     }
 }
@@ -1201,6 +1285,19 @@ impl ::std::fmt::Debug for HeApplicationWindow {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeApplicationWindow @ {self:p}"))
             .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeAvatar {
+    pub parent_instance: HeBin,
+    pub priv_: *mut HeAvatarPrivate,
+}
+
+impl ::std::fmt::Debug for HeAvatar {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeAvatar @ {self:p}")).finish()
     }
 }
 
@@ -1274,11 +1371,13 @@ impl ::std::fmt::Debug for HeButton {
 pub struct HeButtonContent {
     pub parent_instance: gtk::GtkWidget,
     pub priv_: *mut HeButtonContentPrivate,
+    pub image: *mut gtk::GtkImage,
 }
 
 impl ::std::fmt::Debug for HeButtonContent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeButtonContent @ {self:p}"))
+            .field("image", &self.image)
             .finish()
     }
 }
@@ -1525,6 +1624,22 @@ impl ::std::fmt::Debug for HePillButton {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeSettingsList {
+    pub parent_instance: HeBin,
+    pub priv_: *mut HeSettingsListPrivate,
+    pub children: *mut glib::GList,
+}
+
+impl ::std::fmt::Debug for HeSettingsList {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeSettingsList @ {self:p}"))
+            .field("children", &self.children)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeSettingsPage {
     pub parent_instance: HeBin,
     pub priv_: *mut HeSettingsPagePrivate,
@@ -1533,6 +1648,20 @@ pub struct HeSettingsPage {
 impl ::std::fmt::Debug for HeSettingsPage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeSettingsPage @ {self:p}"))
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeSettingsRow {
+    pub parent_instance: gtk::GtkListBoxRow,
+    pub priv_: *mut HeSettingsRowPrivate,
+}
+
+impl ::std::fmt::Debug for HeSettingsRow {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeSettingsRow @ {self:p}"))
             .finish()
     }
 }
@@ -1671,6 +1800,20 @@ pub struct HeViewAux {
 impl ::std::fmt::Debug for HeViewAux {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeViewAux @ {self:p}")).finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeViewChooser {
+    pub parent_instance: HeBin,
+    pub priv_: *mut HeViewChooserPrivate,
+}
+
+impl ::std::fmt::Debug for HeViewChooser {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeViewChooser @ {self:p}"))
+            .finish()
     }
 }
 
@@ -1919,6 +2062,8 @@ extern "C" {
     pub fn he_app_bar_set_scroller(self_: *mut HeAppBar, value: *mut gtk::GtkScrolledWindow);
     pub fn he_app_bar_get_viewtitle_label(self_: *mut HeAppBar) -> *const c_char;
     pub fn he_app_bar_set_viewtitle_label(self_: *mut HeAppBar, value: *const c_char);
+    pub fn he_app_bar_get_viewsubtitle_label(self_: *mut HeAppBar) -> *const c_char;
+    pub fn he_app_bar_set_viewsubtitle_label(self_: *mut HeAppBar, value: *const c_char);
     pub fn he_app_bar_get_flat(self_: *mut HeAppBar) -> gboolean;
     pub fn he_app_bar_set_flat(self_: *mut HeAppBar, value: gboolean);
     pub fn he_app_bar_get_show_buttons(self_: *mut HeAppBar) -> gboolean;
@@ -1962,6 +2107,18 @@ extern "C" {
         self_: *mut HeApplicationWindow,
         value: gboolean,
     );
+
+    //=========================================================================
+    // HeAvatar
+    //=========================================================================
+    pub fn he_avatar_get_type() -> GType;
+    pub fn he_avatar_new(size: c_int, image: *const c_char, text: *const c_char) -> *mut HeAvatar;
+    pub fn he_avatar_get_image(self_: *mut HeAvatar) -> *const c_char;
+    pub fn he_avatar_set_image(self_: *mut HeAvatar, value: *const c_char);
+    pub fn he_avatar_get_size(self_: *mut HeAvatar) -> c_int;
+    pub fn he_avatar_set_size(self_: *mut HeAvatar, value: c_int);
+    pub fn he_avatar_get_text(self_: *mut HeAvatar) -> *const c_char;
+    pub fn he_avatar_set_text(self_: *mut HeAvatar, value: *const c_char);
 
     //=========================================================================
     // HeBadge
@@ -2344,20 +2501,59 @@ extern "C" {
     pub fn he_pill_button_new(label: *const c_char) -> *mut HePillButton;
 
     //=========================================================================
+    // HeSettingsList
+    //=========================================================================
+    pub fn he_settings_list_get_type() -> GType;
+    pub fn he_settings_list_add(self_: *mut HeSettingsList, child: *mut gtk::GtkWidget);
+    pub fn he_settings_list_remove(self_: *mut HeSettingsList, child: *mut gtk::GtkWidget);
+    pub fn he_settings_list_new() -> *mut HeSettingsList;
+    pub fn he_settings_list_get_title(self_: *mut HeSettingsList) -> *const c_char;
+    pub fn he_settings_list_set_title(self_: *mut HeSettingsList, value: *const c_char);
+    pub fn he_settings_list_get_description(self_: *mut HeSettingsList) -> *const c_char;
+    pub fn he_settings_list_set_description(self_: *mut HeSettingsList, value: *const c_char);
+
+    //=========================================================================
     // HeSettingsPage
     //=========================================================================
     pub fn he_settings_page_get_type() -> GType;
-    pub fn he_settings_page_add_list(self_: *mut HeSettingsPage, list: *mut HeContentList);
+    pub fn he_settings_page_add_list(self_: *mut HeSettingsPage, list: *mut HeSettingsList);
     pub fn he_settings_page_new(title: *const c_char) -> *mut HeSettingsPage;
     pub fn he_settings_page_get_title(self_: *mut HeSettingsPage) -> *const c_char;
     pub fn he_settings_page_set_title(self_: *mut HeSettingsPage, value: *const c_char);
+
+    //=========================================================================
+    // HeSettingsRow
+    //=========================================================================
+    pub fn he_settings_row_get_type() -> GType;
+    pub fn he_settings_row_new_with_details(
+        title: *const c_char,
+        subtitle: *const c_char,
+        primary_button: *mut HeButton,
+    ) -> *mut HeSettingsRow;
+    pub fn he_settings_row_new() -> *mut HeSettingsRow;
+    pub fn he_settings_row_get_title(self_: *mut HeSettingsRow) -> *const c_char;
+    pub fn he_settings_row_set_title(self_: *mut HeSettingsRow, value: *const c_char);
+    pub fn he_settings_row_get_subtitle(self_: *mut HeSettingsRow) -> *const c_char;
+    pub fn he_settings_row_set_subtitle(self_: *mut HeSettingsRow, value: *const c_char);
+    pub fn he_settings_row_get_icon(self_: *mut HeSettingsRow) -> *const c_char;
+    pub fn he_settings_row_set_icon(self_: *mut HeSettingsRow, value: *const c_char);
+    pub fn he_settings_row_set_gicon(self_: *mut HeSettingsRow, value: *mut gio::GIcon);
+    pub fn he_settings_row_set_paintable(self_: *mut HeSettingsRow, value: *mut gdk::GdkPaintable);
+    pub fn he_settings_row_get_primary_button(self_: *mut HeSettingsRow) -> *mut HeButton;
+    pub fn he_settings_row_set_primary_button(self_: *mut HeSettingsRow, value: *mut HeButton);
+    pub fn he_settings_row_get_activatable_widget(self_: *mut HeSettingsRow)
+        -> *mut gtk::GtkWidget;
+    pub fn he_settings_row_set_activatable_widget(
+        self_: *mut HeSettingsRow,
+        value: *mut gtk::GtkWidget,
+    );
 
     //=========================================================================
     // HeSettingsWindow
     //=========================================================================
     pub fn he_settings_window_get_type() -> GType;
     pub fn he_settings_window_add_page(self_: *mut HeSettingsWindow, page: *mut HeSettingsPage);
-    pub fn he_settings_window_add_list(self_: *mut HeSettingsWindow, list: *mut HeContentList);
+    pub fn he_settings_window_add_list(self_: *mut HeSettingsWindow, list: *mut HeSettingsList);
     pub fn he_settings_window_new(parent: *mut gtk::GtkWindow) -> *mut HeSettingsWindow;
 
     //=========================================================================
@@ -2495,6 +2691,14 @@ extern "C" {
     pub fn he_view_aux_new() -> *mut HeViewAux;
     pub fn he_view_aux_get_show_aux(self_: *mut HeViewAux) -> gboolean;
     pub fn he_view_aux_set_show_aux(self_: *mut HeViewAux, value: gboolean);
+
+    //=========================================================================
+    // HeViewChooser
+    //=========================================================================
+    pub fn he_view_chooser_get_type() -> GType;
+    pub fn he_view_chooser_new() -> *mut HeViewChooser;
+    pub fn he_view_chooser_get_stack(self_: *mut HeViewChooser) -> *mut gtk::GtkStack;
+    pub fn he_view_chooser_set_stack(self_: *mut HeViewChooser, value: *mut gtk::GtkStack);
 
     //=========================================================================
     // HeViewDual

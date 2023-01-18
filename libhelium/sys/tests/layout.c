@@ -17,6 +17,8 @@ int main() {
     printf("%s;%zu;%zu\n", "HeApplicationClass", sizeof(HeApplicationClass), alignof(HeApplicationClass));
     printf("%s;%zu;%zu\n", "HeApplicationWindow", sizeof(HeApplicationWindow), alignof(HeApplicationWindow));
     printf("%s;%zu;%zu\n", "HeApplicationWindowClass", sizeof(HeApplicationWindowClass), alignof(HeApplicationWindowClass));
+    printf("%s;%zu;%zu\n", "HeAvatar", sizeof(HeAvatar), alignof(HeAvatar));
+    printf("%s;%zu;%zu\n", "HeAvatarClass", sizeof(HeAvatarClass), alignof(HeAvatarClass));
     printf("%s;%zu;%zu\n", "HeBadge", sizeof(HeBadge), alignof(HeBadge));
     printf("%s;%zu;%zu\n", "HeBadgeClass", sizeof(HeBadgeClass), alignof(HeBadgeClass));
     printf("%s;%zu;%zu\n", "HeBanner", sizeof(HeBanner), alignof(HeBanner));
@@ -76,8 +78,12 @@ int main() {
     printf("%s;%zu;%zu\n", "HeOverlayButtonSize", sizeof(HeOverlayButtonSize), alignof(HeOverlayButtonSize));
     printf("%s;%zu;%zu\n", "HePillButton", sizeof(HePillButton), alignof(HePillButton));
     printf("%s;%zu;%zu\n", "HePillButtonClass", sizeof(HePillButtonClass), alignof(HePillButtonClass));
+    printf("%s;%zu;%zu\n", "HeSettingsList", sizeof(HeSettingsList), alignof(HeSettingsList));
+    printf("%s;%zu;%zu\n", "HeSettingsListClass", sizeof(HeSettingsListClass), alignof(HeSettingsListClass));
     printf("%s;%zu;%zu\n", "HeSettingsPage", sizeof(HeSettingsPage), alignof(HeSettingsPage));
     printf("%s;%zu;%zu\n", "HeSettingsPageClass", sizeof(HeSettingsPageClass), alignof(HeSettingsPageClass));
+    printf("%s;%zu;%zu\n", "HeSettingsRow", sizeof(HeSettingsRow), alignof(HeSettingsRow));
+    printf("%s;%zu;%zu\n", "HeSettingsRowClass", sizeof(HeSettingsRowClass), alignof(HeSettingsRowClass));
     printf("%s;%zu;%zu\n", "HeSettingsWindow", sizeof(HeSettingsWindow), alignof(HeSettingsWindow));
     printf("%s;%zu;%zu\n", "HeSettingsWindowClass", sizeof(HeSettingsWindowClass), alignof(HeSettingsWindowClass));
     printf("%s;%zu;%zu\n", "HeSideBar", sizeof(HeSideBar), alignof(HeSideBar));
@@ -98,6 +104,8 @@ int main() {
     printf("%s;%zu;%zu\n", "HeView", sizeof(HeView), alignof(HeView));
     printf("%s;%zu;%zu\n", "HeViewAux", sizeof(HeViewAux), alignof(HeViewAux));
     printf("%s;%zu;%zu\n", "HeViewAuxClass", sizeof(HeViewAuxClass), alignof(HeViewAuxClass));
+    printf("%s;%zu;%zu\n", "HeViewChooser", sizeof(HeViewChooser), alignof(HeViewChooser));
+    printf("%s;%zu;%zu\n", "HeViewChooserClass", sizeof(HeViewChooserClass), alignof(HeViewChooserClass));
     printf("%s;%zu;%zu\n", "HeViewClass", sizeof(HeViewClass), alignof(HeViewClass));
     printf("%s;%zu;%zu\n", "HeViewDual", sizeof(HeViewDual), alignof(HeViewDual));
     printf("%s;%zu;%zu\n", "HeViewDualClass", sizeof(HeViewDualClass), alignof(HeViewDualClass));

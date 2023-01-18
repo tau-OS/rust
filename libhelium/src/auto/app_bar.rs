@@ -54,6 +54,7 @@ pub struct AppBarBuilder {
     stack: Option<gtk::Stack>,
     scroller: Option<gtk::ScrolledWindow>,
     viewtitle_label: Option<String>,
+    viewsubtitle_label: Option<String>,
     flat: Option<bool>,
     show_buttons: Option<bool>,
     show_back: Option<bool>,
@@ -110,6 +111,9 @@ impl AppBarBuilder {
         }
         if let Some(ref viewtitle_label) = self.viewtitle_label {
             properties.push(("viewtitle-label", viewtitle_label));
+        }
+        if let Some(ref viewsubtitle_label) = self.viewsubtitle_label {
+            properties.push(("viewsubtitle-label", viewsubtitle_label));
         }
         if let Some(ref flat) = self.flat {
             properties.push(("flat", flat));
@@ -216,6 +220,11 @@ impl AppBarBuilder {
 
     pub fn viewtitle_label(mut self, viewtitle_label: &str) -> Self {
         self.viewtitle_label = Some(viewtitle_label.to_string());
+        self
+    }
+
+    pub fn viewsubtitle_label(mut self, viewsubtitle_label: &str) -> Self {
+        self.viewsubtitle_label = Some(viewsubtitle_label.to_string());
         self
     }
 
@@ -398,6 +407,13 @@ pub trait AppBarExt: 'static {
     #[doc(alias = "he_app_bar_set_viewtitle_label")]
     fn set_viewtitle_label(&self, value: &str);
 
+    #[doc(alias = "he_app_bar_get_viewsubtitle_label")]
+    #[doc(alias = "get_viewsubtitle_label")]
+    fn viewsubtitle_label(&self) -> glib::GString;
+
+    #[doc(alias = "he_app_bar_set_viewsubtitle_label")]
+    fn set_viewsubtitle_label(&self, value: &str);
+
     #[doc(alias = "he_app_bar_get_flat")]
     #[doc(alias = "get_flat")]
     fn is_flat(&self) -> bool;
@@ -427,6 +443,9 @@ pub trait AppBarExt: 'static {
 
     #[doc(alias = "viewtitle-label")]
     fn connect_viewtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "viewsubtitle-label")]
+    fn connect_viewsubtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "flat")]
     fn connect_flat_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -488,6 +507,23 @@ impl<O: IsA<AppBar>> AppBarExt for O {
     fn set_viewtitle_label(&self, value: &str) {
         unsafe {
             ffi::he_app_bar_set_viewtitle_label(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
+    fn viewsubtitle_label(&self) -> glib::GString {
+        unsafe {
+            from_glib_none(ffi::he_app_bar_get_viewsubtitle_label(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_viewsubtitle_label(&self, value: &str) {
+        unsafe {
+            ffi::he_app_bar_set_viewsubtitle_label(
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
             );
@@ -595,6 +631,31 @@ impl<O: IsA<AppBar>> AppBarExt for O {
                 b"notify::viewtitle-label\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_viewtitle_label_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_viewsubtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_viewsubtitle_label_trampoline<
+            P: IsA<AppBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeAppBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(AppBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::viewsubtitle-label\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_viewsubtitle_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

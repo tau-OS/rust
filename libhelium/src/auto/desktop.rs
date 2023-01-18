@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ColorRGBColor, DesktopColorScheme};
+use crate::{ColorRGBColor, DesktopColorScheme, DesktopDarkModeStrength};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -52,7 +52,7 @@ impl Default for Desktop {
 #[must_use = "The builder must be built to be used"]
 pub struct DesktopBuilder {
     prefers_color_scheme: Option<DesktopColorScheme>,
-    //dark-mode-strength: /*Unknown type*/,
+    dark_mode_strength: Option<DesktopDarkModeStrength>,
     accent_color: Option<ColorRGBColor>,
 }
 
@@ -71,6 +71,9 @@ impl DesktopBuilder {
         if let Some(ref prefers_color_scheme) = self.prefers_color_scheme {
             properties.push(("prefers-color-scheme", prefers_color_scheme));
         }
+        if let Some(ref dark_mode_strength) = self.dark_mode_strength {
+            properties.push(("dark-mode-strength", dark_mode_strength));
+        }
         if let Some(ref accent_color) = self.accent_color {
             properties.push(("accent-color", accent_color));
         }
@@ -79,6 +82,11 @@ impl DesktopBuilder {
 
     pub fn prefers_color_scheme(mut self, prefers_color_scheme: DesktopColorScheme) -> Self {
         self.prefers_color_scheme = Some(prefers_color_scheme);
+        self
+    }
+
+    pub fn dark_mode_strength(mut self, dark_mode_strength: DesktopDarkModeStrength) -> Self {
+        self.dark_mode_strength = Some(dark_mode_strength);
         self
     }
 
@@ -93,9 +101,9 @@ pub trait DesktopExt: 'static {
     #[doc(alias = "get_prefers_color_scheme")]
     fn prefers_color_scheme(&self) -> DesktopColorScheme;
 
-    //#[doc(alias = "he_desktop_get_dark_mode_strength")]
-    //#[doc(alias = "get_dark_mode_strength")]
-    //fn dark_mode_strength(&self) -> /*Ignored*/DesktopDarkModeStrength;
+    #[doc(alias = "he_desktop_get_dark_mode_strength")]
+    #[doc(alias = "get_dark_mode_strength")]
+    fn dark_mode_strength(&self) -> DesktopDarkModeStrength;
 
     #[doc(alias = "he_desktop_get_accent_color")]
     #[doc(alias = "get_accent_color")]
@@ -104,8 +112,8 @@ pub trait DesktopExt: 'static {
     #[doc(alias = "prefers-color-scheme")]
     fn set_prefers_color_scheme(&self, prefers_color_scheme: DesktopColorScheme);
 
-    //#[doc(alias = "dark-mode-strength")]
-    //fn set_dark_mode_strength(&self, dark_mode_strength: /*Ignored*/DesktopDarkModeStrength);
+    #[doc(alias = "dark-mode-strength")]
+    fn set_dark_mode_strength(&self, dark_mode_strength: DesktopDarkModeStrength);
 
     #[doc(alias = "accent-color")]
     fn set_accent_color(&self, accent_color: Option<&ColorRGBColor>);
@@ -129,9 +137,13 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
-    //fn dark_mode_strength(&self) -> /*Ignored*/DesktopDarkModeStrength {
-    //    unsafe { TODO: call ffi:he_desktop_get_dark_mode_strength() }
-    //}
+    fn dark_mode_strength(&self) -> DesktopDarkModeStrength {
+        unsafe {
+            from_glib(ffi::he_desktop_get_dark_mode_strength(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn accent_color(&self) -> Option<ColorRGBColor> {
         unsafe {
@@ -145,9 +157,9 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "prefers-color-scheme", &prefers_color_scheme)
     }
 
-    //fn set_dark_mode_strength(&self, dark_mode_strength: /*Ignored*/DesktopDarkModeStrength) {
-    //    glib::ObjectExt::set_property(self.as_ref(),"dark-mode-strength", &dark_mode_strength)
-    //}
+    fn set_dark_mode_strength(&self, dark_mode_strength: DesktopDarkModeStrength) {
+        glib::ObjectExt::set_property(self.as_ref(), "dark-mode-strength", &dark_mode_strength)
+    }
 
     fn set_accent_color(&self, accent_color: Option<&ColorRGBColor>) {
         glib::ObjectExt::set_property(self.as_ref(), "accent-color", &accent_color)

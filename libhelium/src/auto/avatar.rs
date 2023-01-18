@@ -12,47 +12,54 @@ use glib::{
 use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 glib::wrapper! {
-    #[doc(alias = "HeNavigationRail")]
-    pub struct NavigationRail(Object<ffi::HeNavigationRail, ffi::HeNavigationRailClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    #[doc(alias = "HeAvatar")]
+    pub struct Avatar(Object<ffi::HeAvatar, ffi::HeAvatarClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_navigation_rail_get_type(),
+        type_ => || ffi::he_avatar_get_type(),
     }
 }
 
-impl NavigationRail {
-    pub const NONE: Option<&'static NavigationRail> = None;
+impl Avatar {
+    pub const NONE: Option<&'static Avatar> = None;
 
-    #[doc(alias = "he_navigation_rail_new")]
-    pub fn new() -> NavigationRail {
+    #[doc(alias = "he_avatar_new")]
+    pub fn new(size: i32, image: Option<&str>, text: Option<&str>) -> Avatar {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::he_navigation_rail_new()) }
+        unsafe {
+            from_glib_none(ffi::he_avatar_new(
+                size,
+                image.to_glib_none().0,
+                text.to_glib_none().0,
+            ))
+        }
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`NavigationRail`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`Avatar`] objects.
     ///
-    /// This method returns an instance of [`NavigationRailBuilder`](crate::builders::NavigationRailBuilder) which can be used to create [`NavigationRail`] objects.
-    pub fn builder() -> NavigationRailBuilder {
-        NavigationRailBuilder::default()
+    /// This method returns an instance of [`AvatarBuilder`](crate::builders::AvatarBuilder) which can be used to create [`Avatar`] objects.
+    pub fn builder() -> AvatarBuilder {
+        AvatarBuilder::default()
     }
 }
 
-impl Default for NavigationRail {
+impl Default for Avatar {
     fn default() -> Self {
-        Self::new()
+        glib::object::Object::new::<Self>(&[])
     }
 }
 
 #[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`NavigationRail`] objects.
+/// A [builder-pattern] type to construct [`Avatar`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct NavigationRailBuilder {
-    stack: Option<gtk::Stack>,
-    orientation: Option<gtk::Orientation>,
+pub struct AvatarBuilder {
+    image: Option<String>,
+    size: Option<i32>,
+    text: Option<String>,
     child: Option<gtk::Widget>,
     can_focus: Option<bool>,
     can_target: Option<bool>,
@@ -86,23 +93,26 @@ pub struct NavigationRailBuilder {
     //accessible-role: /*Unknown type*/,
 }
 
-impl NavigationRailBuilder {
+impl AvatarBuilder {
     // rustdoc-stripper-ignore-next
-    /// Create a new [`NavigationRailBuilder`].
+    /// Create a new [`AvatarBuilder`].
     pub fn new() -> Self {
         Self::default()
     }
 
     // rustdoc-stripper-ignore-next
-    /// Build the [`NavigationRail`].
+    /// Build the [`Avatar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> NavigationRail {
+    pub fn build(self) -> Avatar {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref stack) = self.stack {
-            properties.push(("stack", stack));
+        if let Some(ref image) = self.image {
+            properties.push(("image", image));
         }
-        if let Some(ref orientation) = self.orientation {
-            properties.push(("orientation", orientation));
+        if let Some(ref size) = self.size {
+            properties.push(("size", size));
+        }
+        if let Some(ref text) = self.text {
+            properties.push(("text", text));
         }
         if let Some(ref child) = self.child {
             properties.push(("child", child));
@@ -185,16 +195,21 @@ impl NavigationRailBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new::<NavigationRail>(&properties)
+        glib::Object::new::<Avatar>(&properties)
     }
 
-    pub fn stack(mut self, stack: &gtk::Stack) -> Self {
-        self.stack = Some(stack.clone());
+    pub fn image(mut self, image: &str) -> Self {
+        self.image = Some(image.to_string());
         self
     }
 
-    pub fn orientation(mut self, orientation: gtk::Orientation) -> Self {
-        self.orientation = Some(orientation);
+    pub fn size(mut self, size: i32) -> Self {
+        self.size = Some(size);
+        self
+    }
+
+    pub fn text(mut self, text: &str) -> Self {
+        self.text = Some(text.to_string());
         self
     }
 
@@ -334,107 +349,129 @@ impl NavigationRailBuilder {
     }
 }
 
-pub trait NavigationRailExt: 'static {
-    #[doc(alias = "he_navigation_rail_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack;
+pub trait AvatarExt: 'static {
+    #[doc(alias = "he_avatar_get_image")]
+    #[doc(alias = "get_image")]
+    fn image(&self) -> Option<glib::GString>;
 
-    #[doc(alias = "he_navigation_rail_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack);
+    #[doc(alias = "he_avatar_set_image")]
+    fn set_image(&self, value: Option<&str>);
 
-    #[doc(alias = "he_navigation_rail_get_orientation")]
-    #[doc(alias = "get_orientation")]
-    fn orientation(&self) -> gtk::Orientation;
+    #[doc(alias = "he_avatar_get_size")]
+    #[doc(alias = "get_size")]
+    fn size(&self) -> i32;
 
-    #[doc(alias = "he_navigation_rail_set_orientation")]
-    fn set_orientation(&self, value: gtk::Orientation);
+    #[doc(alias = "he_avatar_set_size")]
+    fn set_size(&self, value: i32);
 
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "he_avatar_get_text")]
+    #[doc(alias = "get_text")]
+    fn text(&self) -> Option<glib::GString>;
 
-    #[doc(alias = "orientation")]
-    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "he_avatar_set_text")]
+    fn set_text(&self, value: Option<&str>);
+
+    #[doc(alias = "image")]
+    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "size")]
+    fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "text")]
+    fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<NavigationRail>> NavigationRailExt for O {
-    fn stack(&self) -> gtk::Stack {
+impl<O: IsA<Avatar>> AvatarExt for O {
+    fn image(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::he_avatar_get_image(self.as_ref().to_glib_none().0)) }
+    }
+
+    fn set_image(&self, value: Option<&str>) {
         unsafe {
-            from_glib_none(ffi::he_navigation_rail_get_stack(
-                self.as_ref().to_glib_none().0,
-            ))
+            ffi::he_avatar_set_image(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
-    fn set_stack(&self, value: &gtk::Stack) {
+    fn size(&self) -> i32 {
+        unsafe { ffi::he_avatar_get_size(self.as_ref().to_glib_none().0) }
+    }
+
+    fn set_size(&self, value: i32) {
         unsafe {
-            ffi::he_navigation_rail_set_stack(
-                self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
+            ffi::he_avatar_set_size(self.as_ref().to_glib_none().0, value);
         }
     }
 
-    fn orientation(&self) -> gtk::Orientation {
+    fn text(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::he_avatar_get_text(self.as_ref().to_glib_none().0)) }
+    }
+
+    fn set_text(&self, value: Option<&str>) {
         unsafe {
-            from_glib(ffi::he_navigation_rail_get_orientation(
-                self.as_ref().to_glib_none().0,
-            ))
+            ffi::he_avatar_set_text(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
-    fn set_orientation(&self, value: gtk::Orientation) {
-        unsafe {
-            ffi::he_navigation_rail_set_orientation(
-                self.as_ref().to_glib_none().0,
-                value.into_glib(),
-            );
-        }
-    }
-
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_stack_trampoline<
-            P: IsA<NavigationRail>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeNavigationRail,
+    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_image_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeAvatar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stack\0".as_ptr() as *const _,
+                b"notify::image\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_stack_trampoline::<Self, F> as *const (),
+                    notify_image_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_orientation_trampoline<
-            P: IsA<NavigationRail>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeNavigationRail,
+    fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_size_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeAvatar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::orientation\0".as_ptr() as *const _,
+                b"notify::size\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_orientation_trampoline::<Self, F> as *const (),
+                    notify_size_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_text_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeAvatar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::text\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -442,8 +479,8 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
     }
 }
 
-impl fmt::Display for NavigationRail {
+impl fmt::Display for Avatar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("NavigationRail")
+        f.write_str("Avatar")
     }
 }

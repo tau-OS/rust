@@ -696,6 +696,109 @@ impl From<DesktopColorScheme> for glib::Value {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HeDesktopDarkModeStrength")]
+pub enum DesktopDarkModeStrength {
+    #[doc(alias = "HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM")]
+    Medium,
+    #[doc(alias = "HE_DESKTOP_DARK_MODE_STRENGTH_HARSH")]
+    Harsh,
+    #[doc(alias = "HE_DESKTOP_DARK_MODE_STRENGTH_SOFT")]
+    Soft,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+impl fmt::Display for DesktopDarkModeStrength {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "DesktopDarkModeStrength::{}",
+            match *self {
+                Self::Medium => "Medium",
+                Self::Harsh => "Harsh",
+                Self::Soft => "Soft",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for DesktopDarkModeStrength {
+    type GlibType = ffi::HeDesktopDarkModeStrength;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeDesktopDarkModeStrength {
+        match self {
+            Self::Medium => ffi::HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM,
+            Self::Harsh => ffi::HE_DESKTOP_DARK_MODE_STRENGTH_HARSH,
+            Self::Soft => ffi::HE_DESKTOP_DARK_MODE_STRENGTH_SOFT,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeDesktopDarkModeStrength> for DesktopDarkModeStrength {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeDesktopDarkModeStrength) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM => Self::Medium,
+            ffi::HE_DESKTOP_DARK_MODE_STRENGTH_HARSH => Self::Harsh,
+            ffi::HE_DESKTOP_DARK_MODE_STRENGTH_SOFT => Self::Soft,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for DesktopDarkModeStrength {
+    #[inline]
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::he_desktop_dark_mode_strength_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for DesktopDarkModeStrength {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for DesktopDarkModeStrength {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for DesktopDarkModeStrength {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<DesktopDarkModeStrength> for glib::Value {
+    #[inline]
+    fn from(v: DesktopDarkModeStrength) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "HeModifierBadgeAlignment")]
 pub enum ModifierBadgeAlignment {
     #[doc(alias = "HE_MODIFIER_BADGE_ALIGNMENT_LEFT")]

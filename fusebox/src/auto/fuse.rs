@@ -45,6 +45,10 @@ pub trait FuseExt: 'static {
     #[doc(alias = "get_category")]
     fn category(&self) -> FuseCategory;
 
+    #[doc(alias = "fusebox_fuse_get_index")]
+    #[doc(alias = "get_index")]
+    fn index(&self) -> i32;
+
     #[doc(alias = "fusebox_fuse_get_code_name")]
     #[doc(alias = "get_code_name")]
     fn code_name(&self) -> glib::GString;
@@ -71,9 +75,6 @@ pub trait FuseExt: 'static {
 
     #[doc(alias = "fusebox_fuse_set_can_show")]
     fn set_can_show(&self, value: bool);
-
-    #[doc(alias = "visibility-changed")]
-    fn connect_visibility_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "can-show")]
     fn connect_can_show_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -115,6 +116,10 @@ impl<O: IsA<Fuse>> FuseExt for O {
                 self.as_ref().to_glib_none().0,
             ))
         }
+    }
+
+    fn index(&self) -> i32 {
+        unsafe { ffi::fusebox_fuse_get_index(self.as_ref().to_glib_none().0) }
     }
 
     fn code_name(&self) -> glib::GString {
@@ -160,27 +165,6 @@ impl<O: IsA<Fuse>> FuseExt for O {
     fn set_can_show(&self, value: bool) {
         unsafe {
             ffi::fusebox_fuse_set_can_show(self.as_ref().to_glib_none().0, value.into_glib());
-        }
-    }
-
-    fn connect_visibility_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn visibility_changed_trampoline<P: IsA<Fuse>, F: Fn(&P) + 'static>(
-            this: *mut ffi::FuseboxFuse,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(Fuse::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"visibility-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    visibility_changed_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
         }
     }
 

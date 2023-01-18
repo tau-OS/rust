@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ContentList, SettingsPage, Window};
+use crate::{SettingsList, SettingsPage, Window};
 use glib::{prelude::*, translate::*};
 use std::fmt;
 
@@ -548,7 +548,7 @@ pub trait SettingsWindowExt: 'static {
     fn add_page(&self, page: &impl IsA<SettingsPage>);
 
     #[doc(alias = "he_settings_window_add_list")]
-    fn add_list(&self, list: &impl IsA<ContentList>);
+    fn add_list(&self, list: &impl IsA<SettingsList>);
 }
 
 impl<O: IsA<SettingsWindow>> SettingsWindowExt for O {
@@ -561,7 +561,7 @@ impl<O: IsA<SettingsWindow>> SettingsWindowExt for O {
         }
     }
 
-    fn add_list(&self, list: &impl IsA<ContentList>) {
+    fn add_list(&self, list: &impl IsA<SettingsList>) {
         unsafe {
             ffi::he_settings_window_add_list(
                 self.as_ref().to_glib_none().0,

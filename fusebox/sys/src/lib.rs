@@ -26,6 +26,7 @@ pub type FuseboxFuseCategory = c_int;
 pub const FUSEBOX_FUSE_CATEGORY_NETWORK: FuseboxFuseCategory = 0;
 pub const FUSEBOX_FUSE_CATEGORY_PERSONAL: FuseboxFuseCategory = 1;
 pub const FUSEBOX_FUSE_CATEGORY_SYSTEM: FuseboxFuseCategory = 2;
+pub const FUSEBOX_FUSE_CATEGORY_CUSTOM: FuseboxFuseCategory = 3;
 
 // Records
 #[derive(Copy, Clone)]
@@ -149,6 +150,7 @@ extern "C" {
     ) -> *mut glib::GHashTable;
     pub fn fusebox_fuse_search_callback(self_: *mut FuseboxFuse, location: *const c_char);
     pub fn fusebox_fuse_get_category(self_: *mut FuseboxFuse) -> FuseboxFuseCategory;
+    pub fn fusebox_fuse_get_index(self_: *mut FuseboxFuse) -> c_int;
     pub fn fusebox_fuse_get_code_name(self_: *mut FuseboxFuse) -> *const c_char;
     pub fn fusebox_fuse_get_display_name(self_: *mut FuseboxFuse) -> *const c_char;
     pub fn fusebox_fuse_get_description(self_: *mut FuseboxFuse) -> *const c_char;

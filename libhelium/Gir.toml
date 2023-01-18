@@ -25,11 +25,13 @@ external_libraries = [
 ]
 
 generate = [
+  "He.Avatar",
   "He.ColorRGBColor",
   "He.ColorXYZColor",
   "He.ColorLABColor",
   "He.ColorLCHColor",
   "He.Colors",
+  "He.DesktopDarkModeStrength",
   "He.Bin",
   "He.Button",
   "He.ButtonContent",
@@ -69,6 +71,8 @@ generate = [
   "He.OverlayButtonAlignment",
   "He.SettingsPage",
   "He.SettingsWindow",
+  "He.SettingsRow",
+  "He.SettingsList",
   "He.SideBar",
   "He.Tab",
   "He.TabPage",
@@ -82,11 +86,15 @@ generate = [
   "He.ViewSubTitle",
   "He.ViewSwitcher",
   "He.ViewTitle",
+  "He.ViewChooser",
   "He.WelcomeScreen"
 ]
 
 manual = [
+  "Gtk.ApplicationWindow",
   "Gtk.Application",
+  "Gtk.Orientation",
+  "Gtk.ListBoxRow",
   "Gio.Application",
   "Gio.ActionGroup",
   "Gio.ActionMap",

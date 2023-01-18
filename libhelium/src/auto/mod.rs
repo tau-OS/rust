@@ -15,6 +15,9 @@ pub use self::application::Application;
 mod application_window;
 pub use self::application_window::ApplicationWindow;
 
+mod avatar;
+pub use self::avatar::Avatar;
+
 mod badge;
 pub use self::badge::Badge;
 
@@ -84,8 +87,14 @@ pub use self::overlay_button::OverlayButton;
 mod pill_button;
 pub use self::pill_button::PillButton;
 
+mod settings_list;
+pub use self::settings_list::SettingsList;
+
 mod settings_page;
 pub use self::settings_page::SettingsPage;
+
+mod settings_row;
+pub use self::settings_row::SettingsRow;
 
 mod settings_window;
 pub use self::settings_window::SettingsWindow;
@@ -116,6 +125,9 @@ pub use self::view::View;
 
 mod view_aux;
 pub use self::view_aux::ViewAux;
+
+mod view_chooser;
+pub use self::view_chooser::ViewChooser;
 
 mod view_dual;
 pub use self::view_dual::ViewDual;
@@ -157,6 +169,7 @@ pub use self::enums::BottomBarPosition;
 pub use self::enums::Colors;
 pub use self::enums::ContentBlockImageClusterImagePosition;
 pub use self::enums::DesktopColorScheme;
+pub use self::enums::DesktopDarkModeStrength;
 pub use self::enums::ModifierBadgeAlignment;
 pub use self::enums::OverlayButtonAlignment;
 pub use self::enums::OverlayButtonSize;
@@ -168,6 +181,7 @@ pub mod traits {
     pub use super::app_bar::AppBarExt;
     pub use super::application::HeApplicationExt;
     pub use super::application_window::ApplicationWindowExt;
+    pub use super::avatar::AvatarExt;
     pub use super::badge::BadgeExt;
     pub use super::banner::BannerExt;
     pub use super::bin::BinExt;
@@ -187,7 +201,9 @@ pub mod traits {
     pub use super::modifier_badge::ModifierBadgeExt;
     pub use super::navigation_rail::NavigationRailExt;
     pub use super::overlay_button::OverlayButtonExt;
+    pub use super::settings_list::SettingsListExt;
     pub use super::settings_page::SettingsPageExt;
+    pub use super::settings_row::SettingsRowExt;
     pub use super::settings_window::SettingsWindowExt;
     pub use super::side_bar::SideBarExt;
     pub use super::tab::TabExt;
@@ -196,6 +212,7 @@ pub mod traits {
     pub use super::toast::ToastExt;
     pub use super::view::ViewExt;
     pub use super::view_aux::ViewAuxExt;
+    pub use super::view_chooser::ViewChooserExt;
     pub use super::view_sub_title::ViewSubTitleExt;
     pub use super::view_switcher::ViewSwitcherExt;
     pub use super::view_title::ViewTitleExt;
@@ -208,6 +225,7 @@ pub mod builders {
     pub use super::app_bar::AppBarBuilder;
     pub use super::application::ApplicationBuilder;
     pub use super::application_window::ApplicationWindowBuilder;
+    pub use super::avatar::AvatarBuilder;
     pub use super::badge::BadgeBuilder;
     pub use super::banner::BannerBuilder;
     pub use super::bin::BinBuilder;
@@ -230,7 +248,9 @@ pub mod builders {
     pub use super::outline_button::OutlineButtonBuilder;
     pub use super::overlay_button::OverlayButtonBuilder;
     pub use super::pill_button::PillButtonBuilder;
+    pub use super::settings_list::SettingsListBuilder;
     pub use super::settings_page::SettingsPageBuilder;
+    pub use super::settings_row::SettingsRowBuilder;
     pub use super::settings_window::SettingsWindowBuilder;
     pub use super::side_bar::SideBarBuilder;
     pub use super::tab::TabBuilder;
@@ -240,6 +260,7 @@ pub mod builders {
     pub use super::tint_button::TintButtonBuilder;
     pub use super::toast::ToastBuilder;
     pub use super::view_aux::ViewAuxBuilder;
+    pub use super::view_chooser::ViewChooserBuilder;
     pub use super::view_dual::ViewDualBuilder;
     pub use super::view_mono::ViewMonoBuilder;
     pub use super::view_sub_title::ViewSubTitleBuilder;

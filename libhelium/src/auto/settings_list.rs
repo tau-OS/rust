@@ -12,33 +12,33 @@ use glib::{
 use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 glib::wrapper! {
-    #[doc(alias = "HeNavigationRail")]
-    pub struct NavigationRail(Object<ffi::HeNavigationRail, ffi::HeNavigationRailClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    #[doc(alias = "HeSettingsList")]
+    pub struct SettingsList(Object<ffi::HeSettingsList, ffi::HeSettingsListClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_navigation_rail_get_type(),
+        type_ => || ffi::he_settings_list_get_type(),
     }
 }
 
-impl NavigationRail {
-    pub const NONE: Option<&'static NavigationRail> = None;
+impl SettingsList {
+    pub const NONE: Option<&'static SettingsList> = None;
 
-    #[doc(alias = "he_navigation_rail_new")]
-    pub fn new() -> NavigationRail {
+    #[doc(alias = "he_settings_list_new")]
+    pub fn new() -> SettingsList {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::he_navigation_rail_new()) }
+        unsafe { from_glib_none(ffi::he_settings_list_new()) }
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`NavigationRail`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`SettingsList`] objects.
     ///
-    /// This method returns an instance of [`NavigationRailBuilder`](crate::builders::NavigationRailBuilder) which can be used to create [`NavigationRail`] objects.
-    pub fn builder() -> NavigationRailBuilder {
-        NavigationRailBuilder::default()
+    /// This method returns an instance of [`SettingsListBuilder`](crate::builders::SettingsListBuilder) which can be used to create [`SettingsList`] objects.
+    pub fn builder() -> SettingsListBuilder {
+        SettingsListBuilder::default()
     }
 }
 
-impl Default for NavigationRail {
+impl Default for SettingsList {
     fn default() -> Self {
         Self::new()
     }
@@ -46,13 +46,13 @@ impl Default for NavigationRail {
 
 #[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`NavigationRail`] objects.
+/// A [builder-pattern] type to construct [`SettingsList`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct NavigationRailBuilder {
-    stack: Option<gtk::Stack>,
-    orientation: Option<gtk::Orientation>,
+pub struct SettingsListBuilder {
+    title: Option<String>,
+    description: Option<String>,
     child: Option<gtk::Widget>,
     can_focus: Option<bool>,
     can_target: Option<bool>,
@@ -86,23 +86,23 @@ pub struct NavigationRailBuilder {
     //accessible-role: /*Unknown type*/,
 }
 
-impl NavigationRailBuilder {
+impl SettingsListBuilder {
     // rustdoc-stripper-ignore-next
-    /// Create a new [`NavigationRailBuilder`].
+    /// Create a new [`SettingsListBuilder`].
     pub fn new() -> Self {
         Self::default()
     }
 
     // rustdoc-stripper-ignore-next
-    /// Build the [`NavigationRail`].
+    /// Build the [`SettingsList`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> NavigationRail {
+    pub fn build(self) -> SettingsList {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref stack) = self.stack {
-            properties.push(("stack", stack));
+        if let Some(ref title) = self.title {
+            properties.push(("title", title));
         }
-        if let Some(ref orientation) = self.orientation {
-            properties.push(("orientation", orientation));
+        if let Some(ref description) = self.description {
+            properties.push(("description", description));
         }
         if let Some(ref child) = self.child {
             properties.push(("child", child));
@@ -185,16 +185,16 @@ impl NavigationRailBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new::<NavigationRail>(&properties)
+        glib::Object::new::<SettingsList>(&properties)
     }
 
-    pub fn stack(mut self, stack: &gtk::Stack) -> Self {
-        self.stack = Some(stack.clone());
+    pub fn title(mut self, title: &str) -> Self {
+        self.title = Some(title.to_string());
         self
     }
 
-    pub fn orientation(mut self, orientation: gtk::Orientation) -> Self {
-        self.orientation = Some(orientation);
+    pub fn description(mut self, description: &str) -> Self {
+        self.description = Some(description.to_string());
         self
     }
 
@@ -334,107 +334,125 @@ impl NavigationRailBuilder {
     }
 }
 
-pub trait NavigationRailExt: 'static {
-    #[doc(alias = "he_navigation_rail_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack;
+pub trait SettingsListExt: 'static {
+    #[doc(alias = "he_settings_list_add")]
+    fn add(&self, child: &impl IsA<gtk::Widget>);
 
-    #[doc(alias = "he_navigation_rail_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack);
+    #[doc(alias = "he_settings_list_remove")]
+    fn remove(&self, child: &impl IsA<gtk::Widget>);
 
-    #[doc(alias = "he_navigation_rail_get_orientation")]
-    #[doc(alias = "get_orientation")]
-    fn orientation(&self) -> gtk::Orientation;
+    #[doc(alias = "he_settings_list_get_title")]
+    #[doc(alias = "get_title")]
+    fn title(&self) -> Option<glib::GString>;
 
-    #[doc(alias = "he_navigation_rail_set_orientation")]
-    fn set_orientation(&self, value: gtk::Orientation);
+    #[doc(alias = "he_settings_list_set_title")]
+    fn set_title(&self, value: Option<&str>);
 
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "he_settings_list_get_description")]
+    #[doc(alias = "get_description")]
+    fn description(&self) -> Option<glib::GString>;
 
-    #[doc(alias = "orientation")]
-    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "he_settings_list_set_description")]
+    fn set_description(&self, value: Option<&str>);
+
+    #[doc(alias = "title")]
+    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "description")]
+    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<NavigationRail>> NavigationRailExt for O {
-    fn stack(&self) -> gtk::Stack {
+impl<O: IsA<SettingsList>> SettingsListExt for O {
+    fn add(&self, child: &impl IsA<gtk::Widget>) {
         unsafe {
-            from_glib_none(ffi::he_navigation_rail_get_stack(
+            ffi::he_settings_list_add(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    fn remove(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_settings_list_remove(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    fn title(&self) -> Option<glib::GString> {
+        unsafe {
+            from_glib_none(ffi::he_settings_list_get_title(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn set_stack(&self, value: &gtk::Stack) {
+    fn set_title(&self, value: Option<&str>) {
         unsafe {
-            ffi::he_navigation_rail_set_stack(
+            ffi::he_settings_list_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    fn description(&self) -> Option<glib::GString> {
+        unsafe {
+            from_glib_none(ffi::he_settings_list_get_description(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_description(&self, value: Option<&str>) {
+        unsafe {
+            ffi::he_settings_list_set_description(
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
             );
         }
     }
 
-    fn orientation(&self) -> gtk::Orientation {
-        unsafe {
-            from_glib(ffi::he_navigation_rail_get_orientation(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_orientation(&self, value: gtk::Orientation) {
-        unsafe {
-            ffi::he_navigation_rail_set_orientation(
-                self.as_ref().to_glib_none().0,
-                value.into_glib(),
-            );
-        }
-    }
-
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_stack_trampoline<
-            P: IsA<NavigationRail>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeNavigationRail,
+    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_title_trampoline<P: IsA<SettingsList>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSettingsList,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(SettingsList::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stack\0".as_ptr() as *const _,
+                b"notify::title\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_stack_trampoline::<Self, F> as *const (),
+                    notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_orientation_trampoline<
-            P: IsA<NavigationRail>,
+    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_description_trampoline<
+            P: IsA<SettingsList>,
             F: Fn(&P) + 'static,
         >(
-            this: *mut ffi::HeNavigationRail,
+            this: *mut ffi::HeSettingsList,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(SettingsList::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::orientation\0".as_ptr() as *const _,
+                b"notify::description\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_orientation_trampoline::<Self, F> as *const (),
+                    notify_description_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -442,8 +460,8 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
     }
 }
 
-impl fmt::Display for NavigationRail {
+impl fmt::Display for SettingsList {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("NavigationRail")
+        f.write_str("SettingsList")
     }
 }

@@ -252,12 +252,26 @@
 		</virtual-method>
 		<property name="category" writable="1" construct-only="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The category under which the Fuse will be stored.&lt;/para&gt;
-&lt;para&gt;Possible &lt;type&gt;FuseboxFuseCategory&lt;/type&gt; values are PERSONAL, HARDWARE, NETWORK or SYSTEM.&lt;/para&gt;</doc>
+&lt;para&gt;Possible &lt;type&gt;FuseboxFuseCategory&lt;/type&gt; values are PERSONAL, NETWORK or SYSTEM.&lt;/para&gt;</doc>
 			<type name="fusebox.FuseCategory" c:type="FuseboxFuseCategory"/>
 		</property>
 		<method name="get_category" c:identifier="fusebox_fuse_get_category">
 			<return-value transfer-ownership="none">
 				<type name="fusebox.FuseCategory" c:type="FuseboxFuseCategory"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="fusebox.Fuse" c:type="FuseboxFuse*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<property name="index" writable="1" construct-only="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The placement index of the fuse; starts at 0.&lt;/para&gt;</doc>
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_index" c:identifier="fusebox_fuse_get_index">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -370,13 +384,6 @@
 				</parameter>
 			</parameters>
 		</method>
-		<glib:signal name="visibility-changed" deprecated="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Inform the application that the Fuse can now be listed in the available Fuses. The application will also listen to the notify::can-show signal.
-&lt;/para&gt;</doc>
-			<return-value transfer-ownership="full">
-				<type name="none" c:type="void"/>
-			</return-value>
-		</glib:signal>
 	</class>
 	<record name="FuseClass" c:type="FuseboxFuseClass" glib:is-gtype-struct-for="Fuse">
 		<field name="parent_class" readable="0" private="1">
@@ -480,6 +487,7 @@
 		<member name="network" c:identifier="FUSEBOX_FUSE_CATEGORY_NETWORK" value="0"/>
 		<member name="personal" c:identifier="FUSEBOX_FUSE_CATEGORY_PERSONAL" value="1"/>
 		<member name="system" c:identifier="FUSEBOX_FUSE_CATEGORY_SYSTEM" value="2"/>
+		<member name="custom" c:identifier="FUSEBOX_FUSE_CATEGORY_CUSTOM" value="3"/>
 	</enumeration>
 </namespace>
 </repository>

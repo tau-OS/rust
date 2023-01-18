@@ -262,6 +262,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HeAvatar",
+        Layout {
+            size: size_of::<HeAvatar>(),
+            alignment: align_of::<HeAvatar>(),
+        },
+    ),
+    (
+        "HeAvatarClass",
+        Layout {
+            size: size_of::<HeAvatarClass>(),
+            alignment: align_of::<HeAvatarClass>(),
+        },
+    ),
+    (
         "HeBadge",
         Layout {
             size: size_of::<HeBadge>(),
@@ -675,6 +689,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HeSettingsList",
+        Layout {
+            size: size_of::<HeSettingsList>(),
+            alignment: align_of::<HeSettingsList>(),
+        },
+    ),
+    (
+        "HeSettingsListClass",
+        Layout {
+            size: size_of::<HeSettingsListClass>(),
+            alignment: align_of::<HeSettingsListClass>(),
+        },
+    ),
+    (
         "HeSettingsPage",
         Layout {
             size: size_of::<HeSettingsPage>(),
@@ -686,6 +714,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<HeSettingsPageClass>(),
             alignment: align_of::<HeSettingsPageClass>(),
+        },
+    ),
+    (
+        "HeSettingsRow",
+        Layout {
+            size: size_of::<HeSettingsRow>(),
+            alignment: align_of::<HeSettingsRow>(),
+        },
+    ),
+    (
+        "HeSettingsRowClass",
+        Layout {
+            size: size_of::<HeSettingsRowClass>(),
+            alignment: align_of::<HeSettingsRowClass>(),
         },
     ),
     (
@@ -826,6 +868,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<HeViewAuxClass>(),
             alignment: align_of::<HeViewAuxClass>(),
+        },
+    ),
+    (
+        "HeViewChooser",
+        Layout {
+            size: size_of::<HeViewChooser>(),
+            alignment: align_of::<HeViewChooser>(),
+        },
+    ),
+    (
+        "HeViewChooserClass",
+        Layout {
+            size: size_of::<HeViewChooserClass>(),
+            alignment: align_of::<HeViewChooserClass>(),
         },
     ),
     (
