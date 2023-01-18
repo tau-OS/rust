@@ -1,2 +1,4 @@
 target/
 builddir/
+subprojects/blueprint-compiler.wrap
+subprojects/tau-helium.wrap
