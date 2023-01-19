@@ -1247,6 +1247,7 @@ impl ::std::fmt::Debug for HeAboutWindow {
 pub struct HeAppBar {
     pub parent_instance: HeBin,
     pub priv_: *mut HeAppBarPrivate,
+    pub flat: gboolean,
     pub back_button: *mut gtk::GtkButton,
     pub btn_box: *mut gtk::GtkBox,
 }
@@ -1254,6 +1255,7 @@ pub struct HeAppBar {
 impl ::std::fmt::Debug for HeAppBar {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeAppBar @ {self:p}"))
+            .field("flat", &self.flat)
             .field("back_button", &self.back_button)
             .field("btn_box", &self.btn_box)
             .finish()
@@ -2062,10 +2064,10 @@ extern "C" {
     pub fn he_app_bar_set_scroller(self_: *mut HeAppBar, value: *mut gtk::GtkScrolledWindow);
     pub fn he_app_bar_get_viewtitle_label(self_: *mut HeAppBar) -> *const c_char;
     pub fn he_app_bar_set_viewtitle_label(self_: *mut HeAppBar, value: *const c_char);
+    pub fn he_app_bar_get_viewtitle_widget(self_: *mut HeAppBar) -> *mut gtk::GtkWidget;
+    pub fn he_app_bar_set_viewtitle_widget(self_: *mut HeAppBar, value: *mut gtk::GtkWidget);
     pub fn he_app_bar_get_viewsubtitle_label(self_: *mut HeAppBar) -> *const c_char;
     pub fn he_app_bar_set_viewsubtitle_label(self_: *mut HeAppBar, value: *const c_char);
-    pub fn he_app_bar_get_flat(self_: *mut HeAppBar) -> gboolean;
-    pub fn he_app_bar_set_flat(self_: *mut HeAppBar, value: gboolean);
     pub fn he_app_bar_get_show_buttons(self_: *mut HeAppBar) -> gboolean;
     pub fn he_app_bar_set_show_buttons(self_: *mut HeAppBar, value: gboolean);
     pub fn he_app_bar_get_show_back(self_: *mut HeAppBar) -> gboolean;
@@ -2563,6 +2565,8 @@ extern "C" {
     pub fn he_side_bar_new(title: *const c_char, subtitle: *const c_char) -> *mut HeSideBar;
     pub fn he_side_bar_get_title(self_: *mut HeSideBar) -> *const c_char;
     pub fn he_side_bar_set_title(self_: *mut HeSideBar, value: *const c_char);
+    pub fn he_side_bar_get_titlewidget(self_: *mut HeSideBar) -> *mut gtk::GtkWidget;
+    pub fn he_side_bar_set_titlewidget(self_: *mut HeSideBar, value: *mut gtk::GtkWidget);
     pub fn he_side_bar_get_subtitle(self_: *mut HeSideBar) -> *const c_char;
     pub fn he_side_bar_set_subtitle(self_: *mut HeSideBar, value: *const c_char);
     pub fn he_side_bar_get_show_buttons(self_: *mut HeSideBar) -> gboolean;

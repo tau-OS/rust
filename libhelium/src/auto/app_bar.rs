@@ -54,8 +54,8 @@ pub struct AppBarBuilder {
     stack: Option<gtk::Stack>,
     scroller: Option<gtk::ScrolledWindow>,
     viewtitle_label: Option<String>,
+    viewtitle_widget: Option<gtk::Widget>,
     viewsubtitle_label: Option<String>,
-    flat: Option<bool>,
     show_buttons: Option<bool>,
     show_back: Option<bool>,
     child: Option<gtk::Widget>,
@@ -112,11 +112,11 @@ impl AppBarBuilder {
         if let Some(ref viewtitle_label) = self.viewtitle_label {
             properties.push(("viewtitle-label", viewtitle_label));
         }
+        if let Some(ref viewtitle_widget) = self.viewtitle_widget {
+            properties.push(("viewtitle-widget", viewtitle_widget));
+        }
         if let Some(ref viewsubtitle_label) = self.viewsubtitle_label {
             properties.push(("viewsubtitle-label", viewsubtitle_label));
-        }
-        if let Some(ref flat) = self.flat {
-            properties.push(("flat", flat));
         }
         if let Some(ref show_buttons) = self.show_buttons {
             properties.push(("show-buttons", show_buttons));
@@ -223,13 +223,13 @@ impl AppBarBuilder {
         self
     }
 
-    pub fn viewsubtitle_label(mut self, viewsubtitle_label: &str) -> Self {
-        self.viewsubtitle_label = Some(viewsubtitle_label.to_string());
+    pub fn viewtitle_widget(mut self, viewtitle_widget: &impl IsA<gtk::Widget>) -> Self {
+        self.viewtitle_widget = Some(viewtitle_widget.clone().upcast());
         self
     }
 
-    pub fn flat(mut self, flat: bool) -> Self {
-        self.flat = Some(flat);
+    pub fn viewsubtitle_label(mut self, viewsubtitle_label: &str) -> Self {
+        self.viewsubtitle_label = Some(viewsubtitle_label.to_string());
         self
     }
 
@@ -407,19 +407,19 @@ pub trait AppBarExt: 'static {
     #[doc(alias = "he_app_bar_set_viewtitle_label")]
     fn set_viewtitle_label(&self, value: &str);
 
+    #[doc(alias = "he_app_bar_get_viewtitle_widget")]
+    #[doc(alias = "get_viewtitle_widget")]
+    fn viewtitle_widget(&self) -> Option<gtk::Widget>;
+
+    #[doc(alias = "he_app_bar_set_viewtitle_widget")]
+    fn set_viewtitle_widget(&self, value: Option<&impl IsA<gtk::Widget>>);
+
     #[doc(alias = "he_app_bar_get_viewsubtitle_label")]
     #[doc(alias = "get_viewsubtitle_label")]
     fn viewsubtitle_label(&self) -> glib::GString;
 
     #[doc(alias = "he_app_bar_set_viewsubtitle_label")]
     fn set_viewsubtitle_label(&self, value: &str);
-
-    #[doc(alias = "he_app_bar_get_flat")]
-    #[doc(alias = "get_flat")]
-    fn is_flat(&self) -> bool;
-
-    #[doc(alias = "he_app_bar_set_flat")]
-    fn set_flat(&self, value: bool);
 
     #[doc(alias = "he_app_bar_get_show_buttons")]
     #[doc(alias = "get_show_buttons")]
@@ -444,11 +444,11 @@ pub trait AppBarExt: 'static {
     #[doc(alias = "viewtitle-label")]
     fn connect_viewtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "viewtitle-widget")]
+    fn connect_viewtitle_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     #[doc(alias = "viewsubtitle-label")]
     fn connect_viewsubtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "flat")]
-    fn connect_flat_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "show-buttons")]
     fn connect_show_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -513,6 +513,23 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    fn viewtitle_widget(&self) -> Option<gtk::Widget> {
+        unsafe {
+            from_glib_none(ffi::he_app_bar_get_viewtitle_widget(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_viewtitle_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
+        unsafe {
+            ffi::he_app_bar_set_viewtitle_widget(
+                self.as_ref().to_glib_none().0,
+                value.map(|p| p.as_ref()).to_glib_none().0,
+            );
+        }
+    }
+
     fn viewsubtitle_label(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_app_bar_get_viewsubtitle_label(
@@ -527,16 +544,6 @@ impl<O: IsA<AppBar>> AppBarExt for O {
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
             );
-        }
-    }
-
-    fn is_flat(&self) -> bool {
-        unsafe { from_glib(ffi::he_app_bar_get_flat(self.as_ref().to_glib_none().0)) }
-    }
-
-    fn set_flat(&self, value: bool) {
-        unsafe {
-            ffi::he_app_bar_set_flat(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
@@ -637,6 +644,31 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    fn connect_viewtitle_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_viewtitle_widget_trampoline<
+            P: IsA<AppBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeAppBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(AppBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::viewtitle-widget\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_viewtitle_widget_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     fn connect_viewsubtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_viewsubtitle_label_trampoline<
             P: IsA<AppBar>,
@@ -656,28 +688,6 @@ impl<O: IsA<AppBar>> AppBarExt for O {
                 b"notify::viewsubtitle-label\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_viewsubtitle_label_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    fn connect_flat_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_flat_trampoline<P: IsA<AppBar>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeAppBar,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(AppBar::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::flat\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_flat_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -1649,6 +1649,11 @@ control.&lt;/para&gt;</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="AppBarPrivate" c:type="HeAppBarPrivate*"/>
 		</field>
+		<field name="flat" writable="1" deprecated="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The flatness of the He.AppBar&lt;/para&gt;
+&lt;para&gt;Deprecated for code use. Will break if set manually!&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</field>
 		<field name="back_button" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The button to go back one view displayed in the AppBar.&lt;/para&gt;</doc>
 			<type name="Gtk.Button" c:type="GtkButton*"/>
@@ -1775,6 +1780,34 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="viewtitle-widget" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The title widget to the left on the AppBar. If this is set, the other title &amp;lpar;not subtitle&amp;rpar; props won&amp;apos;t work, and the mini title
+on collapsed state won&amp;apos;t show.&lt;/para&gt;</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_viewtitle_widget" c:identifier="he_app_bar_get_viewtitle_widget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_viewtitle_widget" c:identifier="he_app_bar_set_viewtitle_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="viewsubtitle-label" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The title to the left on the AppBar.&lt;/para&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
@@ -1799,33 +1832,6 @@ Since: 1.0</doc>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
 					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="flat" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Whether the AppBar is flat, i.e. has no bottom border.&lt;/para&gt;</doc>
-			<type name="gboolean" c:type="gboolean"/>
-		</property>
-		<method name="get_flat" c:identifier="he_app_bar_get_flat">
-			<return-value transfer-ownership="none">
-				<type name="gboolean" c:type="gboolean"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.AppBar" c:type="HeAppBar*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_flat" c:identifier="he_app_bar_set_flat">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.AppBar" c:type="HeAppBar*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -5082,6 +5088,33 @@ Since: 1.0</doc>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
 					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="titlewidget" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The title widget of the sidebar.&lt;/para&gt;</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_titlewidget" c:identifier="he_side_bar_get_titlewidget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SideBar" c:type="HeSideBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_titlewidget" c:identifier="he_side_bar_set_titlewidget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SideBar" c:type="HeSideBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
 		</method>

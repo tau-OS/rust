@@ -57,6 +57,7 @@ impl Default for SideBar {
 #[must_use = "The builder must be built to be used"]
 pub struct SideBarBuilder {
     title: Option<String>,
+    titlewidget: Option<gtk::Widget>,
     subtitle: Option<String>,
     show_buttons: Option<bool>,
     show_back: Option<bool>,
@@ -110,6 +111,9 @@ impl SideBarBuilder {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
         if let Some(ref title) = self.title {
             properties.push(("title", title));
+        }
+        if let Some(ref titlewidget) = self.titlewidget {
+            properties.push(("titlewidget", titlewidget));
         }
         if let Some(ref subtitle) = self.subtitle {
             properties.push(("subtitle", subtitle));
@@ -215,6 +219,11 @@ impl SideBarBuilder {
 
     pub fn title(mut self, title: &str) -> Self {
         self.title = Some(title.to_string());
+        self
+    }
+
+    pub fn titlewidget(mut self, titlewidget: &impl IsA<gtk::Widget>) -> Self {
+        self.titlewidget = Some(titlewidget.clone().upcast());
         self
     }
 
@@ -392,6 +401,13 @@ pub trait SideBarExt: 'static {
     #[doc(alias = "he_side_bar_set_title")]
     fn set_title(&self, value: &str);
 
+    #[doc(alias = "he_side_bar_get_titlewidget")]
+    #[doc(alias = "get_titlewidget")]
+    fn titlewidget(&self) -> Option<gtk::Widget>;
+
+    #[doc(alias = "he_side_bar_set_titlewidget")]
+    fn set_titlewidget(&self, value: Option<&impl IsA<gtk::Widget>>);
+
     #[doc(alias = "he_side_bar_get_subtitle")]
     #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString;
@@ -437,6 +453,9 @@ pub trait SideBarExt: 'static {
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "titlewidget")]
+    fn connect_titlewidget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -464,6 +483,23 @@ impl<O: IsA<SideBar>> SideBarExt for O {
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_side_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    fn titlewidget(&self) -> Option<gtk::Widget> {
+        unsafe {
+            from_glib_none(ffi::he_side_bar_get_titlewidget(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_titlewidget(&self, value: Option<&impl IsA<gtk::Widget>>) {
+        unsafe {
+            ffi::he_side_bar_set_titlewidget(
+                self.as_ref().to_glib_none().0,
+                value.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
@@ -563,6 +599,28 @@ impl<O: IsA<SideBar>> SideBarExt for O {
                 b"notify::title\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_titlewidget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_titlewidget_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSideBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(SideBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::titlewidget\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_titlewidget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
