@@ -36,7 +36,7 @@ impl SwipeTracker {
     ///
     /// This method returns an instance of [`SwipeTrackerBuilder`](crate::builders::SwipeTrackerBuilder) which can be used to create [`SwipeTracker`] objects.
     pub fn builder() -> SwipeTrackerBuilder {
-        SwipeTrackerBuilder::default()
+        SwipeTrackerBuilder::new()
     }
 
     #[doc(alias = "bis_swipe_tracker_get_allow_long_swipes")]
@@ -313,78 +313,71 @@ impl SwipeTracker {
 
 impl Default for SwipeTracker {
     fn default() -> Self {
-        glib::object::Object::new::<Self>(&[])
+        glib::object::Object::new_default::<Self>()
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`SwipeTracker`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct SwipeTrackerBuilder {
-    allow_long_swipes: Option<bool>,
-    allow_mouse_drag: Option<bool>,
-    enabled: Option<bool>,
-    reversed: Option<bool>,
-    swipeable: Option<Swipeable>,
-    //orientation: /*Unknown type*/,
+    builder: glib::object::ObjectBuilder<'static, SwipeTracker>,
 }
 
 impl SwipeTrackerBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`SwipeTrackerBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::object::Object::builder(),
+        }
+    }
+
+    pub fn allow_long_swipes(self, allow_long_swipes: bool) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("allow-long-swipes", allow_long_swipes),
+        }
+    }
+
+    pub fn allow_mouse_drag(self, allow_mouse_drag: bool) -> Self {
+        Self {
+            builder: self.builder.property("allow-mouse-drag", allow_mouse_drag),
+        }
+    }
+
+    pub fn enabled(self, enabled: bool) -> Self {
+        Self {
+            builder: self.builder.property("enabled", enabled),
+        }
+    }
+
+    pub fn reversed(self, reversed: bool) -> Self {
+        Self {
+            builder: self.builder.property("reversed", reversed),
+        }
+    }
+
+    pub fn swipeable(self, swipeable: &impl IsA<Swipeable>) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("swipeable", swipeable.clone().upcast()),
+        }
+    }
+
+    pub fn orientation(self, orientation: /*Ignored*/ gtk::Orientation) -> Self {
+        Self {
+            builder: self.builder.property("orientation", orientation),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`SwipeTracker`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SwipeTracker {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref allow_long_swipes) = self.allow_long_swipes {
-            properties.push(("allow-long-swipes", allow_long_swipes));
-        }
-        if let Some(ref allow_mouse_drag) = self.allow_mouse_drag {
-            properties.push(("allow-mouse-drag", allow_mouse_drag));
-        }
-        if let Some(ref enabled) = self.enabled {
-            properties.push(("enabled", enabled));
-        }
-        if let Some(ref reversed) = self.reversed {
-            properties.push(("reversed", reversed));
-        }
-        if let Some(ref swipeable) = self.swipeable {
-            properties.push(("swipeable", swipeable));
-        }
-        glib::Object::new::<SwipeTracker>(&properties)
-    }
-
-    pub fn allow_long_swipes(mut self, allow_long_swipes: bool) -> Self {
-        self.allow_long_swipes = Some(allow_long_swipes);
-        self
-    }
-
-    pub fn allow_mouse_drag(mut self, allow_mouse_drag: bool) -> Self {
-        self.allow_mouse_drag = Some(allow_mouse_drag);
-        self
-    }
-
-    pub fn enabled(mut self, enabled: bool) -> Self {
-        self.enabled = Some(enabled);
-        self
-    }
-
-    pub fn reversed(mut self, reversed: bool) -> Self {
-        self.reversed = Some(reversed);
-        self
-    }
-
-    pub fn swipeable(mut self, swipeable: &impl IsA<Swipeable>) -> Self {
-        self.swipeable = Some(swipeable.clone().upcast());
-        self
+        self.builder.build()
     }
 }
 

@@ -87,7 +87,8 @@ generate = [
   "He.ViewSwitcher",
   "He.ViewTitle",
   "He.ViewChooser",
-  "He.WelcomeScreen"
+  "He.WelcomeScreen",
+  "He.SegmentedButton"
 ]
 
 manual = [

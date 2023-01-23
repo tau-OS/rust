@@ -25,7 +25,7 @@ impl HuggerPage {
     ///
     /// This method returns an instance of [`HuggerPageBuilder`](crate::builders::HuggerPageBuilder) which can be used to create [`HuggerPage`] objects.
     pub fn builder() -> HuggerPageBuilder {
-        HuggerPageBuilder::default()
+        HuggerPageBuilder::new()
     }
 
     #[doc(alias = "bis_hugger_page_get_child")]
@@ -71,46 +71,39 @@ impl HuggerPage {
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`HuggerPage`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct HuggerPageBuilder {
-    child: Option<gtk::Widget>,
-    enabled: Option<bool>,
+    builder: glib::object::ObjectBuilder<'static, HuggerPage>,
 }
 
 impl HuggerPageBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`HuggerPageBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::object::Object::builder(),
+        }
+    }
+
+    pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
+        Self {
+            builder: self.builder.property("child", child.clone().upcast()),
+        }
+    }
+
+    pub fn enabled(self, enabled: bool) -> Self {
+        Self {
+            builder: self.builder.property("enabled", enabled),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`HuggerPage`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> HuggerPage {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref child) = self.child {
-            properties.push(("child", child));
-        }
-        if let Some(ref enabled) = self.enabled {
-            properties.push(("enabled", enabled));
-        }
-        glib::Object::new::<HuggerPage>(&properties)
-    }
-
-    pub fn child(mut self, child: &impl IsA<gtk::Widget>) -> Self {
-        self.child = Some(child.clone().upcast());
-        self
-    }
-
-    pub fn enabled(mut self, enabled: bool) -> Self {
-        self.enabled = Some(enabled);
-        self
+        self.builder.build()
     }
 }
 

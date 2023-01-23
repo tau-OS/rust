@@ -34,7 +34,7 @@ impl Desktop {
     ///
     /// This method returns an instance of [`DesktopBuilder`](crate::builders::DesktopBuilder) which can be used to create [`Desktop`] objects.
     pub fn builder() -> DesktopBuilder {
-        DesktopBuilder::default()
+        DesktopBuilder::new()
     }
 }
 
@@ -44,55 +44,49 @@ impl Default for Desktop {
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`Desktop`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct DesktopBuilder {
-    prefers_color_scheme: Option<DesktopColorScheme>,
-    dark_mode_strength: Option<DesktopDarkModeStrength>,
-    accent_color: Option<ColorRGBColor>,
+    builder: glib::object::ObjectBuilder<'static, Desktop>,
 }
 
 impl DesktopBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`DesktopBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::object::Object::builder(),
+        }
+    }
+
+    pub fn prefers_color_scheme(self, prefers_color_scheme: DesktopColorScheme) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("prefers-color-scheme", prefers_color_scheme),
+        }
+    }
+
+    pub fn dark_mode_strength(self, dark_mode_strength: DesktopDarkModeStrength) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("dark-mode-strength", dark_mode_strength),
+        }
+    }
+
+    pub fn accent_color(self, accent_color: &ColorRGBColor) -> Self {
+        Self {
+            builder: self.builder.property("accent-color", accent_color.clone()),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`Desktop`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Desktop {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref prefers_color_scheme) = self.prefers_color_scheme {
-            properties.push(("prefers-color-scheme", prefers_color_scheme));
-        }
-        if let Some(ref dark_mode_strength) = self.dark_mode_strength {
-            properties.push(("dark-mode-strength", dark_mode_strength));
-        }
-        if let Some(ref accent_color) = self.accent_color {
-            properties.push(("accent-color", accent_color));
-        }
-        glib::Object::new::<Desktop>(&properties)
-    }
-
-    pub fn prefers_color_scheme(mut self, prefers_color_scheme: DesktopColorScheme) -> Self {
-        self.prefers_color_scheme = Some(prefers_color_scheme);
-        self
-    }
-
-    pub fn dark_mode_strength(mut self, dark_mode_strength: DesktopDarkModeStrength) -> Self {
-        self.dark_mode_strength = Some(dark_mode_strength);
-        self
-    }
-
-    pub fn accent_color(mut self, accent_color: &ColorRGBColor) -> Self {
-        self.accent_color = Some(accent_color.clone());
-        self
+        self.builder.build()
     }
 }
 

@@ -27,7 +27,7 @@ impl EnumListModel {
     ///
     /// This method returns an instance of [`EnumListModelBuilder`](crate::builders::EnumListModelBuilder) which can be used to create [`EnumListModel`] objects.
     pub fn builder() -> EnumListModelBuilder {
-        EnumListModelBuilder::default()
+        EnumListModelBuilder::new()
     }
 
     #[doc(alias = "bis_enum_list_model_find_position")]
@@ -48,41 +48,37 @@ impl EnumListModel {
 
 impl Default for EnumListModel {
     fn default() -> Self {
-        glib::object::Object::new::<Self>(&[])
+        glib::object::Object::new_default::<Self>()
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`EnumListModel`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct EnumListModelBuilder {
-    enum_type: Option<glib::types::Type>,
+    builder: glib::object::ObjectBuilder<'static, EnumListModel>,
 }
 
 impl EnumListModelBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`EnumListModelBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::object::Object::builder(),
+        }
+    }
+
+    pub fn enum_type(self, enum_type: glib::types::Type) -> Self {
+        Self {
+            builder: self.builder.property("enum-type", enum_type),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`EnumListModel`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> EnumListModel {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref enum_type) = self.enum_type {
-            properties.push(("enum-type", enum_type));
-        }
-        glib::Object::new::<EnumListModel>(&properties)
-    }
-
-    pub fn enum_type(mut self, enum_type: glib::types::Type) -> Self {
-        self.enum_type = Some(enum_type);
-        self
+        self.builder.build()
     }
 }
 

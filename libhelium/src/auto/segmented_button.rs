@@ -3,78 +3,55 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::Bin;
-use glib::{
-    prelude::*,
-    signal::{connect_raw, SignalHandlerId},
-    translate::*,
-};
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use glib::{prelude::*, translate::*};
+use std::fmt;
 
 glib::wrapper! {
-    #[doc(alias = "HeContentList")]
-    pub struct ContentList(Object<ffi::HeContentList, ffi::HeContentListClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    #[doc(alias = "HeSegmentedButton")]
+    pub struct SegmentedButton(Object<ffi::HeSegmentedButton, ffi::HeSegmentedButtonClass>) @extends gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_content_list_get_type(),
+        type_ => || ffi::he_segmented_button_get_type(),
     }
 }
 
-impl ContentList {
-    pub const NONE: Option<&'static ContentList> = None;
+impl SegmentedButton {
+    pub const NONE: Option<&'static SegmentedButton> = None;
 
-    #[doc(alias = "he_content_list_new")]
-    pub fn new() -> ContentList {
+    #[doc(alias = "he_segmented_button_new")]
+    pub fn new() -> SegmentedButton {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::he_content_list_new()) }
+        unsafe { from_glib_none(ffi::he_segmented_button_new()) }
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`ContentList`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`SegmentedButton`] objects.
     ///
-    /// This method returns an instance of [`ContentListBuilder`](crate::builders::ContentListBuilder) which can be used to create [`ContentList`] objects.
-    pub fn builder() -> ContentListBuilder {
-        ContentListBuilder::new()
+    /// This method returns an instance of [`SegmentedButtonBuilder`](crate::builders::SegmentedButtonBuilder) which can be used to create [`SegmentedButton`] objects.
+    pub fn builder() -> SegmentedButtonBuilder {
+        SegmentedButtonBuilder::new()
     }
 }
 
-impl Default for ContentList {
+impl Default for SegmentedButton {
     fn default() -> Self {
         Self::new()
     }
 }
 
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`ContentList`] objects.
+/// A [builder-pattern] type to construct [`SegmentedButton`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct ContentListBuilder {
-    builder: glib::object::ObjectBuilder<'static, ContentList>,
+pub struct SegmentedButtonBuilder {
+    builder: glib::object::ObjectBuilder<'static, SegmentedButton>,
 }
 
-impl ContentListBuilder {
+impl SegmentedButtonBuilder {
     fn new() -> Self {
         Self {
             builder: glib::object::Object::builder(),
-        }
-    }
-
-    pub fn title(self, title: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("title", title.into()),
-        }
-    }
-
-    pub fn description(self, description: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("description", description.into()),
-        }
-    }
-
-    pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self.builder.property("child", child.clone().upcast()),
         }
     }
 
@@ -263,141 +240,43 @@ impl ContentListBuilder {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Build the [`ContentList`].
+    /// Build the [`SegmentedButton`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> ContentList {
+    pub fn build(self) -> SegmentedButton {
         self.builder.build()
     }
 }
 
-pub trait ContentListExt: 'static {
-    #[doc(alias = "he_content_list_add")]
-    fn add(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_content_list_remove")]
-    fn remove(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_content_list_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_content_list_set_title")]
-    fn set_title(&self, value: Option<&str>);
-
-    #[doc(alias = "he_content_list_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_content_list_set_description")]
-    fn set_description(&self, value: Option<&str>);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "description")]
-    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+pub trait SegmentedButtonExt: 'static {
+    #[doc(alias = "he_segmented_button_add_child")]
+    fn add_child(
+        &self,
+        builder: &gtk::Builder,
+        child: &impl IsA<glib::Object>,
+        type_: Option<&str>,
+    );
 }
 
-impl<O: IsA<ContentList>> ContentListExt for O {
-    fn add(&self, child: &impl IsA<gtk::Widget>) {
+impl<O: IsA<SegmentedButton>> SegmentedButtonExt for O {
+    fn add_child(
+        &self,
+        builder: &gtk::Builder,
+        child: &impl IsA<glib::Object>,
+        type_: Option<&str>,
+    ) {
         unsafe {
-            ffi::he_content_list_add(
+            ffi::he_segmented_button_add_child(
                 self.as_ref().to_glib_none().0,
+                builder.to_glib_none().0,
                 child.as_ref().to_glib_none().0,
+                type_.to_glib_none().0,
             );
-        }
-    }
-
-    fn remove(&self, child: &impl IsA<gtk::Widget>) {
-        unsafe {
-            ffi::he_content_list_remove(
-                self.as_ref().to_glib_none().0,
-                child.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    fn title(&self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::he_content_list_get_title(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_title(&self, value: Option<&str>) {
-        unsafe {
-            ffi::he_content_list_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
-        }
-    }
-
-    fn description(&self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::he_content_list_get_description(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_description(&self, value: Option<&str>) {
-        unsafe {
-            ffi::he_content_list_set_description(
-                self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
-        }
-    }
-
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_title_trampoline<P: IsA<ContentList>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeContentList,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(ContentList::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_title_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_description_trampoline<
-            P: IsA<ContentList>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeContentList,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(ContentList::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::description\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_description_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
         }
     }
 }
 
-impl fmt::Display for ContentList {
+impl fmt::Display for SegmentedButton {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ContentList")
+        f.write_str("SegmentedButton")
     }
 }

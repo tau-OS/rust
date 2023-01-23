@@ -31,7 +31,7 @@ impl LatchLayout {
     ///
     /// This method returns an instance of [`LatchLayoutBuilder`](crate::builders::LatchLayoutBuilder) which can be used to create [`LatchLayout`] objects.
     pub fn builder() -> LatchLayoutBuilder {
-        LatchLayoutBuilder::default()
+        LatchLayoutBuilder::new()
     }
 
     #[doc(alias = "bis_latch_layout_get_maximum_size")]
@@ -121,47 +121,47 @@ impl Default for LatchLayout {
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`LatchLayout`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct LatchLayoutBuilder {
-    maximum_size: Option<i32>,
-    tightening_threshold: Option<i32>,
-    //orientation: /*Unknown type*/,
+    builder: glib::object::ObjectBuilder<'static, LatchLayout>,
 }
 
 impl LatchLayoutBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`LatchLayoutBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::object::Object::builder(),
+        }
+    }
+
+    pub fn maximum_size(self, maximum_size: i32) -> Self {
+        Self {
+            builder: self.builder.property("maximum-size", maximum_size),
+        }
+    }
+
+    pub fn tightening_threshold(self, tightening_threshold: i32) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("tightening-threshold", tightening_threshold),
+        }
+    }
+
+    pub fn orientation(self, orientation: /*Ignored*/ gtk::Orientation) -> Self {
+        Self {
+            builder: self.builder.property("orientation", orientation),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`LatchLayout`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> LatchLayout {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref maximum_size) = self.maximum_size {
-            properties.push(("maximum-size", maximum_size));
-        }
-        if let Some(ref tightening_threshold) = self.tightening_threshold {
-            properties.push(("tightening-threshold", tightening_threshold));
-        }
-        glib::Object::new::<LatchLayout>(&properties)
-    }
-
-    pub fn maximum_size(mut self, maximum_size: i32) -> Self {
-        self.maximum_size = Some(maximum_size);
-        self
-    }
-
-    pub fn tightening_threshold(mut self, tightening_threshold: i32) -> Self {
-        self.tightening_threshold = Some(tightening_threshold);
-        self
+        self.builder.build()
     }
 }
 

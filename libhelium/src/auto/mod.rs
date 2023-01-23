@@ -87,6 +87,9 @@ pub use self::overlay_button::OverlayButton;
 mod pill_button;
 pub use self::pill_button::PillButton;
 
+mod segmented_button;
+pub use self::segmented_button::SegmentedButton;
+
 mod settings_list;
 pub use self::settings_list::SettingsList;
 
@@ -201,6 +204,7 @@ pub mod traits {
     pub use super::modifier_badge::ModifierBadgeExt;
     pub use super::navigation_rail::NavigationRailExt;
     pub use super::overlay_button::OverlayButtonExt;
+    pub use super::segmented_button::SegmentedButtonExt;
     pub use super::settings_list::SettingsListExt;
     pub use super::settings_page::SettingsPageExt;
     pub use super::settings_row::SettingsRowExt;
@@ -248,6 +252,7 @@ pub mod builders {
     pub use super::outline_button::OutlineButtonBuilder;
     pub use super::overlay_button::OverlayButtonBuilder;
     pub use super::pill_button::PillButtonBuilder;
+    pub use super::segmented_button::SegmentedButtonBuilder;
     pub use super::settings_list::SettingsListBuilder;
     pub use super::settings_page::SettingsPageBuilder;
     pub use super::settings_row::SettingsRowBuilder;

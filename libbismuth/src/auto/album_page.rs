@@ -25,7 +25,7 @@ impl AlbumPage {
     ///
     /// This method returns an instance of [`AlbumPageBuilder`](crate::builders::AlbumPageBuilder) which can be used to create [`AlbumPage`] objects.
     pub fn builder() -> AlbumPageBuilder {
-        AlbumPageBuilder::default()
+        AlbumPageBuilder::new()
     }
 
     #[doc(alias = "bis_album_page_get_child")]
@@ -107,55 +107,45 @@ impl AlbumPage {
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`AlbumPage`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct AlbumPageBuilder {
-    child: Option<gtk::Widget>,
-    name: Option<String>,
-    navigatable: Option<bool>,
+    builder: glib::object::ObjectBuilder<'static, AlbumPage>,
 }
 
 impl AlbumPageBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`AlbumPageBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::object::Object::builder(),
+        }
+    }
+
+    pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
+        Self {
+            builder: self.builder.property("child", child.clone().upcast()),
+        }
+    }
+
+    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("name", name.into()),
+        }
+    }
+
+    pub fn navigatable(self, navigatable: bool) -> Self {
+        Self {
+            builder: self.builder.property("navigatable", navigatable),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`AlbumPage`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AlbumPage {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref child) = self.child {
-            properties.push(("child", child));
-        }
-        if let Some(ref name) = self.name {
-            properties.push(("name", name));
-        }
-        if let Some(ref navigatable) = self.navigatable {
-            properties.push(("navigatable", navigatable));
-        }
-        glib::Object::new::<AlbumPage>(&properties)
-    }
-
-    pub fn child(mut self, child: &impl IsA<gtk::Widget>) -> Self {
-        self.child = Some(child.clone().upcast());
-        self
-    }
-
-    pub fn name(mut self, name: &str) -> Self {
-        self.name = Some(name.to_string());
-        self
-    }
-
-    pub fn navigatable(mut self, navigatable: bool) -> Self {
-        self.navigatable = Some(navigatable);
-        self
+        self.builder.build()
     }
 }
 

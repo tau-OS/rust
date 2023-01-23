@@ -50,7 +50,7 @@ impl PropertyAnimationTarget {
     ///
     /// This method returns an instance of [`PropertyAnimationTargetBuilder`](crate::builders::PropertyAnimationTargetBuilder) which can be used to create [`PropertyAnimationTarget`] objects.
     pub fn builder() -> PropertyAnimationTargetBuilder {
-        PropertyAnimationTargetBuilder::default()
+        PropertyAnimationTargetBuilder::new()
     }
 
     #[doc(alias = "bis_property_animation_target_get_object")]
@@ -78,60 +78,47 @@ impl PropertyAnimationTarget {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
 impl Default for PropertyAnimationTarget {
     fn default() -> Self {
-        glib::object::Object::new::<Self>(&[])
+        glib::object::Object::new_default::<Self>()
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`PropertyAnimationTarget`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct PropertyAnimationTargetBuilder {
-    #[cfg(any(feature = "v1_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
-    object: Option<glib::Object>,
-    #[cfg(any(feature = "v1_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
-    pspec: Option<glib::ParamSpec>,
+    builder: glib::object::ObjectBuilder<'static, PropertyAnimationTarget>,
 }
 
 impl PropertyAnimationTargetBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`PropertyAnimationTargetBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::object::Object::builder(),
+        }
+    }
+
+    #[cfg(any(feature = "v1_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+    pub fn object(self, object: &impl IsA<glib::Object>) -> Self {
+        Self {
+            builder: self.builder.property("object", object.clone().upcast()),
+        }
+    }
+
+    #[cfg(any(feature = "v1_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+    pub fn pspec(self, pspec: impl AsRef<glib::ParamSpec>) -> Self {
+        Self {
+            builder: self.builder.property("pspec", pspec.as_ref().clone()),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`PropertyAnimationTarget`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> PropertyAnimationTarget {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        #[cfg(any(feature = "v1_2", feature = "dox"))]
-        if let Some(ref object) = self.object {
-            properties.push(("object", object));
-        }
-        #[cfg(any(feature = "v1_2", feature = "dox"))]
-        if let Some(ref pspec) = self.pspec {
-            properties.push(("pspec", pspec));
-        }
-        glib::Object::new::<PropertyAnimationTarget>(&properties)
-    }
-
-    #[cfg(any(feature = "v1_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
-    pub fn object(mut self, object: &impl IsA<glib::Object>) -> Self {
-        self.object = Some(object.clone().upcast());
-        self
-    }
-
-    #[cfg(any(feature = "v1_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
-    pub fn pspec(mut self, pspec: impl AsRef<glib::ParamSpec>) -> Self {
-        self.pspec = Some(pspec.as_ref().clone());
-        self
+        self.builder.build()
     }
 }
 
