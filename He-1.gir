@@ -12,25 +12,25 @@
 	<constant name="ColorLabConstantsKn" c:identifier="HE_COLOR_LAB_CONSTANTS_Kn" c:type="HE_COLOR_LAB_CONSTANTS_Kn" value="18">
 		<type name="gint" c:type="gint"/>
 	</constant>
-	<constant name="ColorLabConstantsXn" c:identifier="HE_COLOR_LAB_CONSTANTS_Xn" c:type="HE_COLOR_LAB_CONSTANTS_Xn" value="0.950470">
+	<constant name="ColorLabConstantsXn" c:identifier="HE_COLOR_LAB_CONSTANTS_Xn" c:type="HE_COLOR_LAB_CONSTANTS_Xn" value="0.9570855264">
 		<type name="gdouble" c:type="gdouble"/>
 	</constant>
-	<constant name="ColorLabConstantsYn" c:identifier="HE_COLOR_LAB_CONSTANTS_Yn" c:type="HE_COLOR_LAB_CONSTANTS_Yn" value="1">
-		<type name="gint" c:type="gint"/>
-	</constant>
-	<constant name="ColorLabConstantsZn" c:identifier="HE_COLOR_LAB_CONSTANTS_Zn" c:type="HE_COLOR_LAB_CONSTANTS_Zn" value="1.088830">
+	<constant name="ColorLabConstantsYn" c:identifier="HE_COLOR_LAB_CONSTANTS_Yn" c:type="HE_COLOR_LAB_CONSTANTS_Yn" value="1.0114135331">
 		<type name="gdouble" c:type="gdouble"/>
 	</constant>
-	<constant name="ColorLabConstantst0" c:identifier="HE_COLOR_LAB_CONSTANTS_t0" c:type="HE_COLOR_LAB_CONSTANTS_t0" value="0.137931034">
+	<constant name="ColorLabConstantsZn" c:identifier="HE_COLOR_LAB_CONSTANTS_Zn" c:type="HE_COLOR_LAB_CONSTANTS_Zn" value="1.1190554598">
 		<type name="gdouble" c:type="gdouble"/>
 	</constant>
-	<constant name="ColorLabConstantst1" c:identifier="HE_COLOR_LAB_CONSTANTS_t1" c:type="HE_COLOR_LAB_CONSTANTS_t1" value="0.206896552">
+	<constant name="ColorLabConstantst0" c:identifier="HE_COLOR_LAB_CONSTANTS_t0" c:type="HE_COLOR_LAB_CONSTANTS_t0" value="0.1379310345">
 		<type name="gdouble" c:type="gdouble"/>
 	</constant>
-	<constant name="ColorLabConstantst2" c:identifier="HE_COLOR_LAB_CONSTANTS_t2" c:type="HE_COLOR_LAB_CONSTANTS_t2" value="0.128418550">
+	<constant name="ColorLabConstantst1" c:identifier="HE_COLOR_LAB_CONSTANTS_t1" c:type="HE_COLOR_LAB_CONSTANTS_t1" value="0.2068965523">
 		<type name="gdouble" c:type="gdouble"/>
 	</constant>
-	<constant name="ColorLabConstantst3" c:identifier="HE_COLOR_LAB_CONSTANTS_t3" c:type="HE_COLOR_LAB_CONSTANTS_t3" value="0.008856452">
+	<constant name="ColorLabConstantst2" c:identifier="HE_COLOR_LAB_CONSTANTS_t2" c:type="HE_COLOR_LAB_CONSTANTS_t2" value="0.1284185508">
+		<type name="gdouble" c:type="gdouble"/>
+	</constant>
+	<constant name="ColorLabConstantst3" c:identifier="HE_COLOR_LAB_CONSTANTS_t3" c:type="HE_COLOR_LAB_CONSTANTS_t3" value="0.0088564521">
 		<type name="gdouble" c:type="gdouble"/>
 	</constant>
 	<record name="ColorRGBColor" c:type="HeColorRGBColor" c:symbol-prefix="rgb_color" glib:type-name="HeColorRGBColor" glib:get-type="he_color_rgb_color_get_type">

@@ -97,13 +97,13 @@ pub const HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_NEVER: HeTabSwitcherTabBarBehavior = 
 
 // Constants
 pub const HE_COLOR_LAB_CONSTANTS_Kn: c_int = 18;
-pub const HE_COLOR_LAB_CONSTANTS_Xn: c_double = 0.950470;
-pub const HE_COLOR_LAB_CONSTANTS_Yn: c_int = 1;
-pub const HE_COLOR_LAB_CONSTANTS_Zn: c_double = 1.088830;
-pub const HE_COLOR_LAB_CONSTANTS_t0: c_double = 0.137931034;
-pub const HE_COLOR_LAB_CONSTANTS_t1: c_double = 0.206896552;
-pub const HE_COLOR_LAB_CONSTANTS_t2: c_double = 0.128418550;
-pub const HE_COLOR_LAB_CONSTANTS_t3: c_double = 0.008856452;
+pub const HE_COLOR_LAB_CONSTANTS_Xn: c_double = 0.9570855264;
+pub const HE_COLOR_LAB_CONSTANTS_Yn: c_double = 1.0114135331;
+pub const HE_COLOR_LAB_CONSTANTS_Zn: c_double = 1.1190554598;
+pub const HE_COLOR_LAB_CONSTANTS_t0: c_double = 0.1379310345;
+pub const HE_COLOR_LAB_CONSTANTS_t1: c_double = 0.2068965523;
+pub const HE_COLOR_LAB_CONSTANTS_t2: c_double = 0.1284185508;
+pub const HE_COLOR_LAB_CONSTANTS_t3: c_double = 0.0088564521;
 
 // Records
 #[derive(Copy, Clone)]
