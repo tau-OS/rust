@@ -220,11 +220,9 @@ impl LatchScrollableBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -238,11 +236,9 @@ impl LatchScrollableBuilder {
         }
     }
 
-    pub fn halign(self, halign: /*Ignored*/ gtk::Align) -> Self {
-        Self {
-            builder: self.builder.property("halign", halign),
-        }
-    }
+    //pub fn halign(self, halign: /*Ignored*/gtk::Align) -> Self {
+    //    Self { builder: self.builder.property("halign", halign), }
+    //}
 
     pub fn has_tooltip(self, has_tooltip: bool) -> Self {
         Self {
@@ -312,11 +308,9 @@ impl LatchScrollableBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -344,11 +338,9 @@ impl LatchScrollableBuilder {
         }
     }
 
-    pub fn valign(self, valign: /*Ignored*/ gtk::Align) -> Self {
-        Self {
-            builder: self.builder.property("valign", valign),
-        }
-    }
+    //pub fn valign(self, valign: /*Ignored*/gtk::Align) -> Self {
+    //    Self { builder: self.builder.property("valign", valign), }
+    //}
 
     pub fn vexpand(self, vexpand: bool) -> Self {
         Self {
@@ -374,45 +366,29 @@ impl LatchScrollableBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
-        Self {
-            builder: self.builder.property("accessible-role", accessible_role),
-        }
-    }
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
 
-    pub fn orientation(self, orientation: /*Ignored*/ gtk::Orientation) -> Self {
-        Self {
-            builder: self.builder.property("orientation", orientation),
-        }
-    }
+    //pub fn orientation(self, orientation: /*Ignored*/gtk::Orientation) -> Self {
+    //    Self { builder: self.builder.property("orientation", orientation), }
+    //}
 
-    pub fn hadjustment(self, hadjustment: &impl IsA</*Ignored*/ gtk::Adjustment>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("hadjustment", hadjustment.clone().upcast()),
-        }
-    }
+    //pub fn hadjustment(self, hadjustment: &impl IsA</*Ignored*/gtk::Adjustment>) -> Self {
+    //    Self { builder: self.builder.property("hadjustment", hadjustment.clone().upcast()), }
+    //}
 
-    pub fn hscroll_policy(self, hscroll_policy: /*Ignored*/ gtk::ScrollablePolicy) -> Self {
-        Self {
-            builder: self.builder.property("hscroll-policy", hscroll_policy),
-        }
-    }
+    //pub fn hscroll_policy(self, hscroll_policy: /*Ignored*/gtk::ScrollablePolicy) -> Self {
+    //    Self { builder: self.builder.property("hscroll-policy", hscroll_policy), }
+    //}
 
-    pub fn vadjustment(self, vadjustment: &impl IsA</*Ignored*/ gtk::Adjustment>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("vadjustment", vadjustment.clone().upcast()),
-        }
-    }
+    //pub fn vadjustment(self, vadjustment: &impl IsA</*Ignored*/gtk::Adjustment>) -> Self {
+    //    Self { builder: self.builder.property("vadjustment", vadjustment.clone().upcast()), }
+    //}
 
-    pub fn vscroll_policy(self, vscroll_policy: /*Ignored*/ gtk::ScrollablePolicy) -> Self {
-        Self {
-            builder: self.builder.property("vscroll-policy", vscroll_policy),
-        }
-    }
+    //pub fn vscroll_policy(self, vscroll_policy: /*Ignored*/gtk::ScrollablePolicy) -> Self {
+    //    Self { builder: self.builder.property("vscroll-policy", vscroll_policy), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`LatchScrollable`].

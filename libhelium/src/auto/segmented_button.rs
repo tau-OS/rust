@@ -8,7 +8,7 @@ use std::fmt;
 
 glib::wrapper! {
     #[doc(alias = "HeSegmentedButton")]
-    pub struct SegmentedButton(Object<ffi::HeSegmentedButton, ffi::HeSegmentedButtonClass>) @extends gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    pub struct SegmentedButton(Object<ffi::HeSegmentedButton, ffi::HeSegmentedButtonClass>) @extends gtk::Box, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Orientable;
 
     match fn {
         type_ => || ffi::he_segmented_button_get_type(),
@@ -55,6 +55,22 @@ impl SegmentedButtonBuilder {
         }
     }
 
+    //pub fn baseline_position(self, baseline_position: /*Ignored*/gtk::BaselinePosition) -> Self {
+    //    Self { builder: self.builder.property("baseline-position", baseline_position), }
+    //}
+
+    pub fn homogeneous(self, homogeneous: bool) -> Self {
+        Self {
+            builder: self.builder.property("homogeneous", homogeneous),
+        }
+    }
+
+    pub fn spacing(self, spacing: i32) -> Self {
+        Self {
+            builder: self.builder.property("spacing", spacing),
+        }
+    }
+
     pub fn can_focus(self, can_focus: bool) -> Self {
         Self {
             builder: self.builder.property("can-focus", can_focus),
@@ -79,11 +95,9 @@ impl SegmentedButtonBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -127,13 +141,9 @@ impl SegmentedButtonBuilder {
         }
     }
 
-    pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/ gtk::LayoutManager>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("layout-manager", layout_manager.clone().upcast()),
-        }
-    }
+    //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
+    //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
+    //}
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -171,11 +181,9 @@ impl SegmentedButtonBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -233,9 +241,13 @@ impl SegmentedButtonBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
+
+    pub fn orientation(self, orientation: gtk::Orientation) -> Self {
         Self {
-            builder: self.builder.property("accessible-role", accessible_role),
+            builder: self.builder.property("orientation", orientation),
         }
     }
 

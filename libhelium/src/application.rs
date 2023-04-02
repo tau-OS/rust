@@ -62,7 +62,7 @@ impl<O: IsA<Application>> ApplicationManual for O {
 
 impl Default for Application {
     fn default() -> Self {
-        let app = glib::object::Object::new::<Self>(&[]);
+        let app = glib::object::Object::new::<Self>();
         Self::register_startup_hook(&app);
         app
     }

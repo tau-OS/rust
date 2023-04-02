@@ -52,19 +52,27 @@ impl ApplicationBuilder {
         Self {
             builder: self
                 .builder
-                .property("default-accent-color", default_accent_color.clone()),
+                .property("default-accent-color", default_accent_color),
+        }
+    }
+
+    pub fn default_font_weight(self, default_font_weight: f64) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("default-font-weight", default_font_weight),
         }
     }
 
     pub fn accent_color(self, accent_color: &ColorRGBColor) -> Self {
         Self {
-            builder: self.builder.property("accent-color", accent_color.clone()),
+            builder: self.builder.property("accent-color", accent_color),
         }
     }
 
     pub fn foreground(self, foreground: &ColorRGBColor) -> Self {
         Self {
-            builder: self.builder.property("foreground", foreground.clone()),
+            builder: self.builder.property("foreground", foreground),
         }
     }
 
@@ -72,7 +80,7 @@ impl ApplicationBuilder {
         Self {
             builder: self
                 .builder
-                .property("accent-foreground", accent_foreground.clone()),
+                .property("accent-foreground", accent_foreground),
         }
     }
 
@@ -143,6 +151,13 @@ pub trait HeApplicationExt: 'static {
     #[doc(alias = "get_default_accent_color")]
     fn default_accent_color(&self) -> Option<ColorRGBColor>;
 
+    #[doc(alias = "he_application_get_default_font_weight")]
+    #[doc(alias = "get_default_font_weight")]
+    fn default_font_weight(&self) -> f64;
+
+    #[doc(alias = "he_application_set_default_font_weight")]
+    fn set_default_font_weight(&self, value: f64);
+
     #[doc(alias = "he_application_get_accent_color")]
     #[doc(alias = "get_accent_color")]
     fn accent_color(&self) -> ColorRGBColor;
@@ -166,6 +181,9 @@ pub trait HeApplicationExt: 'static {
     #[doc(alias = "default-accent-color")]
     fn connect_default_accent_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "default-font-weight")]
+    fn connect_default_font_weight_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     #[doc(alias = "accent-color")]
     fn connect_accent_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -182,6 +200,16 @@ impl<O: IsA<Application>> HeApplicationExt for O {
             from_glib_none(ffi::he_application_get_default_accent_color(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    fn default_font_weight(&self) -> f64 {
+        unsafe { ffi::he_application_get_default_font_weight(self.as_ref().to_glib_none().0) }
+    }
+
+    fn set_default_font_weight(&self, value: f64) {
+        unsafe {
+            ffi::he_application_set_default_font_weight(self.as_ref().to_glib_none().0, value);
         }
     }
 
@@ -219,15 +247,15 @@ impl<O: IsA<Application>> HeApplicationExt for O {
     }
 
     fn set_accent_color(&self, accent_color: Option<&ColorRGBColor>) {
-        glib::ObjectExt::set_property(self.as_ref(), "accent-color", &accent_color)
+        glib::ObjectExt::set_property(self.as_ref(), "accent-color", accent_color)
     }
 
     fn set_foreground(&self, foreground: Option<&ColorRGBColor>) {
-        glib::ObjectExt::set_property(self.as_ref(), "foreground", &foreground)
+        glib::ObjectExt::set_property(self.as_ref(), "foreground", foreground)
     }
 
     fn set_accent_foreground(&self, accent_foreground: Option<&ColorRGBColor>) {
-        glib::ObjectExt::set_property(self.as_ref(), "accent-foreground", &accent_foreground)
+        glib::ObjectExt::set_property(self.as_ref(), "accent-foreground", accent_foreground)
     }
 
     fn connect_default_accent_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -249,6 +277,31 @@ impl<O: IsA<Application>> HeApplicationExt for O {
                 b"notify::default-accent-color\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_default_accent_color_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_default_font_weight_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_default_font_weight_trampoline<
+            P: IsA<Application>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeApplication,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Application::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::default-font-weight\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_default_font_weight_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

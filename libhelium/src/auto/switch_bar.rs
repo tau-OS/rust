@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{Bin, ContentBlockImage, ContentBlockImageClusterImagePosition};
+use crate::Bin;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -12,54 +12,48 @@ use glib::{
 use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 glib::wrapper! {
-    #[doc(alias = "HeContentBlockImageCluster")]
-    pub struct ContentBlockImageCluster(Object<ffi::HeContentBlockImageCluster, ffi::HeContentBlockImageClusterClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    #[doc(alias = "HeSwitchBar")]
+    pub struct SwitchBar(Object<ffi::HeSwitchBar, ffi::HeSwitchBarClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_content_block_image_cluster_get_type(),
+        type_ => || ffi::he_switch_bar_get_type(),
     }
 }
 
-impl ContentBlockImageCluster {
-    pub const NONE: Option<&'static ContentBlockImageCluster> = None;
+impl SwitchBar {
+    pub const NONE: Option<&'static SwitchBar> = None;
 
-    #[doc(alias = "he_content_block_image_cluster_new")]
-    pub fn new(title: &str, subtitle: &str, icon: &str) -> ContentBlockImageCluster {
+    #[doc(alias = "he_switch_bar_new")]
+    pub fn new() -> SwitchBar {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::he_content_block_image_cluster_new(
-                title.to_glib_none().0,
-                subtitle.to_glib_none().0,
-                icon.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::he_switch_bar_new()) }
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`ContentBlockImageCluster`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`SwitchBar`] objects.
     ///
-    /// This method returns an instance of [`ContentBlockImageClusterBuilder`](crate::builders::ContentBlockImageClusterBuilder) which can be used to create [`ContentBlockImageCluster`] objects.
-    pub fn builder() -> ContentBlockImageClusterBuilder {
-        ContentBlockImageClusterBuilder::new()
+    /// This method returns an instance of [`SwitchBarBuilder`](crate::builders::SwitchBarBuilder) which can be used to create [`SwitchBar`] objects.
+    pub fn builder() -> SwitchBarBuilder {
+        SwitchBarBuilder::new()
     }
 }
 
-impl Default for ContentBlockImageCluster {
+impl Default for SwitchBar {
     fn default() -> Self {
-        glib::object::Object::new::<Self>()
+        Self::new()
     }
 }
 
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`ContentBlockImageCluster`] objects.
+/// A [builder-pattern] type to construct [`SwitchBar`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct ContentBlockImageClusterBuilder {
-    builder: glib::object::ObjectBuilder<'static, ContentBlockImageCluster>,
+pub struct SwitchBarBuilder {
+    builder: glib::object::ObjectBuilder<'static, SwitchBar>,
 }
 
-impl ContentBlockImageClusterBuilder {
+impl SwitchBarBuilder {
     fn new() -> Self {
         Self {
             builder: glib::object::Object::builder(),
@@ -78,9 +72,11 @@ impl ContentBlockImageClusterBuilder {
         }
     }
 
-    pub fn icon(self, icon: impl Into<glib::GString>) -> Self {
+    pub fn sensitive_widget(self, sensitive_widget: &impl IsA<gtk::Widget>) -> Self {
         Self {
-            builder: self.builder.property("icon", icon.into()),
+            builder: self
+                .builder
+                .property("sensitive-widget", sensitive_widget.clone().upcast()),
         }
     }
 
@@ -265,44 +261,37 @@ impl ContentBlockImageClusterBuilder {
     //}
 
     // rustdoc-stripper-ignore-next
-    /// Build the [`ContentBlockImageCluster`].
+    /// Build the [`SwitchBar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> ContentBlockImageCluster {
+    pub fn build(self) -> SwitchBar {
         self.builder.build()
     }
 }
 
-pub trait ContentBlockImageClusterExt: 'static {
-    #[doc(alias = "he_content_block_image_cluster_set_image")]
-    fn set_image(
-        &self,
-        image: &impl IsA<ContentBlockImage>,
-        position: ContentBlockImageClusterImagePosition,
-    );
-
-    #[doc(alias = "he_content_block_image_cluster_remove_image")]
-    fn remove_image(&self, image: &impl IsA<ContentBlockImage>);
-
-    #[doc(alias = "he_content_block_image_cluster_get_title")]
+pub trait SwitchBarExt: 'static {
+    #[doc(alias = "he_switch_bar_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString;
 
-    #[doc(alias = "he_content_block_image_cluster_set_title")]
+    #[doc(alias = "he_switch_bar_set_title")]
     fn set_title(&self, value: &str);
 
-    #[doc(alias = "he_content_block_image_cluster_get_subtitle")]
+    #[doc(alias = "he_switch_bar_get_subtitle")]
     #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString;
 
-    #[doc(alias = "he_content_block_image_cluster_set_subtitle")]
+    #[doc(alias = "he_switch_bar_set_subtitle")]
     fn set_subtitle(&self, value: &str);
 
-    #[doc(alias = "he_content_block_image_cluster_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
+    #[doc(alias = "he_switch_bar_get_sensitive_widget")]
+    #[doc(alias = "get_sensitive_widget")]
+    fn sensitive_widget(&self) -> Option<gtk::Widget>;
 
-    #[doc(alias = "he_content_block_image_cluster_set_icon")]
-    fn set_icon(&self, value: &str);
+    #[doc(alias = "he_switch_bar_set_sensitive_widget")]
+    fn set_sensitive_widget(&self, value: Option<&impl IsA<gtk::Widget>>);
+
+    #[doc(alias = "activated")]
+    fn connect_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -310,54 +299,24 @@ pub trait ContentBlockImageClusterExt: 'static {
     #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "sensitive-widget")]
+    fn connect_sensitive_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
-    fn set_image(
-        &self,
-        image: &impl IsA<ContentBlockImage>,
-        position: ContentBlockImageClusterImagePosition,
-    ) {
-        unsafe {
-            ffi::he_content_block_image_cluster_set_image(
-                self.as_ref().to_glib_none().0,
-                image.as_ref().to_glib_none().0,
-                position.into_glib(),
-            );
-        }
-    }
-
-    fn remove_image(&self, image: &impl IsA<ContentBlockImage>) {
-        unsafe {
-            ffi::he_content_block_image_cluster_remove_image(
-                self.as_ref().to_glib_none().0,
-                image.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
+impl<O: IsA<SwitchBar>> SwitchBarExt for O {
     fn title(&self) -> glib::GString {
-        unsafe {
-            from_glib_none(ffi::he_content_block_image_cluster_get_title(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::he_switch_bar_get_title(self.as_ref().to_glib_none().0)) }
     }
 
     fn set_title(&self, value: &str) {
         unsafe {
-            ffi::he_content_block_image_cluster_set_title(
-                self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
+            ffi::he_switch_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
     fn subtitle(&self) -> glib::GString {
         unsafe {
-            from_glib_none(ffi::he_content_block_image_cluster_get_subtitle(
+            from_glib_none(ffi::he_switch_bar_get_subtitle(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -365,41 +324,56 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
 
     fn set_subtitle(&self, value: &str) {
         unsafe {
-            ffi::he_content_block_image_cluster_set_subtitle(
-                self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
+            ffi::he_switch_bar_set_subtitle(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
-    fn icon(&self) -> glib::GString {
+    fn sensitive_widget(&self) -> Option<gtk::Widget> {
         unsafe {
-            from_glib_none(ffi::he_content_block_image_cluster_get_icon(
+            from_glib_none(ffi::he_switch_bar_get_sensitive_widget(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn set_icon(&self, value: &str) {
+    fn set_sensitive_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
-            ffi::he_content_block_image_cluster_set_icon(
+            ffi::he_switch_bar_set_sensitive_widget(
                 self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
+                value.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }
 
+    fn connect_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn activated_trampoline<P: IsA<SwitchBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSwitchBar,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(SwitchBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"activated\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activated_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_title_trampoline<
-            P: IsA<ContentBlockImageCluster>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeContentBlockImageCluster,
+        unsafe extern "C" fn notify_title_trampoline<P: IsA<SwitchBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSwitchBar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(ContentBlockImageCluster::from_glib_borrow(this).unsafe_cast_ref())
+            f(SwitchBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -415,16 +389,13 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
     }
 
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_subtitle_trampoline<
-            P: IsA<ContentBlockImageCluster>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeContentBlockImageCluster,
+        unsafe extern "C" fn notify_subtitle_trampoline<P: IsA<SwitchBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSwitchBar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(ContentBlockImageCluster::from_glib_borrow(this).unsafe_cast_ref())
+            f(SwitchBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -439,25 +410,25 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_icon_trampoline<
-            P: IsA<ContentBlockImageCluster>,
+    fn connect_sensitive_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_sensitive_widget_trampoline<
+            P: IsA<SwitchBar>,
             F: Fn(&P) + 'static,
         >(
-            this: *mut ffi::HeContentBlockImageCluster,
+            this: *mut ffi::HeSwitchBar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(ContentBlockImageCluster::from_glib_borrow(this).unsafe_cast_ref())
+            f(SwitchBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::icon\0".as_ptr() as *const _,
+                b"notify::sensitive-widget\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_icon_trampoline::<Self, F> as *const (),
+                    notify_sensitive_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -465,8 +436,8 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
     }
 }
 
-impl fmt::Display for ContentBlockImageCluster {
+impl fmt::Display for SwitchBar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ContentBlockImageCluster")
+        f.write_str("SwitchBar")
     }
 }

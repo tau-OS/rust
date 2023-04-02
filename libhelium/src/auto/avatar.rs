@@ -46,7 +46,7 @@ impl Avatar {
 
 impl Default for Avatar {
     fn default() -> Self {
-        glib::object::Object::new_default::<Self>()
+        glib::object::Object::new::<Self>()
     }
 }
 
@@ -66,12 +66,6 @@ impl AvatarBuilder {
         }
     }
 
-    pub fn image(self, image: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("image", image.into()),
-        }
-    }
-
     pub fn size(self, size: i32) -> Self {
         Self {
             builder: self.builder.property("size", size),
@@ -81,6 +75,12 @@ impl AvatarBuilder {
     pub fn text(self, text: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("text", text.into()),
+        }
+    }
+
+    pub fn image(self, image: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("image", image.into()),
         }
     }
 
@@ -114,11 +114,9 @@ impl AvatarBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -162,13 +160,9 @@ impl AvatarBuilder {
         }
     }
 
-    pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/ gtk::LayoutManager>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("layout-manager", layout_manager.clone().upcast()),
-        }
-    }
+    //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
+    //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
+    //}
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -206,11 +200,9 @@ impl AvatarBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -268,11 +260,9 @@ impl AvatarBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
-        Self {
-            builder: self.builder.property("accessible-role", accessible_role),
-        }
-    }
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`Avatar`].
@@ -283,13 +273,6 @@ impl AvatarBuilder {
 }
 
 pub trait AvatarExt: 'static {
-    #[doc(alias = "he_avatar_get_image")]
-    #[doc(alias = "get_image")]
-    fn image(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_avatar_set_image")]
-    fn set_image(&self, value: Option<&str>);
-
     #[doc(alias = "he_avatar_get_size")]
     #[doc(alias = "get_size")]
     fn size(&self) -> i32;
@@ -304,27 +287,24 @@ pub trait AvatarExt: 'static {
     #[doc(alias = "he_avatar_set_text")]
     fn set_text(&self, value: Option<&str>);
 
-    #[doc(alias = "image")]
-    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "he_avatar_get_image")]
+    #[doc(alias = "get_image")]
+    fn image(&self) -> Option<glib::GString>;
+
+    #[doc(alias = "he_avatar_set_image")]
+    fn set_image(&self, value: Option<&str>);
 
     #[doc(alias = "size")]
     fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "text")]
     fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "image")]
+    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Avatar>> AvatarExt for O {
-    fn image(&self) -> Option<glib::GString> {
-        unsafe { from_glib_none(ffi::he_avatar_get_image(self.as_ref().to_glib_none().0)) }
-    }
-
-    fn set_image(&self, value: Option<&str>) {
-        unsafe {
-            ffi::he_avatar_set_image(self.as_ref().to_glib_none().0, value.to_glib_none().0);
-        }
-    }
-
     fn size(&self) -> i32 {
         unsafe { ffi::he_avatar_get_size(self.as_ref().to_glib_none().0) }
     }
@@ -345,25 +325,13 @@ impl<O: IsA<Avatar>> AvatarExt for O {
         }
     }
 
-    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_image_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeAvatar,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
-        }
+    fn image(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::he_avatar_get_image(self.as_ref().to_glib_none().0)) }
+    }
+
+    fn set_image(&self, value: Option<&str>) {
         unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::image\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_image_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
+            ffi::he_avatar_set_image(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
@@ -405,6 +373,28 @@ impl<O: IsA<Avatar>> AvatarExt for O {
                 b"notify::text\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_image_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeAvatar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::image\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_image_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

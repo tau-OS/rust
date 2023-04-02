@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{Bin, Colors, OverlayButtonAlignment, OverlayButtonSize};
+use crate::{Bin, Colors, OverlayButtonAlignment, OverlayButtonSize, OverlayButtonTypeButton};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -46,7 +46,7 @@ impl OverlayButton {
 
 impl Default for OverlayButton {
     fn default() -> Self {
-        glib::object::Object::new_default::<Self>()
+        glib::object::Object::new::<Self>()
     }
 }
 
@@ -69,6 +69,18 @@ impl OverlayButtonBuilder {
     pub fn size(self, size: OverlayButtonSize) -> Self {
         Self {
             builder: self.builder.property("size", size),
+        }
+    }
+
+    pub fn typeb(self, typeb: OverlayButtonTypeButton) -> Self {
+        Self {
+            builder: self.builder.property("typeb", typeb),
+        }
+    }
+
+    pub fn typeb2(self, typeb2: OverlayButtonTypeButton) -> Self {
+        Self {
+            builder: self.builder.property("typeb2", typeb2),
         }
     }
 
@@ -101,6 +113,22 @@ impl OverlayButtonBuilder {
     pub fn label(self, label: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("label", label.into()),
+        }
+    }
+
+    pub fn primary_tooltip(self, primary_tooltip: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("primary-tooltip", primary_tooltip.into()),
+        }
+    }
+
+    pub fn secondary_tooltip(self, secondary_tooltip: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("secondary-tooltip", secondary_tooltip.into()),
         }
     }
 
@@ -140,11 +168,9 @@ impl OverlayButtonBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -188,13 +214,9 @@ impl OverlayButtonBuilder {
         }
     }
 
-    pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/ gtk::LayoutManager>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("layout-manager", layout_manager.clone().upcast()),
-        }
-    }
+    //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
+    //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
+    //}
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -232,11 +254,9 @@ impl OverlayButtonBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -294,11 +314,9 @@ impl OverlayButtonBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
-        Self {
-            builder: self.builder.property("accessible-role", accessible_role),
-        }
-    }
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`OverlayButton`].
@@ -315,6 +333,20 @@ pub trait OverlayButtonExt: 'static {
 
     #[doc(alias = "he_overlay_button_set_size")]
     fn set_size(&self, value: OverlayButtonSize);
+
+    #[doc(alias = "he_overlay_button_get_typeb")]
+    #[doc(alias = "get_typeb")]
+    fn typeb(&self) -> OverlayButtonTypeButton;
+
+    #[doc(alias = "he_overlay_button_set_typeb")]
+    fn set_typeb(&self, value: OverlayButtonTypeButton);
+
+    #[doc(alias = "he_overlay_button_get_typeb2")]
+    #[doc(alias = "get_typeb2")]
+    fn typeb2(&self) -> OverlayButtonTypeButton;
+
+    #[doc(alias = "he_overlay_button_set_typeb2")]
+    fn set_typeb2(&self, value: OverlayButtonTypeButton);
 
     #[doc(alias = "he_overlay_button_get_color")]
     #[doc(alias = "get_color")]
@@ -351,6 +383,20 @@ pub trait OverlayButtonExt: 'static {
     #[doc(alias = "he_overlay_button_set_label")]
     fn set_label(&self, value: Option<&str>);
 
+    #[doc(alias = "he_overlay_button_get_primary_tooltip")]
+    #[doc(alias = "get_primary_tooltip")]
+    fn primary_tooltip(&self) -> glib::GString;
+
+    #[doc(alias = "he_overlay_button_set_primary_tooltip")]
+    fn set_primary_tooltip(&self, value: &str);
+
+    #[doc(alias = "he_overlay_button_get_secondary_tooltip")]
+    #[doc(alias = "get_secondary_tooltip")]
+    fn secondary_tooltip(&self) -> glib::GString;
+
+    #[doc(alias = "he_overlay_button_set_secondary_tooltip")]
+    fn set_secondary_tooltip(&self, value: &str);
+
     #[doc(alias = "he_overlay_button_get_child")]
     #[doc(alias = "get_child")]
     fn child(&self) -> Option<gtk::Widget>;
@@ -374,6 +420,12 @@ pub trait OverlayButtonExt: 'static {
     #[doc(alias = "size")]
     fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "typeb")]
+    fn connect_typeb_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "typeb2")]
+    fn connect_typeb2_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     #[doc(alias = "color")]
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -388,6 +440,12 @@ pub trait OverlayButtonExt: 'static {
 
     #[doc(alias = "label")]
     fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "primary-tooltip")]
+    fn connect_primary_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "secondary-tooltip")]
+    fn connect_secondary_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "alignment")]
     fn connect_alignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -405,6 +463,34 @@ impl<O: IsA<OverlayButton>> OverlayButtonExt for O {
     fn set_size(&self, value: OverlayButtonSize) {
         unsafe {
             ffi::he_overlay_button_set_size(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    fn typeb(&self) -> OverlayButtonTypeButton {
+        unsafe {
+            from_glib(ffi::he_overlay_button_get_typeb(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_typeb(&self, value: OverlayButtonTypeButton) {
+        unsafe {
+            ffi::he_overlay_button_set_typeb(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    fn typeb2(&self) -> OverlayButtonTypeButton {
+        unsafe {
+            from_glib(ffi::he_overlay_button_get_typeb2(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_typeb2(&self, value: OverlayButtonTypeButton) {
+        unsafe {
+            ffi::he_overlay_button_set_typeb2(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
@@ -481,6 +567,40 @@ impl<O: IsA<OverlayButton>> OverlayButtonExt for O {
     fn set_label(&self, value: Option<&str>) {
         unsafe {
             ffi::he_overlay_button_set_label(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
+    fn primary_tooltip(&self) -> glib::GString {
+        unsafe {
+            from_glib_full(ffi::he_overlay_button_get_primary_tooltip(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_primary_tooltip(&self, value: &str) {
+        unsafe {
+            ffi::he_overlay_button_set_primary_tooltip(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
+    fn secondary_tooltip(&self) -> glib::GString {
+        unsafe {
+            from_glib_full(ffi::he_overlay_button_get_secondary_tooltip(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_secondary_tooltip(&self, value: &str) {
+        unsafe {
+            ffi::he_overlay_button_set_secondary_tooltip(
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
             );
@@ -579,6 +699,53 @@ impl<O: IsA<OverlayButton>> OverlayButtonExt for O {
                 b"notify::size\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_size_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_typeb_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_typeb_trampoline<P: IsA<OverlayButton>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeOverlayButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(OverlayButton::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::typeb\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_typeb_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_typeb2_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_typeb2_trampoline<
+            P: IsA<OverlayButton>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeOverlayButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(OverlayButton::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::typeb2\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_typeb2_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -695,6 +862,56 @@ impl<O: IsA<OverlayButton>> OverlayButtonExt for O {
                 b"notify::label\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_primary_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_tooltip_trampoline<
+            P: IsA<OverlayButton>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeOverlayButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(OverlayButton::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-tooltip\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_tooltip_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_secondary_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_tooltip_trampoline<
+            P: IsA<OverlayButton>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeOverlayButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(OverlayButton::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-tooltip\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_tooltip_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

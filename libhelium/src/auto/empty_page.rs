@@ -78,6 +78,12 @@ impl EmptyPageBuilder {
         }
     }
 
+    pub fn resource(self, resource: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("resource", resource.into()),
+        }
+    }
+
     pub fn button(self, button: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("button", button.into()),
@@ -114,11 +120,9 @@ impl EmptyPageBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -162,13 +166,9 @@ impl EmptyPageBuilder {
         }
     }
 
-    pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/ gtk::LayoutManager>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("layout-manager", layout_manager.clone().upcast()),
-        }
-    }
+    //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
+    //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
+    //}
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -206,11 +206,9 @@ impl EmptyPageBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -268,11 +266,9 @@ impl EmptyPageBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
-        Self {
-            builder: self.builder.property("accessible-role", accessible_role),
-        }
-    }
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`EmptyPage`].
@@ -304,6 +300,9 @@ pub trait EmptyPageExt: 'static {
     #[doc(alias = "he_empty_page_set_icon")]
     fn set_icon(&self, value: &str);
 
+    #[doc(alias = "he_empty_page_set_resource")]
+    fn set_resource(&self, value: &str);
+
     #[doc(alias = "he_empty_page_get_button")]
     #[doc(alias = "get_button")]
     fn button(&self) -> glib::GString;
@@ -319,6 +318,9 @@ pub trait EmptyPageExt: 'static {
 
     #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "resource")]
+    fn connect_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "button")]
     fn connect_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -359,6 +361,12 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_empty_page_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    fn set_resource(&self, value: &str) {
+        unsafe {
+            ffi::he_empty_page_set_resource(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
@@ -439,6 +447,28 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
                 b"notify::icon\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_resource_trampoline<P: IsA<EmptyPage>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeEmptyPage,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(EmptyPage::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::resource\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_resource_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

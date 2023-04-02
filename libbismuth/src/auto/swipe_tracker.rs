@@ -313,7 +313,7 @@ impl SwipeTracker {
 
 impl Default for SwipeTracker {
     fn default() -> Self {
-        glib::object::Object::new_default::<Self>()
+        glib::object::Object::new::<Self>()
     }
 }
 
@@ -367,11 +367,9 @@ impl SwipeTrackerBuilder {
         }
     }
 
-    pub fn orientation(self, orientation: /*Ignored*/ gtk::Orientation) -> Self {
-        Self {
-            builder: self.builder.property("orientation", orientation),
-        }
-    }
+    //pub fn orientation(self, orientation: /*Ignored*/gtk::Orientation) -> Self {
+    //    Self { builder: self.builder.property("orientation", orientation), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`SwipeTracker`].

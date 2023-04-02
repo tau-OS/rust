@@ -39,6 +39,9 @@ pub use self::button_content::ButtonContent;
 mod chip;
 pub use self::chip::Chip;
 
+mod chip_group;
+pub use self::chip_group::ChipGroup;
+
 mod content_block;
 pub use self::content_block::ContentBlock;
 
@@ -50,6 +53,9 @@ pub use self::content_block_image_cluster::ContentBlockImageCluster;
 
 mod content_list;
 pub use self::content_list::ContentList;
+
+mod date_picker;
+pub use self::date_picker::DatePicker;
 
 mod desktop;
 pub use self::desktop::Desktop;
@@ -105,6 +111,9 @@ pub use self::settings_window::SettingsWindow;
 mod side_bar;
 pub use self::side_bar::SideBar;
 
+mod switch_bar;
+pub use self::switch_bar::SwitchBar;
+
 mod tab;
 pub use self::tab::Tab;
 
@@ -116,6 +125,9 @@ pub use self::tab_switcher::TabSwitcher;
 
 mod text_button;
 pub use self::text_button::TextButton;
+
+mod time_picker;
+pub use self::time_picker::TimePicker;
 
 mod tint_button;
 pub use self::tint_button::TintButton;
@@ -153,9 +165,6 @@ pub use self::welcome_screen::WelcomeScreen;
 mod window;
 pub use self::window::Window;
 
-mod color_lab_color;
-pub use self::color_lab_color::ColorLABColor;
-
 mod color_lch_color;
 pub use self::color_lch_color::ColorLCHColor;
 
@@ -173,9 +182,11 @@ pub use self::enums::Colors;
 pub use self::enums::ContentBlockImageClusterImagePosition;
 pub use self::enums::DesktopColorScheme;
 pub use self::enums::DesktopDarkModeStrength;
+pub use self::enums::DesktopEnsorScheme;
 pub use self::enums::ModifierBadgeAlignment;
 pub use self::enums::OverlayButtonAlignment;
 pub use self::enums::OverlayButtonSize;
+pub use self::enums::OverlayButtonTypeButton;
 pub use self::enums::TabSwitcherTabBarBehavior;
 
 #[doc(hidden)]
@@ -191,10 +202,13 @@ pub mod traits {
     pub use super::bottom_bar::BottomBarExt;
     pub use super::button::ButtonExt;
     pub use super::button_content::ButtonContentExt;
+    pub use super::chip::ChipExt;
+    pub use super::chip_group::ChipGroupExt;
     pub use super::content_block::ContentBlockExt;
     pub use super::content_block_image::ContentBlockImageExt;
     pub use super::content_block_image_cluster::ContentBlockImageClusterExt;
     pub use super::content_list::ContentListExt;
+    pub use super::date_picker::DatePickerExt;
     pub use super::desktop::DesktopExt;
     pub use super::dialog::DialogExt;
     pub use super::disclosure_button::DisclosureButtonExt;
@@ -210,9 +224,11 @@ pub mod traits {
     pub use super::settings_row::SettingsRowExt;
     pub use super::settings_window::SettingsWindowExt;
     pub use super::side_bar::SideBarExt;
+    pub use super::switch_bar::SwitchBarExt;
     pub use super::tab::TabExt;
     pub use super::tab_page::TabPageExt;
     pub use super::tab_switcher::TabSwitcherExt;
+    pub use super::time_picker::TimePickerExt;
     pub use super::toast::ToastExt;
     pub use super::view::ViewExt;
     pub use super::view_aux::ViewAuxExt;
@@ -236,10 +252,12 @@ pub mod builders {
     pub use super::bottom_bar::BottomBarBuilder;
     pub use super::button_content::ButtonContentBuilder;
     pub use super::chip::ChipBuilder;
+    pub use super::chip_group::ChipGroupBuilder;
     pub use super::content_block::ContentBlockBuilder;
     pub use super::content_block_image::ContentBlockImageBuilder;
     pub use super::content_block_image_cluster::ContentBlockImageClusterBuilder;
     pub use super::content_list::ContentListBuilder;
+    pub use super::date_picker::DatePickerBuilder;
     pub use super::desktop::DesktopBuilder;
     pub use super::dialog::DialogBuilder;
     pub use super::disclosure_button::DisclosureButtonBuilder;
@@ -258,10 +276,12 @@ pub mod builders {
     pub use super::settings_row::SettingsRowBuilder;
     pub use super::settings_window::SettingsWindowBuilder;
     pub use super::side_bar::SideBarBuilder;
+    pub use super::switch_bar::SwitchBarBuilder;
     pub use super::tab::TabBuilder;
     pub use super::tab_page::TabPageBuilder;
     pub use super::tab_switcher::TabSwitcherBuilder;
     pub use super::text_button::TextButtonBuilder;
+    pub use super::time_picker::TimePickerBuilder;
     pub use super::tint_button::TintButtonBuilder;
     pub use super::toast::ToastBuilder;
     pub use super::view_aux::ViewAuxBuilder;

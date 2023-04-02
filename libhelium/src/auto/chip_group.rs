@@ -3,98 +3,80 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{Button, Colors};
-use glib::{prelude::*, translate::*};
-use std::fmt;
+use crate::Bin;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 glib::wrapper! {
-    #[doc(alias = "HePillButton")]
-    pub struct PillButton(Object<ffi::HePillButton, ffi::HePillButtonClass>) @extends Button, gtk::Button, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Actionable;
+    #[doc(alias = "HeChipGroup")]
+    pub struct ChipGroup(Object<ffi::HeChipGroup, ffi::HeChipGroupClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_pill_button_get_type(),
+        type_ => || ffi::he_chip_group_get_type(),
     }
 }
 
-impl PillButton {
-    pub const NONE: Option<&'static PillButton> = None;
+impl ChipGroup {
+    pub const NONE: Option<&'static ChipGroup> = None;
 
-    #[doc(alias = "he_pill_button_new")]
-    pub fn new(label: &str) -> PillButton {
+    #[doc(alias = "he_chip_group_new")]
+    pub fn new() -> ChipGroup {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::he_pill_button_new(label.to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::he_chip_group_new()) }
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`PillButton`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`ChipGroup`] objects.
     ///
-    /// This method returns an instance of [`PillButtonBuilder`](crate::builders::PillButtonBuilder) which can be used to create [`PillButton`] objects.
-    pub fn builder() -> PillButtonBuilder {
-        PillButtonBuilder::new()
+    /// This method returns an instance of [`ChipGroupBuilder`](crate::builders::ChipGroupBuilder) which can be used to create [`ChipGroup`] objects.
+    pub fn builder() -> ChipGroupBuilder {
+        ChipGroupBuilder::new()
     }
 }
 
-impl Default for PillButton {
+impl Default for ChipGroup {
     fn default() -> Self {
-        glib::object::Object::new::<Self>()
+        Self::new()
     }
 }
 
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`PillButton`] objects.
+/// A [builder-pattern] type to construct [`ChipGroup`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct PillButtonBuilder {
-    builder: glib::object::ObjectBuilder<'static, PillButton>,
+pub struct ChipGroupBuilder {
+    builder: glib::object::ObjectBuilder<'static, ChipGroup>,
 }
 
-impl PillButtonBuilder {
+impl ChipGroupBuilder {
     fn new() -> Self {
         Self {
             builder: glib::object::Object::builder(),
         }
     }
 
-    pub fn color(self, color: Colors) -> Self {
+    pub fn selection_model(self, selection_model: &gtk::SingleSelection) -> Self {
         Self {
-            builder: self.builder.property("color", color),
+            builder: self
+                .builder
+                .property("selection-model", selection_model.clone()),
         }
     }
 
-    pub fn icon(self, icon: impl Into<glib::GString>) -> Self {
+    pub fn single_line(self, single_line: bool) -> Self {
         Self {
-            builder: self.builder.property("icon", icon.into()),
+            builder: self.builder.property("single-line", single_line),
         }
     }
 
     pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self.builder.property("child", child.clone().upcast()),
-        }
-    }
-
-    pub fn has_frame(self, has_frame: bool) -> Self {
-        Self {
-            builder: self.builder.property("has-frame", has_frame),
-        }
-    }
-
-    pub fn icon_name(self, icon_name: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("icon-name", icon_name.into()),
-        }
-    }
-
-    pub fn label(self, label: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("label", label.into()),
-        }
-    }
-
-    pub fn use_underline(self, use_underline: bool) -> Self {
-        Self {
-            builder: self.builder.property("use-underline", use_underline),
         }
     }
 
@@ -272,30 +254,121 @@ impl PillButtonBuilder {
     //    Self { builder: self.builder.property("accessible-role", accessible_role), }
     //}
 
-    pub fn action_name(self, action_name: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("action-name", action_name.into()),
-        }
-    }
-
-    pub fn action_target(self, action_target: &glib::Variant) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("action-target", action_target.clone()),
-        }
-    }
-
     // rustdoc-stripper-ignore-next
-    /// Build the [`PillButton`].
+    /// Build the [`ChipGroup`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> PillButton {
+    pub fn build(self) -> ChipGroup {
         self.builder.build()
     }
 }
 
-impl fmt::Display for PillButton {
+pub trait ChipGroupExt: 'static {
+    #[doc(alias = "he_chip_group_get_selection_model")]
+    #[doc(alias = "get_selection_model")]
+    fn selection_model(&self) -> gtk::SingleSelection;
+
+    #[doc(alias = "he_chip_group_set_selection_model")]
+    fn set_selection_model(&self, value: &gtk::SingleSelection);
+
+    #[doc(alias = "he_chip_group_get_single_line")]
+    #[doc(alias = "get_single_line")]
+    fn is_single_line(&self) -> bool;
+
+    #[doc(alias = "he_chip_group_set_single_line")]
+    fn set_single_line(&self, value: bool);
+
+    #[doc(alias = "selection-model")]
+    fn connect_selection_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "single-line")]
+    fn connect_single_line_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+}
+
+impl<O: IsA<ChipGroup>> ChipGroupExt for O {
+    fn selection_model(&self) -> gtk::SingleSelection {
+        unsafe {
+            from_glib_none(ffi::he_chip_group_get_selection_model(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_selection_model(&self, value: &gtk::SingleSelection) {
+        unsafe {
+            ffi::he_chip_group_set_selection_model(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
+    fn is_single_line(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_chip_group_get_single_line(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_single_line(&self, value: bool) {
+        unsafe {
+            ffi::he_chip_group_set_single_line(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    fn connect_selection_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_selection_model_trampoline<
+            P: IsA<ChipGroup>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeChipGroup,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ChipGroup::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::selection-model\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selection_model_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_single_line_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_single_line_trampoline<
+            P: IsA<ChipGroup>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeChipGroup,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ChipGroup::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::single-line\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_single_line_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+}
+
+impl fmt::Display for ChipGroup {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("PillButton")
+        f.write_str("ChipGroup")
     }
 }

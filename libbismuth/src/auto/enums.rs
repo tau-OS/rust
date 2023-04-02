@@ -55,6 +55,7 @@ impl FromGlib<ffi::BisAlbumTransitionType> for AlbumTransitionType {
     #[inline]
     unsafe fn from_glib(value: ffi::BisAlbumTransitionType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_ALBUM_TRANSITION_TYPE_OVER => Self::Over,
             ffi::BIS_ALBUM_TRANSITION_TYPE_UNDER => Self::Under,
@@ -68,6 +69,16 @@ impl StaticType for AlbumTransitionType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_album_transition_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for AlbumTransitionType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -162,6 +173,7 @@ impl FromGlib<ffi::BisAnimationState> for AnimationState {
     #[inline]
     unsafe fn from_glib(value: ffi::BisAnimationState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_ANIMATION_IDLE => Self::Idle,
             ffi::BIS_ANIMATION_PAUSED => Self::Paused,
@@ -176,6 +188,16 @@ impl StaticType for AnimationState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_animation_state_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for AnimationState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -384,6 +406,7 @@ impl IntoGlib for Easing {
 impl FromGlib<ffi::BisEasing> for Easing {
     unsafe fn from_glib(value: ffi::BisEasing) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_LINEAR => Self::Linear,
             ffi::BIS_EASE_IN_QUAD => Self::EaseInQuad,
@@ -425,6 +448,16 @@ impl StaticType for Easing {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_easing_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for Easing {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -511,6 +544,7 @@ impl FromGlib<ffi::BisFoldThresholdPolicy> for FoldThresholdPolicy {
     #[inline]
     unsafe fn from_glib(value: ffi::BisFoldThresholdPolicy) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_FOLD_THRESHOLD_POLICY_MINIMUM => Self::Minimum,
             ffi::BIS_FOLD_THRESHOLD_POLICY_NATURAL => Self::Natural,
@@ -523,6 +557,16 @@ impl StaticType for FoldThresholdPolicy {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_fold_threshold_policy_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for FoldThresholdPolicy {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -609,6 +653,7 @@ impl FromGlib<ffi::BisHuggerTransitionType> for HuggerTransitionType {
     #[inline]
     unsafe fn from_glib(value: ffi::BisHuggerTransitionType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_HUGGER_TRANSITION_TYPE_NONE => Self::None,
             ffi::BIS_HUGGER_TRANSITION_TYPE_CROSSFADE => Self::Crossfade,
@@ -621,6 +666,16 @@ impl StaticType for HuggerTransitionType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_hugger_transition_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for HuggerTransitionType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -711,6 +766,7 @@ impl FromGlib<ffi::BisLapelFoldPolicy> for LapelFoldPolicy {
     #[inline]
     unsafe fn from_glib(value: ffi::BisLapelFoldPolicy) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_LAPEL_FOLD_POLICY_NEVER => Self::Never,
             ffi::BIS_LAPEL_FOLD_POLICY_ALWAYS => Self::Always,
@@ -724,6 +780,16 @@ impl StaticType for LapelFoldPolicy {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_lapel_fold_policy_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for LapelFoldPolicy {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -814,6 +880,7 @@ impl FromGlib<ffi::BisLapelTransitionType> for LapelTransitionType {
     #[inline]
     unsafe fn from_glib(value: ffi::BisLapelTransitionType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_LAPEL_TRANSITION_TYPE_OVER => Self::Over,
             ffi::BIS_LAPEL_TRANSITION_TYPE_UNDER => Self::Under,
@@ -827,6 +894,16 @@ impl StaticType for LapelTransitionType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_lapel_transition_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for LapelTransitionType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -913,6 +990,7 @@ impl FromGlib<ffi::BisNavigationDirection> for NavigationDirection {
     #[inline]
     unsafe fn from_glib(value: ffi::BisNavigationDirection) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::BIS_NAVIGATION_DIRECTION_BACK => Self::Back,
             ffi::BIS_NAVIGATION_DIRECTION_FORWARD => Self::Forward,
@@ -925,6 +1003,16 @@ impl StaticType for NavigationDirection {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::bis_navigation_direction_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for NavigationDirection {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

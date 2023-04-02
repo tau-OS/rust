@@ -341,7 +341,7 @@ impl SpringAnimation {
 
 impl Default for SpringAnimation {
     fn default() -> Self {
-        glib::object::Object::new_default::<Self>()
+        glib::object::Object::new::<Self>()
     }
 }
 

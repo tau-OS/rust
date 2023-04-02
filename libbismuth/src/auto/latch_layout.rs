@@ -151,11 +151,9 @@ impl LatchLayoutBuilder {
         }
     }
 
-    pub fn orientation(self, orientation: /*Ignored*/ gtk::Orientation) -> Self {
-        Self {
-            builder: self.builder.property("orientation", orientation),
-        }
-    }
+    //pub fn orientation(self, orientation: /*Ignored*/gtk::Orientation) -> Self {
+    //    Self { builder: self.builder.property("orientation", orientation), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`LatchLayout`].

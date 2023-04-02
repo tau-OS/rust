@@ -3,13 +3,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{Button, Colors};
-use glib::{prelude::*, translate::*};
-use std::fmt;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "HeChip")]
-    pub struct Chip(Object<ffi::HeChip, ffi::HeChipClass>) @extends Button, gtk::Button, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Actionable;
+    pub struct Chip(Object<ffi::HeChip, ffi::HeChipClass>) @extends gtk::ToggleButton, gtk::Button, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Actionable;
 
     match fn {
         type_ => || ffi::he_chip_get_type(),
@@ -36,7 +39,7 @@ impl Chip {
 
 impl Default for Chip {
     fn default() -> Self {
-        glib::object::Object::new_default::<Self>()
+        glib::object::Object::new::<Self>()
     }
 }
 
@@ -56,15 +59,21 @@ impl ChipBuilder {
         }
     }
 
-    pub fn color(self, color: Colors) -> Self {
+    pub fn chip_label(self, chip_label: impl Into<glib::GString>) -> Self {
         Self {
-            builder: self.builder.property("color", color),
+            builder: self.builder.property("chip-label", chip_label.into()),
         }
     }
 
-    pub fn icon(self, icon: impl Into<glib::GString>) -> Self {
+    pub fn active(self, active: bool) -> Self {
         Self {
-            builder: self.builder.property("icon", icon.into()),
+            builder: self.builder.property("active", active),
+        }
+    }
+
+    pub fn group(self, group: &impl IsA<gtk::ToggleButton>) -> Self {
+        Self {
+            builder: self.builder.property("group", group.clone().upcast()),
         }
     }
 
@@ -122,11 +131,9 @@ impl ChipBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -170,13 +177,9 @@ impl ChipBuilder {
         }
     }
 
-    pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/ gtk::LayoutManager>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("layout-manager", layout_manager.clone().upcast()),
-        }
-    }
+    //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
+    //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
+    //}
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -214,11 +217,9 @@ impl ChipBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -276,11 +277,9 @@ impl ChipBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
-        Self {
-            builder: self.builder.property("accessible-role", accessible_role),
-        }
-    }
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
 
     pub fn action_name(self, action_name: impl Into<glib::GString>) -> Self {
         Self {
@@ -301,6 +300,52 @@ impl ChipBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Chip {
         self.builder.build()
+    }
+}
+
+pub trait ChipExt: 'static {
+    #[doc(alias = "he_chip_get_chip_label")]
+    #[doc(alias = "get_chip_label")]
+    fn chip_label(&self) -> glib::GString;
+
+    #[doc(alias = "he_chip_set_chip_label")]
+    fn set_chip_label(&self, value: &str);
+
+    #[doc(alias = "chip-label")]
+    fn connect_chip_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+}
+
+impl<O: IsA<Chip>> ChipExt for O {
+    fn chip_label(&self) -> glib::GString {
+        unsafe { from_glib_none(ffi::he_chip_get_chip_label(self.as_ref().to_glib_none().0)) }
+    }
+
+    fn set_chip_label(&self, value: &str) {
+        unsafe {
+            ffi::he_chip_set_chip_label(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    fn connect_chip_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_chip_label_trampoline<P: IsA<Chip>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeChip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Chip::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::chip-label\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_chip_label_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
     }
 }
 

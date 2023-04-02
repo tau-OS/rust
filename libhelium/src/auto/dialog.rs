@@ -60,7 +60,7 @@ impl Dialog {
 
 impl Default for Dialog {
     fn default() -> Self {
-        glib::object::Object::new_default::<Self>()
+        glib::object::Object::new::<Self>()
     }
 }
 
@@ -83,12 +83,6 @@ impl DialogBuilder {
     pub fn title(self, title: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("title", title.into()),
-        }
-    }
-
-    pub fn subtitle(self, subtitle: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("subtitle", subtitle.into()),
         }
     }
 
@@ -198,11 +192,9 @@ impl DialogBuilder {
         }
     }
 
-    pub fn display(self, display: /*Ignored*/ &gdk::Display) -> Self {
-        Self {
-            builder: self.builder.property("display", display),
-        }
-    }
+    //pub fn display(self, display: /*Ignored*/&gdk::Display) -> Self {
+    //    Self { builder: self.builder.property("display", display), }
+    //}
 
     pub fn focus_visible(self, focus_visible: bool) -> Self {
         Self {
@@ -312,11 +304,9 @@ impl DialogBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -360,13 +350,9 @@ impl DialogBuilder {
         }
     }
 
-    pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/ gtk::LayoutManager>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("layout-manager", layout_manager.clone().upcast()),
-        }
-    }
+    //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
+    //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
+    //}
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -404,11 +390,9 @@ impl DialogBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -466,11 +450,9 @@ impl DialogBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
-        Self {
-            builder: self.builder.property("accessible-role", accessible_role),
-        }
-    }
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`Dialog`].
@@ -490,13 +472,6 @@ pub trait DialogExt: 'static {
 
     #[doc(alias = "he_dialog_set_title")]
     fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_dialog_get_subtitle")]
-    #[doc(alias = "get_subtitle")]
-    fn subtitle(&self) -> glib::GString;
-
-    #[doc(alias = "he_dialog_set_subtitle")]
-    fn set_subtitle(&self, value: &str);
 
     #[doc(alias = "he_dialog_get_info")]
     #[doc(alias = "get_info")]
@@ -525,9 +500,6 @@ pub trait DialogExt: 'static {
 
     #[doc(alias = "he_dialog_set_primary_button")]
     fn set_primary_button(&self, value: &impl IsA<FillButton>);
-
-    #[doc(alias = "subtitle")]
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "info")]
     fn connect_info_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -559,16 +531,6 @@ impl<O: IsA<Dialog>> DialogExt for O {
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_dialog_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
-        }
-    }
-
-    fn subtitle(&self) -> glib::GString {
-        unsafe { from_glib_none(ffi::he_dialog_get_subtitle(self.as_ref().to_glib_none().0)) }
-    }
-
-    fn set_subtitle(&self, value: &str) {
-        unsafe {
-            ffi::he_dialog_set_subtitle(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
@@ -623,28 +585,6 @@ impl<O: IsA<Dialog>> DialogExt for O {
                 self.as_ref().to_glib_none().0,
                 value.as_ref().to_glib_none().0,
             );
-        }
-    }
-
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_subtitle_trampoline<P: IsA<Dialog>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeDialog,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(Dialog::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_subtitle_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
         }
     }
 

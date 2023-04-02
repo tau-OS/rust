@@ -59,6 +59,7 @@ impl FromGlib<ffi::FuseboxFuseCategory> for FuseCategory {
     #[inline]
     unsafe fn from_glib(value: ffi::FuseboxFuseCategory) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::FUSEBOX_FUSE_CATEGORY_NETWORK => Self::Network,
             ffi::FUSEBOX_FUSE_CATEGORY_PERSONAL => Self::Personal,
@@ -73,6 +74,16 @@ impl StaticType for FuseCategory {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::fusebox_fuse_category_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for FuseCategory {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

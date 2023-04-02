@@ -102,6 +102,14 @@ impl AppBarBuilder {
         }
     }
 
+    pub fn decoration_layout(self, decoration_layout: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("decoration-layout", decoration_layout.into()),
+        }
+    }
+
     pub fn show_back(self, show_back: bool) -> Self {
         Self {
             builder: self.builder.property("show-back", show_back),
@@ -138,11 +146,9 @@ impl AppBarBuilder {
         }
     }
 
-    pub fn cursor(self, cursor: /*Ignored*/ &gdk::Cursor) -> Self {
-        Self {
-            builder: self.builder.property("cursor", cursor),
-        }
-    }
+    //pub fn cursor(self, cursor: /*Ignored*/&gdk::Cursor) -> Self {
+    //    Self { builder: self.builder.property("cursor", cursor), }
+    //}
 
     pub fn focus_on_click(self, focus_on_click: bool) -> Self {
         Self {
@@ -186,13 +192,9 @@ impl AppBarBuilder {
         }
     }
 
-    pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/ gtk::LayoutManager>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("layout-manager", layout_manager.clone().upcast()),
-        }
-    }
+    //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
+    //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
+    //}
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -230,11 +232,9 @@ impl AppBarBuilder {
         }
     }
 
-    pub fn overflow(self, overflow: /*Ignored*/ gtk::Overflow) -> Self {
-        Self {
-            builder: self.builder.property("overflow", overflow),
-        }
-    }
+    //pub fn overflow(self, overflow: /*Ignored*/gtk::Overflow) -> Self {
+    //    Self { builder: self.builder.property("overflow", overflow), }
+    //}
 
     pub fn receives_default(self, receives_default: bool) -> Self {
         Self {
@@ -292,11 +292,9 @@ impl AppBarBuilder {
         }
     }
 
-    pub fn accessible_role(self, accessible_role: /*Ignored*/ gtk::AccessibleRole) -> Self {
-        Self {
-            builder: self.builder.property("accessible-role", accessible_role),
-        }
-    }
+    //pub fn accessible_role(self, accessible_role: /*Ignored*/gtk::AccessibleRole) -> Self {
+    //    Self { builder: self.builder.property("accessible-role", accessible_role), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`AppBar`].
@@ -355,6 +353,13 @@ pub trait AppBarExt: 'static {
     #[doc(alias = "he_app_bar_set_show_buttons")]
     fn set_show_buttons(&self, value: bool);
 
+    #[doc(alias = "he_app_bar_get_decoration_layout")]
+    #[doc(alias = "get_decoration_layout")]
+    fn decoration_layout(&self) -> glib::GString;
+
+    #[doc(alias = "he_app_bar_set_decoration_layout")]
+    fn set_decoration_layout(&self, value: &str);
+
     #[doc(alias = "he_app_bar_get_show_back")]
     #[doc(alias = "get_show_back")]
     fn shows_back(&self) -> bool;
@@ -379,6 +384,9 @@ pub trait AppBarExt: 'static {
 
     #[doc(alias = "show-buttons")]
     fn connect_show_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "decoration-layout")]
+    fn connect_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "show-back")]
     fn connect_show_back_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -485,6 +493,23 @@ impl<O: IsA<AppBar>> AppBarExt for O {
     fn set_show_buttons(&self, value: bool) {
         unsafe {
             ffi::he_app_bar_set_show_buttons(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    fn decoration_layout(&self) -> glib::GString {
+        unsafe {
+            from_glib_none(ffi::he_app_bar_get_decoration_layout(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn set_decoration_layout(&self, value: &str) {
+        unsafe {
+            ffi::he_app_bar_set_decoration_layout(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
         }
     }
 
@@ -637,6 +662,31 @@ impl<O: IsA<AppBar>> AppBarExt for O {
                 b"notify::show-buttons\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_show_buttons_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_decoration_layout_trampoline<
+            P: IsA<AppBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeAppBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(AppBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::decoration-layout\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_decoration_layout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

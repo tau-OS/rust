@@ -28,7 +28,6 @@ generate = [
   "He.Avatar",
   "He.ColorRGBColor",
   "He.ColorXYZColor",
-  "He.ColorLABColor",
   "He.ColorLCHColor",
   "He.Colors",
   "He.DesktopDarkModeStrength",
@@ -37,7 +36,6 @@ generate = [
   "He.ButtonContent",
   "He.Window",
   "He.DesktopColorScheme",
-  "He.Desktop",
   "He.AboutWindow",
   "He.AboutWindowLicenses",
   "He.AppBar",
@@ -88,7 +86,13 @@ generate = [
   "He.ViewTitle",
   "He.ViewChooser",
   "He.WelcomeScreen",
-  "He.SegmentedButton"
+  "He.SegmentedButton",
+  "He.DesktopEnsorScheme",
+  "He.ChipGroup",
+  "He.DatePicker",
+  "He.OverlayButtonTypeButton",
+  "He.SwitchBar",
+  "He.TimePicker",
 ]
 
 manual = [
@@ -125,7 +129,19 @@ manual = [
   "GLib.DestroyNotify",
   "Gdk.RGBA",
   "Gtk.Align",
-  "GLib.Variant"
+  "GLib.Variant",
+  "Gtk.ToggleButton",
+  "Gtk.Entry",
+  "Gtk.CellEditable",
+  "Gtk.Editable",
+  "Gtk.Box",
+  "Gtk.Orientable",
+  "Gtk.Text",
+  "GLib.DateTime",
+  "Gtk.SingleSelection",
+  "Gio.AsyncResult",
+  "Gio.AsyncReadyCallback",
+  "GLib.HashTable"
 ]
 
 [[object]]
@@ -140,3 +156,9 @@ trait_name = "HeApplicationExt"
     name = "set_default_accent_color"
     manual = true
 
+[[object]]
+name = "He.Desktop"
+status = "generate"
+    [[object.function]]
+    name = "set_accent_color"
+    ignore = true

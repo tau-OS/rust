@@ -78,7 +78,7 @@ impl PropertyAnimationTarget {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
 impl Default for PropertyAnimationTarget {
     fn default() -> Self {
-        glib::object::Object::new_default::<Self>()
+        glib::object::Object::new::<Self>()
     }
 }
 

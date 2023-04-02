@@ -10,15 +10,15 @@ use std::fmt;
 #[non_exhaustive]
 #[doc(alias = "HeAboutWindowLicenses")]
 pub enum AboutWindowLicenses {
-    #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_GPLv3")]
+    #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_GPLV3")]
     Gplv3,
     #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_MIT")]
     Mit,
-    #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_MPLv2")]
+    #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_MPLV2")]
     Mplv2,
     #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_UNLICENSE")]
     Unlicense,
-    #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_APACHEv2")]
+    #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_APACHEV2")]
     Apachev2,
     #[doc(alias = "HE_ABOUT_WINDOW_LICENSES_WTFPL")]
     Wtfpl,
@@ -54,11 +54,11 @@ impl IntoGlib for AboutWindowLicenses {
     #[inline]
     fn into_glib(self) -> ffi::HeAboutWindowLicenses {
         match self {
-            Self::Gplv3 => ffi::HE_ABOUT_WINDOW_LICENSES_GPLv3,
+            Self::Gplv3 => ffi::HE_ABOUT_WINDOW_LICENSES_GPLV3,
             Self::Mit => ffi::HE_ABOUT_WINDOW_LICENSES_MIT,
-            Self::Mplv2 => ffi::HE_ABOUT_WINDOW_LICENSES_MPLv2,
+            Self::Mplv2 => ffi::HE_ABOUT_WINDOW_LICENSES_MPLV2,
             Self::Unlicense => ffi::HE_ABOUT_WINDOW_LICENSES_UNLICENSE,
-            Self::Apachev2 => ffi::HE_ABOUT_WINDOW_LICENSES_APACHEv2,
+            Self::Apachev2 => ffi::HE_ABOUT_WINDOW_LICENSES_APACHEV2,
             Self::Wtfpl => ffi::HE_ABOUT_WINDOW_LICENSES_WTFPL,
             Self::Proprietary => ffi::HE_ABOUT_WINDOW_LICENSES_PROPRIETARY,
             Self::__Unknown(value) => value,
@@ -71,12 +71,13 @@ impl FromGlib<ffi::HeAboutWindowLicenses> for AboutWindowLicenses {
     #[inline]
     unsafe fn from_glib(value: ffi::HeAboutWindowLicenses) -> Self {
         skip_assert_initialized!();
+
         match value {
-            ffi::HE_ABOUT_WINDOW_LICENSES_GPLv3 => Self::Gplv3,
+            ffi::HE_ABOUT_WINDOW_LICENSES_GPLV3 => Self::Gplv3,
             ffi::HE_ABOUT_WINDOW_LICENSES_MIT => Self::Mit,
-            ffi::HE_ABOUT_WINDOW_LICENSES_MPLv2 => Self::Mplv2,
+            ffi::HE_ABOUT_WINDOW_LICENSES_MPLV2 => Self::Mplv2,
             ffi::HE_ABOUT_WINDOW_LICENSES_UNLICENSE => Self::Unlicense,
-            ffi::HE_ABOUT_WINDOW_LICENSES_APACHEv2 => Self::Apachev2,
+            ffi::HE_ABOUT_WINDOW_LICENSES_APACHEV2 => Self::Apachev2,
             ffi::HE_ABOUT_WINDOW_LICENSES_WTFPL => Self::Wtfpl,
             ffi::HE_ABOUT_WINDOW_LICENSES_PROPRIETARY => Self::Proprietary,
             value => Self::__Unknown(value),
@@ -88,6 +89,16 @@ impl StaticType for AboutWindowLicenses {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_about_window_licenses_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for AboutWindowLicenses {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -178,6 +189,7 @@ impl FromGlib<ffi::HeBannerStyle> for BannerStyle {
     #[inline]
     unsafe fn from_glib(value: ffi::HeBannerStyle) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_BANNER_STYLE_INFO => Self::Info,
             ffi::HE_BANNER_STYLE_WARNING => Self::Warning,
@@ -191,6 +203,16 @@ impl StaticType for BannerStyle {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_banner_style_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BannerStyle {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -277,6 +299,7 @@ impl FromGlib<ffi::HeBottomBarPosition> for BottomBarPosition {
     #[inline]
     unsafe fn from_glib(value: ffi::HeBottomBarPosition) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_BOTTOM_BAR_POSITION_LEFT => Self::Left,
             ffi::HE_BOTTOM_BAR_POSITION_RIGHT => Self::Right,
@@ -289,6 +312,16 @@ impl StaticType for BottomBarPosition {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_bottom_bar_position_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BottomBarPosition {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -417,6 +450,7 @@ impl IntoGlib for Colors {
 impl FromGlib<ffi::HeColors> for Colors {
     unsafe fn from_glib(value: ffi::HeColors) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_COLORS_NONE => Self::None,
             ffi::HE_COLORS_RED => Self::Red,
@@ -440,6 +474,16 @@ impl StaticType for Colors {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_colors_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for Colors {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -536,6 +580,7 @@ impl FromGlib<ffi::HeContentBlockImageClusterImagePosition>
     #[inline]
     unsafe fn from_glib(value: ffi::HeContentBlockImageClusterImagePosition) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_CONTENT_BLOCK_IMAGE_CLUSTER_IMAGE_POSITION_TOP_LEFT => Self::TopLeft,
             ffi::HE_CONTENT_BLOCK_IMAGE_CLUSTER_IMAGE_POSITION_BOTTOM_LEFT => Self::BottomLeft,
@@ -550,6 +595,16 @@ impl StaticType for ContentBlockImageClusterImagePosition {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_content_block_image_cluster_image_position_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ContentBlockImageClusterImagePosition {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -640,6 +695,7 @@ impl FromGlib<ffi::HeDesktopColorScheme> for DesktopColorScheme {
     #[inline]
     unsafe fn from_glib(value: ffi::HeDesktopColorScheme) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_DESKTOP_COLOR_SCHEME_NO_PREFERENCE => Self::NoPreference,
             ffi::HE_DESKTOP_COLOR_SCHEME_DARK => Self::Dark,
@@ -653,6 +709,16 @@ impl StaticType for DesktopColorScheme {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_desktop_color_scheme_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for DesktopColorScheme {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -743,6 +809,7 @@ impl FromGlib<ffi::HeDesktopDarkModeStrength> for DesktopDarkModeStrength {
     #[inline]
     unsafe fn from_glib(value: ffi::HeDesktopDarkModeStrength) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM => Self::Medium,
             ffi::HE_DESKTOP_DARK_MODE_STRENGTH_HARSH => Self::Harsh,
@@ -756,6 +823,16 @@ impl StaticType for DesktopDarkModeStrength {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_desktop_dark_mode_strength_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for DesktopDarkModeStrength {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -792,6 +869,125 @@ impl ToValue for DesktopDarkModeStrength {
 impl From<DesktopDarkModeStrength> for glib::Value {
     #[inline]
     fn from(v: DesktopDarkModeStrength) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeDesktopEnsorScheme")]
+pub enum DesktopEnsorScheme {
+    #[doc(alias = "HE_DESKTOP_ENSOR_SCHEME_DEFAULT")]
+    Default,
+    #[doc(alias = "HE_DESKTOP_ENSOR_SCHEME_VIBRANT")]
+    Vibrant,
+    #[doc(alias = "HE_DESKTOP_ENSOR_SCHEME_MUTED")]
+    Muted,
+    #[doc(alias = "HE_DESKTOP_ENSOR_SCHEME_MONOCHROMATIC")]
+    Monochromatic,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+impl fmt::Display for DesktopEnsorScheme {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "DesktopEnsorScheme::{}",
+            match *self {
+                Self::Default => "Default",
+                Self::Vibrant => "Vibrant",
+                Self::Muted => "Muted",
+                Self::Monochromatic => "Monochromatic",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for DesktopEnsorScheme {
+    type GlibType = ffi::HeDesktopEnsorScheme;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeDesktopEnsorScheme {
+        match self {
+            Self::Default => ffi::HE_DESKTOP_ENSOR_SCHEME_DEFAULT,
+            Self::Vibrant => ffi::HE_DESKTOP_ENSOR_SCHEME_VIBRANT,
+            Self::Muted => ffi::HE_DESKTOP_ENSOR_SCHEME_MUTED,
+            Self::Monochromatic => ffi::HE_DESKTOP_ENSOR_SCHEME_MONOCHROMATIC,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeDesktopEnsorScheme> for DesktopEnsorScheme {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeDesktopEnsorScheme) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_DESKTOP_ENSOR_SCHEME_DEFAULT => Self::Default,
+            ffi::HE_DESKTOP_ENSOR_SCHEME_VIBRANT => Self::Vibrant,
+            ffi::HE_DESKTOP_ENSOR_SCHEME_MUTED => Self::Muted,
+            ffi::HE_DESKTOP_ENSOR_SCHEME_MONOCHROMATIC => Self::Monochromatic,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for DesktopEnsorScheme {
+    #[inline]
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::he_desktop_ensor_scheme_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for DesktopEnsorScheme {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
+impl glib::value::ValueType for DesktopEnsorScheme {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for DesktopEnsorScheme {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for DesktopEnsorScheme {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<DesktopEnsorScheme> for glib::Value {
+    #[inline]
+    fn from(v: DesktopEnsorScheme) -> Self {
         skip_assert_initialized!();
         ToValue::to_value(&v)
     }
@@ -846,6 +1042,7 @@ impl FromGlib<ffi::HeModifierBadgeAlignment> for ModifierBadgeAlignment {
     #[inline]
     unsafe fn from_glib(value: ffi::HeModifierBadgeAlignment) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_MODIFIER_BADGE_ALIGNMENT_LEFT => Self::Left,
             ffi::HE_MODIFIER_BADGE_ALIGNMENT_CENTER => Self::Center,
@@ -859,6 +1056,16 @@ impl StaticType for ModifierBadgeAlignment {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_modifier_badge_alignment_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ModifierBadgeAlignment {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -949,6 +1156,7 @@ impl FromGlib<ffi::HeOverlayButtonAlignment> for OverlayButtonAlignment {
     #[inline]
     unsafe fn from_glib(value: ffi::HeOverlayButtonAlignment) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_OVERLAY_BUTTON_ALIGNMENT_LEFT => Self::Left,
             ffi::HE_OVERLAY_BUTTON_ALIGNMENT_CENTER => Self::Center,
@@ -962,6 +1170,16 @@ impl StaticType for OverlayButtonAlignment {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_overlay_button_alignment_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for OverlayButtonAlignment {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1052,6 +1270,7 @@ impl FromGlib<ffi::HeOverlayButtonSize> for OverlayButtonSize {
     #[inline]
     unsafe fn from_glib(value: ffi::HeOverlayButtonSize) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_OVERLAY_BUTTON_SIZE_SMALL => Self::Small,
             ffi::HE_OVERLAY_BUTTON_SIZE_MEDIUM => Self::Medium,
@@ -1065,6 +1284,16 @@ impl StaticType for OverlayButtonSize {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_overlay_button_size_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for OverlayButtonSize {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1101,6 +1330,125 @@ impl ToValue for OverlayButtonSize {
 impl From<OverlayButtonSize> for glib::Value {
     #[inline]
     fn from(v: OverlayButtonSize) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeOverlayButtonTypeButton")]
+pub enum OverlayButtonTypeButton {
+    #[doc(alias = "HE_OVERLAY_BUTTON_TYPE_BUTTON_SURFACE")]
+    Surface,
+    #[doc(alias = "HE_OVERLAY_BUTTON_TYPE_BUTTON_PRIMARY")]
+    Primary,
+    #[doc(alias = "HE_OVERLAY_BUTTON_TYPE_BUTTON_SECONDARY")]
+    Secondary,
+    #[doc(alias = "HE_OVERLAY_BUTTON_TYPE_BUTTON_TERTIARY")]
+    Tertiary,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+impl fmt::Display for OverlayButtonTypeButton {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "OverlayButtonTypeButton::{}",
+            match *self {
+                Self::Surface => "Surface",
+                Self::Primary => "Primary",
+                Self::Secondary => "Secondary",
+                Self::Tertiary => "Tertiary",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for OverlayButtonTypeButton {
+    type GlibType = ffi::HeOverlayButtonTypeButton;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeOverlayButtonTypeButton {
+        match self {
+            Self::Surface => ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_SURFACE,
+            Self::Primary => ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_PRIMARY,
+            Self::Secondary => ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_SECONDARY,
+            Self::Tertiary => ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_TERTIARY,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeOverlayButtonTypeButton> for OverlayButtonTypeButton {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeOverlayButtonTypeButton) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_SURFACE => Self::Surface,
+            ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_PRIMARY => Self::Primary,
+            ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_SECONDARY => Self::Secondary,
+            ffi::HE_OVERLAY_BUTTON_TYPE_BUTTON_TERTIARY => Self::Tertiary,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for OverlayButtonTypeButton {
+    #[inline]
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::he_overlay_button_type_button_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for OverlayButtonTypeButton {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
+impl glib::value::ValueType for OverlayButtonTypeButton {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for OverlayButtonTypeButton {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for OverlayButtonTypeButton {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<OverlayButtonTypeButton> for glib::Value {
+    #[inline]
+    fn from(v: OverlayButtonTypeButton) -> Self {
         skip_assert_initialized!();
         ToValue::to_value(&v)
     }
@@ -1155,6 +1503,7 @@ impl FromGlib<ffi::HeTabSwitcherTabBarBehavior> for TabSwitcherTabBarBehavior {
     #[inline]
     unsafe fn from_glib(value: ffi::HeTabSwitcherTabBarBehavior) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_ALWAYS => Self::Always,
             ffi::HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_SINGLE => Self::Single,
@@ -1168,6 +1517,16 @@ impl StaticType for TabSwitcherTabBarBehavior {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::he_tab_switcher_tab_bar_behavior_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TabSwitcherTabBarBehavior {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

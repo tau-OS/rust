@@ -40,29 +40,29 @@ futures-channel = "0.3"
 
 [dependencies.glib]
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.17"
+version = "0.18.0"
 
 [dependencies.gio]
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.17"
+version = "0.18.0"
 
 [dependencies.gdk-pixbuf]
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.17"
+version = "0.18.0"
 
 [dependencies.pango]
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.17"
+version = "0.18.0"
 
 [dependencies.gdk]
 package = "gdk4"
 git = "https://github.com/gtk-rs/gtk4-rs"
-version = "0.6"
+version = "0.7.0"
 
 [dependencies.gtk]
 package = "gtk4"
 git = "https://github.com/gtk-rs/gtk4-rs"
-version = "0.6"
+version = "0.7.0"
 
 [dependencies.ffi]
 package = "fusebox-sys"
