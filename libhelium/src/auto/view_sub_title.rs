@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeViewSubTitle")]
@@ -254,19 +254,14 @@ impl ViewSubTitleBuilder {
     }
 }
 
-pub trait ViewSubTitleExt: 'static {
-    #[doc(alias = "he_view_sub_title_get_label")]
-    #[doc(alias = "get_label")]
-    fn label(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_view_sub_title_set_label")]
-    fn set_label(&self, value: Option<&str>);
-
-    #[doc(alias = "label")]
-    fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ViewSubTitle>> Sealed for T {}
 }
 
-impl<O: IsA<ViewSubTitle>> ViewSubTitleExt for O {
+pub trait ViewSubTitleExt: IsA<ViewSubTitle> + sealed::Sealed + 'static {
+    #[doc(alias = "he_view_sub_title_get_label")]
+    #[doc(alias = "get_label")]
     fn label(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_view_sub_title_get_label(
@@ -275,6 +270,7 @@ impl<O: IsA<ViewSubTitle>> ViewSubTitleExt for O {
         }
     }
 
+    #[doc(alias = "he_view_sub_title_set_label")]
     fn set_label(&self, value: Option<&str>) {
         unsafe {
             ffi::he_view_sub_title_set_label(
@@ -284,6 +280,7 @@ impl<O: IsA<ViewSubTitle>> ViewSubTitleExt for O {
         }
     }
 
+    #[doc(alias = "label")]
     fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_label_trampoline<P: IsA<ViewSubTitle>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeViewSubTitle,
@@ -298,7 +295,7 @@ impl<O: IsA<ViewSubTitle>> ViewSubTitleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -307,8 +304,4 @@ impl<O: IsA<ViewSubTitle>> ViewSubTitleExt for O {
     }
 }
 
-impl fmt::Display for ViewSubTitle {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ViewSubTitle")
-    }
-}
+impl<O: IsA<ViewSubTitle>> ViewSubTitleExt for O {}

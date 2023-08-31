@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeSettingsPage")]
@@ -254,22 +254,13 @@ impl SettingsPageBuilder {
     }
 }
 
-pub trait SettingsPageExt: 'static {
-    #[doc(alias = "he_settings_page_add_list")]
-    fn add_list(&self, list: &impl IsA<SettingsList>);
-
-    #[doc(alias = "he_settings_page_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_settings_page_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::SettingsPage>> Sealed for T {}
 }
 
-impl<O: IsA<SettingsPage>> SettingsPageExt for O {
+pub trait SettingsPageExt: IsA<SettingsPage> + sealed::Sealed + 'static {
+    #[doc(alias = "he_settings_page_add_list")]
     fn add_list(&self, list: &impl IsA<SettingsList>) {
         unsafe {
             ffi::he_settings_page_add_list(
@@ -279,6 +270,8 @@ impl<O: IsA<SettingsPage>> SettingsPageExt for O {
         }
     }
 
+    #[doc(alias = "he_settings_page_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_settings_page_get_title(
@@ -287,12 +280,14 @@ impl<O: IsA<SettingsPage>> SettingsPageExt for O {
         }
     }
 
+    #[doc(alias = "he_settings_page_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_settings_page_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<SettingsPage>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSettingsPage,
@@ -307,7 +302,7 @@ impl<O: IsA<SettingsPage>> SettingsPageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -316,8 +311,4 @@ impl<O: IsA<SettingsPage>> SettingsPageExt for O {
     }
 }
 
-impl fmt::Display for SettingsPage {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("SettingsPage")
-    }
-}
+impl<O: IsA<SettingsPage>> SettingsPageExt for O {}

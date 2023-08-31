@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeBottomBar")]
@@ -285,74 +285,13 @@ impl BottomBarBuilder {
     }
 }
 
-pub trait BottomBarExt: 'static {
-    #[doc(alias = "he_bottom_bar_append_button")]
-    fn append_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
-
-    #[doc(alias = "he_bottom_bar_prepend_button")]
-    fn prepend_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
-
-    #[doc(alias = "he_bottom_bar_remove_button")]
-    fn remove_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition);
-
-    #[doc(alias = "he_bottom_bar_insert_button_after")]
-    fn insert_button_after(
-        &self,
-        icon: &impl IsA<IconicButton>,
-        after: &impl IsA<IconicButton>,
-        position: BottomBarPosition,
-    );
-
-    #[doc(alias = "he_bottom_bar_reorder_button_after")]
-    fn reorder_button_after(
-        &self,
-        icon: &impl IsA<IconicButton>,
-        sibling: &impl IsA<IconicButton>,
-        position: BottomBarPosition,
-    );
-
-    #[doc(alias = "he_bottom_bar_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_bottom_bar_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_bottom_bar_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> glib::GString;
-
-    #[doc(alias = "he_bottom_bar_set_description")]
-    fn set_description(&self, value: &str);
-
-    #[doc(alias = "he_bottom_bar_get_menu_model")]
-    #[doc(alias = "get_menu_model")]
-    fn menu_model(&self) -> gio::MenuModel;
-
-    #[doc(alias = "he_bottom_bar_set_menu_model")]
-    fn set_menu_model(&self, value: &impl IsA<gio::MenuModel>);
-
-    #[doc(alias = "he_bottom_bar_get_collapse_actions")]
-    #[doc(alias = "get_collapse_actions")]
-    fn is_collapse_actions(&self) -> bool;
-
-    #[doc(alias = "he_bottom_bar_set_collapse_actions")]
-    fn set_collapse_actions(&self, value: bool);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "description")]
-    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "menu-model")]
-    fn connect_menu_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "collapse-actions")]
-    fn connect_collapse_actions_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BottomBar>> Sealed for T {}
 }
 
-impl<O: IsA<BottomBar>> BottomBarExt for O {
+pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
+    #[doc(alias = "he_bottom_bar_append_button")]
     fn append_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_append_button(
@@ -363,6 +302,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_prepend_button")]
     fn prepend_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_prepend_button(
@@ -373,6 +313,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_remove_button")]
     fn remove_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_remove_button(
@@ -383,6 +324,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_insert_button_after")]
     fn insert_button_after(
         &self,
         icon: &impl IsA<IconicButton>,
@@ -399,6 +341,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_reorder_button_after")]
     fn reorder_button_after(
         &self,
         icon: &impl IsA<IconicButton>,
@@ -415,16 +358,21 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_bottom_bar_get_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_bottom_bar_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_bottom_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_bottom_bar_get_description")]
+    #[doc(alias = "get_description")]
     fn description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_bottom_bar_get_description(
@@ -433,6 +381,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_set_description")]
     fn set_description(&self, value: &str) {
         unsafe {
             ffi::he_bottom_bar_set_description(
@@ -442,6 +391,8 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_get_menu_model")]
+    #[doc(alias = "get_menu_model")]
     fn menu_model(&self) -> gio::MenuModel {
         unsafe {
             from_glib_none(ffi::he_bottom_bar_get_menu_model(
@@ -450,6 +401,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_set_menu_model")]
     fn set_menu_model(&self, value: &impl IsA<gio::MenuModel>) {
         unsafe {
             ffi::he_bottom_bar_set_menu_model(
@@ -459,6 +411,8 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_get_collapse_actions")]
+    #[doc(alias = "get_collapse_actions")]
     fn is_collapse_actions(&self) -> bool {
         unsafe {
             from_glib(ffi::he_bottom_bar_get_collapse_actions(
@@ -467,6 +421,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "he_bottom_bar_set_collapse_actions")]
     fn set_collapse_actions(&self, value: bool) {
         unsafe {
             ffi::he_bottom_bar_set_collapse_actions(
@@ -476,6 +431,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<BottomBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeBottomBar,
@@ -490,7 +446,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -498,6 +454,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "description")]
     fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_description_trampoline<
             P: IsA<BottomBar>,
@@ -515,7 +472,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::description\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_description_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -523,6 +480,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "menu-model")]
     fn connect_menu_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_menu_model_trampoline<
             P: IsA<BottomBar>,
@@ -540,7 +498,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu-model\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_menu_model_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -548,6 +506,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
         }
     }
 
+    #[doc(alias = "collapse-actions")]
     fn connect_collapse_actions_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_collapse_actions_trampoline<
             P: IsA<BottomBar>,
@@ -565,7 +524,7 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::collapse-actions\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_collapse_actions_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -574,8 +533,4 @@ impl<O: IsA<BottomBar>> BottomBarExt for O {
     }
 }
 
-impl fmt::Display for BottomBar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("BottomBar")
-    }
-}
+impl<O: IsA<BottomBar>> BottomBarExt for O {}

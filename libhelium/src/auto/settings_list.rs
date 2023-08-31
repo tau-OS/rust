@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeSettingsList")]
@@ -260,35 +260,13 @@ impl SettingsListBuilder {
     }
 }
 
-pub trait SettingsListExt: 'static {
-    #[doc(alias = "he_settings_list_add")]
-    fn add(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_settings_list_remove")]
-    fn remove(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_settings_list_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_settings_list_set_title")]
-    fn set_title(&self, value: Option<&str>);
-
-    #[doc(alias = "he_settings_list_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_settings_list_set_description")]
-    fn set_description(&self, value: Option<&str>);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "description")]
-    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::SettingsList>> Sealed for T {}
 }
 
-impl<O: IsA<SettingsList>> SettingsListExt for O {
+pub trait SettingsListExt: IsA<SettingsList> + sealed::Sealed + 'static {
+    #[doc(alias = "he_settings_list_add")]
     fn add(&self, child: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_settings_list_add(
@@ -298,6 +276,7 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
         }
     }
 
+    #[doc(alias = "he_settings_list_remove")]
     fn remove(&self, child: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_settings_list_remove(
@@ -307,6 +286,8 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
         }
     }
 
+    #[doc(alias = "he_settings_list_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_settings_list_get_title(
@@ -315,12 +296,15 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
         }
     }
 
+    #[doc(alias = "he_settings_list_set_title")]
     fn set_title(&self, value: Option<&str>) {
         unsafe {
             ffi::he_settings_list_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_settings_list_get_description")]
+    #[doc(alias = "get_description")]
     fn description(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_settings_list_get_description(
@@ -329,6 +313,7 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
         }
     }
 
+    #[doc(alias = "he_settings_list_set_description")]
     fn set_description(&self, value: Option<&str>) {
         unsafe {
             ffi::he_settings_list_set_description(
@@ -338,6 +323,7 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<SettingsList>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSettingsList,
@@ -352,7 +338,7 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -360,6 +346,7 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
         }
     }
 
+    #[doc(alias = "description")]
     fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_description_trampoline<
             P: IsA<SettingsList>,
@@ -377,7 +364,7 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::description\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_description_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -386,8 +373,4 @@ impl<O: IsA<SettingsList>> SettingsListExt for O {
     }
 }
 
-impl fmt::Display for SettingsList {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("SettingsList")
-    }
-}
+impl<O: IsA<SettingsList>> SettingsListExt for O {}

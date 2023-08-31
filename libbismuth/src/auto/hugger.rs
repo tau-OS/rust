@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "BisHugger")]
@@ -211,7 +211,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-none\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_allow_none_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -234,7 +234,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::homogeneous\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_homogeneous_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -257,7 +257,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::interpolate-size\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_interpolate_size_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -280,7 +280,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pages\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_pages_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -306,7 +306,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::switch-threshold-policy\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_switch_threshold_policy_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -332,7 +332,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-duration\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_transition_duration_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -358,7 +358,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-running\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_transition_running_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -381,7 +381,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-type\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_transition_type_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -404,7 +404,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-child\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_visible_child_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -427,7 +427,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::xalign\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_xalign_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -450,7 +450,7 @@ impl Hugger {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::yalign\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_yalign_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -716,11 +716,5 @@ impl HuggerBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Hugger {
         self.builder.build()
-    }
-}
-
-impl fmt::Display for Hugger {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Hugger")
     }
 }

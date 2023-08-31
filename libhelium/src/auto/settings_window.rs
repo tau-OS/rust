@@ -5,7 +5,6 @@
 
 use crate::{SettingsList, SettingsPage, Window};
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 glib::wrapper! {
     #[doc(alias = "HeSettingsWindow")]
@@ -63,12 +62,6 @@ impl SettingsWindowBuilder {
     pub fn parent(self, parent: &impl IsA<gtk::Window>) -> Self {
         Self {
             builder: self.builder.property("parent", parent.clone().upcast()),
-        }
-    }
-
-    pub fn modal(self, modal: bool) -> Self {
-        Self {
-            builder: self.builder.property("modal", modal),
         }
     }
 
@@ -162,8 +155,8 @@ impl SettingsWindowBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_2")))]
+    #[cfg(feature = "gtk_v4_2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
     pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
         Self {
             builder: self
@@ -198,6 +191,12 @@ impl SettingsWindowBuilder {
         }
     }
 
+    pub fn modal(self, modal: bool) -> Self {
+        Self {
+            builder: self.builder.property("modal", modal),
+        }
+    }
+
     pub fn resizable(self, resizable: bool) -> Self {
         Self {
             builder: self.builder.property("resizable", resizable),
@@ -216,8 +215,8 @@ impl SettingsWindowBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_6", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_6")))]
+    #[cfg(feature = "gtk_v4_6")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_6")))]
     pub fn titlebar(self, titlebar: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self.builder.property("titlebar", titlebar.clone().upcast()),
@@ -414,15 +413,13 @@ impl SettingsWindowBuilder {
     }
 }
 
-pub trait SettingsWindowExt: 'static {
-    #[doc(alias = "he_settings_window_add_page")]
-    fn add_page(&self, page: &impl IsA<SettingsPage>);
-
-    #[doc(alias = "he_settings_window_add_list")]
-    fn add_list(&self, list: &impl IsA<SettingsList>);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::SettingsWindow>> Sealed for T {}
 }
 
-impl<O: IsA<SettingsWindow>> SettingsWindowExt for O {
+pub trait SettingsWindowExt: IsA<SettingsWindow> + sealed::Sealed + 'static {
+    #[doc(alias = "he_settings_window_add_page")]
     fn add_page(&self, page: &impl IsA<SettingsPage>) {
         unsafe {
             ffi::he_settings_window_add_page(
@@ -432,6 +429,7 @@ impl<O: IsA<SettingsWindow>> SettingsWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_settings_window_add_list")]
     fn add_list(&self, list: &impl IsA<SettingsList>) {
         unsafe {
             ffi::he_settings_window_add_list(
@@ -442,8 +440,4 @@ impl<O: IsA<SettingsWindow>> SettingsWindowExt for O {
     }
 }
 
-impl fmt::Display for SettingsWindow {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("SettingsWindow")
-    }
-}
+impl<O: IsA<SettingsWindow>> SettingsWindowExt for O {}

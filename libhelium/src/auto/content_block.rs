@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeContentBlock")]
@@ -302,65 +302,14 @@ impl ContentBlockBuilder {
     }
 }
 
-pub trait ContentBlockExt: 'static {
-    #[doc(alias = "he_content_block_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_content_block_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_content_block_get_subtitle")]
-    #[doc(alias = "get_subtitle")]
-    fn subtitle(&self) -> glib::GString;
-
-    #[doc(alias = "he_content_block_set_subtitle")]
-    fn set_subtitle(&self, value: &str);
-
-    #[doc(alias = "he_content_block_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_content_block_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "he_content_block_set_gicon")]
-    fn set_gicon(&self, value: &impl IsA<gio::Icon>);
-
-    #[doc(alias = "he_content_block_get_secondary_button")]
-    #[doc(alias = "get_secondary_button")]
-    fn secondary_button(&self) -> Button;
-
-    #[doc(alias = "he_content_block_set_secondary_button")]
-    fn set_secondary_button(&self, value: &impl IsA<Button>);
-
-    #[doc(alias = "he_content_block_get_primary_button")]
-    #[doc(alias = "get_primary_button")]
-    fn primary_button(&self) -> Button;
-
-    #[doc(alias = "he_content_block_set_primary_button")]
-    fn set_primary_button(&self, value: &impl IsA<Button>);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "subtitle")]
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "gicon")]
-    fn connect_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "secondary-button")]
-    fn connect_secondary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "primary-button")]
-    fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ContentBlock>> Sealed for T {}
 }
 
-impl<O: IsA<ContentBlock>> ContentBlockExt for O {
+pub trait ContentBlockExt: IsA<ContentBlock> + sealed::Sealed + 'static {
+    #[doc(alias = "he_content_block_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_get_title(
@@ -369,12 +318,15 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_content_block_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_content_block_get_subtitle")]
+    #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_get_subtitle(
@@ -383,6 +335,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_set_subtitle")]
     fn set_subtitle(&self, value: &str) {
         unsafe {
             ffi::he_content_block_set_subtitle(
@@ -392,6 +345,8 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_get_icon(
@@ -400,12 +355,14 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_content_block_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_content_block_set_gicon")]
     fn set_gicon(&self, value: &impl IsA<gio::Icon>) {
         unsafe {
             ffi::he_content_block_set_gicon(
@@ -415,6 +372,8 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_get_secondary_button")]
+    #[doc(alias = "get_secondary_button")]
     fn secondary_button(&self) -> Button {
         unsafe {
             from_glib_none(ffi::he_content_block_get_secondary_button(
@@ -423,6 +382,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_set_secondary_button")]
     fn set_secondary_button(&self, value: &impl IsA<Button>) {
         unsafe {
             ffi::he_content_block_set_secondary_button(
@@ -432,6 +392,8 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_get_primary_button")]
+    #[doc(alias = "get_primary_button")]
     fn primary_button(&self) -> Button {
         unsafe {
             from_glib_none(ffi::he_content_block_get_primary_button(
@@ -440,6 +402,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_set_primary_button")]
     fn set_primary_button(&self, value: &impl IsA<Button>) {
         unsafe {
             ffi::he_content_block_set_primary_button(
@@ -449,6 +412,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<ContentBlock>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeContentBlock,
@@ -463,7 +427,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -471,6 +435,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_subtitle_trampoline<
             P: IsA<ContentBlock>,
@@ -488,7 +453,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -496,6 +461,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<P: IsA<ContentBlock>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeContentBlock,
@@ -510,7 +476,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -518,6 +484,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "gicon")]
     fn connect_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_gicon_trampoline<P: IsA<ContentBlock>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeContentBlock,
@@ -532,7 +499,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::gicon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_gicon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -540,6 +507,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "secondary-button")]
     fn connect_secondary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_secondary_button_trampoline<
             P: IsA<ContentBlock>,
@@ -557,7 +525,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_secondary_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -565,6 +533,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "primary-button")]
     fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_primary_button_trampoline<
             P: IsA<ContentBlock>,
@@ -582,7 +551,7 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_primary_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -591,8 +560,4 @@ impl<O: IsA<ContentBlock>> ContentBlockExt for O {
     }
 }
 
-impl fmt::Display for ContentBlock {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ContentBlock")
-    }
-}
+impl<O: IsA<ContentBlock>> ContentBlockExt for O {}

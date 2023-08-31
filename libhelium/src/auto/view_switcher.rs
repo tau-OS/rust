@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeViewSwitcher")]
@@ -254,19 +254,14 @@ impl ViewSwitcherBuilder {
     }
 }
 
-pub trait ViewSwitcherExt: 'static {
-    #[doc(alias = "he_view_switcher_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack;
-
-    #[doc(alias = "he_view_switcher_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack);
-
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ViewSwitcher>> Sealed for T {}
 }
 
-impl<O: IsA<ViewSwitcher>> ViewSwitcherExt for O {
+pub trait ViewSwitcherExt: IsA<ViewSwitcher> + sealed::Sealed + 'static {
+    #[doc(alias = "he_view_switcher_get_stack")]
+    #[doc(alias = "get_stack")]
     fn stack(&self) -> gtk::Stack {
         unsafe {
             from_glib_none(ffi::he_view_switcher_get_stack(
@@ -275,12 +270,14 @@ impl<O: IsA<ViewSwitcher>> ViewSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_view_switcher_set_stack")]
     fn set_stack(&self, value: &gtk::Stack) {
         unsafe {
             ffi::he_view_switcher_set_stack(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "stack")]
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stack_trampoline<P: IsA<ViewSwitcher>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeViewSwitcher,
@@ -295,7 +292,7 @@ impl<O: IsA<ViewSwitcher>> ViewSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stack\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -304,8 +301,4 @@ impl<O: IsA<ViewSwitcher>> ViewSwitcherExt for O {
     }
 }
 
-impl fmt::Display for ViewSwitcher {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ViewSwitcher")
-    }
-}
+impl<O: IsA<ViewSwitcher>> ViewSwitcherExt for O {}

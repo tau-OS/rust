@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeAboutWindow")]
@@ -176,12 +176,6 @@ impl AboutWindowBuilder {
         }
     }
 
-    pub fn modal(self, modal: bool) -> Self {
-        Self {
-            builder: self.builder.property("modal", modal),
-        }
-    }
-
     pub fn has_title(self, has_title: bool) -> Self {
         Self {
             builder: self.builder.property("has-title", has_title),
@@ -272,8 +266,8 @@ impl AboutWindowBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_2")))]
+    #[cfg(feature = "gtk_v4_2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
     pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
         Self {
             builder: self
@@ -308,6 +302,12 @@ impl AboutWindowBuilder {
         }
     }
 
+    pub fn modal(self, modal: bool) -> Self {
+        Self {
+            builder: self.builder.property("modal", modal),
+        }
+    }
+
     pub fn resizable(self, resizable: bool) -> Self {
         Self {
             builder: self.builder.property("resizable", resizable),
@@ -326,8 +326,8 @@ impl AboutWindowBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_6", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_6")))]
+    #[cfg(feature = "gtk_v4_6")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_6")))]
     pub fn titlebar(self, titlebar: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self.builder.property("titlebar", titlebar.clone().upcast()),
@@ -524,129 +524,14 @@ impl AboutWindowBuilder {
     }
 }
 
-pub trait AboutWindowExt: 'static {
-    #[doc(alias = "he_about_window_get_color")]
-    #[doc(alias = "get_color")]
-    fn color(&self) -> Colors;
-
-    #[doc(alias = "he_about_window_set_color")]
-    fn set_color(&self, value: Colors);
-
-    #[doc(alias = "he_about_window_get_license")]
-    #[doc(alias = "get_license")]
-    fn license(&self) -> AboutWindowLicenses;
-
-    #[doc(alias = "he_about_window_set_license")]
-    fn set_license(&self, value: AboutWindowLicenses);
-
-    #[doc(alias = "he_about_window_get_version")]
-    #[doc(alias = "get_version")]
-    fn version(&self) -> glib::GString;
-
-    #[doc(alias = "he_about_window_set_version")]
-    fn set_version(&self, value: &str);
-
-    #[doc(alias = "he_about_window_get_app_name")]
-    #[doc(alias = "get_app_name")]
-    fn app_name(&self) -> glib::GString;
-
-    #[doc(alias = "he_about_window_set_app_name")]
-    fn set_app_name(&self, value: &str);
-
-    #[doc(alias = "he_about_window_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_about_window_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "he_about_window_get_translator_names")]
-    #[doc(alias = "get_translator_names")]
-    fn translator_names(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "he_about_window_set_translator_names")]
-    fn set_translator_names(&self, value: &[&str]);
-
-    #[doc(alias = "he_about_window_get_developer_names")]
-    #[doc(alias = "get_developer_names")]
-    fn developer_names(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "he_about_window_set_developer_names")]
-    fn set_developer_names(&self, value: &[&str]);
-
-    #[doc(alias = "he_about_window_get_copyright_year")]
-    #[doc(alias = "get_copyright_year")]
-    fn copyright_year(&self) -> i32;
-
-    #[doc(alias = "he_about_window_set_copyright_year")]
-    fn set_copyright_year(&self, value: i32);
-
-    #[doc(alias = "he_about_window_get_app_id")]
-    #[doc(alias = "get_app_id")]
-    fn app_id(&self) -> glib::GString;
-
-    #[doc(alias = "he_about_window_set_app_id")]
-    fn set_app_id(&self, value: &str);
-
-    #[doc(alias = "he_about_window_get_translate_url")]
-    #[doc(alias = "get_translate_url")]
-    fn translate_url(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_about_window_set_translate_url")]
-    fn set_translate_url(&self, value: Option<&str>);
-
-    #[doc(alias = "he_about_window_get_issue_url")]
-    #[doc(alias = "get_issue_url")]
-    fn issue_url(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_about_window_set_issue_url")]
-    fn set_issue_url(&self, value: Option<&str>);
-
-    #[doc(alias = "he_about_window_get_more_info_url")]
-    #[doc(alias = "get_more_info_url")]
-    fn more_info_url(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_about_window_set_more_info_url")]
-    fn set_more_info_url(&self, value: Option<&str>);
-
-    #[doc(alias = "color")]
-    fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "license")]
-    fn connect_license_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "version")]
-    fn connect_version_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "app-name")]
-    fn connect_app_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "translator-names")]
-    fn connect_translator_names_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "developer-names")]
-    fn connect_developer_names_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "copyright-year")]
-    fn connect_copyright_year_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "app-id")]
-    fn connect_app_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "translate-url")]
-    fn connect_translate_url_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "issue-url")]
-    fn connect_issue_url_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "more-info-url")]
-    fn connect_more_info_url_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AboutWindow>> Sealed for T {}
 }
 
-impl<O: IsA<AboutWindow>> AboutWindowExt for O {
+pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
+    #[doc(alias = "he_about_window_get_color")]
+    #[doc(alias = "get_color")]
     fn color(&self) -> Colors {
         unsafe {
             from_glib(ffi::he_about_window_get_color(
@@ -655,12 +540,15 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_color")]
     fn set_color(&self, value: Colors) {
         unsafe {
             ffi::he_about_window_set_color(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_about_window_get_license")]
+    #[doc(alias = "get_license")]
     fn license(&self) -> AboutWindowLicenses {
         unsafe {
             from_glib(ffi::he_about_window_get_license(
@@ -669,12 +557,15 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_license")]
     fn set_license(&self, value: AboutWindowLicenses) {
         unsafe {
             ffi::he_about_window_set_license(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_about_window_get_version")]
+    #[doc(alias = "get_version")]
     fn version(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_about_window_get_version(
@@ -683,6 +574,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_version")]
     fn set_version(&self, value: &str) {
         unsafe {
             ffi::he_about_window_set_version(
@@ -692,6 +584,8 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_get_app_name")]
+    #[doc(alias = "get_app_name")]
     fn app_name(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_about_window_get_app_name(
@@ -700,6 +594,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_app_name")]
     fn set_app_name(&self, value: &str) {
         unsafe {
             ffi::he_about_window_set_app_name(
@@ -709,6 +604,8 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_about_window_get_icon(
@@ -717,15 +614,18 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_about_window_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_about_window_get_translator_names")]
+    #[doc(alias = "get_translator_names")]
     fn translator_names(&self) -> Vec<glib::GString> {
         unsafe {
-            let mut result_length1 = mem::MaybeUninit::uninit();
+            let mut result_length1 = std::mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_none_num(
                 ffi::he_about_window_get_translator_names(
                     self.as_ref().to_glib_none().0,
@@ -737,6 +637,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_translator_names")]
     fn set_translator_names(&self, value: &[&str]) {
         let value_length1 = value.len() as _;
         unsafe {
@@ -748,9 +649,11 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_get_developer_names")]
+    #[doc(alias = "get_developer_names")]
     fn developer_names(&self) -> Vec<glib::GString> {
         unsafe {
-            let mut result_length1 = mem::MaybeUninit::uninit();
+            let mut result_length1 = std::mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_none_num(
                 ffi::he_about_window_get_developer_names(
                     self.as_ref().to_glib_none().0,
@@ -762,6 +665,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_developer_names")]
     fn set_developer_names(&self, value: &[&str]) {
         let value_length1 = value.len() as _;
         unsafe {
@@ -773,16 +677,21 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_get_copyright_year")]
+    #[doc(alias = "get_copyright_year")]
     fn copyright_year(&self) -> i32 {
         unsafe { ffi::he_about_window_get_copyright_year(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "he_about_window_set_copyright_year")]
     fn set_copyright_year(&self, value: i32) {
         unsafe {
             ffi::he_about_window_set_copyright_year(self.as_ref().to_glib_none().0, value);
         }
     }
 
+    #[doc(alias = "he_about_window_get_app_id")]
+    #[doc(alias = "get_app_id")]
     fn app_id(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_about_window_get_app_id(
@@ -791,12 +700,15 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_app_id")]
     fn set_app_id(&self, value: &str) {
         unsafe {
             ffi::he_about_window_set_app_id(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_about_window_get_translate_url")]
+    #[doc(alias = "get_translate_url")]
     fn translate_url(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_about_window_get_translate_url(
@@ -805,6 +717,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_translate_url")]
     fn set_translate_url(&self, value: Option<&str>) {
         unsafe {
             ffi::he_about_window_set_translate_url(
@@ -814,6 +727,8 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_get_issue_url")]
+    #[doc(alias = "get_issue_url")]
     fn issue_url(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_about_window_get_issue_url(
@@ -822,6 +737,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_issue_url")]
     fn set_issue_url(&self, value: Option<&str>) {
         unsafe {
             ffi::he_about_window_set_issue_url(
@@ -831,6 +747,8 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_get_more_info_url")]
+    #[doc(alias = "get_more_info_url")]
     fn more_info_url(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_about_window_get_more_info_url(
@@ -839,6 +757,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "he_about_window_set_more_info_url")]
     fn set_more_info_url(&self, value: Option<&str>) {
         unsafe {
             ffi::he_about_window_set_more_info_url(
@@ -848,6 +767,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "color")]
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_color_trampoline<P: IsA<AboutWindow>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAboutWindow,
@@ -862,7 +782,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::color\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -870,6 +790,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "license")]
     fn connect_license_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_license_trampoline<P: IsA<AboutWindow>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAboutWindow,
@@ -884,7 +805,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::license\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_license_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -892,6 +813,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "version")]
     fn connect_version_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_version_trampoline<P: IsA<AboutWindow>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAboutWindow,
@@ -906,7 +828,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::version\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_version_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -914,6 +836,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "app-name")]
     fn connect_app_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_app_name_trampoline<
             P: IsA<AboutWindow>,
@@ -931,7 +854,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::app-name\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_app_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -939,6 +862,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<P: IsA<AboutWindow>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAboutWindow,
@@ -953,7 +877,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -961,6 +885,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "translator-names")]
     fn connect_translator_names_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_translator_names_trampoline<
             P: IsA<AboutWindow>,
@@ -978,7 +903,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::translator-names\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_translator_names_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -986,6 +911,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "developer-names")]
     fn connect_developer_names_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_developer_names_trampoline<
             P: IsA<AboutWindow>,
@@ -1003,7 +929,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::developer-names\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_developer_names_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1011,6 +937,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "copyright-year")]
     fn connect_copyright_year_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_copyright_year_trampoline<
             P: IsA<AboutWindow>,
@@ -1028,7 +955,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::copyright-year\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_copyright_year_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1036,6 +963,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "app-id")]
     fn connect_app_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_app_id_trampoline<P: IsA<AboutWindow>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAboutWindow,
@@ -1050,7 +978,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::app-id\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_app_id_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1058,6 +986,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "translate-url")]
     fn connect_translate_url_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_translate_url_trampoline<
             P: IsA<AboutWindow>,
@@ -1075,7 +1004,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::translate-url\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_translate_url_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1083,6 +1012,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "issue-url")]
     fn connect_issue_url_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_issue_url_trampoline<
             P: IsA<AboutWindow>,
@@ -1100,7 +1030,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::issue-url\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_issue_url_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1108,6 +1038,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
         }
     }
 
+    #[doc(alias = "more-info-url")]
     fn connect_more_info_url_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_more_info_url_trampoline<
             P: IsA<AboutWindow>,
@@ -1125,7 +1056,7 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::more-info-url\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_more_info_url_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1134,8 +1065,4 @@ impl<O: IsA<AboutWindow>> AboutWindowExt for O {
     }
 }
 
-impl fmt::Display for AboutWindow {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("AboutWindow")
-    }
-}
+impl<O: IsA<AboutWindow>> AboutWindowExt for O {}

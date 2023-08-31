@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeWelcomeScreen")]
@@ -265,37 +265,13 @@ impl WelcomeScreenBuilder {
     }
 }
 
-pub trait WelcomeScreenExt: 'static {
-    #[doc(alias = "he_welcome_screen_add_child")]
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    );
-
-    #[doc(alias = "he_welcome_screen_get_appname")]
-    #[doc(alias = "get_appname")]
-    fn appname(&self) -> glib::GString;
-
-    #[doc(alias = "he_welcome_screen_set_appname")]
-    fn set_appname(&self, value: &str);
-
-    #[doc(alias = "he_welcome_screen_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> glib::GString;
-
-    #[doc(alias = "he_welcome_screen_set_description")]
-    fn set_description(&self, value: &str);
-
-    #[doc(alias = "appname")]
-    fn connect_appname_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "description")]
-    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::WelcomeScreen>> Sealed for T {}
 }
 
-impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
+pub trait WelcomeScreenExt: IsA<WelcomeScreen> + sealed::Sealed + 'static {
+    #[doc(alias = "he_welcome_screen_add_child")]
     fn add_child(
         &self,
         builder: &gtk::Builder,
@@ -312,6 +288,8 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
         }
     }
 
+    #[doc(alias = "he_welcome_screen_get_appname")]
+    #[doc(alias = "get_appname")]
     fn appname(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_welcome_screen_get_appname(
@@ -320,6 +298,7 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
         }
     }
 
+    #[doc(alias = "he_welcome_screen_set_appname")]
     fn set_appname(&self, value: &str) {
         unsafe {
             ffi::he_welcome_screen_set_appname(
@@ -329,6 +308,8 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
         }
     }
 
+    #[doc(alias = "he_welcome_screen_get_description")]
+    #[doc(alias = "get_description")]
     fn description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_welcome_screen_get_description(
@@ -337,6 +318,7 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
         }
     }
 
+    #[doc(alias = "he_welcome_screen_set_description")]
     fn set_description(&self, value: &str) {
         unsafe {
             ffi::he_welcome_screen_set_description(
@@ -346,6 +328,7 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
         }
     }
 
+    #[doc(alias = "appname")]
     fn connect_appname_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_appname_trampoline<
             P: IsA<WelcomeScreen>,
@@ -363,7 +346,7 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::appname\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_appname_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -371,6 +354,7 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
         }
     }
 
+    #[doc(alias = "description")]
     fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_description_trampoline<
             P: IsA<WelcomeScreen>,
@@ -388,7 +372,7 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::description\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_description_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -397,8 +381,4 @@ impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {
     }
 }
 
-impl fmt::Display for WelcomeScreen {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("WelcomeScreen")
-    }
-}
+impl<O: IsA<WelcomeScreen>> WelcomeScreenExt for O {}

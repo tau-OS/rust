@@ -5,7 +5,6 @@
 
 use crate::{Button, Colors};
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 glib::wrapper! {
     #[doc(alias = "HeDisclosureButton")]
@@ -75,6 +74,14 @@ impl DisclosureButtonBuilder {
     pub fn color(self, color: Colors) -> Self {
         Self {
             builder: self.builder.property("color", color),
+        }
+    }
+
+    #[cfg(feature = "gtk_v4_12")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_12")))]
+    pub fn can_shrink(self, can_shrink: bool) -> Self {
+        Self {
+            builder: self.builder.property("can-shrink", can_shrink),
         }
     }
 
@@ -304,16 +311,14 @@ impl DisclosureButtonBuilder {
     }
 }
 
-pub trait DisclosureButtonExt: 'static {
-    #[doc(alias = "he_disclosure_button_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_disclosure_button_set_icon")]
-    fn set_icon(&self, value: &str);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DisclosureButton>> Sealed for T {}
 }
 
-impl<O: IsA<DisclosureButton>> DisclosureButtonExt for O {
+pub trait DisclosureButtonExt: IsA<DisclosureButton> + sealed::Sealed + 'static {
+    #[doc(alias = "he_disclosure_button_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_disclosure_button_get_icon(
@@ -322,6 +327,7 @@ impl<O: IsA<DisclosureButton>> DisclosureButtonExt for O {
         }
     }
 
+    #[doc(alias = "he_disclosure_button_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_disclosure_button_set_icon(
@@ -332,8 +338,4 @@ impl<O: IsA<DisclosureButton>> DisclosureButtonExt for O {
     }
 }
 
-impl fmt::Display for DisclosureButton {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("DisclosureButton")
-    }
-}
+impl<O: IsA<DisclosureButton>> DisclosureButtonExt for O {}

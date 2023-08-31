@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 glib::wrapper! {
     #[doc(alias = "HeSegmentedButton")]
@@ -52,6 +51,14 @@ impl SegmentedButtonBuilder {
     fn new() -> Self {
         Self {
             builder: glib::object::Object::builder(),
+        }
+    }
+
+    #[cfg(feature = "gtk_v4_12")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_12")))]
+    pub fn baseline_child(self, baseline_child: i32) -> Self {
+        Self {
+            builder: self.builder.property("baseline-child", baseline_child),
         }
     }
 
@@ -259,17 +266,13 @@ impl SegmentedButtonBuilder {
     }
 }
 
-pub trait SegmentedButtonExt: 'static {
-    #[doc(alias = "he_segmented_button_add_child")]
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    );
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::SegmentedButton>> Sealed for T {}
 }
 
-impl<O: IsA<SegmentedButton>> SegmentedButtonExt for O {
+pub trait SegmentedButtonExt: IsA<SegmentedButton> + sealed::Sealed + 'static {
+    #[doc(alias = "he_segmented_button_add_child")]
     fn add_child(
         &self,
         builder: &gtk::Builder,
@@ -287,8 +290,4 @@ impl<O: IsA<SegmentedButton>> SegmentedButtonExt for O {
     }
 }
 
-impl fmt::Display for SegmentedButton {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("SegmentedButton")
-    }
-}
+impl<O: IsA<SegmentedButton>> SegmentedButtonExt for O {}

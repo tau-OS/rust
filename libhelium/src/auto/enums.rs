@@ -3,8 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::fmt;
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -26,25 +25,6 @@ pub enum AboutWindowLicenses {
     Proprietary,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for AboutWindowLicenses {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "AboutWindowLicenses::{}",
-            match *self {
-                Self::Gplv3 => "Gplv3",
-                Self::Mit => "Mit",
-                Self::Mplv2 => "Mplv2",
-                Self::Unlicense => "Unlicense",
-                Self::Apachev2 => "Apachev2",
-                Self::Wtfpl => "Wtfpl",
-                Self::Proprietary => "Proprietary",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]
@@ -87,7 +67,8 @@ impl FromGlib<ffi::HeAboutWindowLicenses> for AboutWindowLicenses {
 
 impl StaticType for AboutWindowLicenses {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_about_window_licenses_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_about_window_licenses_get_type()) }
     }
 }
@@ -98,7 +79,7 @@ impl glib::HasParamSpec for AboutWindowLicenses {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -106,7 +87,7 @@ impl glib::value::ValueType for AboutWindowLicenses {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AboutWindowLicenses {
+unsafe impl<'a> glib::value::FromValue<'a> for AboutWindowLicenses {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -154,21 +135,6 @@ pub enum BannerStyle {
     __Unknown(i32),
 }
 
-impl fmt::Display for BannerStyle {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "BannerStyle::{}",
-            match *self {
-                Self::Info => "Info",
-                Self::Warning => "Warning",
-                Self::Error => "Error",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for BannerStyle {
     type GlibType = ffi::HeBannerStyle;
@@ -201,7 +167,8 @@ impl FromGlib<ffi::HeBannerStyle> for BannerStyle {
 
 impl StaticType for BannerStyle {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_banner_style_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_banner_style_get_type()) }
     }
 }
@@ -212,7 +179,7 @@ impl glib::HasParamSpec for BannerStyle {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -220,7 +187,7 @@ impl glib::value::ValueType for BannerStyle {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for BannerStyle {
+unsafe impl<'a> glib::value::FromValue<'a> for BannerStyle {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -266,20 +233,6 @@ pub enum BottomBarPosition {
     __Unknown(i32),
 }
 
-impl fmt::Display for BottomBarPosition {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "BottomBarPosition::{}",
-            match *self {
-                Self::Left => "Left",
-                Self::Right => "Right",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for BottomBarPosition {
     type GlibType = ffi::HeBottomBarPosition;
@@ -310,7 +263,8 @@ impl FromGlib<ffi::HeBottomBarPosition> for BottomBarPosition {
 
 impl StaticType for BottomBarPosition {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_bottom_bar_position_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_bottom_bar_position_get_type()) }
     }
 }
@@ -321,7 +275,7 @@ impl glib::HasParamSpec for BottomBarPosition {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -329,7 +283,7 @@ impl glib::value::ValueType for BottomBarPosition {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for BottomBarPosition {
+unsafe impl<'a> glib::value::FromValue<'a> for BottomBarPosition {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -397,31 +351,6 @@ pub enum Colors {
     __Unknown(i32),
 }
 
-impl fmt::Display for Colors {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "Colors::{}",
-            match *self {
-                Self::None => "None",
-                Self::Red => "Red",
-                Self::Orange => "Orange",
-                Self::Yellow => "Yellow",
-                Self::Green => "Green",
-                Self::Blue => "Blue",
-                Self::Indigo => "Indigo",
-                Self::Purple => "Purple",
-                Self::Pink => "Pink",
-                Self::Mint => "Mint",
-                Self::Brown => "Brown",
-                Self::Light => "Light",
-                Self::Dark => "Dark",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for Colors {
     type GlibType = ffi::HeColors;
@@ -472,7 +401,8 @@ impl FromGlib<ffi::HeColors> for Colors {
 
 impl StaticType for Colors {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_colors_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_colors_get_type()) }
     }
 }
@@ -483,7 +413,7 @@ impl glib::HasParamSpec for Colors {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -491,7 +421,7 @@ impl glib::value::ValueType for Colors {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for Colors {
+unsafe impl<'a> glib::value::FromValue<'a> for Colors {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -541,22 +471,6 @@ pub enum ContentBlockImageClusterImagePosition {
     __Unknown(i32),
 }
 
-impl fmt::Display for ContentBlockImageClusterImagePosition {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "ContentBlockImageClusterImagePosition::{}",
-            match *self {
-                Self::TopLeft => "TopLeft",
-                Self::BottomLeft => "BottomLeft",
-                Self::TopRight => "TopRight",
-                Self::BottomRight => "BottomRight",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for ContentBlockImageClusterImagePosition {
     type GlibType = ffi::HeContentBlockImageClusterImagePosition;
@@ -593,7 +507,8 @@ impl FromGlib<ffi::HeContentBlockImageClusterImagePosition>
 
 impl StaticType for ContentBlockImageClusterImagePosition {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_content_block_image_cluster_image_position_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_content_block_image_cluster_image_position_get_type()) }
     }
 }
@@ -604,7 +519,7 @@ impl glib::HasParamSpec for ContentBlockImageClusterImagePosition {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -612,7 +527,7 @@ impl glib::value::ValueType for ContentBlockImageClusterImagePosition {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ContentBlockImageClusterImagePosition {
+unsafe impl<'a> glib::value::FromValue<'a> for ContentBlockImageClusterImagePosition {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -660,21 +575,6 @@ pub enum DesktopColorScheme {
     __Unknown(i32),
 }
 
-impl fmt::Display for DesktopColorScheme {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "DesktopColorScheme::{}",
-            match *self {
-                Self::NoPreference => "NoPreference",
-                Self::Dark => "Dark",
-                Self::Light => "Light",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for DesktopColorScheme {
     type GlibType = ffi::HeDesktopColorScheme;
@@ -707,7 +607,8 @@ impl FromGlib<ffi::HeDesktopColorScheme> for DesktopColorScheme {
 
 impl StaticType for DesktopColorScheme {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_desktop_color_scheme_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_desktop_color_scheme_get_type()) }
     }
 }
@@ -718,7 +619,7 @@ impl glib::HasParamSpec for DesktopColorScheme {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -726,7 +627,7 @@ impl glib::value::ValueType for DesktopColorScheme {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for DesktopColorScheme {
+unsafe impl<'a> glib::value::FromValue<'a> for DesktopColorScheme {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -762,120 +663,6 @@ impl From<DesktopColorScheme> for glib::Value {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
-#[doc(alias = "HeDesktopDarkModeStrength")]
-pub enum DesktopDarkModeStrength {
-    #[doc(alias = "HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM")]
-    Medium,
-    #[doc(alias = "HE_DESKTOP_DARK_MODE_STRENGTH_HARSH")]
-    Harsh,
-    #[doc(alias = "HE_DESKTOP_DARK_MODE_STRENGTH_SOFT")]
-    Soft,
-    #[doc(hidden)]
-    __Unknown(i32),
-}
-
-impl fmt::Display for DesktopDarkModeStrength {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "DesktopDarkModeStrength::{}",
-            match *self {
-                Self::Medium => "Medium",
-                Self::Harsh => "Harsh",
-                Self::Soft => "Soft",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
-#[doc(hidden)]
-impl IntoGlib for DesktopDarkModeStrength {
-    type GlibType = ffi::HeDesktopDarkModeStrength;
-
-    #[inline]
-    fn into_glib(self) -> ffi::HeDesktopDarkModeStrength {
-        match self {
-            Self::Medium => ffi::HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM,
-            Self::Harsh => ffi::HE_DESKTOP_DARK_MODE_STRENGTH_HARSH,
-            Self::Soft => ffi::HE_DESKTOP_DARK_MODE_STRENGTH_SOFT,
-            Self::__Unknown(value) => value,
-        }
-    }
-}
-
-#[doc(hidden)]
-impl FromGlib<ffi::HeDesktopDarkModeStrength> for DesktopDarkModeStrength {
-    #[inline]
-    unsafe fn from_glib(value: ffi::HeDesktopDarkModeStrength) -> Self {
-        skip_assert_initialized!();
-
-        match value {
-            ffi::HE_DESKTOP_DARK_MODE_STRENGTH_MEDIUM => Self::Medium,
-            ffi::HE_DESKTOP_DARK_MODE_STRENGTH_HARSH => Self::Harsh,
-            ffi::HE_DESKTOP_DARK_MODE_STRENGTH_SOFT => Self::Soft,
-            value => Self::__Unknown(value),
-        }
-    }
-}
-
-impl StaticType for DesktopDarkModeStrength {
-    #[inline]
-    fn static_type() -> Type {
-        unsafe { from_glib(ffi::he_desktop_dark_mode_strength_get_type()) }
-    }
-}
-
-impl glib::HasParamSpec for DesktopDarkModeStrength {
-    type ParamSpec = glib::ParamSpecEnum;
-    type SetValue = Self;
-    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
-
-    fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
-    }
-}
-
-impl glib::value::ValueType for DesktopDarkModeStrength {
-    type Type = Self;
-}
-
-unsafe impl<'a> FromValue<'a> for DesktopDarkModeStrength {
-    type Checker = glib::value::GenericValueTypeChecker<Self>;
-
-    #[inline]
-    unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
-    }
-}
-
-impl ToValue for DesktopDarkModeStrength {
-    #[inline]
-    fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<Self>();
-        unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
-        }
-        value
-    }
-
-    #[inline]
-    fn value_type(&self) -> glib::Type {
-        Self::static_type()
-    }
-}
-
-impl From<DesktopDarkModeStrength> for glib::Value {
-    #[inline]
-    fn from(v: DesktopDarkModeStrength) -> Self {
-        skip_assert_initialized!();
-        ToValue::to_value(&v)
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
 #[doc(alias = "HeDesktopEnsorScheme")]
 pub enum DesktopEnsorScheme {
     #[doc(alias = "HE_DESKTOP_ENSOR_SCHEME_DEFAULT")]
@@ -888,22 +675,6 @@ pub enum DesktopEnsorScheme {
     Monochromatic,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for DesktopEnsorScheme {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "DesktopEnsorScheme::{}",
-            match *self {
-                Self::Default => "Default",
-                Self::Vibrant => "Vibrant",
-                Self::Muted => "Muted",
-                Self::Monochromatic => "Monochromatic",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]
@@ -940,7 +711,8 @@ impl FromGlib<ffi::HeDesktopEnsorScheme> for DesktopEnsorScheme {
 
 impl StaticType for DesktopEnsorScheme {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_desktop_ensor_scheme_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_desktop_ensor_scheme_get_type()) }
     }
 }
@@ -951,7 +723,7 @@ impl glib::HasParamSpec for DesktopEnsorScheme {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -959,7 +731,7 @@ impl glib::value::ValueType for DesktopEnsorScheme {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for DesktopEnsorScheme {
+unsafe impl<'a> glib::value::FromValue<'a> for DesktopEnsorScheme {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1007,21 +779,6 @@ pub enum ModifierBadgeAlignment {
     __Unknown(i32),
 }
 
-impl fmt::Display for ModifierBadgeAlignment {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "ModifierBadgeAlignment::{}",
-            match *self {
-                Self::Left => "Left",
-                Self::Center => "Center",
-                Self::Right => "Right",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for ModifierBadgeAlignment {
     type GlibType = ffi::HeModifierBadgeAlignment;
@@ -1054,7 +811,8 @@ impl FromGlib<ffi::HeModifierBadgeAlignment> for ModifierBadgeAlignment {
 
 impl StaticType for ModifierBadgeAlignment {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_modifier_badge_alignment_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_modifier_badge_alignment_get_type()) }
     }
 }
@@ -1065,7 +823,7 @@ impl glib::HasParamSpec for ModifierBadgeAlignment {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1073,7 +831,7 @@ impl glib::value::ValueType for ModifierBadgeAlignment {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ModifierBadgeAlignment {
+unsafe impl<'a> glib::value::FromValue<'a> for ModifierBadgeAlignment {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1121,21 +879,6 @@ pub enum OverlayButtonAlignment {
     __Unknown(i32),
 }
 
-impl fmt::Display for OverlayButtonAlignment {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "OverlayButtonAlignment::{}",
-            match *self {
-                Self::Left => "Left",
-                Self::Center => "Center",
-                Self::Right => "Right",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for OverlayButtonAlignment {
     type GlibType = ffi::HeOverlayButtonAlignment;
@@ -1168,7 +911,8 @@ impl FromGlib<ffi::HeOverlayButtonAlignment> for OverlayButtonAlignment {
 
 impl StaticType for OverlayButtonAlignment {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_overlay_button_alignment_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_overlay_button_alignment_get_type()) }
     }
 }
@@ -1179,7 +923,7 @@ impl glib::HasParamSpec for OverlayButtonAlignment {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1187,7 +931,7 @@ impl glib::value::ValueType for OverlayButtonAlignment {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for OverlayButtonAlignment {
+unsafe impl<'a> glib::value::FromValue<'a> for OverlayButtonAlignment {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1235,21 +979,6 @@ pub enum OverlayButtonSize {
     __Unknown(i32),
 }
 
-impl fmt::Display for OverlayButtonSize {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "OverlayButtonSize::{}",
-            match *self {
-                Self::Small => "Small",
-                Self::Medium => "Medium",
-                Self::Large => "Large",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for OverlayButtonSize {
     type GlibType = ffi::HeOverlayButtonSize;
@@ -1282,7 +1011,8 @@ impl FromGlib<ffi::HeOverlayButtonSize> for OverlayButtonSize {
 
 impl StaticType for OverlayButtonSize {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_overlay_button_size_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_overlay_button_size_get_type()) }
     }
 }
@@ -1293,7 +1023,7 @@ impl glib::HasParamSpec for OverlayButtonSize {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1301,7 +1031,7 @@ impl glib::value::ValueType for OverlayButtonSize {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for OverlayButtonSize {
+unsafe impl<'a> glib::value::FromValue<'a> for OverlayButtonSize {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1351,22 +1081,6 @@ pub enum OverlayButtonTypeButton {
     __Unknown(i32),
 }
 
-impl fmt::Display for OverlayButtonTypeButton {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "OverlayButtonTypeButton::{}",
-            match *self {
-                Self::Surface => "Surface",
-                Self::Primary => "Primary",
-                Self::Secondary => "Secondary",
-                Self::Tertiary => "Tertiary",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for OverlayButtonTypeButton {
     type GlibType = ffi::HeOverlayButtonTypeButton;
@@ -1401,7 +1115,8 @@ impl FromGlib<ffi::HeOverlayButtonTypeButton> for OverlayButtonTypeButton {
 
 impl StaticType for OverlayButtonTypeButton {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_overlay_button_type_button_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_overlay_button_type_button_get_type()) }
     }
 }
@@ -1412,7 +1127,7 @@ impl glib::HasParamSpec for OverlayButtonTypeButton {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1420,7 +1135,7 @@ impl glib::value::ValueType for OverlayButtonTypeButton {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for OverlayButtonTypeButton {
+unsafe impl<'a> glib::value::FromValue<'a> for OverlayButtonTypeButton {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1468,21 +1183,6 @@ pub enum TabSwitcherTabBarBehavior {
     __Unknown(i32),
 }
 
-impl fmt::Display for TabSwitcherTabBarBehavior {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "TabSwitcherTabBarBehavior::{}",
-            match *self {
-                Self::Always => "Always",
-                Self::Single => "Single",
-                Self::Never => "Never",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for TabSwitcherTabBarBehavior {
     type GlibType = ffi::HeTabSwitcherTabBarBehavior;
@@ -1515,7 +1215,8 @@ impl FromGlib<ffi::HeTabSwitcherTabBarBehavior> for TabSwitcherTabBarBehavior {
 
 impl StaticType for TabSwitcherTabBarBehavior {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "he_tab_switcher_tab_bar_behavior_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::he_tab_switcher_tab_bar_behavior_get_type()) }
     }
 }
@@ -1526,7 +1227,7 @@ impl glib::HasParamSpec for TabSwitcherTabBarBehavior {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1534,7 +1235,7 @@ impl glib::value::ValueType for TabSwitcherTabBarBehavior {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TabSwitcherTabBarBehavior {
+unsafe impl<'a> glib::value::FromValue<'a> for TabSwitcherTabBarBehavior {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

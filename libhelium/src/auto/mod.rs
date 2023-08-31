@@ -181,7 +181,6 @@ pub use self::enums::BottomBarPosition;
 pub use self::enums::Colors;
 pub use self::enums::ContentBlockImageClusterImagePosition;
 pub use self::enums::DesktopColorScheme;
-pub use self::enums::DesktopDarkModeStrength;
 pub use self::enums::DesktopEnsorScheme;
 pub use self::enums::ModifierBadgeAlignment;
 pub use self::enums::OverlayButtonAlignment;
@@ -189,8 +188,7 @@ pub use self::enums::OverlayButtonSize;
 pub use self::enums::OverlayButtonTypeButton;
 pub use self::enums::TabSwitcherTabBarBehavior;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::about_window::AboutWindowExt;
     pub use super::app_bar::AppBarExt;
     pub use super::application::HeApplicationExt;
@@ -239,8 +237,7 @@ pub mod traits {
     pub use super::welcome_screen::WelcomeScreenExt;
     pub use super::window::WindowExt;
 }
-#[doc(hidden)]
-pub mod builders {
+pub(crate) mod builders {
     pub use super::about_window::AboutWindowBuilder;
     pub use super::app_bar::AppBarBuilder;
     pub use super::application::ApplicationBuilder;

@@ -5,7 +5,6 @@
 
 use crate::AnimationTarget;
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 glib::wrapper! {
     #[doc(alias = "BisPropertyAnimationTarget")]
@@ -74,8 +73,8 @@ impl PropertyAnimationTarget {
     }
 }
 
-#[cfg(any(feature = "v1_2", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+#[cfg(feature = "v1_2")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_2")))]
 impl Default for PropertyAnimationTarget {
     fn default() -> Self {
         glib::object::Object::new::<Self>()
@@ -98,16 +97,16 @@ impl PropertyAnimationTargetBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+    #[cfg(feature = "v1_2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_2")))]
     pub fn object(self, object: &impl IsA<glib::Object>) -> Self {
         Self {
             builder: self.builder.property("object", object.clone().upcast()),
         }
     }
 
-    #[cfg(any(feature = "v1_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+    #[cfg(feature = "v1_2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_2")))]
     pub fn pspec(self, pspec: impl AsRef<glib::ParamSpec>) -> Self {
         Self {
             builder: self.builder.property("pspec", pspec.as_ref().clone()),
@@ -119,11 +118,5 @@ impl PropertyAnimationTargetBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> PropertyAnimationTarget {
         self.builder.build()
-    }
-}
-
-impl fmt::Display for PropertyAnimationTarget {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("PropertyAnimationTarget")
     }
 }

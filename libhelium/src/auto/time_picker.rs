@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeTimePicker")]
@@ -577,30 +577,14 @@ impl TimePickerBuilder {
     }
 }
 
-pub trait TimePickerExt: 'static {
-    #[doc(alias = "he_time_picker_get_format_12")]
-    #[doc(alias = "get_format_12")]
-    fn format_12(&self) -> glib::GString;
-
-    #[doc(alias = "he_time_picker_get_format_24")]
-    #[doc(alias = "get_format_24")]
-    fn format_24(&self) -> glib::GString;
-
-    #[doc(alias = "he_time_picker_get_time")]
-    #[doc(alias = "get_time")]
-    fn time(&self) -> glib::DateTime;
-
-    #[doc(alias = "he_time_picker_set_time")]
-    fn set_time(&self, value: &glib::DateTime);
-
-    #[doc(alias = "time-changed")]
-    fn connect_time_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "time")]
-    fn connect_time_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TimePicker>> Sealed for T {}
 }
 
-impl<O: IsA<TimePicker>> TimePickerExt for O {
+pub trait TimePickerExt: IsA<TimePicker> + sealed::Sealed + 'static {
+    #[doc(alias = "he_time_picker_get_format_12")]
+    #[doc(alias = "get_format_12")]
     fn format_12(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_time_picker_get_format_12(
@@ -609,6 +593,8 @@ impl<O: IsA<TimePicker>> TimePickerExt for O {
         }
     }
 
+    #[doc(alias = "he_time_picker_get_format_24")]
+    #[doc(alias = "get_format_24")]
     fn format_24(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_time_picker_get_format_24(
@@ -617,16 +603,20 @@ impl<O: IsA<TimePicker>> TimePickerExt for O {
         }
     }
 
+    #[doc(alias = "he_time_picker_get_time")]
+    #[doc(alias = "get_time")]
     fn time(&self) -> glib::DateTime {
         unsafe { from_glib_none(ffi::he_time_picker_get_time(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_time_picker_set_time")]
     fn set_time(&self, value: &glib::DateTime) {
         unsafe {
             ffi::he_time_picker_set_time(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "time-changed")]
     fn connect_time_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn time_changed_trampoline<P: IsA<TimePicker>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTimePicker,
@@ -640,7 +630,7 @@ impl<O: IsA<TimePicker>> TimePickerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"time-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     time_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -648,6 +638,7 @@ impl<O: IsA<TimePicker>> TimePickerExt for O {
         }
     }
 
+    #[doc(alias = "time")]
     fn connect_time_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_time_trampoline<P: IsA<TimePicker>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTimePicker,
@@ -662,7 +653,7 @@ impl<O: IsA<TimePicker>> TimePickerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::time\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -671,8 +662,4 @@ impl<O: IsA<TimePicker>> TimePickerExt for O {
     }
 }
 
-impl fmt::Display for TimePicker {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("TimePicker")
-    }
-}
+impl<O: IsA<TimePicker>> TimePickerExt for O {}

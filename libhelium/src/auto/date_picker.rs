@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeDatePicker")]
@@ -566,23 +566,14 @@ impl DatePickerBuilder {
     }
 }
 
-pub trait DatePickerExt: 'static {
-    #[doc(alias = "he_date_picker_get_format")]
-    #[doc(alias = "get_format")]
-    fn format(&self) -> glib::GString;
-
-    #[doc(alias = "he_date_picker_get_date")]
-    #[doc(alias = "get_date")]
-    fn date(&self) -> glib::DateTime;
-
-    #[doc(alias = "he_date_picker_set_date")]
-    fn set_date(&self, value: &glib::DateTime);
-
-    #[doc(alias = "date")]
-    fn connect_date_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DatePicker>> Sealed for T {}
 }
 
-impl<O: IsA<DatePicker>> DatePickerExt for O {
+pub trait DatePickerExt: IsA<DatePicker> + sealed::Sealed + 'static {
+    #[doc(alias = "he_date_picker_get_format")]
+    #[doc(alias = "get_format")]
     fn format(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_date_picker_get_format(
@@ -591,16 +582,20 @@ impl<O: IsA<DatePicker>> DatePickerExt for O {
         }
     }
 
+    #[doc(alias = "he_date_picker_get_date")]
+    #[doc(alias = "get_date")]
     fn date(&self) -> glib::DateTime {
         unsafe { from_glib_none(ffi::he_date_picker_get_date(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_date_picker_set_date")]
     fn set_date(&self, value: &glib::DateTime) {
         unsafe {
             ffi::he_date_picker_set_date(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "date")]
     fn connect_date_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_date_trampoline<P: IsA<DatePicker>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeDatePicker,
@@ -615,7 +610,7 @@ impl<O: IsA<DatePicker>> DatePickerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::date\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_date_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -624,8 +619,4 @@ impl<O: IsA<DatePicker>> DatePickerExt for O {
     }
 }
 
-impl fmt::Display for DatePicker {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("DatePicker")
-    }
-}
+impl<O: IsA<DatePicker>> DatePickerExt for O {}

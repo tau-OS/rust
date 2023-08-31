@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeView")]
@@ -23,60 +23,13 @@ impl View {
     pub const NONE: Option<&'static View> = None;
 }
 
-pub trait ViewExt: 'static {
-    #[doc(alias = "he_view_add_child")]
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    );
-
-    #[doc(alias = "he_view_add")]
-    fn add(&self, widget: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_view_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_view_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_view_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack;
-
-    #[doc(alias = "he_view_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack);
-
-    #[doc(alias = "he_view_get_subtitle")]
-    #[doc(alias = "get_subtitle")]
-    fn subtitle(&self) -> glib::GString;
-
-    #[doc(alias = "he_view_set_subtitle")]
-    fn set_subtitle(&self, value: &str);
-
-    #[doc(alias = "he_view_get_has_margins")]
-    #[doc(alias = "get_has_margins")]
-    fn has_margins(&self) -> bool;
-
-    #[doc(alias = "he_view_set_has_margins")]
-    fn set_has_margins(&self, value: bool);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "subtitle")]
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "has-margins")]
-    fn connect_has_margins_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::View>> Sealed for T {}
 }
 
-impl<O: IsA<View>> ViewExt for O {
+pub trait ViewExt: IsA<View> + sealed::Sealed + 'static {
+    #[doc(alias = "he_view_add_child")]
     fn add_child(
         &self,
         builder: &gtk::Builder,
@@ -93,6 +46,7 @@ impl<O: IsA<View>> ViewExt for O {
         }
     }
 
+    #[doc(alias = "he_view_add")]
     fn add(&self, widget: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_view_add(
@@ -102,46 +56,59 @@ impl<O: IsA<View>> ViewExt for O {
         }
     }
 
+    #[doc(alias = "he_view_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_view_get_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_view_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_view_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_view_get_stack")]
+    #[doc(alias = "get_stack")]
     fn stack(&self) -> gtk::Stack {
         unsafe { from_glib_none(ffi::he_view_get_stack(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_view_set_stack")]
     fn set_stack(&self, value: &gtk::Stack) {
         unsafe {
             ffi::he_view_set_stack(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_view_get_subtitle")]
+    #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_view_get_subtitle(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_view_set_subtitle")]
     fn set_subtitle(&self, value: &str) {
         unsafe {
             ffi::he_view_set_subtitle(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_view_get_has_margins")]
+    #[doc(alias = "get_has_margins")]
     fn has_margins(&self) -> bool {
         unsafe { from_glib(ffi::he_view_get_has_margins(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_view_set_has_margins")]
     fn set_has_margins(&self, value: bool) {
         unsafe {
             ffi::he_view_set_has_margins(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<View>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeView,
@@ -156,7 +123,7 @@ impl<O: IsA<View>> ViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -164,6 +131,7 @@ impl<O: IsA<View>> ViewExt for O {
         }
     }
 
+    #[doc(alias = "stack")]
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stack_trampoline<P: IsA<View>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeView,
@@ -178,7 +146,7 @@ impl<O: IsA<View>> ViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stack\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -186,6 +154,7 @@ impl<O: IsA<View>> ViewExt for O {
         }
     }
 
+    #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_subtitle_trampoline<P: IsA<View>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeView,
@@ -200,7 +169,7 @@ impl<O: IsA<View>> ViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -208,6 +177,7 @@ impl<O: IsA<View>> ViewExt for O {
         }
     }
 
+    #[doc(alias = "has-margins")]
     fn connect_has_margins_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_has_margins_trampoline<P: IsA<View>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeView,
@@ -222,7 +192,7 @@ impl<O: IsA<View>> ViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-margins\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_has_margins_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -231,8 +201,4 @@ impl<O: IsA<View>> ViewExt for O {
     }
 }
 
-impl fmt::Display for View {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("View")
-    }
-}
+impl<O: IsA<View>> ViewExt for O {}

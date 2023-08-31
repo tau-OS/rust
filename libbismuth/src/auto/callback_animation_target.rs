@@ -5,7 +5,7 @@
 
 use crate::AnimationTarget;
 use glib::{prelude::*, translate::*};
-use std::{boxed::Box as Box_, fmt};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "BisCallbackAnimationTarget")]
@@ -42,11 +42,5 @@ impl CallbackAnimationTarget {
             ))
             .unsafe_cast()
         }
-    }
-}
-
-impl fmt::Display for CallbackAnimationTarget {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("CallbackAnimationTarget")
     }
 }

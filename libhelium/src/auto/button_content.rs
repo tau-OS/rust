@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeButtonContent")]
@@ -253,29 +253,14 @@ impl ButtonContentBuilder {
     }
 }
 
-pub trait ButtonContentExt: 'static {
-    #[doc(alias = "he_button_content_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_button_content_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "he_button_content_get_label")]
-    #[doc(alias = "get_label")]
-    fn label(&self) -> glib::GString;
-
-    #[doc(alias = "he_button_content_set_label")]
-    fn set_label(&self, value: &str);
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "label")]
-    fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ButtonContent>> Sealed for T {}
 }
 
-impl<O: IsA<ButtonContent>> ButtonContentExt for O {
+pub trait ButtonContentExt: IsA<ButtonContent> + sealed::Sealed + 'static {
+    #[doc(alias = "he_button_content_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::he_button_content_get_icon(
@@ -284,12 +269,15 @@ impl<O: IsA<ButtonContent>> ButtonContentExt for O {
         }
     }
 
+    #[doc(alias = "he_button_content_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_button_content_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_button_content_get_label")]
+    #[doc(alias = "get_label")]
     fn label(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::he_button_content_get_label(
@@ -298,6 +286,7 @@ impl<O: IsA<ButtonContent>> ButtonContentExt for O {
         }
     }
 
+    #[doc(alias = "he_button_content_set_label")]
     fn set_label(&self, value: &str) {
         unsafe {
             ffi::he_button_content_set_label(
@@ -307,6 +296,7 @@ impl<O: IsA<ButtonContent>> ButtonContentExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<P: IsA<ButtonContent>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeButtonContent,
@@ -321,7 +311,7 @@ impl<O: IsA<ButtonContent>> ButtonContentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -329,6 +319,7 @@ impl<O: IsA<ButtonContent>> ButtonContentExt for O {
         }
     }
 
+    #[doc(alias = "label")]
     fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_label_trampoline<P: IsA<ButtonContent>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeButtonContent,
@@ -343,7 +334,7 @@ impl<O: IsA<ButtonContent>> ButtonContentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -352,8 +343,4 @@ impl<O: IsA<ButtonContent>> ButtonContentExt for O {
     }
 }
 
-impl fmt::Display for ButtonContent {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ButtonContent")
-    }
-}
+impl<O: IsA<ButtonContent>> ButtonContentExt for O {}

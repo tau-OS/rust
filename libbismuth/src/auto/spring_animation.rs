@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "BisSpringAnimation")]
@@ -162,7 +162,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::epsilon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_epsilon_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -190,7 +190,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::estimated-duration\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_estimated_duration_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -215,7 +215,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::initial-velocity\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_initial_velocity_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -238,7 +238,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latch\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_latch_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -261,7 +261,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spring-params\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_spring_params_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -284,7 +284,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value-from\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_value_from_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -307,7 +307,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value-to\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_value_to_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -330,7 +330,7 @@ impl SpringAnimation {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::velocity\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_velocity_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -416,11 +416,5 @@ impl SpringAnimationBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SpringAnimation {
         self.builder.build()
-    }
-}
-
-impl fmt::Display for SpringAnimation {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("SpringAnimation")
     }
 }

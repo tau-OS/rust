@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeNavigationRail")]
@@ -260,29 +260,14 @@ impl NavigationRailBuilder {
     }
 }
 
-pub trait NavigationRailExt: 'static {
-    #[doc(alias = "he_navigation_rail_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack;
-
-    #[doc(alias = "he_navigation_rail_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack);
-
-    #[doc(alias = "he_navigation_rail_get_orientation")]
-    #[doc(alias = "get_orientation")]
-    fn orientation(&self) -> gtk::Orientation;
-
-    #[doc(alias = "he_navigation_rail_set_orientation")]
-    fn set_orientation(&self, value: gtk::Orientation);
-
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "orientation")]
-    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::NavigationRail>> Sealed for T {}
 }
 
-impl<O: IsA<NavigationRail>> NavigationRailExt for O {
+pub trait NavigationRailExt: IsA<NavigationRail> + sealed::Sealed + 'static {
+    #[doc(alias = "he_navigation_rail_get_stack")]
+    #[doc(alias = "get_stack")]
     fn stack(&self) -> gtk::Stack {
         unsafe {
             from_glib_none(ffi::he_navigation_rail_get_stack(
@@ -291,6 +276,7 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
         }
     }
 
+    #[doc(alias = "he_navigation_rail_set_stack")]
     fn set_stack(&self, value: &gtk::Stack) {
         unsafe {
             ffi::he_navigation_rail_set_stack(
@@ -300,6 +286,8 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
         }
     }
 
+    #[doc(alias = "he_navigation_rail_get_orientation")]
+    #[doc(alias = "get_orientation")]
     fn orientation(&self) -> gtk::Orientation {
         unsafe {
             from_glib(ffi::he_navigation_rail_get_orientation(
@@ -308,6 +296,7 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
         }
     }
 
+    #[doc(alias = "he_navigation_rail_set_orientation")]
     fn set_orientation(&self, value: gtk::Orientation) {
         unsafe {
             ffi::he_navigation_rail_set_orientation(
@@ -317,6 +306,7 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
         }
     }
 
+    #[doc(alias = "stack")]
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stack_trampoline<
             P: IsA<NavigationRail>,
@@ -334,7 +324,7 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stack\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -342,6 +332,7 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
         }
     }
 
+    #[doc(alias = "orientation")]
     fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_orientation_trampoline<
             P: IsA<NavigationRail>,
@@ -359,7 +350,7 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::orientation\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_orientation_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -368,8 +359,4 @@ impl<O: IsA<NavigationRail>> NavigationRailExt for O {
     }
 }
 
-impl fmt::Display for NavigationRail {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("NavigationRail")
-    }
-}
+impl<O: IsA<NavigationRail>> NavigationRailExt for O {}

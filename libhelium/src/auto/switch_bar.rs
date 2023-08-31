@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeSwitchBar")]
@@ -268,52 +268,27 @@ impl SwitchBarBuilder {
     }
 }
 
-pub trait SwitchBarExt: 'static {
-    #[doc(alias = "he_switch_bar_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_switch_bar_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_switch_bar_get_subtitle")]
-    #[doc(alias = "get_subtitle")]
-    fn subtitle(&self) -> glib::GString;
-
-    #[doc(alias = "he_switch_bar_set_subtitle")]
-    fn set_subtitle(&self, value: &str);
-
-    #[doc(alias = "he_switch_bar_get_sensitive_widget")]
-    #[doc(alias = "get_sensitive_widget")]
-    fn sensitive_widget(&self) -> Option<gtk::Widget>;
-
-    #[doc(alias = "he_switch_bar_set_sensitive_widget")]
-    fn set_sensitive_widget(&self, value: Option<&impl IsA<gtk::Widget>>);
-
-    #[doc(alias = "activated")]
-    fn connect_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "subtitle")]
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "sensitive-widget")]
-    fn connect_sensitive_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::SwitchBar>> Sealed for T {}
 }
 
-impl<O: IsA<SwitchBar>> SwitchBarExt for O {
+pub trait SwitchBarExt: IsA<SwitchBar> + sealed::Sealed + 'static {
+    #[doc(alias = "he_switch_bar_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_switch_bar_get_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_switch_bar_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_switch_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_switch_bar_get_subtitle")]
+    #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_switch_bar_get_subtitle(
@@ -322,12 +297,15 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
         }
     }
 
+    #[doc(alias = "he_switch_bar_set_subtitle")]
     fn set_subtitle(&self, value: &str) {
         unsafe {
             ffi::he_switch_bar_set_subtitle(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_switch_bar_get_sensitive_widget")]
+    #[doc(alias = "get_sensitive_widget")]
     fn sensitive_widget(&self) -> Option<gtk::Widget> {
         unsafe {
             from_glib_none(ffi::he_switch_bar_get_sensitive_widget(
@@ -336,6 +314,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
         }
     }
 
+    #[doc(alias = "he_switch_bar_set_sensitive_widget")]
     fn set_sensitive_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
             ffi::he_switch_bar_set_sensitive_widget(
@@ -345,6 +324,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
         }
     }
 
+    #[doc(alias = "activated")]
     fn connect_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn activated_trampoline<P: IsA<SwitchBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSwitchBar,
@@ -358,7 +338,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     activated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -366,6 +346,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<SwitchBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSwitchBar,
@@ -380,7 +361,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -388,6 +369,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
         }
     }
 
+    #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_subtitle_trampoline<P: IsA<SwitchBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSwitchBar,
@@ -402,7 +384,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -410,6 +392,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
         }
     }
 
+    #[doc(alias = "sensitive-widget")]
     fn connect_sensitive_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_sensitive_widget_trampoline<
             P: IsA<SwitchBar>,
@@ -427,7 +410,7 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sensitive-widget\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_sensitive_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -436,8 +419,4 @@ impl<O: IsA<SwitchBar>> SwitchBarExt for O {
     }
 }
 
-impl fmt::Display for SwitchBar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("SwitchBar")
-    }
-}
+impl<O: IsA<SwitchBar>> SwitchBarExt for O {}

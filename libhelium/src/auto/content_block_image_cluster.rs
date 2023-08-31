@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeContentBlockImageCluster")]
@@ -272,49 +272,15 @@ impl ContentBlockImageClusterBuilder {
     }
 }
 
-pub trait ContentBlockImageClusterExt: 'static {
-    #[doc(alias = "he_content_block_image_cluster_set_image")]
-    fn set_image(
-        &self,
-        image: &impl IsA<ContentBlockImage>,
-        position: ContentBlockImageClusterImagePosition,
-    );
-
-    #[doc(alias = "he_content_block_image_cluster_remove_image")]
-    fn remove_image(&self, image: &impl IsA<ContentBlockImage>);
-
-    #[doc(alias = "he_content_block_image_cluster_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_content_block_image_cluster_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_content_block_image_cluster_get_subtitle")]
-    #[doc(alias = "get_subtitle")]
-    fn subtitle(&self) -> glib::GString;
-
-    #[doc(alias = "he_content_block_image_cluster_set_subtitle")]
-    fn set_subtitle(&self, value: &str);
-
-    #[doc(alias = "he_content_block_image_cluster_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_content_block_image_cluster_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "subtitle")]
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ContentBlockImageCluster>> Sealed for T {}
 }
 
-impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
+pub trait ContentBlockImageClusterExt:
+    IsA<ContentBlockImageCluster> + sealed::Sealed + 'static
+{
+    #[doc(alias = "he_content_block_image_cluster_set_image")]
     fn set_image(
         &self,
         image: &impl IsA<ContentBlockImage>,
@@ -329,6 +295,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_cluster_remove_image")]
     fn remove_image(&self, image: &impl IsA<ContentBlockImage>) {
         unsafe {
             ffi::he_content_block_image_cluster_remove_image(
@@ -338,6 +305,8 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_cluster_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_image_cluster_get_title(
@@ -346,6 +315,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_cluster_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_content_block_image_cluster_set_title(
@@ -355,6 +325,8 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_cluster_get_subtitle")]
+    #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_image_cluster_get_subtitle(
@@ -363,6 +335,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_cluster_set_subtitle")]
     fn set_subtitle(&self, value: &str) {
         unsafe {
             ffi::he_content_block_image_cluster_set_subtitle(
@@ -372,6 +345,8 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_cluster_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_image_cluster_get_icon(
@@ -380,6 +355,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_cluster_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_content_block_image_cluster_set_icon(
@@ -389,6 +365,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<
             P: IsA<ContentBlockImageCluster>,
@@ -406,7 +383,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -414,6 +391,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_subtitle_trampoline<
             P: IsA<ContentBlockImageCluster>,
@@ -431,7 +409,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -439,6 +417,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<
             P: IsA<ContentBlockImageCluster>,
@@ -456,7 +435,7 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -465,8 +444,4 @@ impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {
     }
 }
 
-impl fmt::Display for ContentBlockImageCluster {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ContentBlockImageCluster")
-    }
-}
+impl<O: IsA<ContentBlockImageCluster>> ContentBlockImageClusterExt for O {}

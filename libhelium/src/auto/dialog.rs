@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeDialog")]
@@ -120,12 +120,6 @@ impl DialogBuilder {
         }
     }
 
-    pub fn modal(self, modal: bool) -> Self {
-        Self {
-            builder: self.builder.property("modal", modal),
-        }
-    }
-
     pub fn has_title(self, has_title: bool) -> Self {
         Self {
             builder: self.builder.property("has-title", has_title),
@@ -216,8 +210,8 @@ impl DialogBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_2")))]
+    #[cfg(feature = "gtk_v4_2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
     pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
         Self {
             builder: self
@@ -252,6 +246,12 @@ impl DialogBuilder {
         }
     }
 
+    pub fn modal(self, modal: bool) -> Self {
+        Self {
+            builder: self.builder.property("modal", modal),
+        }
+    }
+
     pub fn resizable(self, resizable: bool) -> Self {
         Self {
             builder: self.builder.property("resizable", resizable),
@@ -264,8 +264,8 @@ impl DialogBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_6", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_6")))]
+    #[cfg(feature = "gtk_v4_6")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_6")))]
     pub fn titlebar(self, titlebar: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self.builder.property("titlebar", titlebar.clone().upcast()),
@@ -462,59 +462,13 @@ impl DialogBuilder {
     }
 }
 
-pub trait DialogExt: 'static {
-    #[doc(alias = "he_dialog_add")]
-    fn add(&self, widget: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_dialog_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_dialog_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_dialog_get_info")]
-    #[doc(alias = "get_info")]
-    fn info(&self) -> glib::GString;
-
-    #[doc(alias = "he_dialog_set_info")]
-    fn set_info(&self, value: &str);
-
-    #[doc(alias = "he_dialog_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_dialog_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "he_dialog_get_secondary_button")]
-    #[doc(alias = "get_secondary_button")]
-    fn secondary_button(&self) -> TintButton;
-
-    #[doc(alias = "he_dialog_set_secondary_button")]
-    fn set_secondary_button(&self, value: &impl IsA<TintButton>);
-
-    #[doc(alias = "he_dialog_get_primary_button")]
-    #[doc(alias = "get_primary_button")]
-    fn primary_button(&self) -> FillButton;
-
-    #[doc(alias = "he_dialog_set_primary_button")]
-    fn set_primary_button(&self, value: &impl IsA<FillButton>);
-
-    #[doc(alias = "info")]
-    fn connect_info_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "secondary-button")]
-    fn connect_secondary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "primary-button")]
-    fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Dialog>> Sealed for T {}
 }
 
-impl<O: IsA<Dialog>> DialogExt for O {
+pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
+    #[doc(alias = "he_dialog_add")]
     fn add(&self, widget: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_dialog_add(
@@ -524,36 +478,47 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "he_dialog_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_dialog_get_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_dialog_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_dialog_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_dialog_get_info")]
+    #[doc(alias = "get_info")]
     fn info(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_dialog_get_info(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_dialog_set_info")]
     fn set_info(&self, value: &str) {
         unsafe {
             ffi::he_dialog_set_info(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_dialog_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_dialog_get_icon(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_dialog_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_dialog_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_dialog_get_secondary_button")]
+    #[doc(alias = "get_secondary_button")]
     fn secondary_button(&self) -> TintButton {
         unsafe {
             from_glib_none(ffi::he_dialog_get_secondary_button(
@@ -562,6 +527,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "he_dialog_set_secondary_button")]
     fn set_secondary_button(&self, value: &impl IsA<TintButton>) {
         unsafe {
             ffi::he_dialog_set_secondary_button(
@@ -571,6 +537,8 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "he_dialog_get_primary_button")]
+    #[doc(alias = "get_primary_button")]
     fn primary_button(&self) -> FillButton {
         unsafe {
             from_glib_none(ffi::he_dialog_get_primary_button(
@@ -579,6 +547,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "he_dialog_set_primary_button")]
     fn set_primary_button(&self, value: &impl IsA<FillButton>) {
         unsafe {
             ffi::he_dialog_set_primary_button(
@@ -588,6 +557,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "info")]
     fn connect_info_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_info_trampoline<P: IsA<Dialog>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeDialog,
@@ -602,7 +572,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::info\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_info_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -610,6 +580,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<P: IsA<Dialog>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeDialog,
@@ -624,7 +595,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -632,6 +603,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "secondary-button")]
     fn connect_secondary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_secondary_button_trampoline<
             P: IsA<Dialog>,
@@ -649,7 +621,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_secondary_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -657,6 +629,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
+    #[doc(alias = "primary-button")]
     fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_primary_button_trampoline<
             P: IsA<Dialog>,
@@ -674,7 +647,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_primary_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -683,8 +656,4 @@ impl<O: IsA<Dialog>> DialogExt for O {
     }
 }
 
-impl fmt::Display for Dialog {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Dialog")
-    }
-}
+impl<O: IsA<Dialog>> DialogExt for O {}

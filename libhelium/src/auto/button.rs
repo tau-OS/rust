@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeButton")]
@@ -24,49 +24,39 @@ impl Button {
     pub const NONE: Option<&'static Button> = None;
 }
 
-pub trait ButtonExt: 'static {
-    #[doc(alias = "he_button_get_color")]
-    #[doc(alias = "get_color")]
-    fn color(&self) -> Colors;
-
-    #[doc(alias = "he_button_set_color")]
-    fn set_color(&self, value: Colors);
-
-    #[doc(alias = "he_button_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_button_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "color")]
-    fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Button>> Sealed for T {}
 }
 
-impl<O: IsA<Button>> ButtonExt for O {
+pub trait ButtonExt: IsA<Button> + sealed::Sealed + 'static {
+    #[doc(alias = "he_button_get_color")]
+    #[doc(alias = "get_color")]
     fn color(&self) -> Colors {
         unsafe { from_glib(ffi::he_button_get_color(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_button_set_color")]
     fn set_color(&self, value: Colors) {
         unsafe {
             ffi::he_button_set_color(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_button_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe { from_glib_full(ffi::he_button_get_icon(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_button_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_button_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "color")]
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_color_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeButton,
@@ -81,7 +71,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::color\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -89,6 +79,7 @@ impl<O: IsA<Button>> ButtonExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeButton,
@@ -103,7 +94,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -112,8 +103,4 @@ impl<O: IsA<Button>> ButtonExt for O {
     }
 }
 
-impl fmt::Display for Button {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Button")
-    }
-}
+impl<O: IsA<Button>> ButtonExt for O {}

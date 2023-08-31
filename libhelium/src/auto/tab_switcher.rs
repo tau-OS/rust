@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeTabSwitcher")]
@@ -304,143 +304,14 @@ impl TabSwitcherBuilder {
     }
 }
 
-pub trait TabSwitcherExt: 'static {
-    #[doc(alias = "he_tab_switcher_get_tab_position")]
-    #[doc(alias = "get_tab_position")]
-    fn tab_position(&self, tab: &impl IsA<Tab>) -> i32;
-
-    #[doc(alias = "he_tab_switcher_insert_tab")]
-    fn insert_tab(&self, tab: &impl IsA<Tab>, index: i32) -> u32;
-
-    #[doc(alias = "he_tab_switcher_remove_tab")]
-    fn remove_tab(&self, tab: &impl IsA<Tab>);
-
-    #[doc(alias = "he_tab_switcher_get_n_tabs")]
-    #[doc(alias = "get_n_tabs")]
-    fn n_tabs(&self) -> i32;
-
-    #[doc(alias = "he_tab_switcher_get_tabs")]
-    #[doc(alias = "get_tabs")]
-    fn tabs(&self) -> Vec<Tab>;
-
-    #[doc(alias = "he_tab_switcher_get_tab_bar_behavior")]
-    #[doc(alias = "get_tab_bar_behavior")]
-    fn tab_bar_behavior(&self) -> TabSwitcherTabBarBehavior;
-
-    #[doc(alias = "he_tab_switcher_set_tab_bar_behavior")]
-    fn set_tab_bar_behavior(&self, value: TabSwitcherTabBarBehavior);
-
-    #[doc(alias = "he_tab_switcher_get_allow_duplicate_tabs")]
-    #[doc(alias = "get_allow_duplicate_tabs")]
-    fn allows_duplicate_tabs(&self) -> bool;
-
-    #[doc(alias = "he_tab_switcher_set_allow_duplicate_tabs")]
-    fn set_allow_duplicate_tabs(&self, value: bool);
-
-    #[doc(alias = "he_tab_switcher_get_allow_drag")]
-    #[doc(alias = "get_allow_drag")]
-    fn allows_drag(&self) -> bool;
-
-    #[doc(alias = "he_tab_switcher_set_allow_drag")]
-    fn set_allow_drag(&self, value: bool);
-
-    #[doc(alias = "he_tab_switcher_get_allow_pinning")]
-    #[doc(alias = "get_allow_pinning")]
-    fn allows_pinning(&self) -> bool;
-
-    #[doc(alias = "he_tab_switcher_set_allow_pinning")]
-    fn set_allow_pinning(&self, value: bool);
-
-    #[doc(alias = "he_tab_switcher_get_allow_closing")]
-    #[doc(alias = "get_allow_closing")]
-    fn allows_closing(&self) -> bool;
-
-    #[doc(alias = "he_tab_switcher_set_allow_closing")]
-    fn set_allow_closing(&self, value: bool);
-
-    #[doc(alias = "he_tab_switcher_get_allow_new_window")]
-    #[doc(alias = "get_allow_new_window")]
-    fn allows_new_window(&self) -> bool;
-
-    #[doc(alias = "he_tab_switcher_set_allow_new_window")]
-    fn set_allow_new_window(&self, value: bool);
-
-    #[doc(alias = "he_tab_switcher_get_current")]
-    #[doc(alias = "get_current")]
-    fn current(&self) -> Tab;
-
-    #[doc(alias = "he_tab_switcher_set_current")]
-    fn set_current(&self, value: &impl IsA<Tab>);
-
-    #[doc(alias = "he_tab_switcher_get_menu")]
-    #[doc(alias = "get_menu")]
-    fn menu(&self) -> gio::Menu;
-
-    #[doc(alias = "he_tab_switcher_get_actions")]
-    #[doc(alias = "get_actions")]
-    fn actions(&self) -> gio::SimpleActionGroup;
-
-    fn set_menu(&self, menu: Option<&gio::Menu>);
-
-    #[doc(alias = "tab-added")]
-    fn connect_tab_added<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "tab-removed")]
-    fn connect_tab_removed<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "tab-switched")]
-    fn connect_tab_switched<F: Fn(&Self, Option<&Tab>, &Tab) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "tab-moved")]
-    fn connect_tab_moved<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "tab-duplicated")]
-    fn connect_tab_duplicated<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "new-tab-requested")]
-    fn connect_new_tab_requested<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "close-tab-requested")]
-    fn connect_close_tab_requested<F: Fn(&Self, &Tab) -> bool + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "n-tabs")]
-    fn connect_n_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "tabs")]
-    fn connect_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "tab-bar-behavior")]
-    fn connect_tab_bar_behavior_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "allow-duplicate-tabs")]
-    fn connect_allow_duplicate_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "allow-drag")]
-    fn connect_allow_drag_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "allow-pinning")]
-    fn connect_allow_pinning_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "allow-closing")]
-    fn connect_allow_closing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "allow-new-window")]
-    fn connect_allow_new_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "current")]
-    fn connect_current_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "menu")]
-    fn connect_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TabSwitcher>> Sealed for T {}
 }
 
-impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
+pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
+    #[doc(alias = "he_tab_switcher_get_tab_position")]
+    #[doc(alias = "get_tab_position")]
     fn tab_position(&self, tab: &impl IsA<Tab>) -> i32 {
         unsafe {
             ffi::he_tab_switcher_get_tab_position(
@@ -450,6 +321,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_insert_tab")]
     fn insert_tab(&self, tab: &impl IsA<Tab>, index: i32) -> u32 {
         unsafe {
             ffi::he_tab_switcher_insert_tab(
@@ -460,6 +332,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_remove_tab")]
     fn remove_tab(&self, tab: &impl IsA<Tab>) {
         unsafe {
             ffi::he_tab_switcher_remove_tab(
@@ -469,10 +342,14 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_n_tabs")]
+    #[doc(alias = "get_n_tabs")]
     fn n_tabs(&self) -> i32 {
         unsafe { ffi::he_tab_switcher_get_n_tabs(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "he_tab_switcher_get_tabs")]
+    #[doc(alias = "get_tabs")]
     fn tabs(&self) -> Vec<Tab> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::he_tab_switcher_get_tabs(
@@ -481,6 +358,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_tab_bar_behavior")]
+    #[doc(alias = "get_tab_bar_behavior")]
     fn tab_bar_behavior(&self) -> TabSwitcherTabBarBehavior {
         unsafe {
             from_glib(ffi::he_tab_switcher_get_tab_bar_behavior(
@@ -489,6 +368,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_set_tab_bar_behavior")]
     fn set_tab_bar_behavior(&self, value: TabSwitcherTabBarBehavior) {
         unsafe {
             ffi::he_tab_switcher_set_tab_bar_behavior(
@@ -498,6 +378,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_allow_duplicate_tabs")]
+    #[doc(alias = "get_allow_duplicate_tabs")]
     fn allows_duplicate_tabs(&self) -> bool {
         unsafe {
             from_glib(ffi::he_tab_switcher_get_allow_duplicate_tabs(
@@ -506,6 +388,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_set_allow_duplicate_tabs")]
     fn set_allow_duplicate_tabs(&self, value: bool) {
         unsafe {
             ffi::he_tab_switcher_set_allow_duplicate_tabs(
@@ -515,6 +398,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_allow_drag")]
+    #[doc(alias = "get_allow_drag")]
     fn allows_drag(&self) -> bool {
         unsafe {
             from_glib(ffi::he_tab_switcher_get_allow_drag(
@@ -523,12 +408,15 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_set_allow_drag")]
     fn set_allow_drag(&self, value: bool) {
         unsafe {
             ffi::he_tab_switcher_set_allow_drag(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_allow_pinning")]
+    #[doc(alias = "get_allow_pinning")]
     fn allows_pinning(&self) -> bool {
         unsafe {
             from_glib(ffi::he_tab_switcher_get_allow_pinning(
@@ -537,6 +425,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_set_allow_pinning")]
     fn set_allow_pinning(&self, value: bool) {
         unsafe {
             ffi::he_tab_switcher_set_allow_pinning(
@@ -546,6 +435,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_allow_closing")]
+    #[doc(alias = "get_allow_closing")]
     fn allows_closing(&self) -> bool {
         unsafe {
             from_glib(ffi::he_tab_switcher_get_allow_closing(
@@ -554,6 +445,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_set_allow_closing")]
     fn set_allow_closing(&self, value: bool) {
         unsafe {
             ffi::he_tab_switcher_set_allow_closing(
@@ -563,6 +455,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_allow_new_window")]
+    #[doc(alias = "get_allow_new_window")]
     fn allows_new_window(&self) -> bool {
         unsafe {
             from_glib(ffi::he_tab_switcher_get_allow_new_window(
@@ -571,6 +465,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_set_allow_new_window")]
     fn set_allow_new_window(&self, value: bool) {
         unsafe {
             ffi::he_tab_switcher_set_allow_new_window(
@@ -580,6 +475,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_current")]
+    #[doc(alias = "get_current")]
     fn current(&self) -> Tab {
         unsafe {
             from_glib_none(ffi::he_tab_switcher_get_current(
@@ -588,6 +485,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_set_current")]
     fn set_current(&self, value: &impl IsA<Tab>) {
         unsafe {
             ffi::he_tab_switcher_set_current(
@@ -597,6 +495,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_menu")]
+    #[doc(alias = "get_menu")]
     fn menu(&self) -> gio::Menu {
         unsafe {
             from_glib_none(ffi::he_tab_switcher_get_menu(
@@ -605,6 +505,8 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_switcher_get_actions")]
+    #[doc(alias = "get_actions")]
     fn actions(&self) -> gio::SimpleActionGroup {
         unsafe {
             from_glib_none(ffi::he_tab_switcher_get_actions(
@@ -614,9 +516,10 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
     }
 
     fn set_menu(&self, menu: Option<&gio::Menu>) {
-        glib::ObjectExt::set_property(self.as_ref(), "menu", menu)
+        ObjectExt::set_property(self.as_ref(), "menu", menu)
     }
 
+    #[doc(alias = "tab-added")]
     fn connect_tab_added<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn tab_added_trampoline<
             P: IsA<TabSwitcher>,
@@ -637,7 +540,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tab-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     tab_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -645,6 +548,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "tab-removed")]
     fn connect_tab_removed<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn tab_removed_trampoline<
             P: IsA<TabSwitcher>,
@@ -665,7 +569,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tab-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     tab_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -673,6 +577,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "tab-switched")]
     fn connect_tab_switched<F: Fn(&Self, Option<&Tab>, &Tab) + 'static>(
         &self,
         f: F,
@@ -698,7 +603,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tab-switched\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     tab_switched_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -706,6 +611,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "tab-moved")]
     fn connect_tab_moved<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn tab_moved_trampoline<
             P: IsA<TabSwitcher>,
@@ -726,7 +632,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tab-moved\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     tab_moved_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -734,6 +640,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "tab-duplicated")]
     fn connect_tab_duplicated<F: Fn(&Self, &Tab) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn tab_duplicated_trampoline<
             P: IsA<TabSwitcher>,
@@ -754,7 +661,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tab-duplicated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     tab_duplicated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -762,6 +669,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "new-tab-requested")]
     fn connect_new_tab_requested<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn new_tab_requested_trampoline<
             P: IsA<TabSwitcher>,
@@ -778,7 +686,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-tab-requested\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     new_tab_requested_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -786,6 +694,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "close-tab-requested")]
     fn connect_close_tab_requested<F: Fn(&Self, &Tab) -> bool + 'static>(
         &self,
         f: F,
@@ -810,7 +719,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close-tab-requested\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     close_tab_requested_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -818,6 +727,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "n-tabs")]
     fn connect_n_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_n_tabs_trampoline<P: IsA<TabSwitcher>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTabSwitcher,
@@ -832,7 +742,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-tabs\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_n_tabs_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -840,6 +750,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "tabs")]
     fn connect_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_tabs_trampoline<P: IsA<TabSwitcher>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTabSwitcher,
@@ -854,7 +765,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tabs\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_tabs_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -862,6 +773,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "tab-bar-behavior")]
     fn connect_tab_bar_behavior_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_tab_bar_behavior_trampoline<
             P: IsA<TabSwitcher>,
@@ -879,7 +791,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tab-bar-behavior\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_tab_bar_behavior_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -887,6 +799,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "allow-duplicate-tabs")]
     fn connect_allow_duplicate_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_allow_duplicate_tabs_trampoline<
             P: IsA<TabSwitcher>,
@@ -904,7 +817,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-duplicate-tabs\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_allow_duplicate_tabs_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -912,6 +825,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "allow-drag")]
     fn connect_allow_drag_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_allow_drag_trampoline<
             P: IsA<TabSwitcher>,
@@ -929,7 +843,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-drag\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_allow_drag_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -937,6 +851,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "allow-pinning")]
     fn connect_allow_pinning_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_allow_pinning_trampoline<
             P: IsA<TabSwitcher>,
@@ -954,7 +869,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-pinning\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_allow_pinning_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -962,6 +877,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "allow-closing")]
     fn connect_allow_closing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_allow_closing_trampoline<
             P: IsA<TabSwitcher>,
@@ -979,7 +895,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-closing\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_allow_closing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -987,6 +903,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "allow-new-window")]
     fn connect_allow_new_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_allow_new_window_trampoline<
             P: IsA<TabSwitcher>,
@@ -1004,7 +921,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-new-window\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_allow_new_window_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1012,6 +929,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "current")]
     fn connect_current_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_current_trampoline<P: IsA<TabSwitcher>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTabSwitcher,
@@ -1026,7 +944,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_current_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1034,6 +952,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
         }
     }
 
+    #[doc(alias = "menu")]
     fn connect_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_menu_trampoline<P: IsA<TabSwitcher>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTabSwitcher,
@@ -1048,7 +967,7 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_menu_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1057,8 +976,4 @@ impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {
     }
 }
 
-impl fmt::Display for TabSwitcher {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("TabSwitcher")
-    }
-}
+impl<O: IsA<TabSwitcher>> TabSwitcherExt for O {}

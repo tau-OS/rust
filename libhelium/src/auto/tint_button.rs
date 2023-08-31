@@ -5,7 +5,6 @@
 
 use crate::{Button, Colors};
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 glib::wrapper! {
     #[doc(alias = "HeTintButton")]
@@ -71,6 +70,14 @@ impl TintButtonBuilder {
     pub fn icon(self, icon: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("icon", icon.into()),
+        }
+    }
+
+    #[cfg(feature = "gtk_v4_12")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_12")))]
+    pub fn can_shrink(self, can_shrink: bool) -> Self {
+        Self {
+            builder: self.builder.property("can-shrink", can_shrink),
         }
     }
 
@@ -297,11 +304,5 @@ impl TintButtonBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> TintButton {
         self.builder.build()
-    }
-}
-
-impl fmt::Display for TintButton {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("TintButton")
     }
 }

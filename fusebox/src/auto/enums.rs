@@ -3,8 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::fmt;
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -20,22 +19,6 @@ pub enum FuseCategory {
     Custom,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for FuseCategory {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "FuseCategory::{}",
-            match *self {
-                Self::Network => "Network",
-                Self::Personal => "Personal",
-                Self::System => "System",
-                Self::Custom => "Custom",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]
@@ -72,7 +55,8 @@ impl FromGlib<ffi::FuseboxFuseCategory> for FuseCategory {
 
 impl StaticType for FuseCategory {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "fusebox_fuse_category_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::fusebox_fuse_category_get_type()) }
     }
 }
@@ -83,7 +67,7 @@ impl glib::HasParamSpec for FuseCategory {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -91,7 +75,7 @@ impl glib::value::ValueType for FuseCategory {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for FuseCategory {
+unsafe impl<'a> glib::value::FromValue<'a> for FuseCategory {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

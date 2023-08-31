@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeEmptyPage")]
@@ -278,65 +278,27 @@ impl EmptyPageBuilder {
     }
 }
 
-pub trait EmptyPageExt: 'static {
-    #[doc(alias = "he_empty_page_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_empty_page_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_empty_page_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> glib::GString;
-
-    #[doc(alias = "he_empty_page_set_description")]
-    fn set_description(&self, value: &str);
-
-    #[doc(alias = "he_empty_page_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_empty_page_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "he_empty_page_set_resource")]
-    fn set_resource(&self, value: &str);
-
-    #[doc(alias = "he_empty_page_get_button")]
-    #[doc(alias = "get_button")]
-    fn button(&self) -> glib::GString;
-
-    #[doc(alias = "he_empty_page_set_button")]
-    fn set_button(&self, value: &str);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "description")]
-    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "resource")]
-    fn connect_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "button")]
-    fn connect_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::EmptyPage>> Sealed for T {}
 }
 
-impl<O: IsA<EmptyPage>> EmptyPageExt for O {
+pub trait EmptyPageExt: IsA<EmptyPage> + sealed::Sealed + 'static {
+    #[doc(alias = "he_empty_page_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_empty_page_get_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_empty_page_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_empty_page_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_empty_page_get_description")]
+    #[doc(alias = "get_description")]
     fn description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_empty_page_get_description(
@@ -345,6 +307,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
         }
     }
 
+    #[doc(alias = "he_empty_page_set_description")]
     fn set_description(&self, value: &str) {
         unsafe {
             ffi::he_empty_page_set_description(
@@ -354,22 +317,28 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
         }
     }
 
+    #[doc(alias = "he_empty_page_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_empty_page_get_icon(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_empty_page_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_empty_page_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_empty_page_set_resource")]
     fn set_resource(&self, value: &str) {
         unsafe {
             ffi::he_empty_page_set_resource(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_empty_page_get_button")]
+    #[doc(alias = "get_button")]
     fn button(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_empty_page_get_button(
@@ -378,12 +347,14 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
         }
     }
 
+    #[doc(alias = "he_empty_page_set_button")]
     fn set_button(&self, value: &str) {
         unsafe {
             ffi::he_empty_page_set_button(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<EmptyPage>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeEmptyPage,
@@ -398,7 +369,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -406,6 +377,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
         }
     }
 
+    #[doc(alias = "description")]
     fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_description_trampoline<
             P: IsA<EmptyPage>,
@@ -423,7 +395,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::description\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_description_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -431,6 +403,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<P: IsA<EmptyPage>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeEmptyPage,
@@ -445,7 +418,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -453,6 +426,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
         }
     }
 
+    #[doc(alias = "resource")]
     fn connect_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_resource_trampoline<P: IsA<EmptyPage>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeEmptyPage,
@@ -467,7 +441,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resource\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_resource_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -475,6 +449,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
         }
     }
 
+    #[doc(alias = "button")]
     fn connect_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_button_trampoline<P: IsA<EmptyPage>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeEmptyPage,
@@ -489,7 +464,7 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -498,8 +473,4 @@ impl<O: IsA<EmptyPage>> EmptyPageExt for O {
     }
 }
 
-impl fmt::Display for EmptyPage {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("EmptyPage")
-    }
-}
+impl<O: IsA<EmptyPage>> EmptyPageExt for O {}

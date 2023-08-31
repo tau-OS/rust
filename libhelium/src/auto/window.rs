@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeWindow")]
@@ -62,12 +62,6 @@ impl WindowBuilder {
     pub fn parent(self, parent: &impl IsA<gtk::Window>) -> Self {
         Self {
             builder: self.builder.property("parent", parent.clone().upcast()),
-        }
-    }
-
-    pub fn modal(self, modal: bool) -> Self {
-        Self {
-            builder: self.builder.property("modal", modal),
         }
     }
 
@@ -161,8 +155,8 @@ impl WindowBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_2")))]
+    #[cfg(feature = "gtk_v4_2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
     pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
         Self {
             builder: self
@@ -197,6 +191,12 @@ impl WindowBuilder {
         }
     }
 
+    pub fn modal(self, modal: bool) -> Self {
+        Self {
+            builder: self.builder.property("modal", modal),
+        }
+    }
+
     pub fn resizable(self, resizable: bool) -> Self {
         Self {
             builder: self.builder.property("resizable", resizable),
@@ -215,8 +215,8 @@ impl WindowBuilder {
         }
     }
 
-    #[cfg(any(feature = "gtk_v4_6", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "gtk_v4_6")))]
+    #[cfg(feature = "gtk_v4_6")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_6")))]
     pub fn titlebar(self, titlebar: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self.builder.property("titlebar", titlebar.clone().upcast()),
@@ -413,50 +413,19 @@ impl WindowBuilder {
     }
 }
 
-pub trait WindowExt: 'static {
-    #[doc(alias = "he_window_get_parent")]
-    #[doc(alias = "get_parent")]
-    fn parent(&self) -> Option<gtk::Window>;
-
-    #[doc(alias = "he_window_set_parent")]
-    fn set_parent(&self, value: Option<&impl IsA<gtk::Window>>);
-
-    #[doc(alias = "he_window_get_modal")]
-    #[doc(alias = "get_modal")]
-    fn is_modal(&self) -> bool;
-
-    #[doc(alias = "he_window_set_modal")]
-    fn set_modal(&self, value: bool);
-
-    #[doc(alias = "he_window_get_has_title")]
-    #[doc(alias = "get_has_title")]
-    fn has_title(&self) -> bool;
-
-    #[doc(alias = "he_window_set_has_title")]
-    fn set_has_title(&self, value: bool);
-
-    #[doc(alias = "he_window_get_has_back_button")]
-    #[doc(alias = "get_has_back_button")]
-    fn has_back_button(&self) -> bool;
-
-    #[doc(alias = "he_window_set_has_back_button")]
-    fn set_has_back_button(&self, value: bool);
-
-    #[doc(alias = "parent")]
-    fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "has-title")]
-    fn connect_has_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "has-back-button")]
-    fn connect_has_back_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Window>> Sealed for T {}
 }
 
-impl<O: IsA<Window>> WindowExt for O {
+pub trait WindowExt: IsA<Window> + sealed::Sealed + 'static {
+    #[doc(alias = "he_window_get_parent")]
+    #[doc(alias = "get_parent")]
     fn parent(&self) -> Option<gtk::Window> {
         unsafe { from_glib_none(ffi::he_window_get_parent(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_window_set_parent")]
     fn set_parent(&self, value: Option<&impl IsA<gtk::Window>>) {
         unsafe {
             ffi::he_window_set_parent(
@@ -466,26 +435,21 @@ impl<O: IsA<Window>> WindowExt for O {
         }
     }
 
-    fn is_modal(&self) -> bool {
-        unsafe { from_glib(ffi::he_window_get_modal(self.as_ref().to_glib_none().0)) }
-    }
-
-    fn set_modal(&self, value: bool) {
-        unsafe {
-            ffi::he_window_set_modal(self.as_ref().to_glib_none().0, value.into_glib());
-        }
-    }
-
+    #[doc(alias = "he_window_get_has_title")]
+    #[doc(alias = "get_has_title")]
     fn has_title(&self) -> bool {
         unsafe { from_glib(ffi::he_window_get_has_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_window_set_has_title")]
     fn set_has_title(&self, value: bool) {
         unsafe {
             ffi::he_window_set_has_title(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_window_get_has_back_button")]
+    #[doc(alias = "get_has_back_button")]
     fn has_back_button(&self) -> bool {
         unsafe {
             from_glib(ffi::he_window_get_has_back_button(
@@ -494,12 +458,14 @@ impl<O: IsA<Window>> WindowExt for O {
         }
     }
 
+    #[doc(alias = "he_window_set_has_back_button")]
     fn set_has_back_button(&self, value: bool) {
         unsafe {
             ffi::he_window_set_has_back_button(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "parent")]
     fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_parent_trampoline<P: IsA<Window>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeWindow,
@@ -514,7 +480,7 @@ impl<O: IsA<Window>> WindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_parent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -522,6 +488,7 @@ impl<O: IsA<Window>> WindowExt for O {
         }
     }
 
+    #[doc(alias = "has-title")]
     fn connect_has_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_has_title_trampoline<P: IsA<Window>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeWindow,
@@ -536,7 +503,7 @@ impl<O: IsA<Window>> WindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_has_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -544,6 +511,7 @@ impl<O: IsA<Window>> WindowExt for O {
         }
     }
 
+    #[doc(alias = "has-back-button")]
     fn connect_has_back_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_has_back_button_trampoline<
             P: IsA<Window>,
@@ -561,7 +529,7 @@ impl<O: IsA<Window>> WindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-back-button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_has_back_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -570,8 +538,4 @@ impl<O: IsA<Window>> WindowExt for O {
     }
 }
 
-impl fmt::Display for Window {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Window")
-    }
-}
+impl<O: IsA<Window>> WindowExt for O {}

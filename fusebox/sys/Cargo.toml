@@ -19,6 +19,8 @@ version = "1"
 
 [package.metadata.docs.rs]
 features = ["dox"]
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 
 [lib]
 name = "fusebox_sys"
@@ -29,32 +31,32 @@ libc = "0.2"
 [dependencies.gio]
 package = "gio-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.18.0"
+version = "0.19"
 
 [dependencies.glib]
 package = "glib-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.18.0"
+version = "0.19"
 
 [dependencies.gobject]
 package = "gobject-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.18.0"
+version = "0.19"
 
 [dependencies.gtk]
 package = "gtk4-sys"
 git = "https://github.com/gtk-rs/gtk4-rs"
-version = "0.7.0"
+version = "0.8"
 
 [dependencies.gdk]
 package = "gdk4-sys"
 git = "https://github.com/gtk-rs/gtk4-rs"
-version = "0.7.0"
+version = "0.8"
 
 [dependencies.pango]
 package = "pango-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
-version = "0.18.0"
+version = "0.19"
 
 [build-dependencies]
 system-deps = "6"
@@ -64,4 +66,3 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-dox = ["glib/dox", "gobject/dox", "gio/dox"]

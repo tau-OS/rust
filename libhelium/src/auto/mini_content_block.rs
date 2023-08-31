@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeMiniContentBlock")]
@@ -304,61 +304,14 @@ impl MiniContentBlockBuilder {
     }
 }
 
-pub trait MiniContentBlockExt: 'static {
-    #[doc(alias = "he_mini_content_block_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_mini_content_block_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_mini_content_block_get_subtitle")]
-    #[doc(alias = "get_subtitle")]
-    fn subtitle(&self) -> glib::GString;
-
-    #[doc(alias = "he_mini_content_block_set_subtitle")]
-    fn set_subtitle(&self, value: &str);
-
-    #[doc(alias = "he_mini_content_block_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_mini_content_block_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "he_mini_content_block_set_gicon")]
-    fn set_gicon(&self, value: &impl IsA<gio::Icon>);
-
-    #[doc(alias = "he_mini_content_block_set_paintable")]
-    fn set_paintable(&self, value: &impl IsA<gdk::Paintable>);
-
-    #[doc(alias = "he_mini_content_block_get_primary_button")]
-    #[doc(alias = "get_primary_button")]
-    fn primary_button(&self) -> Button;
-
-    #[doc(alias = "he_mini_content_block_set_primary_button")]
-    fn set_primary_button(&self, value: &impl IsA<Button>);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "subtitle")]
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "icon")]
-    fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "gicon")]
-    fn connect_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "paintable")]
-    fn connect_paintable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "primary-button")]
-    fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::MiniContentBlock>> Sealed for T {}
 }
 
-impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
+pub trait MiniContentBlockExt: IsA<MiniContentBlock> + sealed::Sealed + 'static {
+    #[doc(alias = "he_mini_content_block_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_mini_content_block_get_title(
@@ -367,6 +320,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_mini_content_block_set_title(
@@ -376,6 +330,8 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_get_subtitle")]
+    #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_mini_content_block_get_subtitle(
@@ -384,6 +340,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_set_subtitle")]
     fn set_subtitle(&self, value: &str) {
         unsafe {
             ffi::he_mini_content_block_set_subtitle(
@@ -393,6 +350,8 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_mini_content_block_get_icon(
@@ -401,6 +360,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_mini_content_block_set_icon(
@@ -410,6 +370,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_set_gicon")]
     fn set_gicon(&self, value: &impl IsA<gio::Icon>) {
         unsafe {
             ffi::he_mini_content_block_set_gicon(
@@ -419,6 +380,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_set_paintable")]
     fn set_paintable(&self, value: &impl IsA<gdk::Paintable>) {
         unsafe {
             ffi::he_mini_content_block_set_paintable(
@@ -428,6 +390,8 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_get_primary_button")]
+    #[doc(alias = "get_primary_button")]
     fn primary_button(&self) -> Button {
         unsafe {
             from_glib_none(ffi::he_mini_content_block_get_primary_button(
@@ -436,6 +400,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "he_mini_content_block_set_primary_button")]
     fn set_primary_button(&self, value: &impl IsA<Button>) {
         unsafe {
             ffi::he_mini_content_block_set_primary_button(
@@ -445,6 +410,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<
             P: IsA<MiniContentBlock>,
@@ -462,7 +428,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -470,6 +436,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_subtitle_trampoline<
             P: IsA<MiniContentBlock>,
@@ -487,7 +454,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -495,6 +462,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_icon_trampoline<
             P: IsA<MiniContentBlock>,
@@ -512,7 +480,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -520,6 +488,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "gicon")]
     fn connect_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_gicon_trampoline<
             P: IsA<MiniContentBlock>,
@@ -537,7 +506,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::gicon\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_gicon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -545,6 +514,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "paintable")]
     fn connect_paintable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_paintable_trampoline<
             P: IsA<MiniContentBlock>,
@@ -562,7 +532,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::paintable\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_paintable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -570,6 +540,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
         }
     }
 
+    #[doc(alias = "primary-button")]
     fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_primary_button_trampoline<
             P: IsA<MiniContentBlock>,
@@ -587,7 +558,7 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_primary_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -596,8 +567,4 @@ impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {
     }
 }
 
-impl fmt::Display for MiniContentBlock {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("MiniContentBlock")
-    }
-}
+impl<O: IsA<MiniContentBlock>> MiniContentBlockExt for O {}

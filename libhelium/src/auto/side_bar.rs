@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeSideBar")]
@@ -303,99 +303,27 @@ impl SideBarBuilder {
     }
 }
 
-pub trait SideBarExt: 'static {
-    #[doc(alias = "he_side_bar_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_side_bar_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_side_bar_get_titlewidget")]
-    #[doc(alias = "get_titlewidget")]
-    fn titlewidget(&self) -> Option<gtk::Widget>;
-
-    #[doc(alias = "he_side_bar_set_titlewidget")]
-    fn set_titlewidget(&self, value: Option<&impl IsA<gtk::Widget>>);
-
-    #[doc(alias = "he_side_bar_get_subtitle")]
-    #[doc(alias = "get_subtitle")]
-    fn subtitle(&self) -> glib::GString;
-
-    #[doc(alias = "he_side_bar_set_subtitle")]
-    fn set_subtitle(&self, value: &str);
-
-    #[doc(alias = "he_side_bar_get_show_buttons")]
-    #[doc(alias = "get_show_buttons")]
-    fn shows_buttons(&self) -> bool;
-
-    #[doc(alias = "he_side_bar_set_show_buttons")]
-    fn set_show_buttons(&self, value: bool);
-
-    #[doc(alias = "he_side_bar_get_show_back")]
-    #[doc(alias = "get_show_back")]
-    fn shows_back(&self) -> bool;
-
-    #[doc(alias = "he_side_bar_set_show_back")]
-    fn set_show_back(&self, value: bool);
-
-    #[doc(alias = "he_side_bar_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack;
-
-    #[doc(alias = "he_side_bar_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack);
-
-    #[doc(alias = "he_side_bar_get_scroller")]
-    #[doc(alias = "get_scroller")]
-    fn scroller(&self) -> gtk::ScrolledWindow;
-
-    #[doc(alias = "he_side_bar_set_scroller")]
-    fn set_scroller(&self, value: &gtk::ScrolledWindow);
-
-    #[doc(alias = "he_side_bar_get_has_margins")]
-    #[doc(alias = "get_has_margins")]
-    fn has_margins(&self) -> bool;
-
-    #[doc(alias = "he_side_bar_set_has_margins")]
-    fn set_has_margins(&self, value: bool);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "titlewidget")]
-    fn connect_titlewidget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "subtitle")]
-    fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "show-buttons")]
-    fn connect_show_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "show-back")]
-    fn connect_show_back_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "scroller")]
-    fn connect_scroller_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "has-margins")]
-    fn connect_has_margins_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::SideBar>> Sealed for T {}
 }
 
-impl<O: IsA<SideBar>> SideBarExt for O {
+pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
+    #[doc(alias = "he_side_bar_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_side_bar_get_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_side_bar_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_side_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_side_bar_get_titlewidget")]
+    #[doc(alias = "get_titlewidget")]
     fn titlewidget(&self) -> Option<gtk::Widget> {
         unsafe {
             from_glib_none(ffi::he_side_bar_get_titlewidget(
@@ -404,6 +332,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "he_side_bar_set_titlewidget")]
     fn set_titlewidget(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
             ffi::he_side_bar_set_titlewidget(
@@ -413,6 +342,8 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "he_side_bar_get_subtitle")]
+    #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_side_bar_get_subtitle(
@@ -421,12 +352,15 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "he_side_bar_set_subtitle")]
     fn set_subtitle(&self, value: &str) {
         unsafe {
             ffi::he_side_bar_set_subtitle(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_side_bar_get_show_buttons")]
+    #[doc(alias = "get_show_buttons")]
     fn shows_buttons(&self) -> bool {
         unsafe {
             from_glib(ffi::he_side_bar_get_show_buttons(
@@ -435,12 +369,15 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "he_side_bar_set_show_buttons")]
     fn set_show_buttons(&self, value: bool) {
         unsafe {
             ffi::he_side_bar_set_show_buttons(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_side_bar_get_show_back")]
+    #[doc(alias = "get_show_back")]
     fn shows_back(&self) -> bool {
         unsafe {
             from_glib(ffi::he_side_bar_get_show_back(
@@ -449,22 +386,28 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "he_side_bar_set_show_back")]
     fn set_show_back(&self, value: bool) {
         unsafe {
             ffi::he_side_bar_set_show_back(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_side_bar_get_stack")]
+    #[doc(alias = "get_stack")]
     fn stack(&self) -> gtk::Stack {
         unsafe { from_glib_none(ffi::he_side_bar_get_stack(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_side_bar_set_stack")]
     fn set_stack(&self, value: &gtk::Stack) {
         unsafe {
             ffi::he_side_bar_set_stack(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_side_bar_get_scroller")]
+    #[doc(alias = "get_scroller")]
     fn scroller(&self) -> gtk::ScrolledWindow {
         unsafe {
             from_glib_none(ffi::he_side_bar_get_scroller(
@@ -473,12 +416,15 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "he_side_bar_set_scroller")]
     fn set_scroller(&self, value: &gtk::ScrolledWindow) {
         unsafe {
             ffi::he_side_bar_set_scroller(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_side_bar_get_has_margins")]
+    #[doc(alias = "get_has_margins")]
     fn has_margins(&self) -> bool {
         unsafe {
             from_glib(ffi::he_side_bar_get_has_margins(
@@ -487,12 +433,14 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "he_side_bar_set_has_margins")]
     fn set_has_margins(&self, value: bool) {
         unsafe {
             ffi::he_side_bar_set_has_margins(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSideBar,
@@ -507,7 +455,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -515,6 +463,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "titlewidget")]
     fn connect_titlewidget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_titlewidget_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSideBar,
@@ -529,7 +478,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::titlewidget\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_titlewidget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -537,6 +486,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_subtitle_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSideBar,
@@ -551,7 +501,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -559,6 +509,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "show-buttons")]
     fn connect_show_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_show_buttons_trampoline<
             P: IsA<SideBar>,
@@ -576,7 +527,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-buttons\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_show_buttons_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -584,6 +535,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "show-back")]
     fn connect_show_back_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_show_back_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSideBar,
@@ -598,7 +550,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-back\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_show_back_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -606,6 +558,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "stack")]
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stack_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSideBar,
@@ -620,7 +573,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stack\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -628,6 +581,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "scroller")]
     fn connect_scroller_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_scroller_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSideBar,
@@ -642,7 +596,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scroller\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_scroller_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -650,6 +604,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
         }
     }
 
+    #[doc(alias = "has-margins")]
     fn connect_has_margins_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_has_margins_trampoline<P: IsA<SideBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeSideBar,
@@ -664,7 +619,7 @@ impl<O: IsA<SideBar>> SideBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-margins\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_has_margins_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -673,8 +628,4 @@ impl<O: IsA<SideBar>> SideBarExt for O {
     }
 }
 
-impl fmt::Display for SideBar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("SideBar")
-    }
-}
+impl<O: IsA<SideBar>> SideBarExt for O {}

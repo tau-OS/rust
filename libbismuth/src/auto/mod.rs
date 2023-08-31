@@ -54,11 +54,11 @@ pub use self::latch_layout::LatchLayout;
 mod latch_scrollable;
 pub use self::latch_scrollable::LatchScrollable;
 
-#[cfg(any(feature = "v1_2", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+#[cfg(feature = "v1_2")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_2")))]
 mod property_animation_target;
-#[cfg(any(feature = "v1_2", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+#[cfg(feature = "v1_2")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_2")))]
 pub use self::property_animation_target::PropertyAnimationTarget;
 
 mod spring_animation;
@@ -86,14 +86,12 @@ pub use self::enums::LapelFoldPolicy;
 pub use self::enums::LapelTransitionType;
 pub use self::enums::NavigationDirection;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::animation::AnimationExt;
     pub use super::bin::BinExt;
     pub use super::swipeable::SwipeableExt;
 }
-#[doc(hidden)]
-pub mod builders {
+pub(crate) mod builders {
     pub use super::album::AlbumBuilder;
     pub use super::album_page::AlbumPageBuilder;
     pub use super::bin::BinBuilder;
@@ -107,8 +105,8 @@ pub mod builders {
     pub use super::latch::LatchBuilder;
     pub use super::latch_layout::LatchLayoutBuilder;
     pub use super::latch_scrollable::LatchScrollableBuilder;
-    #[cfg(any(feature = "v1_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_2")))]
+    #[cfg(feature = "v1_2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_2")))]
     pub use super::property_animation_target::PropertyAnimationTargetBuilder;
     pub use super::spring_animation::SpringAnimationBuilder;
     pub use super::swipe_tracker::SwipeTrackerBuilder;

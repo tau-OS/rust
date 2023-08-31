@@ -12,8 +12,7 @@ pub use self::fuses_manager::FusesManager;
 mod enums;
 pub use self::enums::FuseCategory;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::fuse::FuseExt;
     pub use super::fuses_manager::FusesManagerExt;
 }

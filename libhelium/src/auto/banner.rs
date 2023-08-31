@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeBanner")]
@@ -271,48 +271,13 @@ impl BannerBuilder {
     }
 }
 
-pub trait BannerExt: 'static {
-    #[doc(alias = "he_banner_add_action_button")]
-    fn add_action_button(&self, widget: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_banner_remove_action")]
-    fn remove_action(&self, widget: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_banner_set_banner_style")]
-    fn set_banner_style(&self, style: BannerStyle);
-
-    #[doc(alias = "he_banner_get_title")]
-    #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString;
-
-    #[doc(alias = "he_banner_set_title")]
-    fn set_title(&self, value: &str);
-
-    #[doc(alias = "he_banner_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> glib::GString;
-
-    #[doc(alias = "he_banner_set_description")]
-    fn set_description(&self, value: &str);
-
-    #[doc(alias = "he_banner_get_style")]
-    #[doc(alias = "get_style")]
-    fn style(&self) -> BannerStyle;
-
-    #[doc(alias = "he_banner_set_style")]
-    fn set_style(&self, value: BannerStyle);
-
-    #[doc(alias = "title")]
-    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "description")]
-    fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "style")]
-    fn connect_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Banner>> Sealed for T {}
 }
 
-impl<O: IsA<Banner>> BannerExt for O {
+pub trait BannerExt: IsA<Banner> + sealed::Sealed + 'static {
+    #[doc(alias = "he_banner_add_action_button")]
     fn add_action_button(&self, widget: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_banner_add_action_button(
@@ -322,6 +287,7 @@ impl<O: IsA<Banner>> BannerExt for O {
         }
     }
 
+    #[doc(alias = "he_banner_remove_action")]
     fn remove_action(&self, widget: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_banner_remove_action(
@@ -331,22 +297,28 @@ impl<O: IsA<Banner>> BannerExt for O {
         }
     }
 
+    #[doc(alias = "he_banner_set_banner_style")]
     fn set_banner_style(&self, style: BannerStyle) {
         unsafe {
             ffi::he_banner_set_banner_style(self.as_ref().to_glib_none().0, style.into_glib());
         }
     }
 
+    #[doc(alias = "he_banner_get_title")]
+    #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_banner_get_title(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_banner_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_banner_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_banner_get_description")]
+    #[doc(alias = "get_description")]
     fn description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_banner_get_description(
@@ -355,22 +327,27 @@ impl<O: IsA<Banner>> BannerExt for O {
         }
     }
 
+    #[doc(alias = "he_banner_set_description")]
     fn set_description(&self, value: &str) {
         unsafe {
             ffi::he_banner_set_description(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_banner_get_style")]
+    #[doc(alias = "get_style")]
     fn style(&self) -> BannerStyle {
         unsafe { from_glib(ffi::he_banner_get_style(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_banner_set_style")]
     fn set_style(&self, value: BannerStyle) {
         unsafe {
             ffi::he_banner_set_style(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_title_trampoline<P: IsA<Banner>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeBanner,
@@ -385,7 +362,7 @@ impl<O: IsA<Banner>> BannerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -393,6 +370,7 @@ impl<O: IsA<Banner>> BannerExt for O {
         }
     }
 
+    #[doc(alias = "description")]
     fn connect_description_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_description_trampoline<P: IsA<Banner>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeBanner,
@@ -407,7 +385,7 @@ impl<O: IsA<Banner>> BannerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::description\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_description_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -415,6 +393,7 @@ impl<O: IsA<Banner>> BannerExt for O {
         }
     }
 
+    #[doc(alias = "style")]
     fn connect_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_style_trampoline<P: IsA<Banner>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeBanner,
@@ -429,7 +408,7 @@ impl<O: IsA<Banner>> BannerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::style\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_style_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -438,8 +417,4 @@ impl<O: IsA<Banner>> BannerExt for O {
     }
 }
 
-impl fmt::Display for Banner {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Banner")
-    }
-}
+impl<O: IsA<Banner>> BannerExt for O {}

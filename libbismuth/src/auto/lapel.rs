@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "BisLapel")]
@@ -257,7 +257,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::content\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_content_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -280,7 +280,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fold-duration\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_fold_duration_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -303,7 +303,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fold-policy\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_fold_policy_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -329,7 +329,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fold-threshold-policy\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_fold_threshold_policy_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -352,7 +352,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::folded\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_folded_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -375,7 +375,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lapel\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_lapel_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -398,7 +398,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lapel-position\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_lapel_position_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -421,7 +421,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::locked\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_locked_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -444,7 +444,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modal\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_modal_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -467,7 +467,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reveal-lapel\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_reveal_lapel_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -490,7 +490,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reveal-params\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_reveal_params_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -513,7 +513,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reveal-progress\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_reveal_progress_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -536,7 +536,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::separator\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_separator_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -559,7 +559,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::swipe-to-close\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_swipe_to_close_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -582,7 +582,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::swipe-to-open\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_swipe_to_open_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -605,7 +605,7 @@ impl Lapel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-type\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_transition_type_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -909,11 +909,5 @@ impl LapelBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Lapel {
         self.builder.build()
-    }
-}
-
-impl fmt::Display for Lapel {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Lapel")
     }
 }

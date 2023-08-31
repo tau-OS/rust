@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "FuseboxFusesManager")]
@@ -32,19 +32,13 @@ impl FusesManager {
     }
 }
 
-pub trait FusesManagerExt: 'static {
-    #[doc(alias = "fusebox_fuses_manager_has_fuses")]
-    fn has_fuses(&self) -> bool;
-
-    #[doc(alias = "fusebox_fuses_manager_get_fuses")]
-    #[doc(alias = "get_fuses")]
-    fn fuses(&self) -> Vec<Fuse>;
-
-    #[doc(alias = "fuse-added")]
-    fn connect_fuse_added<F: Fn(&Self, &Fuse) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::FusesManager>> Sealed for T {}
 }
 
-impl<O: IsA<FusesManager>> FusesManagerExt for O {
+pub trait FusesManagerExt: IsA<FusesManager> + sealed::Sealed + 'static {
+    #[doc(alias = "fusebox_fuses_manager_has_fuses")]
     fn has_fuses(&self) -> bool {
         unsafe {
             from_glib(ffi::fusebox_fuses_manager_has_fuses(
@@ -53,6 +47,8 @@ impl<O: IsA<FusesManager>> FusesManagerExt for O {
         }
     }
 
+    #[doc(alias = "fusebox_fuses_manager_get_fuses")]
+    #[doc(alias = "get_fuses")]
     fn fuses(&self) -> Vec<Fuse> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::fusebox_fuses_manager_get_fuses(
@@ -61,6 +57,7 @@ impl<O: IsA<FusesManager>> FusesManagerExt for O {
         }
     }
 
+    #[doc(alias = "fuse-added")]
     fn connect_fuse_added<F: Fn(&Self, &Fuse) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn fuse_added_trampoline<
             P: IsA<FusesManager>,
@@ -81,7 +78,7 @@ impl<O: IsA<FusesManager>> FusesManagerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"fuse-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     fuse_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -90,8 +87,4 @@ impl<O: IsA<FusesManager>> FusesManagerExt for O {
     }
 }
 
-impl fmt::Display for FusesManager {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FusesManager")
-    }
-}
+impl<O: IsA<FusesManager>> FusesManagerExt for O {}

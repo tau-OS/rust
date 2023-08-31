@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeChip")]
@@ -74,6 +74,14 @@ impl ChipBuilder {
     pub fn group(self, group: &impl IsA<gtk::ToggleButton>) -> Self {
         Self {
             builder: self.builder.property("group", group.clone().upcast()),
+        }
+    }
+
+    #[cfg(feature = "gtk_v4_12")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_12")))]
+    pub fn can_shrink(self, can_shrink: bool) -> Self {
+        Self {
+            builder: self.builder.property("can-shrink", can_shrink),
         }
     }
 
@@ -303,29 +311,26 @@ impl ChipBuilder {
     }
 }
 
-pub trait ChipExt: 'static {
-    #[doc(alias = "he_chip_get_chip_label")]
-    #[doc(alias = "get_chip_label")]
-    fn chip_label(&self) -> glib::GString;
-
-    #[doc(alias = "he_chip_set_chip_label")]
-    fn set_chip_label(&self, value: &str);
-
-    #[doc(alias = "chip-label")]
-    fn connect_chip_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Chip>> Sealed for T {}
 }
 
-impl<O: IsA<Chip>> ChipExt for O {
+pub trait ChipExt: IsA<Chip> + sealed::Sealed + 'static {
+    #[doc(alias = "he_chip_get_chip_label")]
+    #[doc(alias = "get_chip_label")]
     fn chip_label(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_chip_get_chip_label(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_chip_set_chip_label")]
     fn set_chip_label(&self, value: &str) {
         unsafe {
             ffi::he_chip_set_chip_label(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "chip-label")]
     fn connect_chip_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_chip_label_trampoline<P: IsA<Chip>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeChip,
@@ -340,7 +345,7 @@ impl<O: IsA<Chip>> ChipExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::chip-label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_chip_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -349,8 +354,4 @@ impl<O: IsA<Chip>> ChipExt for O {
     }
 }
 
-impl fmt::Display for Chip {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Chip")
-    }
-}
+impl<O: IsA<Chip>> ChipExt for O {}

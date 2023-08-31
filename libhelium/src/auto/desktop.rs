@@ -3,13 +3,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ColorRGBColor, DesktopColorScheme, DesktopDarkModeStrength, DesktopEnsorScheme};
+use crate::{ColorRGBColor, DesktopColorScheme, DesktopEnsorScheme};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeDesktop")]
@@ -68,13 +68,9 @@ impl DesktopBuilder {
         }
     }
 
-    pub fn dark_mode_strength(self, dark_mode_strength: DesktopDarkModeStrength) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("dark-mode-strength", dark_mode_strength),
-        }
-    }
+    //pub fn dark_mode_strength(self, dark_mode_strength: /*Ignored*/DarkModeStrength) -> Self {
+    //    Self { builder: self.builder.property("dark-mode-strength", dark_mode_strength), }
+    //}
 
     pub fn ensor_scheme(self, ensor_scheme: DesktopEnsorScheme) -> Self {
         Self {
@@ -102,59 +98,14 @@ impl DesktopBuilder {
     }
 }
 
-pub trait DesktopExt: 'static {
-    #[doc(alias = "he_desktop_get_prefers_color_scheme")]
-    #[doc(alias = "get_prefers_color_scheme")]
-    fn prefers_color_scheme(&self) -> DesktopColorScheme;
-
-    #[doc(alias = "he_desktop_set_prefers_color_scheme")]
-    fn set_prefers_color_scheme(&self, value: DesktopColorScheme);
-
-    #[doc(alias = "he_desktop_get_dark_mode_strength")]
-    #[doc(alias = "get_dark_mode_strength")]
-    fn dark_mode_strength(&self) -> DesktopDarkModeStrength;
-
-    #[doc(alias = "he_desktop_get_ensor_scheme")]
-    #[doc(alias = "get_ensor_scheme")]
-    fn ensor_scheme(&self) -> DesktopEnsorScheme;
-
-    #[doc(alias = "he_desktop_get_accent_color")]
-    #[doc(alias = "get_accent_color")]
-    fn accent_color(&self) -> Option<ColorRGBColor>;
-
-    #[doc(alias = "he_desktop_get_font_weight")]
-    #[doc(alias = "get_font_weight")]
-    fn font_weight(&self) -> f64;
-
-    #[doc(alias = "he_desktop_set_font_weight")]
-    fn set_font_weight(&self, value: f64);
-
-    #[doc(alias = "dark-mode-strength")]
-    fn set_dark_mode_strength(&self, dark_mode_strength: DesktopDarkModeStrength);
-
-    #[doc(alias = "ensor-scheme")]
-    fn set_ensor_scheme(&self, ensor_scheme: DesktopEnsorScheme);
-
-    #[doc(alias = "accent-color")]
-    fn set_accent_color(&self, accent_color: Option<&ColorRGBColor>);
-
-    #[doc(alias = "prefers-color-scheme")]
-    fn connect_prefers_color_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "dark-mode-strength")]
-    fn connect_dark_mode_strength_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "ensor-scheme")]
-    fn connect_ensor_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "accent-color")]
-    fn connect_accent_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "font-weight")]
-    fn connect_font_weight_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Desktop>> Sealed for T {}
 }
 
-impl<O: IsA<Desktop>> DesktopExt for O {
+pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
+    #[doc(alias = "he_desktop_get_prefers_color_scheme")]
+    #[doc(alias = "get_prefers_color_scheme")]
     fn prefers_color_scheme(&self) -> DesktopColorScheme {
         unsafe {
             from_glib(ffi::he_desktop_get_prefers_color_scheme(
@@ -163,6 +114,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
+    #[doc(alias = "he_desktop_set_prefers_color_scheme")]
     fn set_prefers_color_scheme(&self, value: DesktopColorScheme) {
         unsafe {
             ffi::he_desktop_set_prefers_color_scheme(
@@ -172,14 +124,14 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
-    fn dark_mode_strength(&self) -> DesktopDarkModeStrength {
-        unsafe {
-            from_glib(ffi::he_desktop_get_dark_mode_strength(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
+    //#[doc(alias = "he_desktop_get_dark_mode_strength")]
+    //#[doc(alias = "get_dark_mode_strength")]
+    //fn dark_mode_strength(&self) -> /*Ignored*/DarkModeStrength {
+    //    unsafe { TODO: call ffi:he_desktop_get_dark_mode_strength() }
+    //}
 
+    #[doc(alias = "he_desktop_get_ensor_scheme")]
+    #[doc(alias = "get_ensor_scheme")]
     fn ensor_scheme(&self) -> DesktopEnsorScheme {
         unsafe {
             from_glib(ffi::he_desktop_get_ensor_scheme(
@@ -188,6 +140,8 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
+    #[doc(alias = "he_desktop_get_accent_color")]
+    #[doc(alias = "get_accent_color")]
     fn accent_color(&self) -> Option<ColorRGBColor> {
         unsafe {
             from_glib_none(ffi::he_desktop_get_accent_color(
@@ -196,28 +150,35 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
+    #[doc(alias = "he_desktop_get_font_weight")]
+    #[doc(alias = "get_font_weight")]
     fn font_weight(&self) -> f64 {
         unsafe { ffi::he_desktop_get_font_weight(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "he_desktop_set_font_weight")]
     fn set_font_weight(&self, value: f64) {
         unsafe {
             ffi::he_desktop_set_font_weight(self.as_ref().to_glib_none().0, value);
         }
     }
 
-    fn set_dark_mode_strength(&self, dark_mode_strength: DesktopDarkModeStrength) {
-        glib::ObjectExt::set_property(self.as_ref(), "dark-mode-strength", dark_mode_strength)
-    }
+    //#[doc(alias = "dark-mode-strength")]
+    //fn set_dark_mode_strength(&self, dark_mode_strength: /*Ignored*/DarkModeStrength) {
+    //    ObjectExt::set_property(self.as_ref(),"dark-mode-strength", dark_mode_strength)
+    //}
 
+    #[doc(alias = "ensor-scheme")]
     fn set_ensor_scheme(&self, ensor_scheme: DesktopEnsorScheme) {
-        glib::ObjectExt::set_property(self.as_ref(), "ensor-scheme", ensor_scheme)
+        ObjectExt::set_property(self.as_ref(), "ensor-scheme", ensor_scheme)
     }
 
+    #[doc(alias = "accent-color")]
     fn set_accent_color(&self, accent_color: Option<&ColorRGBColor>) {
-        glib::ObjectExt::set_property(self.as_ref(), "accent-color", accent_color)
+        ObjectExt::set_property(self.as_ref(), "accent-color", accent_color)
     }
 
+    #[doc(alias = "prefers-color-scheme")]
     fn connect_prefers_color_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_prefers_color_scheme_trampoline<
             P: IsA<Desktop>,
@@ -235,7 +196,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::prefers-color-scheme\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_prefers_color_scheme_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -243,6 +204,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
+    #[doc(alias = "dark-mode-strength")]
     fn connect_dark_mode_strength_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_dark_mode_strength_trampoline<
             P: IsA<Desktop>,
@@ -260,7 +222,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::dark-mode-strength\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_dark_mode_strength_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -268,6 +230,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
+    #[doc(alias = "ensor-scheme")]
     fn connect_ensor_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_ensor_scheme_trampoline<
             P: IsA<Desktop>,
@@ -285,7 +248,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ensor-scheme\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_ensor_scheme_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -293,6 +256,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
+    #[doc(alias = "accent-color")]
     fn connect_accent_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_accent_color_trampoline<
             P: IsA<Desktop>,
@@ -310,7 +274,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accent-color\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_accent_color_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -318,6 +282,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
         }
     }
 
+    #[doc(alias = "font-weight")]
     fn connect_font_weight_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_font_weight_trampoline<P: IsA<Desktop>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeDesktop,
@@ -332,7 +297,7 @@ impl<O: IsA<Desktop>> DesktopExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::font-weight\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_font_weight_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -341,8 +306,4 @@ impl<O: IsA<Desktop>> DesktopExt for O {
     }
 }
 
-impl fmt::Display for Desktop {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Desktop")
-    }
-}
+impl<O: IsA<Desktop>> DesktopExt for O {}

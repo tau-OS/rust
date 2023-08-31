@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "BisAlbumPage")]
@@ -75,7 +75,7 @@ impl AlbumPage {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::name\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_name_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -98,7 +98,7 @@ impl AlbumPage {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::navigatable\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_navigatable_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -146,11 +146,5 @@ impl AlbumPageBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AlbumPage {
         self.builder.build()
-    }
-}
-
-impl fmt::Display for AlbumPage {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("AlbumPage")
     }
 }

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeAppBar")]
@@ -304,95 +304,13 @@ impl AppBarBuilder {
     }
 }
 
-pub trait AppBarExt: 'static {
-    #[doc(alias = "he_app_bar_append")]
-    fn append(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_app_bar_remove")]
-    fn remove(&self, child: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_app_bar_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack;
-
-    #[doc(alias = "he_app_bar_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack);
-
-    #[doc(alias = "he_app_bar_get_scroller")]
-    #[doc(alias = "get_scroller")]
-    fn scroller(&self) -> gtk::ScrolledWindow;
-
-    #[doc(alias = "he_app_bar_set_scroller")]
-    fn set_scroller(&self, value: &gtk::ScrolledWindow);
-
-    #[doc(alias = "he_app_bar_get_viewtitle_label")]
-    #[doc(alias = "get_viewtitle_label")]
-    fn viewtitle_label(&self) -> glib::GString;
-
-    #[doc(alias = "he_app_bar_set_viewtitle_label")]
-    fn set_viewtitle_label(&self, value: &str);
-
-    #[doc(alias = "he_app_bar_get_viewtitle_widget")]
-    #[doc(alias = "get_viewtitle_widget")]
-    fn viewtitle_widget(&self) -> Option<gtk::Widget>;
-
-    #[doc(alias = "he_app_bar_set_viewtitle_widget")]
-    fn set_viewtitle_widget(&self, value: Option<&impl IsA<gtk::Widget>>);
-
-    #[doc(alias = "he_app_bar_get_viewsubtitle_label")]
-    #[doc(alias = "get_viewsubtitle_label")]
-    fn viewsubtitle_label(&self) -> glib::GString;
-
-    #[doc(alias = "he_app_bar_set_viewsubtitle_label")]
-    fn set_viewsubtitle_label(&self, value: &str);
-
-    #[doc(alias = "he_app_bar_get_show_buttons")]
-    #[doc(alias = "get_show_buttons")]
-    fn shows_buttons(&self) -> bool;
-
-    #[doc(alias = "he_app_bar_set_show_buttons")]
-    fn set_show_buttons(&self, value: bool);
-
-    #[doc(alias = "he_app_bar_get_decoration_layout")]
-    #[doc(alias = "get_decoration_layout")]
-    fn decoration_layout(&self) -> glib::GString;
-
-    #[doc(alias = "he_app_bar_set_decoration_layout")]
-    fn set_decoration_layout(&self, value: &str);
-
-    #[doc(alias = "he_app_bar_get_show_back")]
-    #[doc(alias = "get_show_back")]
-    fn shows_back(&self) -> bool;
-
-    #[doc(alias = "he_app_bar_set_show_back")]
-    fn set_show_back(&self, value: bool);
-
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "scroller")]
-    fn connect_scroller_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "viewtitle-label")]
-    fn connect_viewtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "viewtitle-widget")]
-    fn connect_viewtitle_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "viewsubtitle-label")]
-    fn connect_viewsubtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "show-buttons")]
-    fn connect_show_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "decoration-layout")]
-    fn connect_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "show-back")]
-    fn connect_show_back_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AppBar>> Sealed for T {}
 }
 
-impl<O: IsA<AppBar>> AppBarExt for O {
+pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
+    #[doc(alias = "he_app_bar_append")]
     fn append(&self, child: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_app_bar_append(
@@ -402,6 +320,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_remove")]
     fn remove(&self, child: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_app_bar_remove(
@@ -411,26 +330,34 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_get_stack")]
+    #[doc(alias = "get_stack")]
     fn stack(&self) -> gtk::Stack {
         unsafe { from_glib_none(ffi::he_app_bar_get_stack(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_app_bar_set_stack")]
     fn set_stack(&self, value: &gtk::Stack) {
         unsafe {
             ffi::he_app_bar_set_stack(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_app_bar_get_scroller")]
+    #[doc(alias = "get_scroller")]
     fn scroller(&self) -> gtk::ScrolledWindow {
         unsafe { from_glib_none(ffi::he_app_bar_get_scroller(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_app_bar_set_scroller")]
     fn set_scroller(&self, value: &gtk::ScrolledWindow) {
         unsafe {
             ffi::he_app_bar_set_scroller(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_app_bar_get_viewtitle_label")]
+    #[doc(alias = "get_viewtitle_label")]
     fn viewtitle_label(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_app_bar_get_viewtitle_label(
@@ -439,6 +366,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_set_viewtitle_label")]
     fn set_viewtitle_label(&self, value: &str) {
         unsafe {
             ffi::he_app_bar_set_viewtitle_label(
@@ -448,6 +376,8 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_get_viewtitle_widget")]
+    #[doc(alias = "get_viewtitle_widget")]
     fn viewtitle_widget(&self) -> Option<gtk::Widget> {
         unsafe {
             from_glib_none(ffi::he_app_bar_get_viewtitle_widget(
@@ -456,6 +386,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_set_viewtitle_widget")]
     fn set_viewtitle_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
             ffi::he_app_bar_set_viewtitle_widget(
@@ -465,6 +396,8 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_get_viewsubtitle_label")]
+    #[doc(alias = "get_viewsubtitle_label")]
     fn viewsubtitle_label(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_app_bar_get_viewsubtitle_label(
@@ -473,6 +406,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_set_viewsubtitle_label")]
     fn set_viewsubtitle_label(&self, value: &str) {
         unsafe {
             ffi::he_app_bar_set_viewsubtitle_label(
@@ -482,6 +416,8 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_get_show_buttons")]
+    #[doc(alias = "get_show_buttons")]
     fn shows_buttons(&self) -> bool {
         unsafe {
             from_glib(ffi::he_app_bar_get_show_buttons(
@@ -490,12 +426,15 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_set_show_buttons")]
     fn set_show_buttons(&self, value: bool) {
         unsafe {
             ffi::he_app_bar_set_show_buttons(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_app_bar_get_decoration_layout")]
+    #[doc(alias = "get_decoration_layout")]
     fn decoration_layout(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_app_bar_get_decoration_layout(
@@ -504,6 +443,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_set_decoration_layout")]
     fn set_decoration_layout(&self, value: &str) {
         unsafe {
             ffi::he_app_bar_set_decoration_layout(
@@ -513,6 +453,8 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_get_show_back")]
+    #[doc(alias = "get_show_back")]
     fn shows_back(&self) -> bool {
         unsafe {
             from_glib(ffi::he_app_bar_get_show_back(
@@ -521,12 +463,14 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "he_app_bar_set_show_back")]
     fn set_show_back(&self, value: bool) {
         unsafe {
             ffi::he_app_bar_set_show_back(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "stack")]
     fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stack_trampoline<P: IsA<AppBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAppBar,
@@ -541,7 +485,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stack\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -549,6 +493,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "scroller")]
     fn connect_scroller_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_scroller_trampoline<P: IsA<AppBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAppBar,
@@ -563,7 +508,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scroller\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_scroller_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -571,6 +516,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "viewtitle-label")]
     fn connect_viewtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_viewtitle_label_trampoline<
             P: IsA<AppBar>,
@@ -588,7 +534,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::viewtitle-label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_viewtitle_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -596,6 +542,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "viewtitle-widget")]
     fn connect_viewtitle_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_viewtitle_widget_trampoline<
             P: IsA<AppBar>,
@@ -613,7 +560,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::viewtitle-widget\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_viewtitle_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -621,6 +568,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "viewsubtitle-label")]
     fn connect_viewsubtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_viewsubtitle_label_trampoline<
             P: IsA<AppBar>,
@@ -638,7 +586,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::viewsubtitle-label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_viewsubtitle_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -646,6 +594,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "show-buttons")]
     fn connect_show_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_show_buttons_trampoline<P: IsA<AppBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAppBar,
@@ -660,7 +609,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-buttons\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_show_buttons_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -668,6 +617,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "decoration-layout")]
     fn connect_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_decoration_layout_trampoline<
             P: IsA<AppBar>,
@@ -685,7 +635,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::decoration-layout\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_decoration_layout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -693,6 +643,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
         }
     }
 
+    #[doc(alias = "show-back")]
     fn connect_show_back_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_show_back_trampoline<P: IsA<AppBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAppBar,
@@ -707,7 +658,7 @@ impl<O: IsA<AppBar>> AppBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-back\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_show_back_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -716,8 +667,4 @@ impl<O: IsA<AppBar>> AppBarExt for O {
     }
 }
 
-impl fmt::Display for AppBar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("AppBar")
-    }
-}
+impl<O: IsA<AppBar>> AppBarExt for O {}

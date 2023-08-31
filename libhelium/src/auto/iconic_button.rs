@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeIconicButton")]
@@ -75,6 +75,14 @@ impl IconicButtonBuilder {
     pub fn color(self, color: Colors) -> Self {
         Self {
             builder: self.builder.property("color", color),
+        }
+    }
+
+    #[cfg(feature = "gtk_v4_12")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_12")))]
+    pub fn can_shrink(self, can_shrink: bool) -> Self {
+        Self {
+            builder: self.builder.property("can-shrink", can_shrink),
         }
     }
 
@@ -304,26 +312,14 @@ impl IconicButtonBuilder {
     }
 }
 
-pub trait IconicButtonExt: 'static {
-    #[doc(alias = "he_iconic_button_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    #[doc(alias = "he_iconic_button_set_icon")]
-    fn set_icon(&self, value: &str);
-
-    #[doc(alias = "he_iconic_button_get_tooltip")]
-    #[doc(alias = "get_tooltip")]
-    fn tooltip(&self) -> glib::GString;
-
-    #[doc(alias = "he_iconic_button_set_tooltip")]
-    fn set_tooltip(&self, value: &str);
-
-    #[doc(alias = "tooltip")]
-    fn connect_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::IconicButton>> Sealed for T {}
 }
 
-impl<O: IsA<IconicButton>> IconicButtonExt for O {
+pub trait IconicButtonExt: IsA<IconicButton> + sealed::Sealed + 'static {
+    #[doc(alias = "he_iconic_button_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_iconic_button_get_icon(
@@ -332,12 +328,15 @@ impl<O: IsA<IconicButton>> IconicButtonExt for O {
         }
     }
 
+    #[doc(alias = "he_iconic_button_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
             ffi::he_iconic_button_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_iconic_button_get_tooltip")]
+    #[doc(alias = "get_tooltip")]
     fn tooltip(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_iconic_button_get_tooltip(
@@ -346,6 +345,7 @@ impl<O: IsA<IconicButton>> IconicButtonExt for O {
         }
     }
 
+    #[doc(alias = "he_iconic_button_set_tooltip")]
     fn set_tooltip(&self, value: &str) {
         unsafe {
             ffi::he_iconic_button_set_tooltip(
@@ -355,6 +355,7 @@ impl<O: IsA<IconicButton>> IconicButtonExt for O {
         }
     }
 
+    #[doc(alias = "tooltip")]
     fn connect_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_tooltip_trampoline<
             P: IsA<IconicButton>,
@@ -372,7 +373,7 @@ impl<O: IsA<IconicButton>> IconicButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_tooltip_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -381,8 +382,4 @@ impl<O: IsA<IconicButton>> IconicButtonExt for O {
     }
 }
 
-impl fmt::Display for IconicButton {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("IconicButton")
-    }
-}
+impl<O: IsA<IconicButton>> IconicButtonExt for O {}

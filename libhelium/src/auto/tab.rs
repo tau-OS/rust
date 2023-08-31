@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeTab")]
@@ -301,128 +301,78 @@ impl TabBuilder {
     }
 }
 
-pub trait TabExt: 'static {
-    #[doc(alias = "he_tab_get_label")]
-    #[doc(alias = "get_label")]
-    fn label(&self) -> glib::GString;
-
-    #[doc(alias = "he_tab_set_label")]
-    fn set_label(&self, value: &str);
-
-    #[doc(alias = "he_tab_set_tooltip")]
-    fn set_tooltip(&self, value: &str);
-
-    #[doc(alias = "he_tab_get_pinned")]
-    #[doc(alias = "get_pinned")]
-    fn is_pinned(&self) -> bool;
-
-    #[doc(alias = "he_tab_set_pinned")]
-    fn set_pinned(&self, value: bool);
-
-    #[doc(alias = "he_tab_get_can_pin")]
-    #[doc(alias = "get_can_pin")]
-    fn can_pin(&self) -> bool;
-
-    #[doc(alias = "he_tab_set_can_pin")]
-    fn set_can_pin(&self, value: bool);
-
-    #[doc(alias = "he_tab_get_can_close")]
-    #[doc(alias = "get_can_close")]
-    fn can_close(&self) -> bool;
-
-    #[doc(alias = "he_tab_set_can_close")]
-    fn set_can_close(&self, value: bool);
-
-    #[doc(alias = "he_tab_get_page")]
-    #[doc(alias = "get_page")]
-    fn page(&self) -> gtk::Widget;
-
-    #[doc(alias = "he_tab_set_page")]
-    fn set_page(&self, value: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "he_tab_get_menu")]
-    #[doc(alias = "get_menu")]
-    fn menu(&self) -> gio::Menu;
-
-    #[doc(alias = "he_tab_get_actions")]
-    #[doc(alias = "get_actions")]
-    fn actions(&self) -> gio::SimpleActionGroup;
-
-    fn set_menu(&self, menu: Option<&gio::Menu>);
-
-    #[doc(alias = "label")]
-    fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "tooltip")]
-    fn connect_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "pinned")]
-    fn connect_pinned_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "can-pin")]
-    fn connect_can_pin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "can-close")]
-    fn connect_can_close_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "page")]
-    fn connect_page_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "menu")]
-    fn connect_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Tab>> Sealed for T {}
 }
 
-impl<O: IsA<Tab>> TabExt for O {
+pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
+    #[doc(alias = "he_tab_get_label")]
+    #[doc(alias = "get_label")]
     fn label(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_tab_get_label(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_tab_set_label")]
     fn set_label(&self, value: &str) {
         unsafe {
             ffi::he_tab_set_label(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_tab_set_tooltip")]
     fn set_tooltip(&self, value: &str) {
         unsafe {
             ffi::he_tab_set_tooltip(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_tab_get_pinned")]
+    #[doc(alias = "get_pinned")]
     fn is_pinned(&self) -> bool {
         unsafe { from_glib(ffi::he_tab_get_pinned(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_tab_set_pinned")]
     fn set_pinned(&self, value: bool) {
         unsafe {
             ffi::he_tab_set_pinned(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_tab_get_can_pin")]
+    #[doc(alias = "get_can_pin")]
     fn can_pin(&self) -> bool {
         unsafe { from_glib(ffi::he_tab_get_can_pin(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_tab_set_can_pin")]
     fn set_can_pin(&self, value: bool) {
         unsafe {
             ffi::he_tab_set_can_pin(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_tab_get_can_close")]
+    #[doc(alias = "get_can_close")]
     fn can_close(&self) -> bool {
         unsafe { from_glib(ffi::he_tab_get_can_close(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_tab_set_can_close")]
     fn set_can_close(&self, value: bool) {
         unsafe {
             ffi::he_tab_set_can_close(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_tab_get_page")]
+    #[doc(alias = "get_page")]
     fn page(&self) -> gtk::Widget {
         unsafe { from_glib_none(ffi::he_tab_get_page(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_tab_set_page")]
     fn set_page(&self, value: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_tab_set_page(
@@ -432,18 +382,23 @@ impl<O: IsA<Tab>> TabExt for O {
         }
     }
 
+    #[doc(alias = "he_tab_get_menu")]
+    #[doc(alias = "get_menu")]
     fn menu(&self) -> gio::Menu {
         unsafe { from_glib_none(ffi::he_tab_get_menu(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_tab_get_actions")]
+    #[doc(alias = "get_actions")]
     fn actions(&self) -> gio::SimpleActionGroup {
         unsafe { from_glib_none(ffi::he_tab_get_actions(self.as_ref().to_glib_none().0)) }
     }
 
     fn set_menu(&self, menu: Option<&gio::Menu>) {
-        glib::ObjectExt::set_property(self.as_ref(), "menu", menu)
+        ObjectExt::set_property(self.as_ref(), "menu", menu)
     }
 
+    #[doc(alias = "label")]
     fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_label_trampoline<P: IsA<Tab>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTab,
@@ -458,7 +413,7 @@ impl<O: IsA<Tab>> TabExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -466,6 +421,7 @@ impl<O: IsA<Tab>> TabExt for O {
         }
     }
 
+    #[doc(alias = "tooltip")]
     fn connect_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_tooltip_trampoline<P: IsA<Tab>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTab,
@@ -480,7 +436,7 @@ impl<O: IsA<Tab>> TabExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_tooltip_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -488,6 +444,7 @@ impl<O: IsA<Tab>> TabExt for O {
         }
     }
 
+    #[doc(alias = "pinned")]
     fn connect_pinned_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_pinned_trampoline<P: IsA<Tab>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTab,
@@ -502,7 +459,7 @@ impl<O: IsA<Tab>> TabExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pinned\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_pinned_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -510,6 +467,7 @@ impl<O: IsA<Tab>> TabExt for O {
         }
     }
 
+    #[doc(alias = "can-pin")]
     fn connect_can_pin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_can_pin_trampoline<P: IsA<Tab>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTab,
@@ -524,7 +482,7 @@ impl<O: IsA<Tab>> TabExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-pin\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_can_pin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -532,6 +490,7 @@ impl<O: IsA<Tab>> TabExt for O {
         }
     }
 
+    #[doc(alias = "can-close")]
     fn connect_can_close_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_can_close_trampoline<P: IsA<Tab>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTab,
@@ -546,7 +505,7 @@ impl<O: IsA<Tab>> TabExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-close\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_can_close_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -554,6 +513,7 @@ impl<O: IsA<Tab>> TabExt for O {
         }
     }
 
+    #[doc(alias = "page")]
     fn connect_page_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_page_trampoline<P: IsA<Tab>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTab,
@@ -568,7 +528,7 @@ impl<O: IsA<Tab>> TabExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_page_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -576,6 +536,7 @@ impl<O: IsA<Tab>> TabExt for O {
         }
     }
 
+    #[doc(alias = "menu")]
     fn connect_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_menu_trampoline<P: IsA<Tab>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeTab,
@@ -590,7 +551,7 @@ impl<O: IsA<Tab>> TabExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_menu_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -599,8 +560,4 @@ impl<O: IsA<Tab>> TabExt for O {
     }
 }
 
-impl fmt::Display for Tab {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Tab")
-    }
-}
+impl<O: IsA<Tab>> TabExt for O {}

@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeBin")]
@@ -247,27 +247,13 @@ impl BinBuilder {
     }
 }
 
-pub trait BinExt: 'static {
-    #[doc(alias = "he_bin_add_child")]
-    fn add_child(
-        &self,
-        builder: &gtk::Builder,
-        child: &impl IsA<glib::Object>,
-        type_: Option<&str>,
-    );
-
-    #[doc(alias = "he_bin_get_child")]
-    #[doc(alias = "get_child")]
-    fn child(&self) -> gtk::Widget;
-
-    #[doc(alias = "he_bin_set_child")]
-    fn set_child(&self, value: &impl IsA<gtk::Widget>);
-
-    #[doc(alias = "child")]
-    fn connect_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Bin>> Sealed for T {}
 }
 
-impl<O: IsA<Bin>> BinExt for O {
+pub trait BinExt: IsA<Bin> + sealed::Sealed + 'static {
+    #[doc(alias = "he_bin_add_child")]
     fn add_child(
         &self,
         builder: &gtk::Builder,
@@ -284,10 +270,13 @@ impl<O: IsA<Bin>> BinExt for O {
         }
     }
 
+    #[doc(alias = "he_bin_get_child")]
+    #[doc(alias = "get_child")]
     fn child(&self) -> gtk::Widget {
         unsafe { from_glib_none(ffi::he_bin_get_child(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_bin_set_child")]
     fn set_child(&self, value: &impl IsA<gtk::Widget>) {
         unsafe {
             ffi::he_bin_set_child(
@@ -297,6 +286,7 @@ impl<O: IsA<Bin>> BinExt for O {
         }
     }
 
+    #[doc(alias = "child")]
     fn connect_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_child_trampoline<P: IsA<Bin>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeBin,
@@ -311,7 +301,7 @@ impl<O: IsA<Bin>> BinExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -320,8 +310,4 @@ impl<O: IsA<Bin>> BinExt for O {
     }
 }
 
-impl fmt::Display for Bin {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Bin")
-    }
-}
+impl<O: IsA<Bin>> BinExt for O {}

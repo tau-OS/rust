@@ -5,7 +5,6 @@
 
 use crate::NavigationDirection;
 use glib::{prelude::*, translate::*};
-use std::{fmt, mem};
 
 glib::wrapper! {
     #[doc(alias = "BisSwipeable")]
@@ -20,48 +19,35 @@ impl Swipeable {
     pub const NONE: Option<&'static Swipeable> = None;
 }
 
-pub trait SwipeableExt: 'static {
-    #[doc(alias = "bis_swipeable_get_cancel_progress")]
-    #[doc(alias = "get_cancel_progress")]
-    fn cancel_progress(&self) -> f64;
-
-    #[doc(alias = "bis_swipeable_get_distance")]
-    #[doc(alias = "get_distance")]
-    fn distance(&self) -> f64;
-
-    #[doc(alias = "bis_swipeable_get_progress")]
-    #[doc(alias = "get_progress")]
-    fn progress(&self) -> f64;
-
-    #[doc(alias = "bis_swipeable_get_snap_points")]
-    #[doc(alias = "get_snap_points")]
-    fn snap_points(&self) -> Vec<f64>;
-
-    #[doc(alias = "bis_swipeable_get_swipe_area")]
-    #[doc(alias = "get_swipe_area")]
-    fn swipe_area(
-        &self,
-        navigation_direction: NavigationDirection,
-        is_drag: bool,
-    ) -> gdk::Rectangle;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Swipeable>> Sealed for T {}
 }
 
-impl<O: IsA<Swipeable>> SwipeableExt for O {
+pub trait SwipeableExt: IsA<Swipeable> + sealed::Sealed + 'static {
+    #[doc(alias = "bis_swipeable_get_cancel_progress")]
+    #[doc(alias = "get_cancel_progress")]
     fn cancel_progress(&self) -> f64 {
         unsafe { ffi::bis_swipeable_get_cancel_progress(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "bis_swipeable_get_distance")]
+    #[doc(alias = "get_distance")]
     fn distance(&self) -> f64 {
         unsafe { ffi::bis_swipeable_get_distance(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "bis_swipeable_get_progress")]
+    #[doc(alias = "get_progress")]
     fn progress(&self) -> f64 {
         unsafe { ffi::bis_swipeable_get_progress(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "bis_swipeable_get_snap_points")]
+    #[doc(alias = "get_snap_points")]
     fn snap_points(&self) -> Vec<f64> {
         unsafe {
-            let mut n_snap_points = mem::MaybeUninit::uninit();
+            let mut n_snap_points = std::mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
                 ffi::bis_swipeable_get_snap_points(
                     self.as_ref().to_glib_none().0,
@@ -73,6 +59,8 @@ impl<O: IsA<Swipeable>> SwipeableExt for O {
         }
     }
 
+    #[doc(alias = "bis_swipeable_get_swipe_area")]
+    #[doc(alias = "get_swipe_area")]
     fn swipe_area(
         &self,
         navigation_direction: NavigationDirection,
@@ -91,8 +79,4 @@ impl<O: IsA<Swipeable>> SwipeableExt for O {
     }
 }
 
-impl fmt::Display for Swipeable {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Swipeable")
-    }
-}
+impl<O: IsA<Swipeable>> SwipeableExt for O {}

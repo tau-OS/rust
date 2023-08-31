@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "FuseboxFuse")]
@@ -24,83 +24,38 @@ impl Fuse {
     pub const NONE: Option<&'static Fuse> = None;
 }
 
-pub trait FuseExt: 'static {
-    #[doc(alias = "fusebox_fuse_get_widget")]
-    #[doc(alias = "get_widget")]
-    fn widget(&self) -> gtk::Widget;
-
-    #[doc(alias = "fusebox_fuse_shown")]
-    fn shown(&self);
-
-    #[doc(alias = "fusebox_fuse_hidden")]
-    fn hidden(&self);
-
-    //#[doc(alias = "fusebox_fuse_search")]
-    //fn search(&self, search: &str, _callback_: AsyncReadyCallback);
-
-    #[doc(alias = "fusebox_fuse_search_callback")]
-    fn search_callback(&self, location: &str);
-
-    #[doc(alias = "fusebox_fuse_get_category")]
-    #[doc(alias = "get_category")]
-    fn category(&self) -> FuseCategory;
-
-    #[doc(alias = "fusebox_fuse_get_index")]
-    #[doc(alias = "get_index")]
-    fn index(&self) -> i32;
-
-    #[doc(alias = "fusebox_fuse_get_code_name")]
-    #[doc(alias = "get_code_name")]
-    fn code_name(&self) -> glib::GString;
-
-    #[doc(alias = "fusebox_fuse_get_display_name")]
-    #[doc(alias = "get_display_name")]
-    fn display_name(&self) -> glib::GString;
-
-    #[doc(alias = "fusebox_fuse_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> glib::GString;
-
-    #[doc(alias = "fusebox_fuse_get_icon")]
-    #[doc(alias = "get_icon")]
-    fn icon(&self) -> glib::GString;
-
-    //#[doc(alias = "fusebox_fuse_get_supported_settings")]
-    //#[doc(alias = "get_supported_settings")]
-    //fn supported_settings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 0, id: 28 };
-
-    #[doc(alias = "fusebox_fuse_get_can_show")]
-    #[doc(alias = "get_can_show")]
-    fn can_show(&self) -> bool;
-
-    #[doc(alias = "fusebox_fuse_set_can_show")]
-    fn set_can_show(&self, value: bool);
-
-    #[doc(alias = "can-show")]
-    fn connect_can_show_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Fuse>> Sealed for T {}
 }
 
-impl<O: IsA<Fuse>> FuseExt for O {
+pub trait FuseExt: IsA<Fuse> + sealed::Sealed + 'static {
+    #[doc(alias = "fusebox_fuse_get_widget")]
+    #[doc(alias = "get_widget")]
     fn widget(&self) -> gtk::Widget {
         unsafe { from_glib_full(ffi::fusebox_fuse_get_widget(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "fusebox_fuse_shown")]
     fn shown(&self) {
         unsafe {
             ffi::fusebox_fuse_shown(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "fusebox_fuse_hidden")]
     fn hidden(&self) {
         unsafe {
             ffi::fusebox_fuse_hidden(self.as_ref().to_glib_none().0);
         }
     }
 
+    //#[doc(alias = "fusebox_fuse_search")]
     //fn search(&self, search: &str, _callback_: AsyncReadyCallback) {
     //    unsafe { TODO: call ffi:fusebox_fuse_search() }
     //}
 
+    #[doc(alias = "fusebox_fuse_search_callback")]
     fn search_callback(&self, location: &str) {
         unsafe {
             ffi::fusebox_fuse_search_callback(
@@ -110,6 +65,8 @@ impl<O: IsA<Fuse>> FuseExt for O {
         }
     }
 
+    #[doc(alias = "fusebox_fuse_get_category")]
+    #[doc(alias = "get_category")]
     fn category(&self) -> FuseCategory {
         unsafe {
             from_glib(ffi::fusebox_fuse_get_category(
@@ -118,10 +75,14 @@ impl<O: IsA<Fuse>> FuseExt for O {
         }
     }
 
+    #[doc(alias = "fusebox_fuse_get_index")]
+    #[doc(alias = "get_index")]
     fn index(&self) -> i32 {
         unsafe { ffi::fusebox_fuse_get_index(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "fusebox_fuse_get_code_name")]
+    #[doc(alias = "get_code_name")]
     fn code_name(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::fusebox_fuse_get_code_name(
@@ -130,6 +91,8 @@ impl<O: IsA<Fuse>> FuseExt for O {
         }
     }
 
+    #[doc(alias = "fusebox_fuse_get_display_name")]
+    #[doc(alias = "get_display_name")]
     fn display_name(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::fusebox_fuse_get_display_name(
@@ -138,6 +101,8 @@ impl<O: IsA<Fuse>> FuseExt for O {
         }
     }
 
+    #[doc(alias = "fusebox_fuse_get_description")]
+    #[doc(alias = "get_description")]
     fn description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::fusebox_fuse_get_description(
@@ -146,14 +111,20 @@ impl<O: IsA<Fuse>> FuseExt for O {
         }
     }
 
+    #[doc(alias = "fusebox_fuse_get_icon")]
+    #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::fusebox_fuse_get_icon(self.as_ref().to_glib_none().0)) }
     }
 
+    //#[doc(alias = "fusebox_fuse_get_supported_settings")]
+    //#[doc(alias = "get_supported_settings")]
     //fn supported_settings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 0, id: 28 } {
     //    unsafe { TODO: call ffi:fusebox_fuse_get_supported_settings() }
     //}
 
+    #[doc(alias = "fusebox_fuse_get_can_show")]
+    #[doc(alias = "get_can_show")]
     fn can_show(&self) -> bool {
         unsafe {
             from_glib(ffi::fusebox_fuse_get_can_show(
@@ -162,12 +133,14 @@ impl<O: IsA<Fuse>> FuseExt for O {
         }
     }
 
+    #[doc(alias = "fusebox_fuse_set_can_show")]
     fn set_can_show(&self, value: bool) {
         unsafe {
             ffi::fusebox_fuse_set_can_show(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "can-show")]
     fn connect_can_show_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_can_show_trampoline<P: IsA<Fuse>, F: Fn(&P) + 'static>(
             this: *mut ffi::FuseboxFuse,
@@ -182,7 +155,7 @@ impl<O: IsA<Fuse>> FuseExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-show\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_can_show_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -191,8 +164,4 @@ impl<O: IsA<Fuse>> FuseExt for O {
     }
 }
 
-impl fmt::Display for Fuse {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Fuse")
-    }
-}
+impl<O: IsA<Fuse>> FuseExt for O {}

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeModifierBadge")]
@@ -272,49 +272,14 @@ impl ModifierBadgeBuilder {
     }
 }
 
-pub trait ModifierBadgeExt: 'static {
-    #[doc(alias = "he_modifier_badge_get_color")]
-    #[doc(alias = "get_color")]
-    fn color(&self) -> Colors;
-
-    #[doc(alias = "he_modifier_badge_set_color")]
-    fn set_color(&self, value: Colors);
-
-    #[doc(alias = "he_modifier_badge_get_tinted")]
-    #[doc(alias = "get_tinted")]
-    fn is_tinted(&self) -> bool;
-
-    #[doc(alias = "he_modifier_badge_set_tinted")]
-    fn set_tinted(&self, value: bool);
-
-    #[doc(alias = "he_modifier_badge_get_label")]
-    #[doc(alias = "get_label")]
-    fn label(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_modifier_badge_set_label")]
-    fn set_label(&self, value: Option<&str>);
-
-    #[doc(alias = "he_modifier_badge_get_alignment")]
-    #[doc(alias = "get_alignment")]
-    fn alignment(&self) -> ModifierBadgeAlignment;
-
-    #[doc(alias = "he_modifier_badge_set_alignment")]
-    fn set_alignment(&self, value: ModifierBadgeAlignment);
-
-    #[doc(alias = "color")]
-    fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "tinted")]
-    fn connect_tinted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "label")]
-    fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "alignment")]
-    fn connect_alignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ModifierBadge>> Sealed for T {}
 }
 
-impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
+pub trait ModifierBadgeExt: IsA<ModifierBadge> + sealed::Sealed + 'static {
+    #[doc(alias = "he_modifier_badge_get_color")]
+    #[doc(alias = "get_color")]
     fn color(&self) -> Colors {
         unsafe {
             from_glib(ffi::he_modifier_badge_get_color(
@@ -323,12 +288,15 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "he_modifier_badge_set_color")]
     fn set_color(&self, value: Colors) {
         unsafe {
             ffi::he_modifier_badge_set_color(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_modifier_badge_get_tinted")]
+    #[doc(alias = "get_tinted")]
     fn is_tinted(&self) -> bool {
         unsafe {
             from_glib(ffi::he_modifier_badge_get_tinted(
@@ -337,12 +305,15 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "he_modifier_badge_set_tinted")]
     fn set_tinted(&self, value: bool) {
         unsafe {
             ffi::he_modifier_badge_set_tinted(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "he_modifier_badge_get_label")]
+    #[doc(alias = "get_label")]
     fn label(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::he_modifier_badge_get_label(
@@ -351,6 +322,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "he_modifier_badge_set_label")]
     fn set_label(&self, value: Option<&str>) {
         unsafe {
             ffi::he_modifier_badge_set_label(
@@ -360,6 +332,8 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "he_modifier_badge_get_alignment")]
+    #[doc(alias = "get_alignment")]
     fn alignment(&self) -> ModifierBadgeAlignment {
         unsafe {
             from_glib(ffi::he_modifier_badge_get_alignment(
@@ -368,12 +342,14 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "he_modifier_badge_set_alignment")]
     fn set_alignment(&self, value: ModifierBadgeAlignment) {
         unsafe {
             ffi::he_modifier_badge_set_alignment(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
+    #[doc(alias = "color")]
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_color_trampoline<P: IsA<ModifierBadge>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeModifierBadge,
@@ -388,7 +364,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::color\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -396,6 +372,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "tinted")]
     fn connect_tinted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_tinted_trampoline<
             P: IsA<ModifierBadge>,
@@ -413,7 +390,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tinted\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_tinted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -421,6 +398,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "label")]
     fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_label_trampoline<P: IsA<ModifierBadge>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeModifierBadge,
@@ -435,7 +413,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -443,6 +421,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
         }
     }
 
+    #[doc(alias = "alignment")]
     fn connect_alignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_alignment_trampoline<
             P: IsA<ModifierBadge>,
@@ -460,7 +439,7 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::alignment\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_alignment_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -469,8 +448,4 @@ impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {
     }
 }
 
-impl fmt::Display for ModifierBadge {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ModifierBadge")
-    }
-}
+impl<O: IsA<ModifierBadge>> ModifierBadgeExt for O {}

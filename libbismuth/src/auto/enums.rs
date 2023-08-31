@@ -3,8 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::fmt;
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -18,21 +17,6 @@ pub enum AlbumTransitionType {
     Slide,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for AlbumTransitionType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "AlbumTransitionType::{}",
-            match *self {
-                Self::Over => "Over",
-                Self::Under => "Under",
-                Self::Slide => "Slide",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]
@@ -67,7 +51,8 @@ impl FromGlib<ffi::BisAlbumTransitionType> for AlbumTransitionType {
 
 impl StaticType for AlbumTransitionType {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_album_transition_type_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_album_transition_type_get_type()) }
     }
 }
@@ -78,7 +63,7 @@ impl glib::HasParamSpec for AlbumTransitionType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -86,7 +71,7 @@ impl glib::value::ValueType for AlbumTransitionType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AlbumTransitionType {
+unsafe impl<'a> glib::value::FromValue<'a> for AlbumTransitionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -136,22 +121,6 @@ pub enum AnimationState {
     __Unknown(i32),
 }
 
-impl fmt::Display for AnimationState {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "AnimationState::{}",
-            match *self {
-                Self::Idle => "Idle",
-                Self::Paused => "Paused",
-                Self::Playing => "Playing",
-                Self::Finished => "Finished",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for AnimationState {
     type GlibType = ffi::BisAnimationState;
@@ -186,7 +155,8 @@ impl FromGlib<ffi::BisAnimationState> for AnimationState {
 
 impl StaticType for AnimationState {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_animation_state_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_animation_state_get_type()) }
     }
 }
@@ -197,7 +167,7 @@ impl glib::HasParamSpec for AnimationState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -205,7 +175,7 @@ impl glib::value::ValueType for AnimationState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AnimationState {
+unsafe impl<'a> glib::value::FromValue<'a> for AnimationState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -317,49 +287,6 @@ impl Easing {
     }
 }
 
-impl fmt::Display for Easing {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "Easing::{}",
-            match *self {
-                Self::Linear => "Linear",
-                Self::EaseInQuad => "EaseInQuad",
-                Self::EaseOutQuad => "EaseOutQuad",
-                Self::EaseInOutQuad => "EaseInOutQuad",
-                Self::EaseInCubic => "EaseInCubic",
-                Self::EaseOutCubic => "EaseOutCubic",
-                Self::EaseInOutCubic => "EaseInOutCubic",
-                Self::EaseInQuart => "EaseInQuart",
-                Self::EaseOutQuart => "EaseOutQuart",
-                Self::EaseInOutQuart => "EaseInOutQuart",
-                Self::EaseInQuint => "EaseInQuint",
-                Self::EaseOutQuint => "EaseOutQuint",
-                Self::EaseInOutQuint => "EaseInOutQuint",
-                Self::EaseInSine => "EaseInSine",
-                Self::EaseOutSine => "EaseOutSine",
-                Self::EaseInOutSine => "EaseInOutSine",
-                Self::EaseInExpo => "EaseInExpo",
-                Self::EaseOutExpo => "EaseOutExpo",
-                Self::EaseInOutExpo => "EaseInOutExpo",
-                Self::EaseInCirc => "EaseInCirc",
-                Self::EaseOutCirc => "EaseOutCirc",
-                Self::EaseInOutCirc => "EaseInOutCirc",
-                Self::EaseInElastic => "EaseInElastic",
-                Self::EaseOutElastic => "EaseOutElastic",
-                Self::EaseInOutElastic => "EaseInOutElastic",
-                Self::EaseInBack => "EaseInBack",
-                Self::EaseOutBack => "EaseOutBack",
-                Self::EaseInOutBack => "EaseInOutBack",
-                Self::EaseInBounce => "EaseInBounce",
-                Self::EaseOutBounce => "EaseOutBounce",
-                Self::EaseInOutBounce => "EaseInOutBounce",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for Easing {
     type GlibType = ffi::BisEasing;
@@ -446,7 +373,8 @@ impl FromGlib<ffi::BisEasing> for Easing {
 
 impl StaticType for Easing {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_easing_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_easing_get_type()) }
     }
 }
@@ -457,7 +385,7 @@ impl glib::HasParamSpec for Easing {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -465,7 +393,7 @@ impl glib::value::ValueType for Easing {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for Easing {
+unsafe impl<'a> glib::value::FromValue<'a> for Easing {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -511,20 +439,6 @@ pub enum FoldThresholdPolicy {
     __Unknown(i32),
 }
 
-impl fmt::Display for FoldThresholdPolicy {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "FoldThresholdPolicy::{}",
-            match *self {
-                Self::Minimum => "Minimum",
-                Self::Natural => "Natural",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for FoldThresholdPolicy {
     type GlibType = ffi::BisFoldThresholdPolicy;
@@ -555,7 +469,8 @@ impl FromGlib<ffi::BisFoldThresholdPolicy> for FoldThresholdPolicy {
 
 impl StaticType for FoldThresholdPolicy {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_fold_threshold_policy_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_fold_threshold_policy_get_type()) }
     }
 }
@@ -566,7 +481,7 @@ impl glib::HasParamSpec for FoldThresholdPolicy {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -574,7 +489,7 @@ impl glib::value::ValueType for FoldThresholdPolicy {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for FoldThresholdPolicy {
+unsafe impl<'a> glib::value::FromValue<'a> for FoldThresholdPolicy {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -620,20 +535,6 @@ pub enum HuggerTransitionType {
     __Unknown(i32),
 }
 
-impl fmt::Display for HuggerTransitionType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "HuggerTransitionType::{}",
-            match *self {
-                Self::None => "None",
-                Self::Crossfade => "Crossfade",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for HuggerTransitionType {
     type GlibType = ffi::BisHuggerTransitionType;
@@ -664,7 +565,8 @@ impl FromGlib<ffi::BisHuggerTransitionType> for HuggerTransitionType {
 
 impl StaticType for HuggerTransitionType {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_hugger_transition_type_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_hugger_transition_type_get_type()) }
     }
 }
@@ -675,7 +577,7 @@ impl glib::HasParamSpec for HuggerTransitionType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -683,7 +585,7 @@ impl glib::value::ValueType for HuggerTransitionType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for HuggerTransitionType {
+unsafe impl<'a> glib::value::FromValue<'a> for HuggerTransitionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -731,21 +633,6 @@ pub enum LapelFoldPolicy {
     __Unknown(i32),
 }
 
-impl fmt::Display for LapelFoldPolicy {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "LapelFoldPolicy::{}",
-            match *self {
-                Self::Never => "Never",
-                Self::Always => "Always",
-                Self::Auto => "Auto",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for LapelFoldPolicy {
     type GlibType = ffi::BisLapelFoldPolicy;
@@ -778,7 +665,8 @@ impl FromGlib<ffi::BisLapelFoldPolicy> for LapelFoldPolicy {
 
 impl StaticType for LapelFoldPolicy {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_lapel_fold_policy_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_lapel_fold_policy_get_type()) }
     }
 }
@@ -789,7 +677,7 @@ impl glib::HasParamSpec for LapelFoldPolicy {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -797,7 +685,7 @@ impl glib::value::ValueType for LapelFoldPolicy {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for LapelFoldPolicy {
+unsafe impl<'a> glib::value::FromValue<'a> for LapelFoldPolicy {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -845,21 +733,6 @@ pub enum LapelTransitionType {
     __Unknown(i32),
 }
 
-impl fmt::Display for LapelTransitionType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "LapelTransitionType::{}",
-            match *self {
-                Self::Over => "Over",
-                Self::Under => "Under",
-                Self::Slide => "Slide",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for LapelTransitionType {
     type GlibType = ffi::BisLapelTransitionType;
@@ -892,7 +765,8 @@ impl FromGlib<ffi::BisLapelTransitionType> for LapelTransitionType {
 
 impl StaticType for LapelTransitionType {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_lapel_transition_type_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_lapel_transition_type_get_type()) }
     }
 }
@@ -903,7 +777,7 @@ impl glib::HasParamSpec for LapelTransitionType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -911,7 +785,7 @@ impl glib::value::ValueType for LapelTransitionType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for LapelTransitionType {
+unsafe impl<'a> glib::value::FromValue<'a> for LapelTransitionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -957,20 +831,6 @@ pub enum NavigationDirection {
     __Unknown(i32),
 }
 
-impl fmt::Display for NavigationDirection {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "NavigationDirection::{}",
-            match *self {
-                Self::Back => "Back",
-                Self::Forward => "Forward",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for NavigationDirection {
     type GlibType = ffi::BisNavigationDirection;
@@ -1001,7 +861,8 @@ impl FromGlib<ffi::BisNavigationDirection> for NavigationDirection {
 
 impl StaticType for NavigationDirection {
     #[inline]
-    fn static_type() -> Type {
+    #[doc(alias = "bis_navigation_direction_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::bis_navigation_direction_get_type()) }
     }
 }
@@ -1012,7 +873,7 @@ impl glib::HasParamSpec for NavigationDirection {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1020,7 +881,7 @@ impl glib::value::ValueType for NavigationDirection {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for NavigationDirection {
+unsafe impl<'a> glib::value::FromValue<'a> for NavigationDirection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

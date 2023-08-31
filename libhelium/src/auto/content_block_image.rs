@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeContentBlockImage")]
@@ -266,39 +266,14 @@ impl ContentBlockImageBuilder {
     }
 }
 
-pub trait ContentBlockImageExt: 'static {
-    #[doc(alias = "he_content_block_image_get_file")]
-    #[doc(alias = "get_file")]
-    fn file(&self) -> glib::GString;
-
-    #[doc(alias = "he_content_block_image_set_file")]
-    fn set_file(&self, value: &str);
-
-    #[doc(alias = "he_content_block_image_get_requested_height")]
-    #[doc(alias = "get_requested_height")]
-    fn requested_height(&self) -> i32;
-
-    #[doc(alias = "he_content_block_image_set_requested_height")]
-    fn set_requested_height(&self, value: i32);
-
-    #[doc(alias = "he_content_block_image_get_requested_width")]
-    #[doc(alias = "get_requested_width")]
-    fn requested_width(&self) -> i32;
-
-    #[doc(alias = "he_content_block_image_set_requested_width")]
-    fn set_requested_width(&self, value: i32);
-
-    #[doc(alias = "file")]
-    fn connect_file_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "requested-height")]
-    fn connect_requested_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "requested-width")]
-    fn connect_requested_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ContentBlockImage>> Sealed for T {}
 }
 
-impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
+pub trait ContentBlockImageExt: IsA<ContentBlockImage> + sealed::Sealed + 'static {
+    #[doc(alias = "he_content_block_image_get_file")]
+    #[doc(alias = "get_file")]
     fn file(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_content_block_image_get_file(
@@ -307,6 +282,7 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_set_file")]
     fn set_file(&self, value: &str) {
         unsafe {
             ffi::he_content_block_image_set_file(
@@ -316,26 +292,33 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
         }
     }
 
+    #[doc(alias = "he_content_block_image_get_requested_height")]
+    #[doc(alias = "get_requested_height")]
     fn requested_height(&self) -> i32 {
         unsafe { ffi::he_content_block_image_get_requested_height(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "he_content_block_image_set_requested_height")]
     fn set_requested_height(&self, value: i32) {
         unsafe {
             ffi::he_content_block_image_set_requested_height(self.as_ref().to_glib_none().0, value);
         }
     }
 
+    #[doc(alias = "he_content_block_image_get_requested_width")]
+    #[doc(alias = "get_requested_width")]
     fn requested_width(&self) -> i32 {
         unsafe { ffi::he_content_block_image_get_requested_width(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "he_content_block_image_set_requested_width")]
     fn set_requested_width(&self, value: i32) {
         unsafe {
             ffi::he_content_block_image_set_requested_width(self.as_ref().to_glib_none().0, value);
         }
     }
 
+    #[doc(alias = "file")]
     fn connect_file_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_file_trampoline<
             P: IsA<ContentBlockImage>,
@@ -353,7 +336,7 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::file\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_file_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -361,6 +344,7 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
         }
     }
 
+    #[doc(alias = "requested-height")]
     fn connect_requested_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_requested_height_trampoline<
             P: IsA<ContentBlockImage>,
@@ -378,7 +362,7 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::requested-height\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_requested_height_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -386,6 +370,7 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
         }
     }
 
+    #[doc(alias = "requested-width")]
     fn connect_requested_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_requested_width_trampoline<
             P: IsA<ContentBlockImage>,
@@ -403,7 +388,7 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::requested-width\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_requested_width_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -412,8 +397,4 @@ impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {
     }
 }
 
-impl fmt::Display for ContentBlockImage {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ContentBlockImage")
-    }
-}
+impl<O: IsA<ContentBlockImage>> ContentBlockImageExt for O {}

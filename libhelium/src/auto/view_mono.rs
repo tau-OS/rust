@@ -5,7 +5,6 @@
 
 use crate::View;
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 glib::wrapper! {
     #[doc(alias = "HeViewMono")]
@@ -259,11 +258,5 @@ impl ViewMonoBuilder {
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ViewMono {
         self.builder.build()
-    }
-}
-
-impl fmt::Display for ViewMono {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ViewMono")
     }
 }

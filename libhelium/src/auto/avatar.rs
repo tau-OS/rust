@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeAvatar")]
@@ -272,69 +272,52 @@ impl AvatarBuilder {
     }
 }
 
-pub trait AvatarExt: 'static {
-    #[doc(alias = "he_avatar_get_size")]
-    #[doc(alias = "get_size")]
-    fn size(&self) -> i32;
-
-    #[doc(alias = "he_avatar_set_size")]
-    fn set_size(&self, value: i32);
-
-    #[doc(alias = "he_avatar_get_text")]
-    #[doc(alias = "get_text")]
-    fn text(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_avatar_set_text")]
-    fn set_text(&self, value: Option<&str>);
-
-    #[doc(alias = "he_avatar_get_image")]
-    #[doc(alias = "get_image")]
-    fn image(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "he_avatar_set_image")]
-    fn set_image(&self, value: Option<&str>);
-
-    #[doc(alias = "size")]
-    fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "text")]
-    fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "image")]
-    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Avatar>> Sealed for T {}
 }
 
-impl<O: IsA<Avatar>> AvatarExt for O {
+pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
+    #[doc(alias = "he_avatar_get_size")]
+    #[doc(alias = "get_size")]
     fn size(&self) -> i32 {
         unsafe { ffi::he_avatar_get_size(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "he_avatar_set_size")]
     fn set_size(&self, value: i32) {
         unsafe {
             ffi::he_avatar_set_size(self.as_ref().to_glib_none().0, value);
         }
     }
 
+    #[doc(alias = "he_avatar_get_text")]
+    #[doc(alias = "get_text")]
     fn text(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::he_avatar_get_text(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_avatar_set_text")]
     fn set_text(&self, value: Option<&str>) {
         unsafe {
             ffi::he_avatar_set_text(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_avatar_get_image")]
+    #[doc(alias = "get_image")]
     fn image(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::he_avatar_get_image(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_avatar_set_image")]
     fn set_image(&self, value: Option<&str>) {
         unsafe {
             ffi::he_avatar_set_image(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "size")]
     fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_size_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAvatar,
@@ -349,7 +332,7 @@ impl<O: IsA<Avatar>> AvatarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::size\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -357,6 +340,7 @@ impl<O: IsA<Avatar>> AvatarExt for O {
         }
     }
 
+    #[doc(alias = "text")]
     fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_text_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAvatar,
@@ -371,7 +355,7 @@ impl<O: IsA<Avatar>> AvatarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -379,6 +363,7 @@ impl<O: IsA<Avatar>> AvatarExt for O {
         }
     }
 
+    #[doc(alias = "image")]
     fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_image_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeAvatar,
@@ -393,7 +378,7 @@ impl<O: IsA<Avatar>> AvatarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::image\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_image_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -402,8 +387,4 @@ impl<O: IsA<Avatar>> AvatarExt for O {
     }
 }
 
-impl fmt::Display for Avatar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Avatar")
-    }
-}
+impl<O: IsA<Avatar>> AvatarExt for O {}

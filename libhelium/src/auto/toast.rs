@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeToast")]
@@ -262,54 +262,34 @@ impl ToastBuilder {
     }
 }
 
-pub trait ToastExt: 'static {
-    #[doc(alias = "he_toast_send_notification")]
-    fn send_notification(&self);
-
-    #[doc(alias = "he_toast_get_label")]
-    #[doc(alias = "get_label")]
-    fn label(&self) -> glib::GString;
-
-    #[doc(alias = "he_toast_set_label")]
-    fn set_label(&self, value: &str);
-
-    #[doc(alias = "he_toast_get_default_action")]
-    #[doc(alias = "get_default_action")]
-    fn default_action(&self) -> glib::GString;
-
-    #[doc(alias = "he_toast_set_default_action")]
-    fn set_default_action(&self, value: &str);
-
-    #[doc(alias = "closed")]
-    fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "action")]
-    fn connect_action<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "label")]
-    fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "default-action")]
-    fn connect_default_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Toast>> Sealed for T {}
 }
 
-impl<O: IsA<Toast>> ToastExt for O {
+pub trait ToastExt: IsA<Toast> + sealed::Sealed + 'static {
+    #[doc(alias = "he_toast_send_notification")]
     fn send_notification(&self) {
         unsafe {
             ffi::he_toast_send_notification(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_toast_get_label")]
+    #[doc(alias = "get_label")]
     fn label(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::he_toast_get_label(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "he_toast_set_label")]
     fn set_label(&self, value: &str) {
         unsafe {
             ffi::he_toast_set_label(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "he_toast_get_default_action")]
+    #[doc(alias = "get_default_action")]
     fn default_action(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::he_toast_get_default_action(
@@ -318,6 +298,7 @@ impl<O: IsA<Toast>> ToastExt for O {
         }
     }
 
+    #[doc(alias = "he_toast_set_default_action")]
     fn set_default_action(&self, value: &str) {
         unsafe {
             ffi::he_toast_set_default_action(
@@ -327,6 +308,7 @@ impl<O: IsA<Toast>> ToastExt for O {
         }
     }
 
+    #[doc(alias = "closed")]
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn closed_trampoline<P: IsA<Toast>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeToast,
@@ -340,7 +322,7 @@ impl<O: IsA<Toast>> ToastExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"closed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     closed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -348,6 +330,7 @@ impl<O: IsA<Toast>> ToastExt for O {
         }
     }
 
+    #[doc(alias = "action")]
     fn connect_action<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn action_trampoline<P: IsA<Toast>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeToast,
@@ -361,7 +344,7 @@ impl<O: IsA<Toast>> ToastExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"action\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     action_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -369,6 +352,7 @@ impl<O: IsA<Toast>> ToastExt for O {
         }
     }
 
+    #[doc(alias = "label")]
     fn connect_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_label_trampoline<P: IsA<Toast>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeToast,
@@ -383,7 +367,7 @@ impl<O: IsA<Toast>> ToastExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -391,6 +375,7 @@ impl<O: IsA<Toast>> ToastExt for O {
         }
     }
 
+    #[doc(alias = "default-action")]
     fn connect_default_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_default_action_trampoline<
             P: IsA<Toast>,
@@ -408,7 +393,7 @@ impl<O: IsA<Toast>> ToastExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-action\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_default_action_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -417,8 +402,4 @@ impl<O: IsA<Toast>> ToastExt for O {
     }
 }
 
-impl fmt::Display for Toast {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("Toast")
-    }
-}
+impl<O: IsA<Toast>> ToastExt for O {}
