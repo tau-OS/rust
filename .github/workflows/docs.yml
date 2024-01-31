@@ -39,7 +39,7 @@ jobs:
           repository: tau-OS/libhelium
           path: libhelium-src
       - name: Install libhelium
-        run: meson build
+        run: meson build -Ddemo=false
         working-directory: ./libhelium-src
       - name: Build libhelium with Ninja
         run: ninja
