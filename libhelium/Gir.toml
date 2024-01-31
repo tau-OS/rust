@@ -93,6 +93,10 @@ generate = [
   "He.OverlayButtonTypeButton",
   "He.SwitchBar",
   "He.TimePicker",
+  "He.Divider",
+  "He.NavigationSection",
+  "He.Slider",
+  "He.TextField"
 ]
 
 manual = [

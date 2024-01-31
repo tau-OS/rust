@@ -66,6 +66,9 @@ pub use self::dialog::Dialog;
 mod disclosure_button;
 pub use self::disclosure_button::DisclosureButton;
 
+mod divider;
+pub use self::divider::Divider;
+
 mod empty_page;
 pub use self::empty_page::EmptyPage;
 
@@ -83,6 +86,9 @@ pub use self::modifier_badge::ModifierBadge;
 
 mod navigation_rail;
 pub use self::navigation_rail::NavigationRail;
+
+mod navigation_section;
+pub use self::navigation_section::NavigationSection;
 
 mod outline_button;
 pub use self::outline_button::OutlineButton;
@@ -111,6 +117,9 @@ pub use self::settings_window::SettingsWindow;
 mod side_bar;
 pub use self::side_bar::SideBar;
 
+mod slider;
+pub use self::slider::Slider;
+
 mod switch_bar;
 pub use self::switch_bar::SwitchBar;
 
@@ -125,6 +134,9 @@ pub use self::tab_switcher::TabSwitcher;
 
 mod text_button;
 pub use self::text_button::TextButton;
+
+mod text_field;
+pub use self::text_field::TextField;
 
 mod time_picker;
 pub use self::time_picker::TimePicker;
@@ -210,11 +222,13 @@ pub(crate) mod traits {
     pub use super::desktop::DesktopExt;
     pub use super::dialog::DialogExt;
     pub use super::disclosure_button::DisclosureButtonExt;
+    pub use super::divider::DividerExt;
     pub use super::empty_page::EmptyPageExt;
     pub use super::iconic_button::IconicButtonExt;
     pub use super::mini_content_block::MiniContentBlockExt;
     pub use super::modifier_badge::ModifierBadgeExt;
     pub use super::navigation_rail::NavigationRailExt;
+    pub use super::navigation_section::NavigationSectionExt;
     pub use super::overlay_button::OverlayButtonExt;
     pub use super::segmented_button::SegmentedButtonExt;
     pub use super::settings_list::SettingsListExt;
@@ -222,10 +236,12 @@ pub(crate) mod traits {
     pub use super::settings_row::SettingsRowExt;
     pub use super::settings_window::SettingsWindowExt;
     pub use super::side_bar::SideBarExt;
+    pub use super::slider::SliderExt;
     pub use super::switch_bar::SwitchBarExt;
     pub use super::tab::TabExt;
     pub use super::tab_page::TabPageExt;
     pub use super::tab_switcher::TabSwitcherExt;
+    pub use super::text_field::TextFieldExt;
     pub use super::time_picker::TimePickerExt;
     pub use super::toast::ToastExt;
     pub use super::view::ViewExt;
@@ -258,12 +274,14 @@ pub(crate) mod builders {
     pub use super::desktop::DesktopBuilder;
     pub use super::dialog::DialogBuilder;
     pub use super::disclosure_button::DisclosureButtonBuilder;
+    pub use super::divider::DividerBuilder;
     pub use super::empty_page::EmptyPageBuilder;
     pub use super::fill_button::FillButtonBuilder;
     pub use super::iconic_button::IconicButtonBuilder;
     pub use super::mini_content_block::MiniContentBlockBuilder;
     pub use super::modifier_badge::ModifierBadgeBuilder;
     pub use super::navigation_rail::NavigationRailBuilder;
+    pub use super::navigation_section::NavigationSectionBuilder;
     pub use super::outline_button::OutlineButtonBuilder;
     pub use super::overlay_button::OverlayButtonBuilder;
     pub use super::pill_button::PillButtonBuilder;
@@ -273,11 +291,13 @@ pub(crate) mod builders {
     pub use super::settings_row::SettingsRowBuilder;
     pub use super::settings_window::SettingsWindowBuilder;
     pub use super::side_bar::SideBarBuilder;
+    pub use super::slider::SliderBuilder;
     pub use super::switch_bar::SwitchBarBuilder;
     pub use super::tab::TabBuilder;
     pub use super::tab_page::TabPageBuilder;
     pub use super::tab_switcher::TabSwitcherBuilder;
     pub use super::text_button::TextButtonBuilder;
+    pub use super::text_field::TextFieldBuilder;
     pub use super::time_picker::TimePickerBuilder;
     pub use super::tint_button::TintButtonBuilder;
     pub use super::toast::ToastBuilder;

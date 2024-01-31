@@ -1327,8 +1327,8 @@ Since: 1.0</doc>
 		</parameters>
 	</function>
 	<function name="misc_accel_string" c:identifier="he_misc_accel_string">
-		<doc xml:whitespace="preserve">&lt;para&gt;Takes a description and an array of accels and returns Pango markup for use in a &lt;type&gt;GtkTooltip&lt;/type&gt;. This method uses
-  Granite.accel_to_string.&lt;/para&gt;
+		<doc xml:whitespace="preserve">&lt;para&gt;Takes a description and an array of accels and returns Pango markup for use in a &lt;type&gt;GtkTooltip&lt;/type&gt;. This method uses &lt;function&gt;he_misc_accel_label&lt;/function&gt;
+.&lt;/para&gt;
 &lt;para&gt;Example:&lt;/para&gt;
 &lt;para&gt;Description Shortcut 1, Shortcut 2&lt;/para&gt;</doc>
 		<return-value transfer-ownership="full">
@@ -1391,12 +1391,6 @@ Since: 1.0</doc>
 			</instance-parameter>
 		</parameters>
 	</function>
-	<enumeration name="DarkModeStrength" c:type="HeDarkModeStrength" glib:type-name="HeDarkModeStrength" glib:get-type="he_dark_mode_strength_get_type">
-		<doc xml:whitespace="preserve">&lt;para&gt;The dark mode strength, which represents the darkness of the dark mode.&lt;/para&gt;</doc>
-		<member name="medium" c:identifier="HE_DARK_MODE_STRENGTH_MEDIUM" value="0"/>
-		<member name="harsh" c:identifier="HE_DARK_MODE_STRENGTH_HARSH" value="1"/>
-		<member name="soft" c:identifier="HE_DARK_MODE_STRENGTH_SOFT" value="2"/>
-	</enumeration>
 	<class name="Application" c:type="HeApplication" c:symbol-prefix="application" glib:type-name="HeApplication" glib:get-type="he_application_get_type" glib:type-struct="ApplicationClass" parent="Gtk.Application">
 		<doc xml:whitespace="preserve">&lt;para&gt;An application.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -1422,7 +1416,6 @@ Since: 1.0</doc>
 			</parameters>
 		</constructor>
 		<property name="default-accent-color" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;A default accent color if the user has not set one.&lt;/para&gt;</doc>
 			<type name="He.ColorRGBColor" c:type="HeColorRGBColor*"/>
 		</property>
 		<method name="get_default_accent_color" c:identifier="he_application_get_default_accent_color">
@@ -1449,7 +1442,6 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="override-accent-color" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Whether to override the user&amp;apos;s accent color choice. This requires default_accent_color to be set.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
 		<method name="get_override_accent_color" c:identifier="he_application_get_override_accent_color">
@@ -1476,8 +1468,6 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="scheme-factory" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;A scheme factory to use for the application. If not set, the user&amp;apos;s preferred scheme will be used. This is especially useful for
-applications with their own color needs, such as media applications using the He.new_content_scheme factory.&lt;/para&gt;</doc>
 			<type name="He.SchemeFactory" c:type="HeSchemeFactory*"/>
 		</property>
 		<method name="get_scheme_factory" c:identifier="he_application_get_scheme_factory">
@@ -1919,17 +1909,21 @@ used directly. Instead, let the `He.Application` class manage this for you.&lt;/
 			<doc xml:whitespace="preserve">&lt;para&gt;The preferred font weight.&lt;/para&gt;</doc>
 			<type name="gdouble" c:type="gdouble"/>
 		</field>
+		<field name="roundness" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The preferred UI roundness.&lt;/para&gt;</doc>
+			<type name="gdouble" c:type="gdouble"/>
+		</field>
 		<field name="is_dark" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;Whether to apply styles for dark mode.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</field>
+		<field name="is_contrast" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether to apply styles for high contrast mode.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</field>
 		<field name="scheme_factory" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;A function that returns a color scheme from a given accent color and whether dark mode is enabled.&lt;/para&gt;</doc>
 			<type name="He.SchemeFactory" c:type="HeSchemeFactory*"/>
-		</field>
-		<field name="dark_mode_strength" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The preferred dark mode strength.&lt;/para&gt;</doc>
-			<type name="He.DarkModeStrength" c:type="HeDarkModeStrength"/>
 		</field>
 		<method name="update" c:identifier="he_style_manager_update">
 			<doc xml:whitespace="preserve">&lt;para&gt;Runs all the necessary updates to apply the current style. If is_registered is false, this will do nothing.&lt;/para&gt;</doc>
@@ -2365,19 +2359,6 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
-		<property name="dark-mode-strength" writable="1">
-			<type name="He.DarkModeStrength" c:type="HeDarkModeStrength"/>
-		</property>
-		<method name="get_dark_mode_strength" c:identifier="he_desktop_get_dark_mode_strength">
-			<return-value transfer-ownership="none">
-				<type name="He.DarkModeStrength" c:type="HeDarkModeStrength"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Desktop" c:type="HeDesktop*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
 		<property name="ensor-scheme" writable="1">
 			<type name="He.DesktopEnsorScheme" c:type="HeDesktopEnsorScheme"/>
 		</property>
@@ -2443,6 +2424,58 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="roundness" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_roundness" c:identifier="he_desktop_get_roundness">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Desktop" c:type="HeDesktop*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_roundness" c:identifier="he_desktop_set_roundness">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Desktop" c:type="HeDesktop*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="contrast" writable="1">
+			<type name="He.DesktopContrastScheme" c:type="HeDesktopContrastScheme"/>
+		</property>
+		<method name="get_contrast" c:identifier="he_desktop_get_contrast">
+			<return-value transfer-ownership="none">
+				<type name="He.DesktopContrastScheme" c:type="HeDesktopContrastScheme"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Desktop" c:type="HeDesktop*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_contrast" c:identifier="he_desktop_set_contrast">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Desktop" c:type="HeDesktop*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.DesktopContrastScheme" c:type="HeDesktopContrastScheme"/>
+				</parameter>
+			</parameters>
+		</method>
 	</class>
 	<record name="DesktopClass" c:type="HeDesktopClass" glib:is-gtype-struct-for="Desktop">
 		<field name="parent_class" readable="0" private="1">
@@ -2455,6 +2488,12 @@ Since: 1.0</doc>
 		<member name="no_preference" c:identifier="HE_DESKTOP_COLOR_SCHEME_NO_PREFERENCE" value="0"/>
 		<member name="dark" c:identifier="HE_DESKTOP_COLOR_SCHEME_DARK" value="1"/>
 		<member name="light" c:identifier="HE_DESKTOP_COLOR_SCHEME_LIGHT" value="2"/>
+	</enumeration>
+	<enumeration name="DesktopContrastScheme" c:type="HeDesktopContrastScheme" glib:type-name="HeDesktopContrastScheme" glib:get-type="he_desktop_contrast_scheme_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;The contrast scheme preference enum, which is used to determine the contrast scheme of the desktop.&lt;/para&gt;</doc>
+		<member name="default" c:identifier="HE_DESKTOP_CONTRAST_SCHEME_DEFAULT" value="0"/>
+		<member name="high" c:identifier="HE_DESKTOP_CONTRAST_SCHEME_HIGH" value="1"/>
+		<member name="low" c:identifier="HE_DESKTOP_CONTRAST_SCHEME_LOW" value="2"/>
 	</enumeration>
 	<enumeration name="DesktopEnsorScheme" c:type="HeDesktopEnsorScheme" glib:type-name="HeDesktopEnsorScheme" glib:get-type="he_desktop_ensor_scheme_get_type">
 		<doc xml:whitespace="preserve">&lt;para&gt;The Ensor scheme preference enum, which is used to determine the Ensor scheme of the desktop.&lt;/para&gt;</doc>
@@ -3784,11 +3823,11 @@ on collapsed state won&amp;apos;t show.&lt;/para&gt;</doc>
 				</parameter>
 			</parameters>
 		</method>
-		<property name="show-buttons" writable="1">
+		<property name="show-left-title-buttons" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;Whether the close, minimize and maximize buttons are shown.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
-		<method name="get_show_buttons" c:identifier="he_app_bar_get_show_buttons">
+		<method name="get_show_left_title_buttons" c:identifier="he_app_bar_get_show_left_title_buttons">
 			<return-value transfer-ownership="none">
 				<type name="gboolean" c:type="gboolean"/>
 			</return-value>
@@ -3798,7 +3837,34 @@ on collapsed state won&amp;apos;t show.&lt;/para&gt;</doc>
 				</instance-parameter>
 			</parameters>
 		</method>
-		<method name="set_show_buttons" c:identifier="he_app_bar_set_show_buttons">
+		<method name="set_show_left_title_buttons" c:identifier="he_app_bar_set_show_left_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-right-title-buttons" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether the close, minimize and maximize buttons are shown.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_right_title_buttons" c:identifier="he_app_bar_get_show_right_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_right_title_buttons" c:identifier="he_app_bar_set_show_right_title_buttons">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -5587,6 +5653,53 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="DialogPrivate" c:type="HeDialogPrivate" disguised="1"/>
+	<class name="Divider" c:type="HeDivider" c:symbol-prefix="divider" glib:type-name="HeDivider" glib:get-type="he_divider_get_type" glib:type-struct="DividerClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Divider is a thin line that groups content in a view, can be full-width &amp;lpar;default&amp;rpar; or inset&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="DividerPrivate" c:type="HeDividerPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_divider_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new Divider.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.Divider" c:type="HeDivider*"/>
+			</return-value>
+		</constructor>
+		<property name="is-inset" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_inset" c:identifier="he_divider_get_is_inset">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_inset" c:identifier="he_divider_set_is_inset">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="DividerClass" c:type="HeDividerClass" glib:is-gtype-struct-for="Divider">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="DividerPrivate" c:type="HeDividerPrivate" disguised="1"/>
 	<class name="DisclosureButton" c:type="HeDisclosureButton" c:symbol-prefix="disclosure_button" glib:type-name="HeDisclosureButton" glib:get-type="he_disclosure_button_get_type" glib:type-struct="DisclosureButtonClass" parent="He.Button">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Disclosure Button is a view-based button that acts on said view.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -6270,6 +6383,77 @@ Since: 1.0</doc>
 			</parameter>
 		</parameters>
 	</function>
+	<class name="NavigationSection" c:type="HeNavigationSection" c:symbol-prefix="navigation_section" glib:type-name="HeNavigationSection" glib:get-type="he_navigation_section_get_type" glib:type-struct="NavigationSectionClass" parent="He.Bin">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="NavigationSectionPrivate" c:type="HeNavigationSectionPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_navigation_section_new">
+			<return-value transfer-ownership="none">
+				<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+			</return-value>
+		</constructor>
+		<property name="stack" writable="1">
+			<type name="Gtk.Stack" c:type="GtkStack*"/>
+		</property>
+		<method name="get_stack" c:identifier="he_navigation_section_get_stack">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Stack" c:type="GtkStack*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_stack" c:identifier="he_navigation_section_set_stack">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Stack" c:type="GtkStack*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="orientation" writable="1">
+			<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+		</property>
+		<method name="get_orientation" c:identifier="he_navigation_section_get_orientation">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_orientation" c:identifier="he_navigation_section_set_orientation">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="NavigationSectionClass" c:type="HeNavigationSectionClass" glib:is-gtype-struct-for="NavigationSection">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="NavigationSectionPrivate" c:type="HeNavigationSectionPrivate" disguised="1"/>
 	<class name="NavigationRail" c:type="HeNavigationRail" c:symbol-prefix="navigation_rail" glib:type-name="HeNavigationRail" glib:get-type="he_navigation_rail_get_type" glib:type-struct="NavigationRailClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A NavigationRail is a vertical switcher that helps navigate a stack.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -7452,11 +7636,11 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
-		<property name="show-buttons" writable="1">
+		<property name="show-right-title-buttons" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;Whether the SideBar should show the buttons.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
-		<method name="get_show_buttons" c:identifier="he_side_bar_get_show_buttons">
+		<method name="get_show_right_title_buttons" c:identifier="he_side_bar_get_show_right_title_buttons">
 			<return-value transfer-ownership="none">
 				<type name="gboolean" c:type="gboolean"/>
 			</return-value>
@@ -7466,7 +7650,34 @@ Since: 1.0</doc>
 				</instance-parameter>
 			</parameters>
 		</method>
-		<method name="set_show_buttons" c:identifier="he_side_bar_set_show_buttons">
+		<method name="set_show_right_title_buttons" c:identifier="he_side_bar_set_show_right_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SideBar" c:type="HeSideBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-left-title-buttons" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether the SideBar should show the buttons.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_left_title_buttons" c:identifier="he_side_bar_get_show_left_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SideBar" c:type="HeSideBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_left_title_buttons" c:identifier="he_side_bar_set_show_left_title_buttons">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7594,6 +7805,130 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="SideBarPrivate" c:type="HeSideBarPrivate" disguised="1"/>
+	<class name="Slider" c:type="HeSlider" c:symbol-prefix="slider" glib:type-name="HeSlider" glib:get-type="he_slider_get_type" glib:type-struct="SliderClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Slider is a widget that is used to select a value by means of a dial running across a trough. Contains optional icons for the slider purpose,
+and a disable-able stop indicator for accessibility purposes.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SliderPrivate" c:type="HeSliderPrivate*"/>
+		</field>
+		<field name="scale" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The scale inside the Slider.&lt;/para&gt;</doc>
+			<type name="Gtk.Scale" c:type="GtkScale*"/>
+		</field>
+		<constructor name="new" c:identifier="he_slider_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new Slider.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.Slider" c:type="HeSlider*"/>
+			</return-value>
+		</constructor>
+		<method name="add_mark" c:identifier="he_slider_add_mark">
+			<doc xml:whitespace="preserve">&lt;para&gt;Adds a mark with some information along the trough of the Slider.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="text" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="left-icon" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_left_icon" c:identifier="he_slider_get_left_icon">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_left_icon" c:identifier="he_slider_set_left_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="right-icon" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_right_icon" c:identifier="he_slider_get_right_icon">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_right_icon" c:identifier="he_slider_set_right_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="stop-indicator-visibility" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_stop_indicator_visibility" c:identifier="he_slider_get_stop_indicator_visibility">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_stop_indicator_visibility" c:identifier="he_slider_set_stop_indicator_visibility">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="SliderClass" c:type="HeSliderClass" glib:is-gtype-struct-for="Slider">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="SliderPrivate" c:type="HeSliderPrivate" disguised="1"/>
 	<class name="SwitchBar" c:type="HeSwitchBar" c:symbol-prefix="switch_bar" glib:type-name="HeSwitchBar" glib:get-type="he_switch_bar_get_type" glib:type-struct="SwitchBarClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A SwitchBar is a widget that is used to identify primarily a switchable view below it.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -8577,7 +8912,6 @@ passed to this constructor.&lt;/para&gt;
 			</parameters>
 		</method>
 		<property name="is-search" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Whether or not this is a search entry.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
 		<method name="get_is_search" c:identifier="he_text_field_get_is_search">
@@ -8591,6 +8925,32 @@ passed to this constructor.&lt;/para&gt;
 			</parameters>
 		</method>
 		<method name="set_is_search" c:identifier="he_text_field_set_is_search">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TextField" c:type="HeTextField*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-outline" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_outline" c:identifier="he_text_field_get_is_outline">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TextField" c:type="HeTextField*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_outline" c:identifier="he_text_field_set_is_outline">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -9398,6 +9758,9 @@ dark or light. Prior runs of the generate method should not affect the output of
 				<parameter name="is_dark" transfer-ownership="none">
 					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
+				<parameter name="is_contrast" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
 				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 					<type name="He.Scheme" c:type="HeScheme*"/>
 				</parameter>
@@ -9415,6 +9778,9 @@ dark or light. Prior runs of the generate method should not affect the output of
 					<type name="He.ColorCAM16Color" c:type="HeColorCAM16Color*"/>
 				</parameter>
 				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="is_contrast" transfer-ownership="none">
 					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
 				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
@@ -9442,6 +9808,9 @@ dark or light. Prior runs of the generate method should not affect the output of
 					<parameter name="is_dark" transfer-ownership="none">
 						<type name="gboolean" c:type="gboolean"/>
 					</parameter>
+					<parameter name="is_contrast" transfer-ownership="none">
+						<type name="gboolean" c:type="gboolean"/>
+					</parameter>
 					<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 						<type name="He.Scheme" c:type="HeScheme*"/>
 					</parameter>
@@ -9451,22 +9820,43 @@ dark or light. Prior runs of the generate method should not affect the output of
 	</record>
 	<record name="Scheme" c:type="HeScheme" c:symbol-prefix="scheme" glib:type-name="HeScheme" glib:get-type="he_scheme_get_type">
 		<doc xml:whitespace="preserve">&lt;para&gt;A struct that contains the color scheme of the app.&lt;/para&gt;</doc>
-		<field name="neutral_background_hex" writable="1">
+		<field name="surface_bg_hex" writable="1">
 			<type name="utf8" c:type="gchar*"/>
 		</field>
-		<field name="neutral_background_variant_hex" writable="1">
+		<field name="surface_bg_variant_hex" writable="1">
 			<type name="utf8" c:type="gchar*"/>
 		</field>
-		<field name="neutral_foreground_hex" writable="1">
+		<field name="surface_fg_hex" writable="1">
 			<type name="utf8" c:type="gchar*"/>
 		</field>
-		<field name="neutral_foreground_variant_hex" writable="1">
+		<field name="surface_fg_variant_hex" writable="1">
 			<type name="utf8" c:type="gchar*"/>
 		</field>
-		<field name="inverse_neutral_background_hex" writable="1">
+		<field name="inverse_surface_bg_hex" writable="1">
 			<type name="utf8" c:type="gchar*"/>
 		</field>
-		<field name="inverse_neutral_foreground_hex" writable="1">
+		<field name="inverse_surface_fg_hex" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</field>
+		<field name="surface_bright_bg_hex" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</field>
+		<field name="surface_dim_bg_hex" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</field>
+		<field name="surface_container_lowest_bg_hex" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</field>
+		<field name="surface_container_low_bg_hex" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</field>
+		<field name="surface_container_bg_hex" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</field>
+		<field name="surface_container_high_bg_hex" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</field>
+		<field name="surface_container_highest_bg_hex" writable="1">
 			<type name="utf8" c:type="gchar*"/>
 		</field>
 		<field name="primary_hex" writable="1">

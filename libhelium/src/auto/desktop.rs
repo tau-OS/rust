@@ -68,10 +68,6 @@ impl DesktopBuilder {
         }
     }
 
-    //pub fn dark_mode_strength(self, dark_mode_strength: /*Ignored*/DarkModeStrength) -> Self {
-    //    Self { builder: self.builder.property("dark-mode-strength", dark_mode_strength), }
-    //}
-
     pub fn ensor_scheme(self, ensor_scheme: DesktopEnsorScheme) -> Self {
         Self {
             builder: self.builder.property("ensor-scheme", ensor_scheme),
@@ -89,6 +85,16 @@ impl DesktopBuilder {
             builder: self.builder.property("font-weight", font_weight),
         }
     }
+
+    pub fn roundness(self, roundness: f64) -> Self {
+        Self {
+            builder: self.builder.property("roundness", roundness),
+        }
+    }
+
+    //pub fn contrast(self, contrast: /*Ignored*/DesktopContrastScheme) -> Self {
+    //    Self { builder: self.builder.property("contrast", contrast), }
+    //}
 
     // rustdoc-stripper-ignore-next
     /// Build the [`Desktop`].
@@ -124,12 +130,6 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
         }
     }
 
-    //#[doc(alias = "he_desktop_get_dark_mode_strength")]
-    //#[doc(alias = "get_dark_mode_strength")]
-    //fn dark_mode_strength(&self) -> /*Ignored*/DarkModeStrength {
-    //    unsafe { TODO: call ffi:he_desktop_get_dark_mode_strength() }
-    //}
-
     #[doc(alias = "he_desktop_get_ensor_scheme")]
     #[doc(alias = "get_ensor_scheme")]
     fn ensor_scheme(&self) -> DesktopEnsorScheme {
@@ -163,9 +163,28 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
         }
     }
 
-    //#[doc(alias = "dark-mode-strength")]
-    //fn set_dark_mode_strength(&self, dark_mode_strength: /*Ignored*/DarkModeStrength) {
-    //    ObjectExt::set_property(self.as_ref(),"dark-mode-strength", dark_mode_strength)
+    #[doc(alias = "he_desktop_get_roundness")]
+    #[doc(alias = "get_roundness")]
+    fn roundness(&self) -> f64 {
+        unsafe { ffi::he_desktop_get_roundness(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_desktop_set_roundness")]
+    fn set_roundness(&self, value: f64) {
+        unsafe {
+            ffi::he_desktop_set_roundness(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
+    //#[doc(alias = "he_desktop_get_contrast")]
+    //#[doc(alias = "get_contrast")]
+    //fn contrast(&self) -> /*Ignored*/DesktopContrastScheme {
+    //    unsafe { TODO: call ffi:he_desktop_get_contrast() }
+    //}
+
+    //#[doc(alias = "he_desktop_set_contrast")]
+    //fn set_contrast(&self, value: /*Ignored*/DesktopContrastScheme) {
+    //    unsafe { TODO: call ffi:he_desktop_set_contrast() }
     //}
 
     #[doc(alias = "ensor-scheme")]
@@ -198,32 +217,6 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
                 b"notify::prefers-color-scheme\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_prefers_color_scheme_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "dark-mode-strength")]
-    fn connect_dark_mode_strength_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_dark_mode_strength_trampoline<
-            P: IsA<Desktop>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeDesktop,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(Desktop::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::dark-mode-strength\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
-                    notify_dark_mode_strength_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -299,6 +292,52 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
                 b"notify::font-weight\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_font_weight_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "roundness")]
+    fn connect_roundness_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_roundness_trampoline<P: IsA<Desktop>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeDesktop,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Desktop::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::roundness\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_roundness_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "contrast")]
+    fn connect_contrast_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_contrast_trampoline<P: IsA<Desktop>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeDesktop,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Desktop::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::contrast\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_contrast_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

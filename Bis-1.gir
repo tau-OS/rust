@@ -1014,7 +1014,8 @@ See [property@Album:visible-child].</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_can_navigate_back"
-                getter="get_can_navigate_back">
+                getter="get_can_navigate_back"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_can_navigate_back"/>
         <attribute name="org.gtk.Property.set"
@@ -1045,7 +1046,8 @@ can be navigated to.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_can_navigate_forward"
-                getter="get_can_navigate_forward">
+                getter="get_can_navigate_forward"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_can_navigate_forward"/>
         <attribute name="org.gtk.Property.set"
@@ -1076,7 +1078,8 @@ can be navigated to.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_can_unfold"
-                getter="get_can_unfold">
+                getter="get_can_unfold"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_can_unfold"/>
         <attribute name="org.gtk.Property.set"
@@ -1110,7 +1113,8 @@ bis_spring_params_new (1, 0.5, 500)
       <property name="child-transition-running"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_child_transition_running">
+                getter="get_child_transition_running"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_child_transition_running"/>
         <doc xml:space="preserve"
@@ -1123,7 +1127,8 @@ bis_spring_params_new (1, 0.5, 500)
                 writable="1"
                 transfer-ownership="none"
                 setter="set_fold_threshold_policy"
-                getter="get_fold_threshold_policy">
+                getter="get_fold_threshold_policy"
+                default-value="BIS_FOLD_THRESHOLD_POLICY_MINIMUM">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_fold_threshold_policy"/>
         <attribute name="org.gtk.Property.set"
@@ -1143,7 +1148,8 @@ ellipsize instead of immediately folding.</doc>
       <property name="folded"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_folded">
+                getter="get_folded"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get" value="bis_album_get_folded"/>
         <doc xml:space="preserve"
              filename="src/bis-album.c"
@@ -1159,7 +1165,8 @@ sum of the minimum or natural sizes of the children (see
                 writable="1"
                 transfer-ownership="none"
                 setter="set_homogeneous"
-                getter="get_homogeneous">
+                getter="get_homogeneous"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_homogeneous"/>
         <attribute name="org.gtk.Property.set"
@@ -1177,7 +1184,8 @@ opposite orientation.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_mode_transition_duration"
-                getter="get_mode_transition_duration">
+                getter="get_mode_transition_duration"
+                default-value="250">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_mode_transition_duration"/>
         <attribute name="org.gtk.Property.set"
@@ -1206,7 +1214,8 @@ page.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_transition_type"
-                getter="get_transition_type">
+                getter="get_transition_type"
+                default-value="BIS_ALBUM_TRANSITION_TYPE_OVER">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_transition_type"/>
         <attribute name="org.gtk.Property.set"
@@ -1245,7 +1254,8 @@ visible child.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_visible_child_name"
-                getter="get_visible_child_name">
+                getter="get_visible_child_name"
+                default-value="NULL">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_get_visible_child_name"/>
         <attribute name="org.gtk.Property.set"
@@ -1430,7 +1440,8 @@ This can be used used to prevent switching to widgets like separators.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_name"
-                getter="get_name">
+                getter="get_name"
+                default-value="NULL">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_page_get_name"/>
         <attribute name="org.gtk.Property.set"
@@ -1445,7 +1456,8 @@ This can be used used to prevent switching to widgets like separators.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_navigatable"
-                getter="get_navigatable">
+                getter="get_navigatable"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_album_page_get_navigatable"/>
         <attribute name="org.gtk.Property.set"
@@ -1817,7 +1829,8 @@ Sets [property@Animation:state] to `BIS_ANIMATION_FINISHED`.</doc>
       <property name="state"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_state">
+                getter="get_state"
+                default-value="BIS_ANIMATION_IDLE">
         <attribute name="org.gtk.Property.get"
                    value="bis_animation_get_state"/>
         <doc xml:space="preserve"
@@ -1847,7 +1860,8 @@ finished or hasn't been started yet.</doc>
       <property name="value"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_value">
+                getter="get_value"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_animation_get_value"/>
         <doc xml:space="preserve"
@@ -1891,6 +1905,7 @@ own or via calling [method@Animation.skip].</doc>
     <record name="AnimationClass"
             c:type="BisAnimationClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="Animation">
       <source-position filename="src/bis-animation.h" line="36"/>
     </record>
@@ -1960,6 +1975,7 @@ The state can be controlled with [method@Animation.play],
     <record name="AnimationTargetClass"
             c:type="BisAnimationTargetClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="AnimationTarget">
       <source-position filename="src/bis-animation-target.h" line="22"/>
     </record>
@@ -2201,6 +2217,7 @@ the animation.</doc>
     <record name="CallbackAnimationTargetClass"
             c:type="BisCallbackAnimationTargetClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="CallbackAnimationTarget">
       <source-position filename="src/bis-animation-target.h" line="40"/>
     </record>
@@ -2879,7 +2896,8 @@ bis_spring_params_new (1, 0.5, 500)
                 writable="1"
                 transfer-ownership="none"
                 setter="set_allow_long_swipes"
-                getter="get_allow_long_swipes">
+                getter="get_allow_long_swipes"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_carousel_get_allow_long_swipes"/>
         <attribute name="org.gtk.Property.set"
@@ -2896,7 +2914,8 @@ If the value is `FALSE`, each swipe can only move to the adjacent pages.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_allow_mouse_drag"
-                getter="get_allow_mouse_drag">
+                getter="get_allow_mouse_drag"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_carousel_get_allow_mouse_drag"/>
         <attribute name="org.gtk.Property.set"
@@ -2913,7 +2932,8 @@ If the value is `FALSE`, dragging is only available on touch.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_allow_scroll_wheel"
-                getter="get_allow_scroll_wheel">
+                getter="get_allow_scroll_wheel"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_carousel_get_allow_scroll_wheel"/>
         <attribute name="org.gtk.Property.set"
@@ -2930,7 +2950,8 @@ If the value is `FALSE`, wheel events will be ignored.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_interactive"
-                getter="get_interactive">
+                getter="get_interactive"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_carousel_get_interactive"/>
         <attribute name="org.gtk.Property.set"
@@ -2946,7 +2967,8 @@ navigating it in a certain state.</doc>
       <property name="n-pages"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_n_pages">
+                getter="get_n_pages"
+                default-value="0">
         <attribute name="org.gtk.Property.get"
                    value="bis_carousel_get_n_pages"/>
         <doc xml:space="preserve"
@@ -2957,7 +2979,8 @@ navigating it in a certain state.</doc>
       <property name="position"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_position">
+                getter="get_position"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_carousel_get_position"/>
         <doc xml:space="preserve"
@@ -2972,7 +2995,8 @@ navigating it in a certain state.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_reveal_duration"
-                getter="get_reveal_duration">
+                getter="get_reveal_duration"
+                default-value="0">
         <doc xml:space="preserve"
              filename="src/bis-carousel.c"
              line="1005">Page reveal duration, in milliseconds.
@@ -3006,7 +3030,8 @@ bis_spring_params_new (1, 0.5, 500)
                 writable="1"
                 transfer-ownership="none"
                 setter="set_spacing"
-                getter="get_spacing">
+                getter="get_spacing"
+                default-value="0">
         <attribute name="org.gtk.Property.get"
                    value="bis_carousel_get_spacing"/>
         <attribute name="org.gtk.Property.set"
@@ -3798,7 +3823,8 @@ New values may be added to this enumeration over time.</doc>
       <property name="name"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_name">
+                getter="get_name"
+                default-value="NULL">
         <attribute name="org.gtk.Property.get"
                    value="bis_enum_list_item_get_name"/>
         <doc xml:space="preserve"
@@ -3809,7 +3835,8 @@ New values may be added to this enumeration over time.</doc>
       <property name="nick"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_nick">
+                getter="get_nick"
+                default-value="NULL">
         <attribute name="org.gtk.Property.get"
                    value="bis_enum_list_item_get_nick"/>
         <doc xml:space="preserve"
@@ -3820,7 +3847,8 @@ New values may be added to this enumeration over time.</doc>
       <property name="value"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_value">
+                getter="get_value"
+                default-value="0">
         <attribute name="org.gtk.Property.get"
                    value="bis_enum_list_item_get_value"/>
         <doc xml:space="preserve"
@@ -4623,7 +4651,8 @@ top side aligned and overflow the bottom side, and 1 means the opposite.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_allow_none"
-                getter="get_allow_none">
+                getter="get_allow_none"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_get_allow_none"/>
         <attribute name="org.gtk.Property.set"
@@ -4642,7 +4671,8 @@ minimum size.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_homogeneous"
-                getter="get_homogeneous">
+                getter="get_homogeneous"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_get_homogeneous"/>
         <attribute name="org.gtk.Property.set"
@@ -4661,7 +4691,8 @@ change size when a different child becomes visible.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_interpolate_size"
-                getter="get_interpolate_size">
+                getter="get_interpolate_size"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_get_interpolate_size"/>
         <attribute name="org.gtk.Property.set"
@@ -4694,7 +4725,8 @@ This can be used to keep an up-to-date view. The model also implements
                 writable="1"
                 transfer-ownership="none"
                 setter="set_switch_threshold_policy"
-                getter="get_switch_threshold_policy">
+                getter="get_switch_threshold_policy"
+                default-value="BIS_FOLD_THRESHOLD_POLICY_NATURAL">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_get_switch_threshold_policy"/>
         <attribute name="org.gtk.Property.set"
@@ -4718,7 +4750,8 @@ ellipsize instead of immediately switching.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_transition_duration"
-                getter="get_transition_duration">
+                getter="get_transition_duration"
+                default-value="200">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_get_transition_duration"/>
         <attribute name="org.gtk.Property.set"
@@ -4731,7 +4764,8 @@ ellipsize instead of immediately switching.</doc>
       <property name="transition-running"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_transition_running">
+                getter="get_transition_running"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_get_transition_running"/>
         <doc xml:space="preserve"
@@ -4748,7 +4782,8 @@ to know that a transition has happened.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_transition_type"
-                getter="get_transition_type">
+                getter="get_transition_type"
+                default-value="BIS_HUGGER_TRANSITION_TYPE_NONE">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_get_transition_type"/>
         <attribute name="org.gtk.Property.set"
@@ -4774,7 +4809,8 @@ to know that a transition has happened.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_xalign"
-                getter="get_xalign">
+                getter="get_xalign"
+                default-value="0.500000">
         <attribute name="org.gtk.Property.get" value="bis_hugger_get_xalign"/>
         <attribute name="org.gtk.Property.set" value="bis_hugger_set_xalign"/>
         <doc xml:space="preserve"
@@ -4793,7 +4829,8 @@ start side aligned and overflow the end side, and 1 means the opposite.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_yalign"
-                getter="get_yalign">
+                getter="get_yalign"
+                default-value="0.500000">
         <attribute name="org.gtk.Property.get" value="bis_hugger_get_yalign"/>
         <attribute name="org.gtk.Property.set" value="bis_hugger_set_yalign"/>
         <doc xml:space="preserve"
@@ -4930,7 +4967,8 @@ window width, or any other constraint you find suitable.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_enabled"
-                getter="get_enabled">
+                getter="get_enabled"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_hugger_page_get_enabled"/>
         <attribute name="org.gtk.Property.set"
@@ -5910,7 +5948,8 @@ It's always displayed when unfolded, and partially visible when folded.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_fold_duration"
-                getter="get_fold_duration">
+                getter="get_fold_duration"
+                default-value="250">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_fold_duration"/>
         <attribute name="org.gtk.Property.set"
@@ -5925,7 +5964,8 @@ It's always displayed when unfolded, and partially visible when folded.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_fold_policy"
-                getter="get_fold_policy">
+                getter="get_fold_policy"
+                default-value="BIS_LAPEL_FOLD_POLICY_AUTO">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_fold_policy"/>
         <doc xml:space="preserve"
@@ -5938,7 +5978,8 @@ It's always displayed when unfolded, and partially visible when folded.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_fold_threshold_policy"
-                getter="get_fold_threshold_policy">
+                getter="get_fold_threshold_policy"
+                default-value="BIS_FOLD_THRESHOLD_POLICY_MINIMUM">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_fold_threshold_policy"/>
         <attribute name="org.gtk.Property.set"
@@ -5958,7 +5999,8 @@ ellipsize instead of immediately folding.</doc>
       <property name="folded"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_folded">
+                getter="get_folded"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get" value="bis_lapel_get_folded"/>
         <doc xml:space="preserve"
              filename="src/bis-lapel.c"
@@ -5987,7 +6029,8 @@ It's only visible when [property@Lapel:reveal-progress] is greater than 0.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_lapel_position"
-                getter="get_lapel_position">
+                getter="get_lapel_position"
+                default-value="GTK_PACK_START">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_lapel_position"/>
         <attribute name="org.gtk.Property.set"
@@ -6005,7 +6048,8 @@ if `GTK_PACK_END`, it's displayed after the content.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_locked"
-                getter="get_locked">
+                getter="get_locked"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get" value="bis_lapel_get_locked"/>
         <attribute name="org.gtk.Property.set" value="bis_lapel_set_locked"/>
         <doc xml:space="preserve"
@@ -6022,7 +6066,8 @@ unfolding it when the lapel is not revealed opens it. If `TRUE`,
                 writable="1"
                 transfer-ownership="none"
                 setter="set_modal"
-                getter="get_modal">
+                getter="get_modal"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get" value="bis_lapel_get_modal"/>
         <attribute name="org.gtk.Property.set" value="bis_lapel_set_modal"/>
         <doc xml:space="preserve"
@@ -6039,7 +6084,8 @@ are passed through to the content widget.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_reveal_lapel"
-                getter="get_reveal_lapel">
+                getter="get_reveal_lapel"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_reveal_lapel"/>
         <attribute name="org.gtk.Property.set"
@@ -6073,7 +6119,8 @@ bis_spring_params_new (1, 0.5, 500)
       <property name="reveal-progress"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_reveal_progress">
+                getter="get_reveal_progress"
+                default-value="1.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_reveal_progress"/>
         <doc xml:space="preserve"
@@ -6109,7 +6156,8 @@ value.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_swipe_to_close"
-                getter="get_swipe_to_close">
+                getter="get_swipe_to_close"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_swipe_to_close"/>
         <attribute name="org.gtk.Property.set"
@@ -6127,7 +6175,8 @@ value.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_swipe_to_open"
-                getter="get_swipe_to_open">
+                getter="get_swipe_to_open"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_swipe_to_open"/>
         <attribute name="org.gtk.Property.set"
@@ -6145,7 +6194,8 @@ value.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_transition_type"
-                getter="get_transition_type">
+                getter="get_transition_type"
+                default-value="BIS_LAPEL_TRANSITION_TYPE_OVER">
         <attribute name="org.gtk.Property.get"
                    value="bis_lapel_get_transition_type"/>
         <attribute name="org.gtk.Property.set"
@@ -6498,7 +6548,8 @@ size makes transitions to and from the maximum size smoother when resizing.</doc
                 writable="1"
                 transfer-ownership="none"
                 setter="set_maximum_size"
-                getter="get_maximum_size">
+                getter="get_maximum_size"
+                default-value="600">
         <attribute name="org.gtk.Property.get"
                    value="bis_latch_get_maximum_size"/>
         <attribute name="org.gtk.Property.set"
@@ -6515,7 +6566,8 @@ It is the width if the latch is horizontal, or the height if it is vertical.</do
                 writable="1"
                 transfer-ownership="none"
                 setter="set_tightening_threshold"
-                getter="get_tightening_threshold">
+                getter="get_tightening_threshold"
+                default-value="400">
         <attribute name="org.gtk.Property.get"
                    value="bis_latch_get_tightening_threshold"/>
         <attribute name="org.gtk.Property.set"
@@ -6720,7 +6772,8 @@ size makes transitions to and from the maximum size smoother when resizing.</doc
                 writable="1"
                 transfer-ownership="none"
                 setter="set_maximum_size"
-                getter="get_maximum_size">
+                getter="get_maximum_size"
+                default-value="600">
         <attribute name="org.gtk.Property.get"
                    value="bis_latch_layout_get_maximum_size"/>
         <attribute name="org.gtk.Property.set"
@@ -6738,7 +6791,8 @@ vertical.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_tightening_threshold"
-                getter="get_tightening_threshold">
+                getter="get_tightening_threshold"
+                default-value="400">
         <attribute name="org.gtk.Property.get"
                    value="bis_latch_layout_get_tightening_threshold"/>
         <attribute name="org.gtk.Property.set"
@@ -7001,7 +7055,8 @@ size makes transitions to and from the maximum size smoother when resizing.</doc
                 writable="1"
                 transfer-ownership="none"
                 setter="set_maximum_size"
-                getter="get_maximum_size">
+                getter="get_maximum_size"
+                default-value="600">
         <attribute name="org.gtk.Property.get"
                    value="bis_latch_scrollable_get_maximum_size"/>
         <attribute name="org.gtk.Property.set"
@@ -7018,7 +7073,8 @@ It is the width if the latch is horizontal, or the height if it is vertical.</do
                 writable="1"
                 transfer-ownership="none"
                 setter="set_tightening_threshold"
-                getter="get_tightening_threshold">
+                getter="get_tightening_threshold"
+                default-value="400">
         <attribute name="org.gtk.Property.get"
                    value="bis_latch_scrollable_get_tightening_threshold"/>
         <attribute name="org.gtk.Property.set"
@@ -7258,6 +7314,7 @@ lifetime.</doc>
     <record name="PropertyAnimationTargetClass"
             c:type="BisPropertyAnimationTargetClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="PropertyAnimationTarget">
       <source-position filename="src/bis-animation-target.h" line="50"/>
     </record>
@@ -7741,7 +7798,8 @@ this value.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_epsilon"
-                getter="get_epsilon">
+                getter="get_epsilon"
+                default-value="0.001000">
         <attribute name="org.gtk.Property.get"
                    value="bis_spring_animation_get_epsilon"/>
         <attribute name="org.gtk.Property.set"
@@ -7765,7 +7823,8 @@ The default value is 0.001.</doc>
       <property name="estimated-duration"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_estimated_duration">
+                getter="get_estimated_duration"
+                default-value="0">
         <attribute name="org.gtk.Property.get"
                    value="bis_spring_animation_get_estimated_duration"/>
         <doc xml:space="preserve"
@@ -7780,7 +7839,8 @@ Can be [const@DURATION_INFINITE] if the spring damping is set to 0.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_initial_velocity"
-                getter="get_initial_velocity">
+                getter="get_initial_velocity"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_spring_animation_get_initial_velocity"/>
         <attribute name="org.gtk.Property.set"
@@ -7797,7 +7857,8 @@ Initial velocity affects only the animation curve, but not its duration.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_latch"
-                getter="get_latch">
+                getter="get_latch"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_spring_animation_get_latch"/>
         <attribute name="org.gtk.Property.set"
@@ -7835,7 +7896,8 @@ relative negative [property@SpringAnimation:initial-velocity] is set.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_value_from"
-                getter="get_value_from">
+                getter="get_value_from"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_spring_animation_get_value_from"/>
         <attribute name="org.gtk.Property.set"
@@ -7854,7 +7916,8 @@ The animation will start at this value and end at
                 construct="1"
                 transfer-ownership="none"
                 setter="set_value_to"
-                getter="get_value_to">
+                getter="get_value_to"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_spring_animation_get_value_to"/>
         <attribute name="org.gtk.Property.set"
@@ -7870,7 +7933,8 @@ at this value.</doc>
       <property name="velocity"
                 version="1.0"
                 transfer-ownership="none"
-                getter="get_velocity">
+                getter="get_velocity"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_spring_animation_get_velocity"/>
         <doc xml:space="preserve"
@@ -7882,11 +7946,13 @@ at this value.</doc>
     <record name="SpringAnimationClass"
             c:type="BisSpringAnimationClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="SpringAnimation">
       <source-position filename="src/bis-spring-animation.h" line="25"/>
     </record>
     <record name="SpringParams"
             c:type="BisSpringParams"
+            opaque="1"
             version="1.0"
             glib:type-name="BisSpringParams"
             glib:get-type="bis_spring_params_get_type"
@@ -8458,7 +8524,8 @@ the gesture.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_allow_long_swipes"
-                getter="get_allow_long_swipes">
+                getter="get_allow_long_swipes"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_swipe_tracker_get_allow_long_swipes"/>
         <attribute name="org.gtk.Property.set"
@@ -8476,7 +8543,8 @@ points.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_allow_mouse_drag"
-                getter="get_allow_mouse_drag">
+                getter="get_allow_mouse_drag"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_swipe_tracker_get_allow_mouse_drag"/>
         <attribute name="org.gtk.Property.set"
@@ -8491,7 +8559,8 @@ points.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_enabled"
-                getter="get_enabled">
+                getter="get_enabled"
+                default-value="TRUE">
         <attribute name="org.gtk.Property.get"
                    value="bis_swipe_tracker_get_enabled"/>
         <attribute name="org.gtk.Property.set"
@@ -8509,7 +8578,8 @@ want to expose this via a property.</doc>
                 writable="1"
                 transfer-ownership="none"
                 setter="set_reversed"
-                getter="get_reversed">
+                getter="get_reversed"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_swipe_tracker_get_reversed"/>
         <attribute name="org.gtk.Property.set"
@@ -9533,7 +9603,8 @@ at this value instead.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_alternate"
-                getter="get_alternate">
+                getter="get_alternate"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_timed_animation_get_alternate"/>
         <attribute name="org.gtk.Property.set"
@@ -9549,7 +9620,8 @@ at this value instead.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_duration"
-                getter="get_duration">
+                getter="get_duration"
+                default-value="0">
         <attribute name="org.gtk.Property.get"
                    value="bis_timed_animation_get_duration"/>
         <attribute name="org.gtk.Property.set"
@@ -9570,7 +9642,8 @@ iteration.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_easing"
-                getter="get_easing">
+                getter="get_easing"
+                default-value="BIS_EASE_OUT_CUBIC">
         <attribute name="org.gtk.Property.get"
                    value="bis_timed_animation_get_easing"/>
         <attribute name="org.gtk.Property.set"
@@ -9590,7 +9663,8 @@ See [enum@Easing] for the description of specific easing functions.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_repeat_count"
-                getter="get_repeat_count">
+                getter="get_repeat_count"
+                default-value="1">
         <attribute name="org.gtk.Property.get"
                    value="bis_timed_animation_get_repeat_count"/>
         <attribute name="org.gtk.Property.set"
@@ -9608,7 +9682,8 @@ If set to 0, the animation will repeat endlessly.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_reverse"
-                getter="get_reverse">
+                getter="get_reverse"
+                default-value="FALSE">
         <attribute name="org.gtk.Property.get"
                    value="bis_timed_animation_get_reverse"/>
         <attribute name="org.gtk.Property.set"
@@ -9624,7 +9699,8 @@ If set to 0, the animation will repeat endlessly.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_value_from"
-                getter="get_value_from">
+                getter="get_value_from"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_timed_animation_get_value_from"/>
         <attribute name="org.gtk.Property.set"
@@ -9646,7 +9722,8 @@ this value instead.</doc>
                 construct="1"
                 transfer-ownership="none"
                 setter="set_value_to"
-                getter="get_value_to">
+                getter="get_value_to"
+                default-value="0.000000">
         <attribute name="org.gtk.Property.get"
                    value="bis_timed_animation_get_value_to"/>
         <attribute name="org.gtk.Property.set"
@@ -9666,6 +9743,7 @@ at this value instead.</doc>
     <record name="TimedAnimationClass"
             c:type="BisTimedAnimationClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="TimedAnimation">
       <source-position filename="src/bis-timed-animation.h" line="25"/>
     </record>

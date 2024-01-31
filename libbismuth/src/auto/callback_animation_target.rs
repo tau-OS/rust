@@ -25,12 +25,12 @@ impl CallbackAnimationTarget {
             value: libc::c_double,
             user_data: glib::ffi::gpointer,
         ) {
-            let callback: &P = &*(user_data as *mut _);
+            let callback = &*(user_data as *mut P);
             (*callback)(value)
         }
         let callback = Some(callback_func::<P> as _);
         unsafe extern "C" fn destroy_func<P: Fn(f64) + 'static>(data: glib::ffi::gpointer) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+            let _callback = Box_::from_raw(data as *mut P);
         }
         let destroy_call2 = Some(destroy_func::<P> as _);
         let super_callback0: Box_<P> = callback_data;
