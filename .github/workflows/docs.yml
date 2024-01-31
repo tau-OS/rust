@@ -63,6 +63,21 @@ jobs:
         run: sudo ninja install
         working-directory: ./libbismuth-src/build
 
+      - name: Checkout fusebox
+        uses: actions/checkout@v3
+        with:
+          repository: tau-OS/fusebox
+          path: fusebox-src
+      - name: Install fusebox
+        run: meson build
+        working-directory: ./fusebox-src
+      - name: Build fusebox with Ninja
+        run: ninja
+        working-directory: ./fusebox-src/build
+      - name: Install fusebox globally
+        run: sudo ninja install
+        working-directory: ./fusebox-src/build
+
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
         with:
