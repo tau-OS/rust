@@ -31,7 +31,7 @@ jobs:
         run: sudo apt update
 
       - name: Install system level libraries
-        run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev libgexiv2-dev meson ninja-build valac valadoc libpulse-dev libgnome-desktop-4-dev libgweather-4-dev libaccountsservice-dev libudisks2-0 libgudev-1.0-dev libgtop2-dev libxml2-dev
+        run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev libgexiv2-dev meson ninja-build valac valadoc libpulse-dev libgnome-desktop-4-dev libgweather-4-dev libaccountsservice-dev libudisks2-0 libgudev-1.0-dev libgtop2-dev libxml2-dev libibus-1.0-dev
 
       - name: Checkout libhelium
         uses: actions/checkout@v3
