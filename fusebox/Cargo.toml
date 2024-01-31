@@ -23,7 +23,9 @@ gtk_v4_8 = ["gtk_v4_6"]
 gtk_v4_10 = ["gtk_v4_8"]
 
 [package.metadata.docs.rs]
-features = ["dox"]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 bitflags = '2.4.0'

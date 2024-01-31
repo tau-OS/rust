@@ -36,9 +36,7 @@ version = "1.5"
 version = "1.6"
 
 [package.metadata.docs.rs]
-features = ["dox"]
-rustc-args = ["--cfg", "docsrs"]
-rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+features = []
 
 [lib]
 name = "libhelium_sys"

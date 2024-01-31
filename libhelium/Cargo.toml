@@ -29,7 +29,9 @@ v1_5 = ["v1_2", "ffi/v1_5"]
 v1_6 = ["v1_2", "ffi/v1_6"]
 
 [package.metadata.docs.rs]
-features = ["dox"]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 bitflags = '2.4.0'
