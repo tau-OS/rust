@@ -31,7 +31,7 @@ jobs:
         run: sudo apt update
 
       - name: Install system level libraries
-        run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev libgexiv2-dev gir1.2-gexiv2-0.10 meson ninja-build valac valadoc libpulse-dev libpulse-mainloop-glib
+        run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev libgexiv2-dev meson ninja-build valac valadoc libpulse-dev
 
       - name: Checkout libhelium
         uses: actions/checkout@v3
