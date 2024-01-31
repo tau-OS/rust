@@ -8,3 +8,4 @@ members = [
     "fusebox/sys",
 ]
 exclude = ["gir"]
+resolver = "2"
