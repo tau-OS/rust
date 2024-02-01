@@ -1,6 +1,6 @@
 [package]
 name = "fusebox"
-version = "1.0.0"
+version = "0.1.0"
 authors = ["Lleyton Gray <lleyton@fyralabs.com>"]
 edition = "2021"
 readme = "../README.md"
@@ -62,4 +62,4 @@ version = "0.8"
 [dependencies.ffi]
 package = "fusebox-sys"
 path = './sys'
-version = "1.0.0"
+version = "0.1.0"
