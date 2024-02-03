@@ -1,8 +1,8 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![allow(clippy::needless_doctest_main)]
 #![doc(
-    html_logo_url = "https://raw.githubusercontent.com/tau-OS/libhelium/main/demo/data/libhelium.svg",
-    html_favicon_url = "https://raw.githubusercontent.com/tau-OS/libhelium/main/demo/data/libhelium-symbolic.svg"
+    html_logo_url = "https://raw.githubusercontent.com/tau-OS/libhelium/main/assets/Helium.svg",
+    html_favicon_url = "https://raw.githubusercontent.com/tau-OS/libhelium/main/assets/Helium-sym.svg"
 )]
 
 // Re-export the -sys bindings
