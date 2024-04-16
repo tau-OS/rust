@@ -14,7 +14,9 @@ impl Avatar {
                 // this function takes in a nullable boolean, which doesn't have a provided implementation in gtk-rs
                 // from what I can see, this is represented as a pointer to a gboolean
                 // this should be correct? I hope?
-                status.map(|c| &mut c.into_glib() as *mut _).unwrap_or(ptr::null_mut()),
+                status
+                    .map(|c| &mut c.into_glib() as *mut _)
+                    .unwrap_or(ptr::null_mut()),
             ))
         }
     }
