@@ -28,38 +28,34 @@ name = "fusebox_sys"
 [dependencies]
 libc = "0.2"
 
-[dependencies.gio]
-package = "gio-sys"
+[dependencies.gio-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 version = "0.20"
 branch = "master"
 
-[dependencies.glib]
-package = "glib-sys"
+[dependencies.glib-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 version = "0.20"
 branch = "master"
 
-[dependencies.gobject]
-package = "gobject-sys"
+[dependencies.gobject-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 version = "0.20"
 branch = "master"
 
-[dependencies.gtk]
+[dependencies.gtk-sys]
 package = "gtk4-sys"
 git = "https://github.com/gtk-rs/gtk4-rs"
 version = "0.9"
 branch = "master"
 
-[dependencies.gdk]
+[dependencies.gdk-sys]
 package = "gdk4-sys"
 git = "https://github.com/gtk-rs/gtk4-rs"
 version = "0.9"
 branch = "master"
 
-[dependencies.pango]
-package = "pango-sys"
+[dependencies.pango-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 version = "0.20"
 branch = "master"

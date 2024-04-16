@@ -52,38 +52,34 @@ name = "libhelium_sys"
 [dependencies]
 libc = "0.2"
 
-[dependencies.gio_sys]
-package = "gio-sys"
+[dependencies.gio-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 branch = "master"
 version = "0.20"
 
-[dependencies.glib_sys]
-package = "glib-sys"
+[dependencies.glib-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 branch = "master"
 version = "0.20"
 
-[dependencies.gobject_sys]
-package = "gobject-sys"
+[dependencies.gobject-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 branch = "master"
 version = "0.20"
 
-[dependencies.gtk_sys]
+[dependencies.gtk-sys]
 package = "gtk4-sys"
 git = "https://github.com/gtk-rs/gtk4-rs"
 branch = "master"
 version = "0.9"
 
-[dependencies.gdk_sys]
+[dependencies.gdk-sys]
 package = "gdk4-sys"
 git = "https://github.com/gtk-rs/gtk4-rs"
 branch = "master"
 version = "0.9"
 
-[dependencies.pango_sys]
-package = "pango-sys"
+[dependencies.pango-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 branch = "master"
 version = "0.20"
