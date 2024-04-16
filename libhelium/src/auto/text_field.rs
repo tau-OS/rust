@@ -104,6 +104,18 @@ impl TextFieldBuilder {
         }
     }
 
+    pub fn suffix_icon(self, suffix_icon: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("suffix-icon", suffix_icon.into()),
+        }
+    }
+
+    pub fn prefix_icon(self, prefix_icon: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("prefix-icon", prefix_icon.into()),
+        }
+    }
+
     pub fn support_text(self, support_text: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("support-text", support_text.into()),
@@ -350,10 +362,14 @@ mod sealed {
 }
 
 pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
-    #[doc(alias = "he_text_field_get_entry")]
-    #[doc(alias = "get_entry")]
-    fn entry(&self) -> gtk::Text {
-        unsafe { from_glib_full(ffi::he_text_field_get_entry(self.as_ref().to_glib_none().0)) }
+    #[doc(alias = "he_text_field_get_internal_entry")]
+    #[doc(alias = "get_internal_entry")]
+    fn internal_entry(&self) -> gtk::Text {
+        unsafe {
+            from_glib_full(ffi::he_text_field_get_internal_entry(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     #[doc(alias = "he_text_field_get_is_valid")]
@@ -451,6 +467,12 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_text_field_get_entry")]
+    #[doc(alias = "get_entry")]
+    fn entry(&self) -> gtk::Text {
+        unsafe { from_glib_none(ffi::he_text_field_get_entry(self.as_ref().to_glib_none().0)) }
+    }
+
     #[doc(alias = "he_text_field_get_text")]
     #[doc(alias = "get_text")]
     fn text(&self) -> Option<glib::GString> {
@@ -461,6 +483,46 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
     fn set_text(&self, value: Option<&str>) {
         unsafe {
             ffi::he_text_field_set_text(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_text_field_get_suffix_icon")]
+    #[doc(alias = "get_suffix_icon")]
+    fn suffix_icon(&self) -> Option<glib::GString> {
+        unsafe {
+            from_glib_none(ffi::he_text_field_get_suffix_icon(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_text_field_set_suffix_icon")]
+    fn set_suffix_icon(&self, value: Option<&str>) {
+        unsafe {
+            ffi::he_text_field_set_suffix_icon(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "he_text_field_get_prefix_icon")]
+    #[doc(alias = "get_prefix_icon")]
+    fn prefix_icon(&self) -> Option<glib::GString> {
+        unsafe {
+            from_glib_none(ffi::he_text_field_get_prefix_icon(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_text_field_set_prefix_icon")]
+    fn set_prefix_icon(&self, value: Option<&str>) {
+        unsafe {
+            ffi::he_text_field_set_prefix_icon(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
         }
     }
 
@@ -681,6 +743,29 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "entry")]
+    fn connect_entry_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_entry_trampoline<P: IsA<TextField>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeTextField,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(TextField::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::entry\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_entry_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "text")]
     fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_text_trampoline<P: IsA<TextField>, F: Fn(&P) + 'static>(
@@ -698,6 +783,58 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
                 b"notify::text\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "suffix-icon")]
+    fn connect_suffix_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_suffix_icon_trampoline<
+            P: IsA<TextField>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeTextField,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(TextField::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::suffix-icon\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_suffix_icon_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "prefix-icon")]
+    fn connect_prefix_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_prefix_icon_trampoline<
+            P: IsA<TextField>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeTextField,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(TextField::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::prefix-icon\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_prefix_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -1893,7 +1893,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="VibrantSchemePrivate" c:type="HeVibrantSchemePrivate" disguised="1"/>
 	<class name="StyleManager" c:type="HeStyleManager" c:symbol-prefix="style_manager" glib:type-name="HeStyleManager" glib:get-type="he_style_manager_get_type" glib:type-struct="StyleManagerClass" parent="GObject.Object">
-		<doc xml:whitespace="preserve">&lt;para&gt;A class that manages the style of the application in conjunction with the provided preferences. This is a low-level class that should not be
+		<doc xml:whitespace="preserve">&lt;para&gt;A class that manages the style of the application in conjunction with the provided preferences. This is a low-level class that should not be 
 used directly. Instead, let the `He.Application` class manage this for you.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
@@ -2023,7 +2023,7 @@ used directly. Instead, let the `He.Application` class manage this for you.&lt;/
 			<type name="ViewPrivate" c:type="HeViewPrivate*"/>
 		</field>
 		<method name="add_child" c:identifier="he_view_add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
 code.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
@@ -2044,7 +2044,7 @@ code.&lt;/para&gt;</doc>
 			</parameters>
 		</method>
 		<virtual-method name="add_child" invoker="add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
 code.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
@@ -2217,7 +2217,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="ViewPrivate" c:type="HeViewPrivate" disguised="1"/>
 	<class name="Window" c:type="HeWindow" c:symbol-prefix="window" glib:type-name="HeWindow" glib:get-type="he_window_get_type" glib:type-struct="WindowClass" parent="Gtk.Window">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Window is a container that has an &lt;type&gt;HeAppBar&lt;/type&gt; and can be moved, resized, and closed. It may be a top-level window or a dialog. The
+		<doc xml:whitespace="preserve">&lt;para&gt;A Window is a container that has an &lt;type&gt;HeAppBar&lt;/type&gt; and can be moved, resized, and closed. It may be a top-level window or a dialog. The 
 title bar can be made always visible. Has an optional back button. The back button is only visible if has_back_button is true.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="Gtk.Window" c:type="GtkWindow"/>
@@ -2747,7 +2747,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="QuantizerWsmeansPrivate" c:type="HeQuantizerWsmeansPrivate" disguised="1"/>
 	<class name="QuantizerWu" c:type="HeQuantizerWu" c:symbol-prefix="quantizer_wu" glib:type-name="HeQuantizerWu" glib:get-type="he_quantizer_wu_get_type" glib:type-struct="QuantizerWuClass" parent="He.Quantizer">
-		<doc xml:whitespace="preserve">&lt;para&gt;An image quantizer that divides the image&amp;apos;s pixels into clusters by recursively cutting an RGB cube, based on the weight of pixels in each
+		<doc xml:whitespace="preserve">&lt;para&gt;An image quantizer that divides the image&amp;apos;s pixels into clusters by recursively cutting an RGB cube, based on the weight of pixels in each 
 area of the cube.&lt;/para&gt;
 &lt;para&gt;&amp;lt;p&amp;gt;The algorithm was described by Xiaolin Wu in Graphic Gems II, published in 1991.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -3628,7 +3628,7 @@ Since: 1.0</doc>
 		</parameters>
 	</function>
 	<class name="AppBar" c:type="HeAppBar" c:symbol-prefix="app_bar" glib:type-name="HeAppBar" glib:get-type="he_app_bar_get_type" glib:type-struct="AppBarClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;An AppBar is the header bar of an Window. It usually provides controls to manage the window, as well as optional children for more granular
+		<doc xml:whitespace="preserve">&lt;para&gt;An AppBar is the header bar of an Window. It usually provides controls to manage the window, as well as optional children for more granular 
 control.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Bin" c:type="HeBin"/>
@@ -3769,7 +3769,7 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="viewtitle-widget" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title widget to the left on the AppBar. If this is set, the other title &amp;lpar;not subtitle&amp;rpar; props won&amp;apos;t work, and the mini title
+			<doc xml:whitespace="preserve">&lt;para&gt;The title widget to the left on the AppBar. If this is set, the other title &amp;lpar;not subtitle&amp;rpar; props won&amp;apos;t work, and the mini title 
 on collapsed state won&amp;apos;t show.&lt;/para&gt;</doc>
 			<type name="Gtk.Widget" c:type="GtkWidget*"/>
 		</property>
@@ -4048,6 +4048,9 @@ Since: 1.1</doc>
 				<parameter name="text" transfer-ownership="none" nullable="1">
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
+				<parameter name="status" transfer-ownership="none" nullable="1">
+					<type name="gboolean" c:type="gboolean*"/>
+				</parameter>
 			</parameters>
 		</constructor>
 		<property name="size" writable="1">
@@ -4101,6 +4104,33 @@ Since: 1.1</doc>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none" nullable="1">
 					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="status" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The status shown on top of the avatar with a badge. e.g. when the user is offline, set it to false.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_status" c:identifier="he_avatar_get_status">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_status" c:identifier="he_avatar_set_status">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -4382,7 +4412,7 @@ Since: 1.0</doc>
 		<member name="error" c:identifier="HE_BANNER_STYLE_ERROR" value="2"/>
 	</enumeration>
 	<class name="BottomBar" c:type="HeBottomBar" c:symbol-prefix="bottom_bar" glib:type-name="HeBottomBar" glib:get-type="he_bottom_bar_get_type" glib:type-struct="BottomBarClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A BottomBar is a toolbar made to make actions on content more visible. It may have up to 5 actions on each side. It has title and description
+		<doc xml:whitespace="preserve">&lt;para&gt;A BottomBar is a toolbar made to make actions on content more visible. It may have up to 5 actions on each side. It has title and description 
 labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
@@ -5653,53 +5683,6 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="DialogPrivate" c:type="HeDialogPrivate" disguised="1"/>
-	<class name="Divider" c:type="HeDivider" c:symbol-prefix="divider" glib:type-name="HeDivider" glib:get-type="he_divider_get_type" glib:type-struct="DividerClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Divider is a thin line that groups content in a view, can be full-width &amp;lpar;default&amp;rpar; or inset&lt;/para&gt;</doc>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Bin" c:type="HeBin"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="DividerPrivate" c:type="HeDividerPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_divider_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new Divider.&lt;/para&gt;</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.Divider" c:type="HeDivider*"/>
-			</return-value>
-		</constructor>
-		<property name="is-inset" writable="1">
-			<type name="gboolean" c:type="gboolean"/>
-		</property>
-		<method name="get_is_inset" c:identifier="he_divider_get_is_inset">
-			<return-value transfer-ownership="none">
-				<type name="gboolean" c:type="gboolean"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Divider" c:type="HeDivider*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_is_inset" c:identifier="he_divider_set_is_inset">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Divider" c:type="HeDivider*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="gboolean" c:type="gboolean"/>
-				</parameter>
-			</parameters>
-		</method>
-	</class>
-	<record name="DividerClass" c:type="HeDividerClass" glib:is-gtype-struct-for="Divider">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.BinClass" c:type="HeBinClass"/>
-		</field>
-	</record>
-	<record name="DividerPrivate" c:type="HeDividerPrivate" disguised="1"/>
 	<class name="DisclosureButton" c:type="HeDisclosureButton" c:symbol-prefix="disclosure_button" glib:type-name="HeDisclosureButton" glib:get-type="he_disclosure_button_get_type" glib:type-struct="DisclosureButtonClass" parent="He.Button">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Disclosure Button is a view-based button that acts on said view.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -5768,6 +5751,53 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="DisclosureButtonPrivate" c:type="HeDisclosureButtonPrivate" disguised="1"/>
+	<class name="Divider" c:type="HeDivider" c:symbol-prefix="divider" glib:type-name="HeDivider" glib:get-type="he_divider_get_type" glib:type-struct="DividerClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Divider is a thin line that groups content in a view, can be full-width &amp;lpar;default&amp;rpar; or inset&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="DividerPrivate" c:type="HeDividerPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_divider_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new Divider.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.Divider" c:type="HeDivider*"/>
+			</return-value>
+		</constructor>
+		<property name="is-inset" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_inset" c:identifier="he_divider_get_is_inset">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_inset" c:identifier="he_divider_set_is_inset">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="DividerClass" c:type="HeDividerClass" glib:is-gtype-struct-for="Divider">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="DividerPrivate" c:type="HeDividerPrivate" disguised="1"/>
 	<class name="EmptyPage" c:type="HeEmptyPage" c:symbol-prefix="empty_page" glib:type-name="HeEmptyPage" glib:get-type="he_empty_page_get_type" glib:type-struct="EmptyPageClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;An EmptyPage is a page that is used to display a message and a button when there is no data to display.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -5777,7 +5807,7 @@ Since: 1.0</doc>
 			<type name="EmptyPagePrivate" c:type="HeEmptyPagePrivate*"/>
 		</field>
 		<field name="action_button" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The action button of the empty page. Can connect to the clicked signal to get notified when the button is clicked. e.g.
+			<doc xml:whitespace="preserve">&lt;para&gt;The action button of the empty page. Can connect to the clicked signal to get notified when the button is clicked. e.g. 
 action_button.clicked.connect&amp;lpar;&amp;lpar;&amp;rpar; =&amp;gt; { ... }&amp;rpar;;&lt;/para&gt;</doc>
 			<type name="He.PillButton" c:type="HePillButton*"/>
 		</field>
@@ -6383,77 +6413,6 @@ Since: 1.0</doc>
 			</parameter>
 		</parameters>
 	</function>
-	<class name="NavigationSection" c:type="HeNavigationSection" c:symbol-prefix="navigation_section" glib:type-name="HeNavigationSection" glib:get-type="he_navigation_section_get_type" glib:type-struct="NavigationSectionClass" parent="He.Bin">
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Bin" c:type="HeBin"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="NavigationSectionPrivate" c:type="HeNavigationSectionPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_navigation_section_new">
-			<return-value transfer-ownership="none">
-				<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
-			</return-value>
-		</constructor>
-		<property name="stack" writable="1">
-			<type name="Gtk.Stack" c:type="GtkStack*"/>
-		</property>
-		<method name="get_stack" c:identifier="he_navigation_section_get_stack">
-			<return-value transfer-ownership="none">
-				<type name="Gtk.Stack" c:type="GtkStack*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_stack" c:identifier="he_navigation_section_set_stack">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="Gtk.Stack" c:type="GtkStack*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="orientation" writable="1">
-			<type name="Gtk.Orientation" c:type="GtkOrientation"/>
-		</property>
-		<method name="get_orientation" c:identifier="he_navigation_section_get_orientation">
-			<return-value transfer-ownership="none">
-				<type name="Gtk.Orientation" c:type="GtkOrientation"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_orientation" c:identifier="he_navigation_section_set_orientation">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="Gtk.Orientation" c:type="GtkOrientation"/>
-				</parameter>
-			</parameters>
-		</method>
-	</class>
-	<record name="NavigationSectionClass" c:type="HeNavigationSectionClass" glib:is-gtype-struct-for="NavigationSection">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.BinClass" c:type="HeBinClass"/>
-		</field>
-	</record>
-	<record name="NavigationSectionPrivate" c:type="HeNavigationSectionPrivate" disguised="1"/>
 	<class name="NavigationRail" c:type="HeNavigationRail" c:symbol-prefix="navigation_rail" glib:type-name="HeNavigationRail" glib:get-type="he_navigation_rail_get_type" glib:type-struct="NavigationRailClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A NavigationRail is a vertical switcher that helps navigate a stack.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -6533,6 +6492,77 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="NavigationRailPrivate" c:type="HeNavigationRailPrivate" disguised="1"/>
+	<class name="NavigationSection" c:type="HeNavigationSection" c:symbol-prefix="navigation_section" glib:type-name="HeNavigationSection" glib:get-type="he_navigation_section_get_type" glib:type-struct="NavigationSectionClass" parent="He.Bin">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="NavigationSectionPrivate" c:type="HeNavigationSectionPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_navigation_section_new">
+			<return-value transfer-ownership="none">
+				<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+			</return-value>
+		</constructor>
+		<property name="stack" writable="1">
+			<type name="Gtk.Stack" c:type="GtkStack*"/>
+		</property>
+		<method name="get_stack" c:identifier="he_navigation_section_get_stack">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Stack" c:type="GtkStack*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_stack" c:identifier="he_navigation_section_set_stack">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Stack" c:type="GtkStack*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="orientation" writable="1">
+			<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+		</property>
+		<method name="get_orientation" c:identifier="he_navigation_section_get_orientation">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_orientation" c:identifier="he_navigation_section_set_orientation">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationSection" c:type="HeNavigationSection*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="NavigationSectionClass" c:type="HeNavigationSectionClass" glib:is-gtype-struct-for="NavigationSection">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="NavigationSectionPrivate" c:type="HeNavigationSectionPrivate" disguised="1"/>
 	<class name="OutlineButton" c:type="HeOutlineButton" c:symbol-prefix="outline_button" glib:type-name="HeOutlineButton" glib:get-type="he_outline_button_get_type" glib:type-struct="OutlineButtonClass" parent="He.Button">
 		<doc xml:whitespace="preserve">&lt;para&gt;An Outline button is a transparent FillButton with a border.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -7027,6 +7057,86 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="PillButtonPrivate" c:type="HePillButtonPrivate" disguised="1"/>
+	<class name="ProgressBar" c:type="HeProgressBar" c:symbol-prefix="progress_bar" glib:type-name="HeProgressBar" glib:get-type="he_progress_bar_get_type" glib:type-struct="ProgressBarClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Progressbar indicates the progress of some process and contains a disable-able Stop Indicator for accessibility purposes.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ProgressBarPrivate" c:type="HeProgressBarPrivate*"/>
+		</field>
+		<field name="progressbar" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The progressbar inside the Progressbar.&lt;/para&gt;</doc>
+			<type name="Gtk.ProgressBar" c:type="GtkProgressBar*"/>
+		</field>
+		<constructor name="new" c:identifier="he_progress_bar_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new Progressbar.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+			</return-value>
+		</constructor>
+		<property name="stop-indicator-visibility" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_stop_indicator_visibility" c:identifier="he_progress_bar_get_stop_indicator_visibility">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_stop_indicator_visibility" c:identifier="he_progress_bar_set_stop_indicator_visibility">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-osd" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_osd" c:identifier="he_progress_bar_get_is_osd">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_osd" c:identifier="he_progress_bar_set_is_osd">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="ProgressBarClass" c:type="HeProgressBarClass" glib:is-gtype-struct-for="ProgressBar">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="ProgressBarPrivate" c:type="HeProgressBarPrivate" disguised="1"/>
 	<class name="SegmentedButton" c:type="HeSegmentedButton" c:symbol-prefix="segmented_button" glib:type-name="HeSegmentedButton" glib:get-type="he_segmented_button_get_type" glib:type-struct="SegmentedButtonClass" parent="Gtk.Box">
 		<doc xml:whitespace="preserve">&lt;para&gt;A SegmentedButton is a group of buttons that selects a setting. The developer supplies the buttons as children for further coding in their app.
 &lt;/para&gt;</doc>
@@ -7037,7 +7147,7 @@ Since: 1.0</doc>
 			<type name="SegmentedButtonPrivate" c:type="HeSegmentedButtonPrivate*"/>
 		</field>
 		<method name="add_child" c:identifier="he_segmented_button_add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Adds a widget to SegmentedButton, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
+			<doc xml:whitespace="preserve">&lt;para&gt;Adds a widget to SegmentedButton, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
 code.&lt;/para&gt;
 
 Since: 1.0</doc>
@@ -7806,8 +7916,10 @@ Since: 1.0</doc>
 	</record>
 	<record name="SideBarPrivate" c:type="HeSideBarPrivate" disguised="1"/>
 	<class name="Slider" c:type="HeSlider" c:symbol-prefix="slider" glib:type-name="HeSlider" glib:get-type="he_slider_get_type" glib:type-struct="SliderClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Slider is a widget that is used to select a value by means of a dial running across a trough. Contains optional icons for the slider purpose,
-and a disable-able stop indicator for accessibility purposes.&lt;/para&gt;</doc>
+		<doc xml:whitespace="preserve">&lt;para&gt;A Slider is a widget that is used to select a value by means of a dial running across a trough. Contains optional icons for the slider purpose, 
+and a disable-able Stop Indicator for accessibility purposes.&lt;/para&gt;
+&lt;para&gt;When using the Stop Indicator, it&amp;apos;s advisable to add a mark with the value of 1.0 along the trough of the Slider so that the user can 
+discern why the end point is marked.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Bin" c:type="HeBin"/>
@@ -7929,6 +8041,86 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="SliderPrivate" c:type="HeSliderPrivate" disguised="1"/>
+	<class name="Switch" c:type="HeSwitch" c:symbol-prefix="switch" glib:type-name="HeSwitch" glib:get-type="he_switch_get_type" glib:type-struct="SwitchClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Switch is a widget that is used to toggle a setting on or off, or to indicate two modes via a toggle &amp;lpar;ex. Light/Dark&amp;rpar;.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SwitchPrivate" c:type="HeSwitchPrivate*"/>
+		</field>
+		<field name="iswitch" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The switch inside the Switch.&lt;/para&gt;</doc>
+			<type name="Gtk.Switch" c:type="GtkSwitch*"/>
+		</field>
+		<constructor name="new" c:identifier="he_switch_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new Switch.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.Switch" c:type="HeSwitch*"/>
+			</return-value>
+		</constructor>
+		<property name="left-icon" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_left_icon" c:identifier="he_switch_get_left_icon">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Switch" c:type="HeSwitch*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_left_icon" c:identifier="he_switch_set_left_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Switch" c:type="HeSwitch*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="right-icon" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_right_icon" c:identifier="he_switch_get_right_icon">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Switch" c:type="HeSwitch*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_right_icon" c:identifier="he_switch_set_right_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Switch" c:type="HeSwitch*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="SwitchClass" c:type="HeSwitchClass" glib:is-gtype-struct-for="Switch">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="SwitchPrivate" c:type="HeSwitchPrivate" disguised="1"/>
 	<class name="SwitchBar" c:type="HeSwitchBar" c:symbol-prefix="switch_bar" glib:type-name="HeSwitchBar" glib:get-type="he_switch_bar_get_type" glib:type-struct="SwitchBarClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A SwitchBar is a widget that is used to identify primarily a switchable view below it.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -7940,7 +8132,7 @@ Since: 1.0</doc>
 		</field>
 		<field name="main_switch" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The switch related to this switchbar.&lt;/para&gt;</doc>
-			<type name="Gtk.Switch" c:type="GtkSwitch*"/>
+			<type name="He.Switch" c:type="HeSwitch*"/>
 		</field>
 		<constructor name="new" c:identifier="he_switch_bar_new">
 			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new switchbar.&lt;/para&gt;
@@ -8743,10 +8935,10 @@ Since: 1.0</doc>
 	</record>
 	<record name="TextButtonPrivate" c:type="HeTextButtonPrivate" disguised="1"/>
 	<class name="TextField" c:type="HeTextField" c:symbol-prefix="text_field" glib:type-name="HeTextField" glib:get-type="he_text_field_get_type" glib:type-struct="TextFieldClass" parent="Gtk.ListBoxRow">
-		<doc xml:whitespace="preserve">&lt;para&gt;TextField is a &lt;type&gt;GtkEntry&lt;/type&gt;-like subclass that is meant to be used in forms where input must be validated before the form can be
-submitted. It provides feedback to users about the state of input validation and keeps track of its own validation state. By default, input is
+		<doc xml:whitespace="preserve">&lt;para&gt;TextField is a &lt;type&gt;GtkEntry&lt;/type&gt;-like subclass that is meant to be used in forms where input must be validated before the form can be 
+submitted. It provides feedback to users about the state of input validation and keeps track of its own validation state. By default, input is 
 considered invalid. This widget can also be used in place of a &lt;type&gt;GtkEntry&lt;/type&gt; for HIG compliance purposes.&lt;/para&gt;
-&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt;
+&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt; 
   &lt;example&gt;
     &lt;programlisting&gt;  var validated_entry = new He.TextField ();
   username_entry.changed.connect (() =&gt; {
@@ -8754,15 +8946,15 @@ considered invalid. This widget can also be used in place of a &lt;type&gt;GtkEn
       username_entry.text == &quot;valid input&quot;;
   });&lt;/programlisting&gt;
   &lt;/example&gt;&lt;/para&gt;
-&lt;para&gt;If the TextField.from_regex &amp;lpar;&amp;rpar; constructor is used then the entry automatically sets its validity status. A valid regex must be
+&lt;para&gt;If the TextField.from_regex &amp;lpar;&amp;rpar; constructor is used then the entry automatically sets its validity status. A valid regex must be 
 passed to this constructor.&lt;/para&gt;
-&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt;
+&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt; 
   &lt;example&gt;
     &lt;programlisting&gt;  GLib.Regex? regex = null;
   He.TextField only_lower_case_letters_entry;
   try {
       regex = new Regex (&quot;^[a-z]*$&quot;);
-
+     
       only_lower_case_letters_entry = new He.TextField.from_regex (regex);
   } catch (Error e) {
       critical (e.message);
@@ -8776,7 +8968,8 @@ passed to this constructor.&lt;/para&gt;
 		<field name="priv" readable="0" private="1">
 			<type name="TextFieldPrivate" c:type="HeTextFieldPrivate*"/>
 		</field>
-		<method name="get_entry" c:identifier="he_text_field_get_entry">
+		<method name="get_internal_entry" c:identifier="he_text_field_get_internal_entry">
+			<doc xml:whitespace="preserve">&lt;para&gt;A function to be used in code &amp;lpar;not Blueprint&amp;rpar; to get the Gtk.Text widget.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="Gtk.Text" c:type="GtkText*"/>
 			</return-value>
@@ -8963,6 +9156,19 @@ passed to this constructor.&lt;/para&gt;
 				</parameter>
 			</parameters>
 		</method>
+		<property name="entry">
+			<type name="Gtk.Text" c:type="GtkText*"/>
+		</property>
+		<method name="get_entry" c:identifier="he_text_field_get_entry">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Text" c:type="GtkText*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TextField" c:type="HeTextField*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
 		<property name="text" writable="1">
 			<type name="utf8" c:type="gchar*"/>
 		</property>
@@ -8977,6 +9183,58 @@ passed to this constructor.&lt;/para&gt;
 			</parameters>
 		</method>
 		<method name="set_text" c:identifier="he_text_field_set_text">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TextField" c:type="HeTextField*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="suffix-icon" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_suffix_icon" c:identifier="he_text_field_get_suffix_icon">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TextField" c:type="HeTextField*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_suffix_icon" c:identifier="he_text_field_set_suffix_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TextField" c:type="HeTextField*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="prefix-icon" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_prefix_icon" c:identifier="he_text_field_get_prefix_icon">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TextField" c:type="HeTextField*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_prefix_icon" c:identifier="he_text_field_set_prefix_icon">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -9196,7 +9454,7 @@ passed to this constructor.&lt;/para&gt;
 	</record>
 	<record name="TimePickerPrivate" c:type="HeTimePickerPrivate" disguised="1"/>
 	<class name="TintButton" c:type="HeTintButton" c:symbol-prefix="tint_button" glib:type-name="HeTintButton" glib:get-type="he_tint_button_get_type" glib:type-struct="TintButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;A TintButton is similar to a FillButton, except that the color of the button has a tinted appearance. In addition, the TintButton also support
+		<doc xml:whitespace="preserve">&lt;para&gt;A TintButton is similar to a FillButton, except that the color of the button has a tinted appearance. In addition, the TintButton also support 
 icons.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Button" c:type="HeButton"/>
@@ -9402,6 +9660,16 @@ Since: 1.0</doc>
 				<type name="He.ViewChooser" c:type="HeViewChooser*"/>
 			</return-value>
 		</constructor>
+		<method name="stack_clear" c:identifier="he_view_chooser_stack_clear">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewChooser" c:type="HeViewChooser*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
 		<property name="stack" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The stack that is controlled by this chooser switcher.&lt;/para&gt;
 
@@ -9641,7 +9909,7 @@ Since: 1.0</doc>
 			<type name="WelcomeScreenPrivate" c:type="HeWelcomeScreenPrivate*"/>
 		</field>
 		<method name="add_child" c:identifier="he_welcome_screen_add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
 code.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
@@ -9741,7 +10009,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="WelcomeScreenPrivate" c:type="HeWelcomeScreenPrivate" disguised="1"/>
 	<interface name="SchemeFactory" c:type="HeSchemeFactory" c:symbol-prefix="scheme_factory" glib:type-name="HeSchemeFactory" glib:get-type="he_scheme_factory_get_type" glib:type-struct="SchemeFactoryIface">
-		<doc xml:whitespace="preserve">&lt;para&gt;A SchemeFactory is a class which implements a method to generate a Scheme from an accent color and boolean representing whether the scheme is
+		<doc xml:whitespace="preserve">&lt;para&gt;A SchemeFactory is a class which implements a method to generate a Scheme from an accent color and boolean representing whether the scheme is 
 dark or light. Prior runs of the generate method should not affect the output of future runs.&lt;/para&gt;</doc>
 		<prerequisite name="GObject.Object"/>
 		<method name="generate" c:identifier="he_scheme_factory_generate">

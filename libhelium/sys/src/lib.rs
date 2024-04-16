@@ -1001,6 +1001,27 @@ pub type HePillButtonPrivate = _HePillButtonPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeProgressBarClass {
+    pub parent_class: HeBinClass,
+}
+
+impl ::std::fmt::Debug for HeProgressBarClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeProgressBarClass @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _HeProgressBarPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type HeProgressBarPrivate = _HeProgressBarPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeQuantizerCelebiClass {
     pub parent_class: gobject::GTypeClass,
 }
@@ -1472,6 +1493,27 @@ pub struct _HeSwitchBarPrivate {
 }
 
 pub type HeSwitchBarPrivate = _HeSwitchBarPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeSwitchClass {
+    pub parent_class: HeBinClass,
+}
+
+impl ::std::fmt::Debug for HeSwitchClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeSwitchClass @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _HeSwitchPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type HeSwitchPrivate = _HeSwitchPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2408,6 +2450,22 @@ impl ::std::fmt::Debug for HePillButton {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeProgressBar {
+    pub parent_instance: HeBin,
+    pub priv_: *mut HeProgressBarPrivate,
+    pub progressbar: *mut gtk::GtkProgressBar,
+}
+
+impl ::std::fmt::Debug for HeProgressBar {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeProgressBar @ {self:p}"))
+            .field("progressbar", &self.progressbar)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeQuantizer {
     pub parent_instance: gobject::GObject,
     pub priv_: *mut HeQuantizerPrivate,
@@ -2665,10 +2723,26 @@ impl ::std::fmt::Debug for HeStyleManager {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeSwitch {
+    pub parent_instance: HeBin,
+    pub priv_: *mut HeSwitchPrivate,
+    pub iswitch: *mut gtk::GtkSwitch,
+}
+
+impl ::std::fmt::Debug for HeSwitch {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeSwitch @ {self:p}"))
+            .field("iswitch", &self.iswitch)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeSwitchBar {
     pub parent_instance: HeBin,
     pub priv_: *mut HeSwitchBarPrivate,
-    pub main_switch: *mut gtk::GtkSwitch,
+    pub main_switch: *mut HeSwitch,
 }
 
 impl ::std::fmt::Debug for HeSwitchBar {
@@ -3206,11 +3280,18 @@ extern "C" {
     // HeAvatar
     //=========================================================================
     pub fn he_avatar_get_type() -> GType;
-    pub fn he_avatar_new(size: c_int, image: *const c_char, text: *const c_char) -> *mut HeAvatar;
+    pub fn he_avatar_new(
+        size: c_int,
+        image: *const c_char,
+        text: *const c_char,
+        status: *mut gboolean,
+    ) -> *mut HeAvatar;
     pub fn he_avatar_get_size(self_: *mut HeAvatar) -> c_int;
     pub fn he_avatar_set_size(self_: *mut HeAvatar, value: c_int);
     pub fn he_avatar_get_text(self_: *mut HeAvatar) -> *const c_char;
     pub fn he_avatar_set_text(self_: *mut HeAvatar, value: *const c_char);
+    pub fn he_avatar_get_status(self_: *mut HeAvatar) -> gboolean;
+    pub fn he_avatar_set_status(self_: *mut HeAvatar, value: gboolean);
     pub fn he_avatar_get_image(self_: *mut HeAvatar) -> *const c_char;
     pub fn he_avatar_set_image(self_: *mut HeAvatar, value: *const c_char);
 
@@ -3696,6 +3777,19 @@ extern "C" {
     pub fn he_pill_button_new(label: *const c_char) -> *mut HePillButton;
 
     //=========================================================================
+    // HeProgressBar
+    //=========================================================================
+    pub fn he_progress_bar_get_type() -> GType;
+    pub fn he_progress_bar_new() -> *mut HeProgressBar;
+    pub fn he_progress_bar_get_stop_indicator_visibility(self_: *mut HeProgressBar) -> gboolean;
+    pub fn he_progress_bar_set_stop_indicator_visibility(
+        self_: *mut HeProgressBar,
+        value: gboolean,
+    );
+    pub fn he_progress_bar_get_is_osd(self_: *mut HeProgressBar) -> gboolean;
+    pub fn he_progress_bar_set_is_osd(self_: *mut HeProgressBar, value: gboolean);
+
+    //=========================================================================
     // HeQuantizer
     //=========================================================================
     pub fn he_quantizer_get_type() -> GType;
@@ -3885,6 +3979,16 @@ extern "C" {
     pub fn he_style_manager_get_user_dark(self_: *mut HeStyleManager) -> *mut gtk::GtkCssProvider;
 
     //=========================================================================
+    // HeSwitch
+    //=========================================================================
+    pub fn he_switch_get_type() -> GType;
+    pub fn he_switch_new() -> *mut HeSwitch;
+    pub fn he_switch_get_left_icon(self_: *mut HeSwitch) -> *const c_char;
+    pub fn he_switch_set_left_icon(self_: *mut HeSwitch, value: *const c_char);
+    pub fn he_switch_get_right_icon(self_: *mut HeSwitch) -> *const c_char;
+    pub fn he_switch_set_right_icon(self_: *mut HeSwitch, value: *const c_char);
+
+    //=========================================================================
     // HeSwitchBar
     //=========================================================================
     pub fn he_switch_bar_get_type() -> GType;
@@ -3970,7 +4074,7 @@ extern "C" {
     // HeTextField
     //=========================================================================
     pub fn he_text_field_get_type() -> GType;
-    pub fn he_text_field_get_entry(self_: *mut HeTextField) -> *mut gtk::GtkText;
+    pub fn he_text_field_get_internal_entry(self_: *mut HeTextField) -> *mut gtk::GtkText;
     pub fn he_text_field_new_from_regex(regex_arg: *mut glib::GRegex) -> *mut HeTextField;
     pub fn he_text_field_new() -> *mut HeTextField;
     pub fn he_text_field_get_is_valid(self_: *mut HeTextField) -> gboolean;
@@ -3985,8 +4089,13 @@ extern "C" {
     pub fn he_text_field_set_is_search(self_: *mut HeTextField, value: gboolean);
     pub fn he_text_field_get_is_outline(self_: *mut HeTextField) -> gboolean;
     pub fn he_text_field_set_is_outline(self_: *mut HeTextField, value: gboolean);
+    pub fn he_text_field_get_entry(self_: *mut HeTextField) -> *mut gtk::GtkText;
     pub fn he_text_field_get_text(self_: *mut HeTextField) -> *const c_char;
     pub fn he_text_field_set_text(self_: *mut HeTextField, value: *const c_char);
+    pub fn he_text_field_get_suffix_icon(self_: *mut HeTextField) -> *const c_char;
+    pub fn he_text_field_set_suffix_icon(self_: *mut HeTextField, value: *const c_char);
+    pub fn he_text_field_get_prefix_icon(self_: *mut HeTextField) -> *const c_char;
+    pub fn he_text_field_set_prefix_icon(self_: *mut HeTextField, value: *const c_char);
     pub fn he_text_field_get_support_text(self_: *mut HeTextField) -> *const c_char;
     pub fn he_text_field_set_support_text(self_: *mut HeTextField, value: *const c_char);
     pub fn he_text_field_get_placeholder_text(self_: *mut HeTextField) -> *const c_char;
@@ -4067,6 +4176,7 @@ extern "C" {
     //=========================================================================
     pub fn he_view_chooser_get_type() -> GType;
     pub fn he_view_chooser_new() -> *mut HeViewChooser;
+    pub fn he_view_chooser_stack_clear(self_: *mut HeViewChooser);
     pub fn he_view_chooser_get_stack(self_: *mut HeViewChooser) -> *mut gtk::GtkStack;
     pub fn he_view_chooser_set_stack(self_: *mut HeViewChooser, value: *mut gtk::GtkStack);
 

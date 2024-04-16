@@ -833,6 +833,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HeProgressBar",
+        Layout {
+            size: size_of::<HeProgressBar>(),
+            alignment: align_of::<HeProgressBar>(),
+        },
+    ),
+    (
+        "HeProgressBarClass",
+        Layout {
+            size: size_of::<HeProgressBarClass>(),
+            alignment: align_of::<HeProgressBarClass>(),
+        },
+    ),
+    (
         "HeQuantizer",
         Layout {
             size: size_of::<HeQuantizer>(),
@@ -1071,6 +1085,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HeSwitch",
+        Layout {
+            size: size_of::<HeSwitch>(),
+            alignment: align_of::<HeSwitch>(),
+        },
+    ),
+    (
         "HeSwitchBar",
         Layout {
             size: size_of::<HeSwitchBar>(),
@@ -1082,6 +1103,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<HeSwitchBarClass>(),
             alignment: align_of::<HeSwitchBarClass>(),
+        },
+    ),
+    (
+        "HeSwitchClass",
+        Layout {
+            size: size_of::<HeSwitchClass>(),
+            alignment: align_of::<HeSwitchClass>(),
         },
     ),
     (

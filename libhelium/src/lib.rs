@@ -34,6 +34,7 @@ macro_rules! skip_assert_initialized {
 mod auto;
 
 mod application;
+mod avatar;
 
 pub use auto::*;
 

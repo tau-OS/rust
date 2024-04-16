@@ -98,6 +98,8 @@ int main() {
     printf("%s;%zu;%zu\n", "HeOverlayButtonTypeButton", sizeof(HeOverlayButtonTypeButton), alignof(HeOverlayButtonTypeButton));
     printf("%s;%zu;%zu\n", "HePillButton", sizeof(HePillButton), alignof(HePillButton));
     printf("%s;%zu;%zu\n", "HePillButtonClass", sizeof(HePillButtonClass), alignof(HePillButtonClass));
+    printf("%s;%zu;%zu\n", "HeProgressBar", sizeof(HeProgressBar), alignof(HeProgressBar));
+    printf("%s;%zu;%zu\n", "HeProgressBarClass", sizeof(HeProgressBarClass), alignof(HeProgressBarClass));
     printf("%s;%zu;%zu\n", "HeQuantizer", sizeof(HeQuantizer), alignof(HeQuantizer));
     printf("%s;%zu;%zu\n", "HeQuantizerCelebi", sizeof(HeQuantizerCelebi), alignof(HeQuantizerCelebi));
     printf("%s;%zu;%zu\n", "HeQuantizerCelebiClass", sizeof(HeQuantizerCelebiClass), alignof(HeQuantizerCelebiClass));
@@ -132,8 +134,10 @@ int main() {
     printf("%s;%zu;%zu\n", "HeSliderClass", sizeof(HeSliderClass), alignof(HeSliderClass));
     printf("%s;%zu;%zu\n", "HeStyleManager", sizeof(HeStyleManager), alignof(HeStyleManager));
     printf("%s;%zu;%zu\n", "HeStyleManagerClass", sizeof(HeStyleManagerClass), alignof(HeStyleManagerClass));
+    printf("%s;%zu;%zu\n", "HeSwitch", sizeof(HeSwitch), alignof(HeSwitch));
     printf("%s;%zu;%zu\n", "HeSwitchBar", sizeof(HeSwitchBar), alignof(HeSwitchBar));
     printf("%s;%zu;%zu\n", "HeSwitchBarClass", sizeof(HeSwitchBarClass), alignof(HeSwitchBarClass));
+    printf("%s;%zu;%zu\n", "HeSwitchClass", sizeof(HeSwitchClass), alignof(HeSwitchClass));
     printf("%s;%zu;%zu\n", "HeTab", sizeof(HeTab), alignof(HeTab));
     printf("%s;%zu;%zu\n", "HeTabClass", sizeof(HeTabClass), alignof(HeTabClass));
     printf("%s;%zu;%zu\n", "HeTabPage", sizeof(HeTabPage), alignof(HeTabPage));
