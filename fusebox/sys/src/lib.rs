@@ -12,9 +12,12 @@
 )]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
+use gdk_sys as gdk;
 use gio_sys as gio;
 use glib_sys as glib;
 use gobject_sys as gobject;
+use gtk_sys as gtk;
+use pango_sys as pango;
 
 #[allow(unused_imports)]
 use libc::{
