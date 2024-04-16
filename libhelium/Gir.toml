@@ -16,16 +16,15 @@ generate_builder = true
 trust_return_value_nullability = true
 
 external_libraries = [
-   "GLib",
-   "GObject",
-   "Gdk",
-   "GdkPixbuf",
-   "Gtk",
-   "Pango",
+  "GLib",
+  "GObject",
+  "Gdk",
+  "GdkPixbuf",
+  "Gtk",
+  "Pango",
 ]
 
 generate = [
-  "He.Avatar",
   "He.ColorRGBColor",
   "He.ColorXYZColor",
   "He.ColorLCHColor",
@@ -96,7 +95,9 @@ generate = [
   "He.Divider",
   "He.NavigationSection",
   "He.Slider",
-  "He.TextField"
+  "He.TextField",
+  "He.ProgressBar",
+  "He.Switch"
 ]
 
 manual = [
@@ -166,3 +167,10 @@ status = "generate"
     [[object.function]]
     name = "set_accent_color"
     ignore = true
+
+[[object]]
+name = "He.Avatar"
+status = "generate"
+    [[object.function]]
+    name = "new" # the status parameter is nullable/optional (which doesn't make much sense)
+    manual = true

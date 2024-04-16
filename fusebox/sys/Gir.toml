@@ -7,5 +7,8 @@ min_cfg_version = "1"
 external_libraries = [
    "GLib",
    "GObject",
-   "Gio"
+   "Gdk",
+   "Gio",
+   "Gtk",
+   "Pango"
 ]

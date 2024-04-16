@@ -12,6 +12,5 @@ pub mod prelude {
     pub use super::content_list::ContentListImpl;
     pub use super::mini_content_block::MiniContentBlockImpl;
     pub use super::window::HeWindowImpl;
-    pub use gio::subclass::prelude::*;
-    pub use glib::subclass::prelude::*;
+    pub use gtk::subclass::prelude::*;
 }

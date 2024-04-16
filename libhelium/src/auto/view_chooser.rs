@@ -260,6 +260,13 @@ mod sealed {
 }
 
 pub trait ViewChooserExt: IsA<ViewChooser> + sealed::Sealed + 'static {
+    #[doc(alias = "he_view_chooser_stack_clear")]
+    fn stack_clear(&self) {
+        unsafe {
+            ffi::he_view_chooser_stack_clear(self.as_ref().to_glib_none().0);
+        }
+    }
+
     #[doc(alias = "he_view_chooser_get_stack")]
     #[doc(alias = "get_stack")]
     fn stack(&self) -> gtk::Stack {

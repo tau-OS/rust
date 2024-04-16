@@ -99,6 +99,9 @@ pub use self::overlay_button::OverlayButton;
 mod pill_button;
 pub use self::pill_button::PillButton;
 
+mod progress_bar;
+pub use self::progress_bar::ProgressBar;
+
 mod segmented_button;
 pub use self::segmented_button::SegmentedButton;
 
@@ -119,6 +122,9 @@ pub use self::side_bar::SideBar;
 
 mod slider;
 pub use self::slider::Slider;
+
+mod switch;
+pub use self::switch::Switch;
 
 mod switch_bar;
 pub use self::switch_bar::SwitchBar;
@@ -230,6 +236,7 @@ pub(crate) mod traits {
     pub use super::navigation_rail::NavigationRailExt;
     pub use super::navigation_section::NavigationSectionExt;
     pub use super::overlay_button::OverlayButtonExt;
+    pub use super::progress_bar::ProgressBarExt;
     pub use super::segmented_button::SegmentedButtonExt;
     pub use super::settings_list::SettingsListExt;
     pub use super::settings_page::SettingsPageExt;
@@ -237,6 +244,7 @@ pub(crate) mod traits {
     pub use super::settings_window::SettingsWindowExt;
     pub use super::side_bar::SideBarExt;
     pub use super::slider::SliderExt;
+    pub use super::switch::SwitchExt;
     pub use super::switch_bar::SwitchBarExt;
     pub use super::tab::TabExt;
     pub use super::tab_page::TabPageExt;
@@ -285,6 +293,7 @@ pub(crate) mod builders {
     pub use super::outline_button::OutlineButtonBuilder;
     pub use super::overlay_button::OverlayButtonBuilder;
     pub use super::pill_button::PillButtonBuilder;
+    pub use super::progress_bar::ProgressBarBuilder;
     pub use super::segmented_button::SegmentedButtonBuilder;
     pub use super::settings_list::SettingsListBuilder;
     pub use super::settings_page::SettingsPageBuilder;
@@ -292,6 +301,7 @@ pub(crate) mod builders {
     pub use super::settings_window::SettingsWindowBuilder;
     pub use super::side_bar::SideBarBuilder;
     pub use super::slider::SliderBuilder;
+    pub use super::switch::SwitchBuilder;
     pub use super::switch_bar::SwitchBarBuilder;
     pub use super::tab::TabBuilder;
     pub use super::tab_page::TabPageBuilder;

@@ -1,6 +1,6 @@
 [package]
 name = "libhelium-sys"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Lleyton Gray <lleyton@fyralabs.com>"]
 edition = "2021"
 build = "build.rs"
@@ -35,8 +35,16 @@ version = "1.5"
 [package.metadata.system-deps.libhelium_1.v1_6]
 version = "1.6"
 
+[package.metadata.system-deps.libhelium_1.v1_7]
+version = "1.7"
+
+[package.metadata.system-deps.libhelium_1.v1_8]
+version = "1.8"
+
 [package.metadata.docs.rs]
 features = []
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 
 [lib]
 name = "libhelium_sys"
@@ -44,29 +52,25 @@ name = "libhelium_sys"
 [dependencies]
 libc = "0.2"
 
-[dependencies.gio]
-package = "gio-sys"
-version = "0.18"
+[dependencies.gio-sys]
+version = "0.19"
 
-[dependencies.glib]
-package = "glib-sys"
-version = "0.18"
+[dependencies.glib-sys]
+version = "0.19"
 
-[dependencies.gobject]
-package = "gobject-sys"
-version = "0.18"
+[dependencies.gobject-sys]
+version = "0.19"
 
-[dependencies.gtk]
+[dependencies.gtk-sys]
 package = "gtk4-sys"
-version = "0.7"
+version = "0.8"
 
-[dependencies.gdk]
+[dependencies.gdk-sys]
 package = "gdk4-sys"
-version = "0.7"
+version = "0.8"
 
-[dependencies.pango]
-package = "pango-sys"
-version = "0.18"
+[dependencies.pango-sys]
+version = "0.19"
 
 [build-dependencies]
 system-deps = "6"
@@ -82,3 +86,5 @@ v1_3 = ["v1_2"]
 v1_4 = ["v1_3"]
 v1_5 = ["v1_4"]
 v1_6 = ["v1_5"]
+v1_7 = ["v1_6"]
+v1_8 = ["v1_7"]

@@ -12,63 +12,65 @@ use glib::{
 use std::boxed::Box as Box_;
 
 glib::wrapper! {
-    #[doc(alias = "HeAvatar")]
-    pub struct Avatar(Object<ffi::HeAvatar, ffi::HeAvatarClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    #[doc(alias = "HeProgressBar")]
+    pub struct ProgressBar(Object<ffi::HeProgressBar, ffi::HeProgressBarClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_avatar_get_type(),
+        type_ => || ffi::he_progress_bar_get_type(),
     }
 }
 
-impl Avatar {
-    pub const NONE: Option<&'static Avatar> = None;
+impl ProgressBar {
+    pub const NONE: Option<&'static ProgressBar> = None;
+
+    #[doc(alias = "he_progress_bar_new")]
+    pub fn new() -> ProgressBar {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::he_progress_bar_new()) }
+    }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`Avatar`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`ProgressBar`] objects.
     ///
-    /// This method returns an instance of [`AvatarBuilder`](crate::builders::AvatarBuilder) which can be used to create [`Avatar`] objects.
-    pub fn builder() -> AvatarBuilder {
-        AvatarBuilder::new()
+    /// This method returns an instance of [`ProgressBarBuilder`](crate::builders::ProgressBarBuilder) which can be used to create [`ProgressBar`] objects.
+    pub fn builder() -> ProgressBarBuilder {
+        ProgressBarBuilder::new()
+    }
+}
+
+impl Default for ProgressBar {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`Avatar`] objects.
+/// A [builder-pattern] type to construct [`ProgressBar`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct AvatarBuilder {
-    builder: glib::object::ObjectBuilder<'static, Avatar>,
+pub struct ProgressBarBuilder {
+    builder: glib::object::ObjectBuilder<'static, ProgressBar>,
 }
 
-impl AvatarBuilder {
+impl ProgressBarBuilder {
     fn new() -> Self {
         Self {
             builder: glib::object::Object::builder(),
         }
     }
 
-    pub fn size(self, size: i32) -> Self {
+    pub fn stop_indicator_visibility(self, stop_indicator_visibility: bool) -> Self {
         Self {
-            builder: self.builder.property("size", size),
+            builder: self
+                .builder
+                .property("stop-indicator-visibility", stop_indicator_visibility),
         }
     }
 
-    pub fn text(self, text: impl Into<glib::GString>) -> Self {
+    pub fn is_osd(self, is_osd: bool) -> Self {
         Self {
-            builder: self.builder.property("text", text.into()),
-        }
-    }
-
-    pub fn status(self, status: bool) -> Self {
-        Self {
-            builder: self.builder.property("status", status),
-        }
-    }
-
-    pub fn image(self, image: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("image", image.into()),
+            builder: self.builder.property("is-osd", is_osd),
         }
     }
 
@@ -253,157 +255,102 @@ impl AvatarBuilder {
     //}
 
     // rustdoc-stripper-ignore-next
-    /// Build the [`Avatar`].
+    /// Build the [`ProgressBar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> Avatar {
+    pub fn build(self) -> ProgressBar {
         self.builder.build()
     }
 }
 
 mod sealed {
     pub trait Sealed {}
-    impl<T: super::IsA<super::Avatar>> Sealed for T {}
+    impl<T: super::IsA<super::ProgressBar>> Sealed for T {}
 }
 
-pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
-    #[doc(alias = "he_avatar_get_size")]
-    #[doc(alias = "get_size")]
-    fn size(&self) -> i32 {
-        unsafe { ffi::he_avatar_get_size(self.as_ref().to_glib_none().0) }
-    }
-
-    #[doc(alias = "he_avatar_set_size")]
-    fn set_size(&self, value: i32) {
+pub trait ProgressBarExt: IsA<ProgressBar> + sealed::Sealed + 'static {
+    #[doc(alias = "he_progress_bar_get_stop_indicator_visibility")]
+    #[doc(alias = "get_stop_indicator_visibility")]
+    fn is_stop_indicator_visibility(&self) -> bool {
         unsafe {
-            ffi::he_avatar_set_size(self.as_ref().to_glib_none().0, value);
+            from_glib(ffi::he_progress_bar_get_stop_indicator_visibility(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
-    #[doc(alias = "he_avatar_get_text")]
-    #[doc(alias = "get_text")]
-    fn text(&self) -> Option<glib::GString> {
-        unsafe { from_glib_none(ffi::he_avatar_get_text(self.as_ref().to_glib_none().0)) }
-    }
-
-    #[doc(alias = "he_avatar_set_text")]
-    fn set_text(&self, value: Option<&str>) {
+    #[doc(alias = "he_progress_bar_set_stop_indicator_visibility")]
+    fn set_stop_indicator_visibility(&self, value: bool) {
         unsafe {
-            ffi::he_avatar_set_text(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+            ffi::he_progress_bar_set_stop_indicator_visibility(
+                self.as_ref().to_glib_none().0,
+                value.into_glib(),
+            );
         }
     }
 
-    #[doc(alias = "he_avatar_get_status")]
-    #[doc(alias = "get_status")]
-    fn is_status(&self) -> bool {
-        unsafe { from_glib(ffi::he_avatar_get_status(self.as_ref().to_glib_none().0)) }
-    }
-
-    #[doc(alias = "he_avatar_set_status")]
-    fn set_status(&self, value: bool) {
+    #[doc(alias = "he_progress_bar_get_is_osd")]
+    #[doc(alias = "get_is_osd")]
+    fn is_osd(&self) -> bool {
         unsafe {
-            ffi::he_avatar_set_status(self.as_ref().to_glib_none().0, value.into_glib());
+            from_glib(ffi::he_progress_bar_get_is_osd(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
-    #[doc(alias = "he_avatar_get_image")]
-    #[doc(alias = "get_image")]
-    fn image(&self) -> Option<glib::GString> {
-        unsafe { from_glib_none(ffi::he_avatar_get_image(self.as_ref().to_glib_none().0)) }
-    }
-
-    #[doc(alias = "he_avatar_set_image")]
-    fn set_image(&self, value: Option<&str>) {
+    #[doc(alias = "he_progress_bar_set_is_osd")]
+    fn set_is_osd(&self, value: bool) {
         unsafe {
-            ffi::he_avatar_set_image(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+            ffi::he_progress_bar_set_is_osd(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
-    #[doc(alias = "size")]
-    fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_size_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeAvatar,
+    #[doc(alias = "stop-indicator-visibility")]
+    fn connect_stop_indicator_visibility_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stop_indicator_visibility_trampoline<
+            P: IsA<ProgressBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeProgressBar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::size\0".as_ptr() as *const _,
+                b"notify::stop-indicator-visibility\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
-                    notify_size_trampoline::<Self, F> as *const (),
+                    notify_stop_indicator_visibility_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    #[doc(alias = "text")]
-    fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_text_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeAvatar,
+    #[doc(alias = "is-osd")]
+    fn connect_is_osd_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_osd_trampoline<P: IsA<ProgressBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeProgressBar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::text\0".as_ptr() as *const _,
+                b"notify::is-osd\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
-                    notify_text_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "status")]
-    fn connect_status_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_status_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeAvatar,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::status\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
-                    notify_status_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "image")]
-    fn connect_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_image_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeAvatar,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::image\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
-                    notify_image_trampoline::<Self, F> as *const (),
+                    notify_is_osd_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -411,4 +358,4 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
     }
 }
 
-impl<O: IsA<Avatar>> AvatarExt for O {}
+impl<O: IsA<ProgressBar>> ProgressBarExt for O {}
