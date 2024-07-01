@@ -1,6 +1,6 @@
 [package]
 name = "libhelium-sys"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Lleyton Gray <lleyton@fyralabs.com>"]
 edition = "2021"
 build = "build.rs"
@@ -73,7 +73,7 @@ version = "0.8"
 version = "0.19"
 
 [build-dependencies]
-system-deps = "6"
+system-deps = "7"
 
 [dev-dependencies]
 shell-words = "1.0.0"

@@ -293,7 +293,6 @@
 		</parameters>
 	</function>
 	<function name="color_fix_disliked" c:identifier="he_color_fix_disliked">
-		<doc xml:whitespace="preserve">&lt;para&gt;If color is disliked, lighten it to make it likable.&lt;/para&gt;</doc>
 		<return-value transfer-ownership="none">
 			<type name="none" c:type="void"/>
 		</return-value>
@@ -1872,6 +1871,26 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="MutedSchemePrivate" c:type="HeMutedSchemePrivate" disguised="1"/>
+	<class name="SaladScheme" c:type="HeSaladScheme" c:symbol-prefix="salad_scheme" glib:type-name="HeSaladScheme" glib:get-type="he_salad_scheme_get_type" glib:type-struct="SaladSchemeClass" parent="GObject.Object">
+		<implements name="He.SchemeFactory"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SaladSchemePrivate" c:type="HeSaladSchemePrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_salad_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.SaladScheme" c:type="HeSaladScheme*"/>
+			</return-value>
+		</constructor>
+	</class>
+	<record name="SaladSchemeClass" c:type="HeSaladSchemeClass" glib:is-gtype-struct-for="SaladScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="SaladSchemePrivate" c:type="HeSaladSchemePrivate" disguised="1"/>
 	<class name="VibrantScheme" c:type="HeVibrantScheme" c:symbol-prefix="vibrant_scheme" glib:type-name="HeVibrantScheme" glib:get-type="he_vibrant_scheme_get_type" glib:type-struct="VibrantSchemeClass" parent="GObject.Object">
 		<implements name="He.SchemeFactory"/>
 		<field name="parent_instance" readable="0" private="1">
@@ -1893,7 +1912,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="VibrantSchemePrivate" c:type="HeVibrantSchemePrivate" disguised="1"/>
 	<class name="StyleManager" c:type="HeStyleManager" c:symbol-prefix="style_manager" glib:type-name="HeStyleManager" glib:get-type="he_style_manager_get_type" glib:type-struct="StyleManagerClass" parent="GObject.Object">
-		<doc xml:whitespace="preserve">&lt;para&gt;A class that manages the style of the application in conjunction with the provided preferences. This is a low-level class that should not be 
+		<doc xml:whitespace="preserve">&lt;para&gt;A class that manages the style of the application in conjunction with the provided preferences. This is a low-level class that should not be
 used directly. Instead, let the `He.Application` class manage this for you.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
@@ -2023,7 +2042,7 @@ used directly. Instead, let the `He.Application` class manage this for you.&lt;/
 			<type name="ViewPrivate" c:type="HeViewPrivate*"/>
 		</field>
 		<method name="add_child" c:identifier="he_view_add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
 code.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
@@ -2044,7 +2063,7 @@ code.&lt;/para&gt;</doc>
 			</parameters>
 		</method>
 		<virtual-method name="add_child" invoker="add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
 code.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
@@ -2217,7 +2236,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="ViewPrivate" c:type="HeViewPrivate" disguised="1"/>
 	<class name="Window" c:type="HeWindow" c:symbol-prefix="window" glib:type-name="HeWindow" glib:get-type="he_window_get_type" glib:type-struct="WindowClass" parent="Gtk.Window">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Window is a container that has an &lt;type&gt;HeAppBar&lt;/type&gt; and can be moved, resized, and closed. It may be a top-level window or a dialog. The 
+		<doc xml:whitespace="preserve">&lt;para&gt;A Window is a container that has an &lt;type&gt;HeAppBar&lt;/type&gt; and can be moved, resized, and closed. It may be a top-level window or a dialog. The
 title bar can be made always visible. Has an optional back button. The back button is only visible if has_back_button is true.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="Gtk.Window" c:type="GtkWindow"/>
@@ -2501,6 +2520,7 @@ Since: 1.0</doc>
 		<member name="vibrant" c:identifier="HE_DESKTOP_ENSOR_SCHEME_VIBRANT" value="1"/>
 		<member name="muted" c:identifier="HE_DESKTOP_ENSOR_SCHEME_MUTED" value="2"/>
 		<member name="monochromatic" c:identifier="HE_DESKTOP_ENSOR_SCHEME_MONOCHROMATIC" value="3"/>
+		<member name="salad" c:identifier="HE_DESKTOP_ENSOR_SCHEME_SALAD" value="4"/>
 	</enumeration>
 	<function name="desktop_ensor_scheme_to_factory" c:identifier="he_desktop_ensor_scheme_to_factory">
 		<return-value transfer-ownership="full">
@@ -2747,7 +2767,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="QuantizerWsmeansPrivate" c:type="HeQuantizerWsmeansPrivate" disguised="1"/>
 	<class name="QuantizerWu" c:type="HeQuantizerWu" c:symbol-prefix="quantizer_wu" glib:type-name="HeQuantizerWu" glib:get-type="he_quantizer_wu_get_type" glib:type-struct="QuantizerWuClass" parent="He.Quantizer">
-		<doc xml:whitespace="preserve">&lt;para&gt;An image quantizer that divides the image&amp;apos;s pixels into clusters by recursively cutting an RGB cube, based on the weight of pixels in each 
+		<doc xml:whitespace="preserve">&lt;para&gt;An image quantizer that divides the image&amp;apos;s pixels into clusters by recursively cutting an RGB cube, based on the weight of pixels in each
 area of the cube.&lt;/para&gt;
 &lt;para&gt;&amp;lt;p&amp;gt;The algorithm was described by Xiaolin Wu in Graphic Gems II, published in 1991.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -2793,6 +2813,9 @@ area of the cube.&lt;/para&gt;
 						<type name="gint" c:type="gint*"/>
 						<type name="gint" c:type="gint*"/>
 					</type>
+				</parameter>
+				<parameter name="desired" transfer-ownership="none" nullable="1">
+					<type name="gint" c:type="gint*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -3628,7 +3651,7 @@ Since: 1.0</doc>
 		</parameters>
 	</function>
 	<class name="AppBar" c:type="HeAppBar" c:symbol-prefix="app_bar" glib:type-name="HeAppBar" glib:get-type="he_app_bar_get_type" glib:type-struct="AppBarClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;An AppBar is the header bar of an Window. It usually provides controls to manage the window, as well as optional children for more granular 
+		<doc xml:whitespace="preserve">&lt;para&gt;An AppBar is the header bar of an Window. It usually provides controls to manage the window, as well as optional children for more granular
 control.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Bin" c:type="HeBin"/>
@@ -3769,7 +3792,7 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="viewtitle-widget" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title widget to the left on the AppBar. If this is set, the other title &amp;lpar;not subtitle&amp;rpar; props won&amp;apos;t work, and the mini title 
+			<doc xml:whitespace="preserve">&lt;para&gt;The title widget to the left on the AppBar. If this is set, the other title &amp;lpar;not subtitle&amp;rpar; props won&amp;apos;t work, and the mini title
 on collapsed state won&amp;apos;t show.&lt;/para&gt;</doc>
 			<type name="Gtk.Widget" c:type="GtkWidget*"/>
 		</property>
@@ -4412,7 +4435,7 @@ Since: 1.0</doc>
 		<member name="error" c:identifier="HE_BANNER_STYLE_ERROR" value="2"/>
 	</enumeration>
 	<class name="BottomBar" c:type="HeBottomBar" c:symbol-prefix="bottom_bar" glib:type-name="HeBottomBar" glib:get-type="he_bottom_bar_get_type" glib:type-struct="BottomBarClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A BottomBar is a toolbar made to make actions on content more visible. It may have up to 5 actions on each side. It has title and description 
+		<doc xml:whitespace="preserve">&lt;para&gt;A BottomBar is a toolbar made to make actions on content more visible. It may have up to 5 actions on each side. It has title and description
 labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
@@ -5807,7 +5830,7 @@ Since: 1.0</doc>
 			<type name="EmptyPagePrivate" c:type="HeEmptyPagePrivate*"/>
 		</field>
 		<field name="action_button" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The action button of the empty page. Can connect to the clicked signal to get notified when the button is clicked. e.g. 
+			<doc xml:whitespace="preserve">&lt;para&gt;The action button of the empty page. Can connect to the clicked signal to get notified when the button is clicked. e.g.
 action_button.clicked.connect&amp;lpar;&amp;lpar;&amp;rpar; =&amp;gt; { ... }&amp;rpar;;&lt;/para&gt;</doc>
 			<type name="He.PillButton" c:type="HePillButton*"/>
 		</field>
@@ -7147,7 +7170,7 @@ Since: 1.0</doc>
 			<type name="SegmentedButtonPrivate" c:type="HeSegmentedButtonPrivate*"/>
 		</field>
 		<method name="add_child" c:identifier="he_segmented_button_add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Adds a widget to SegmentedButton, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
+			<doc xml:whitespace="preserve">&lt;para&gt;Adds a widget to SegmentedButton, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
 code.&lt;/para&gt;
 
 Since: 1.0</doc>
@@ -7374,6 +7397,21 @@ Since: 1.0</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="SettingsRowPrivate" c:type="HeSettingsRowPrivate*"/>
 		</field>
+		<method name="add" c:identifier="he_settings_row_add">
+			<doc xml:whitespace="preserve">&lt;para&gt;Adds a new item to the SettingsRow.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SettingsRow" c:type="HeSettingsRow*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The item to add. &lt;/para&gt;</doc>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
 		<constructor name="with_details" c:identifier="he_settings_row_new_with_details">
 			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new SettingsRow.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="none">
@@ -7916,9 +7954,9 @@ Since: 1.0</doc>
 	</record>
 	<record name="SideBarPrivate" c:type="HeSideBarPrivate" disguised="1"/>
 	<class name="Slider" c:type="HeSlider" c:symbol-prefix="slider" glib:type-name="HeSlider" glib:get-type="he_slider_get_type" glib:type-struct="SliderClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Slider is a widget that is used to select a value by means of a dial running across a trough. Contains optional icons for the slider purpose, 
+		<doc xml:whitespace="preserve">&lt;para&gt;A Slider is a widget that is used to select a value by means of a dial running across a trough. Contains optional icons for the slider purpose,
 and a disable-able Stop Indicator for accessibility purposes.&lt;/para&gt;
-&lt;para&gt;When using the Stop Indicator, it&amp;apos;s advisable to add a mark with the value of 1.0 along the trough of the Slider so that the user can 
+&lt;para&gt;When using the Stop Indicator, it&amp;apos;s advisable to add a mark with the value of 1.0 along the trough of the Slider so that the user can
 discern why the end point is marked.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
@@ -8935,10 +8973,10 @@ Since: 1.0</doc>
 	</record>
 	<record name="TextButtonPrivate" c:type="HeTextButtonPrivate" disguised="1"/>
 	<class name="TextField" c:type="HeTextField" c:symbol-prefix="text_field" glib:type-name="HeTextField" glib:get-type="he_text_field_get_type" glib:type-struct="TextFieldClass" parent="Gtk.ListBoxRow">
-		<doc xml:whitespace="preserve">&lt;para&gt;TextField is a &lt;type&gt;GtkEntry&lt;/type&gt;-like subclass that is meant to be used in forms where input must be validated before the form can be 
-submitted. It provides feedback to users about the state of input validation and keeps track of its own validation state. By default, input is 
+		<doc xml:whitespace="preserve">&lt;para&gt;TextField is a &lt;type&gt;GtkEntry&lt;/type&gt;-like subclass that is meant to be used in forms where input must be validated before the form can be
+submitted. It provides feedback to users about the state of input validation and keeps track of its own validation state. By default, input is
 considered invalid. This widget can also be used in place of a &lt;type&gt;GtkEntry&lt;/type&gt; for HIG compliance purposes.&lt;/para&gt;
-&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt; 
+&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt;
   &lt;example&gt;
     &lt;programlisting&gt;  var validated_entry = new He.TextField ();
   username_entry.changed.connect (() =&gt; {
@@ -8946,15 +8984,15 @@ considered invalid. This widget can also be used in place of a &lt;type&gt;GtkEn
       username_entry.text == &quot;valid input&quot;;
   });&lt;/programlisting&gt;
   &lt;/example&gt;&lt;/para&gt;
-&lt;para&gt;If the TextField.from_regex &amp;lpar;&amp;rpar; constructor is used then the entry automatically sets its validity status. A valid regex must be 
+&lt;para&gt;If the TextField.from_regex &amp;lpar;&amp;rpar; constructor is used then the entry automatically sets its validity status. A valid regex must be
 passed to this constructor.&lt;/para&gt;
-&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt; 
+&lt;para&gt;&lt;emphasis role=&quot;bold&quot;&gt;Example&lt;/emphasis&gt;&lt;br/&gt;
   &lt;example&gt;
     &lt;programlisting&gt;  GLib.Regex? regex = null;
   He.TextField only_lower_case_letters_entry;
   try {
       regex = new Regex (&quot;^[a-z]*$&quot;);
-     
+
       only_lower_case_letters_entry = new He.TextField.from_regex (regex);
   } catch (Error e) {
       critical (e.message);
@@ -9454,7 +9492,7 @@ passed to this constructor.&lt;/para&gt;
 	</record>
 	<record name="TimePickerPrivate" c:type="HeTimePickerPrivate" disguised="1"/>
 	<class name="TintButton" c:type="HeTintButton" c:symbol-prefix="tint_button" glib:type-name="HeTintButton" glib:get-type="he_tint_button_get_type" glib:type-struct="TintButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;A TintButton is similar to a FillButton, except that the color of the button has a tinted appearance. In addition, the TintButton also support 
+		<doc xml:whitespace="preserve">&lt;para&gt;A TintButton is similar to a FillButton, except that the color of the button has a tinted appearance. In addition, the TintButton also support
 icons.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Button" c:type="HeButton"/>
@@ -9909,7 +9947,7 @@ Since: 1.0</doc>
 			<type name="WelcomeScreenPrivate" c:type="HeWelcomeScreenPrivate*"/>
 		</field>
 		<method name="add_child" c:identifier="he_welcome_screen_add_child">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in 
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the welcome screen, should only be used in the context of a UI or Blueprint file. There should be no need to use this method in
 code.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
@@ -10009,7 +10047,7 @@ Since: 1.0</doc>
 	</record>
 	<record name="WelcomeScreenPrivate" c:type="HeWelcomeScreenPrivate" disguised="1"/>
 	<interface name="SchemeFactory" c:type="HeSchemeFactory" c:symbol-prefix="scheme_factory" glib:type-name="HeSchemeFactory" glib:get-type="he_scheme_factory_get_type" glib:type-struct="SchemeFactoryIface">
-		<doc xml:whitespace="preserve">&lt;para&gt;A SchemeFactory is a class which implements a method to generate a Scheme from an accent color and boolean representing whether the scheme is 
+		<doc xml:whitespace="preserve">&lt;para&gt;A SchemeFactory is a class which implements a method to generate a Scheme from an accent color and boolean representing whether the scheme is
 dark or light. Prior runs of the generate method should not affect the output of future runs.&lt;/para&gt;</doc>
 		<prerequisite name="GObject.Object"/>
 		<method name="generate" c:identifier="he_scheme_factory_generate">
