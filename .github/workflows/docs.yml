@@ -19,12 +19,12 @@ jobs:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: "recursive"
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
       - run: npm install -g sass
 
       - name: Update repos
@@ -34,7 +34,7 @@ jobs:
         run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev libgexiv2-dev meson ninja-build valac valadoc libpulse-dev libgnome-desktop-4-dev libgweather-4-dev libaccountsservice-dev libudisks2-dev libgudev-1.0-dev libgtop2-dev libxml2-dev libibus-1.0-dev desktop-file-utils
 
       - name: Checkout libhelium
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: tau-OS/libhelium
           path: libhelium-src
@@ -49,7 +49,7 @@ jobs:
         working-directory: ./libhelium-src/build
 
       - name: Checkout libbismuth
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: tau-OS/libbismuth
           path: libbismuth-src
@@ -64,7 +64,7 @@ jobs:
         working-directory: ./libbismuth-src/build
 
       - name: Checkout fusebox
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: tau-OS/fusebox
           path: fusebox-src
@@ -92,11 +92,11 @@ jobs:
       - run: mv target/doc/ docs
 
       - name: Setup Pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v5
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "docs/"
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
