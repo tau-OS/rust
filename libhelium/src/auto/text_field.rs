@@ -20,10 +20,13 @@ impl TextField {
         pub const NONE: Option<&'static TextField> = None;
     
 
-    //#[doc(alias = "he_text_field_new_from_regex")]
-    //pub fn from_regex(regex_arg: /*Ignored*/&glib::Regex) -> TextField {
-    //    unsafe { TODO: call ffi:he_text_field_new_from_regex() }
-    //}
+    #[doc(alias = "he_text_field_new_from_regex")]
+    pub fn from_regex(regex_arg: &glib::Regex) -> TextField {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::he_text_field_new_from_regex(regex_arg.to_glib_none().0))
+        }
+    }
 
     #[doc(alias = "he_text_field_new")]
     pub fn new() -> TextField {
@@ -75,9 +78,9 @@ pub struct TextFieldBuilder {
                             Self { builder: self.builder.property("min-length", min_length), }
                         }
 
-                            //pub fn regex(self, regex: /*Ignored*/&glib::Regex) -> Self {
-                        //    Self { builder: self.builder.property("regex", regex), }
-                        //}
+                            pub fn regex(self, regex: &glib::Regex) -> Self {
+                            Self { builder: self.builder.property("regex", regex.clone()), }
+                        }
 
                             pub fn is_search(self, is_search: bool) -> Self {
                             Self { builder: self.builder.property("is-search", is_search), }
@@ -321,16 +324,20 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
         }
     }
 
-    //#[doc(alias = "he_text_field_get_regex")]
-    //#[doc(alias = "get_regex")]
-    //fn regex(&self) -> /*Ignored*/glib::Regex {
-    //    unsafe { TODO: call ffi:he_text_field_get_regex() }
-    //}
+    #[doc(alias = "he_text_field_get_regex")]
+    #[doc(alias = "get_regex")]
+    fn regex(&self) -> glib::Regex {
+        unsafe {
+            from_glib_none(ffi::he_text_field_get_regex(self.as_ref().to_glib_none().0))
+        }
+    }
 
-    //#[doc(alias = "he_text_field_set_regex")]
-    //fn set_regex(&self, value: /*Ignored*/&glib::Regex) {
-    //    unsafe { TODO: call ffi:he_text_field_set_regex() }
-    //}
+    #[doc(alias = "he_text_field_set_regex")]
+    fn set_regex(&self, value: &glib::Regex) {
+        unsafe {
+            ffi::he_text_field_set_regex(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
 
     #[doc(alias = "he_text_field_get_is_search")]
     #[doc(alias = "get_is_search")]

@@ -238,6 +238,20 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_app_bar_append_toggle")]
+    fn append_toggle(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_app_bar_append_toggle(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_app_bar_append_menu")]
+    fn append_menu(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_app_bar_append_menu(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
+        }
+    }
+
     #[doc(alias = "he_app_bar_remove")]
     fn remove(&self, child: &impl IsA<gtk::Widget>) {
         unsafe {

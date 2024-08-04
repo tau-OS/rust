@@ -126,6 +126,111 @@ impl From<AboutWindowLicenses> for glib::Value {
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HeAnimationState")]
+pub enum AnimationState {
+    #[doc(alias = "HE_ANIMATION_STATE_IDLE")]
+    Idle,
+    #[doc(alias = "HE_ANIMATION_STATE_PAUSED")]
+    Paused,
+    #[doc(alias = "HE_ANIMATION_STATE_PLAYING")]
+    Playing,
+    #[doc(alias = "HE_ANIMATION_STATE_FINISHED")]
+    Finished,
+#[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for AnimationState {
+    type GlibType = ffi::HeAnimationState;
+
+    #[inline]
+fn into_glib(self) -> ffi::HeAnimationState {
+match self {
+            Self::Idle => ffi::HE_ANIMATION_STATE_IDLE,
+            Self::Paused => ffi::HE_ANIMATION_STATE_PAUSED,
+            Self::Playing => ffi::HE_ANIMATION_STATE_PLAYING,
+            Self::Finished => ffi::HE_ANIMATION_STATE_FINISHED,
+            Self::__Unknown(value) => value,
+}
+}
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeAnimationState> for AnimationState {
+    #[inline]
+unsafe fn from_glib(value: ffi::HeAnimationState) -> Self {
+        skip_assert_initialized!();
+        
+match value {
+            ffi::HE_ANIMATION_STATE_IDLE => Self::Idle,
+            ffi::HE_ANIMATION_STATE_PAUSED => Self::Paused,
+            ffi::HE_ANIMATION_STATE_PLAYING => Self::Playing,
+            ffi::HE_ANIMATION_STATE_FINISHED => Self::Finished,
+            value => Self::__Unknown(value),
+}
+}
+}
+
+impl StaticType for AnimationState {
+                #[inline]
+    #[doc(alias = "he_animation_state_get_type")]
+   fn static_type() -> glib::Type {
+                    unsafe { from_glib(ffi::he_animation_state_get_type()) }
+                }
+            }
+
+impl glib::HasParamSpec for AnimationState {
+                type ParamSpec = glib::ParamSpecEnum;
+                type SetValue = Self;
+                type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+    
+                fn param_spec_builder() -> Self::BuilderFn {
+                    Self::ParamSpec::builder_with_default
+                }
+}
+
+impl glib::value::ValueType for AnimationState {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for AnimationState {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for AnimationState {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<AnimationState> for glib::Value {
+    #[inline]
+    fn from(v: AnimationState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "HeBannerStyle")]
 pub enum BannerStyle {
     #[doc(alias = "HE_BANNER_STYLE_INFO")]
@@ -778,6 +883,107 @@ impl From<DesktopEnsorScheme> for glib::Value {
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HeEasing")]
+pub enum Easing {
+    #[doc(alias = "HE_EASING_LINEAR")]
+    Linear,
+    #[doc(alias = "HE_EASING_EASE_OUT_CUBIC")]
+    EaseOutCubic,
+    #[doc(alias = "HE_EASING_EASE_IN_OUT_BOUNCE")]
+    EaseInOutBounce,
+#[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for Easing {
+    type GlibType = ffi::HeEasing;
+
+    #[inline]
+fn into_glib(self) -> ffi::HeEasing {
+match self {
+            Self::Linear => ffi::HE_EASING_LINEAR,
+            Self::EaseOutCubic => ffi::HE_EASING_EASE_OUT_CUBIC,
+            Self::EaseInOutBounce => ffi::HE_EASING_EASE_IN_OUT_BOUNCE,
+            Self::__Unknown(value) => value,
+}
+}
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeEasing> for Easing {
+    #[inline]
+unsafe fn from_glib(value: ffi::HeEasing) -> Self {
+        skip_assert_initialized!();
+        
+match value {
+            ffi::HE_EASING_LINEAR => Self::Linear,
+            ffi::HE_EASING_EASE_OUT_CUBIC => Self::EaseOutCubic,
+            ffi::HE_EASING_EASE_IN_OUT_BOUNCE => Self::EaseInOutBounce,
+            value => Self::__Unknown(value),
+}
+}
+}
+
+impl StaticType for Easing {
+                #[inline]
+    #[doc(alias = "he_easing_get_type")]
+   fn static_type() -> glib::Type {
+                    unsafe { from_glib(ffi::he_easing_get_type()) }
+                }
+            }
+
+impl glib::HasParamSpec for Easing {
+                type ParamSpec = glib::ParamSpecEnum;
+                type SetValue = Self;
+                type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+    
+                fn param_spec_builder() -> Self::BuilderFn {
+                    Self::ParamSpec::builder_with_default
+                }
+}
+
+impl glib::value::ValueType for Easing {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for Easing {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for Easing {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<Easing> for glib::Value {
+    #[inline]
+    fn from(v: Easing) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "HeModifierBadgeAlignment")]
 pub enum ModifierBadgeAlignment {
     #[doc(alias = "HE_MODIFIER_BADGE_ALIGNMENT_LEFT")]
@@ -1279,6 +1485,107 @@ impl ToValue for TabSwitcherTabBarBehavior {
 impl From<TabSwitcherTabBarBehavior> for glib::Value {
     #[inline]
     fn from(v: TabSwitcherTabBarBehavior) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeTipViewStyle")]
+pub enum TipViewStyle {
+    #[doc(alias = "HE_TIP_VIEW_STYLE_NONE")]
+    None,
+    #[doc(alias = "HE_TIP_VIEW_STYLE_POPUP")]
+    Popup,
+    #[doc(alias = "HE_TIP_VIEW_STYLE_VIEW")]
+    View,
+#[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for TipViewStyle {
+    type GlibType = ffi::HeTipViewStyle;
+
+    #[inline]
+fn into_glib(self) -> ffi::HeTipViewStyle {
+match self {
+            Self::None => ffi::HE_TIP_VIEW_STYLE_NONE,
+            Self::Popup => ffi::HE_TIP_VIEW_STYLE_POPUP,
+            Self::View => ffi::HE_TIP_VIEW_STYLE_VIEW,
+            Self::__Unknown(value) => value,
+}
+}
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeTipViewStyle> for TipViewStyle {
+    #[inline]
+unsafe fn from_glib(value: ffi::HeTipViewStyle) -> Self {
+        skip_assert_initialized!();
+        
+match value {
+            ffi::HE_TIP_VIEW_STYLE_NONE => Self::None,
+            ffi::HE_TIP_VIEW_STYLE_POPUP => Self::Popup,
+            ffi::HE_TIP_VIEW_STYLE_VIEW => Self::View,
+            value => Self::__Unknown(value),
+}
+}
+}
+
+impl StaticType for TipViewStyle {
+                #[inline]
+    #[doc(alias = "he_tip_view_style_get_type")]
+   fn static_type() -> glib::Type {
+                    unsafe { from_glib(ffi::he_tip_view_style_get_type()) }
+                }
+            }
+
+impl glib::HasParamSpec for TipViewStyle {
+                type ParamSpec = glib::ParamSpecEnum;
+                type SetValue = Self;
+                type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+    
+                fn param_spec_builder() -> Self::BuilderFn {
+                    Self::ParamSpec::builder_with_default
+                }
+}
+
+impl glib::value::ValueType for TipViewStyle {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for TipViewStyle {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for TipViewStyle {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<TipViewStyle> for glib::Value {
+    #[inline]
+    fn from(v: TipViewStyle) -> Self {
         skip_assert_initialized!();
         ToValue::to_value(&v)
     }

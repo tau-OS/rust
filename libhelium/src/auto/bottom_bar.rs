@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi,Bin,BottomBarPosition,IconicButton};
+use crate::{ffi,Bin,BottomBarPosition,Button};
 use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
@@ -220,35 +220,35 @@ mod sealed {
 
 pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
     #[doc(alias = "he_bottom_bar_append_button")]
-    fn append_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition) {
+    fn append_button(&self, icon: &impl IsA<Button>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_append_button(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0, position.into_glib());
         }
     }
 
     #[doc(alias = "he_bottom_bar_prepend_button")]
-    fn prepend_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition) {
+    fn prepend_button(&self, icon: &impl IsA<Button>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_prepend_button(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0, position.into_glib());
         }
     }
 
     #[doc(alias = "he_bottom_bar_remove_button")]
-    fn remove_button(&self, icon: &impl IsA<IconicButton>, position: BottomBarPosition) {
+    fn remove_button(&self, icon: &impl IsA<Button>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_remove_button(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0, position.into_glib());
         }
     }
 
     #[doc(alias = "he_bottom_bar_insert_button_after")]
-    fn insert_button_after(&self, icon: &impl IsA<IconicButton>, after: &impl IsA<IconicButton>, position: BottomBarPosition) {
+    fn insert_button_after(&self, icon: &impl IsA<Button>, after: &impl IsA<Button>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_insert_button_after(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0, after.as_ref().to_glib_none().0, position.into_glib());
         }
     }
 
     #[doc(alias = "he_bottom_bar_reorder_button_after")]
-    fn reorder_button_after(&self, icon: &impl IsA<IconicButton>, sibling: &impl IsA<IconicButton>, position: BottomBarPosition) {
+    fn reorder_button_after(&self, icon: &impl IsA<Button>, sibling: &impl IsA<Button>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_reorder_button_after(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0, sibling.as_ref().to_glib_none().0, position.into_glib());
         }

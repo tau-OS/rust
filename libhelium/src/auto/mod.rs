@@ -6,6 +6,12 @@
 mod about_window;
 pub use self::about_window::AboutWindow;
 
+mod animation;
+pub use self::animation::Animation;
+
+mod animation_target;
+pub use self::animation_target::AnimationTarget;
+
 mod app_bar;
 pub use self::app_bar::AppBar;
 
@@ -30,11 +36,17 @@ pub use self::bin::Bin;
 mod bottom_bar;
 pub use self::bottom_bar::BottomBar;
 
+mod bottom_sheet;
+pub use self::bottom_sheet::BottomSheet;
+
 mod button;
 pub use self::button::Button;
 
 mod button_content;
 pub use self::button_content::ButtonContent;
+
+mod callback_animation_target;
+pub use self::callback_animation_target::CallbackAnimationTarget;
 
 mod chip;
 pub use self::chip::Chip;
@@ -63,20 +75,14 @@ pub use self::desktop::Desktop;
 mod dialog;
 pub use self::dialog::Dialog;
 
-mod disclosure_button;
-pub use self::disclosure_button::DisclosureButton;
-
 mod divider;
 pub use self::divider::Divider;
 
+mod dropdown;
+pub use self::dropdown::Dropdown;
+
 mod empty_page;
 pub use self::empty_page::EmptyPage;
-
-mod fill_button;
-pub use self::fill_button::FillButton;
-
-mod iconic_button;
-pub use self::iconic_button::IconicButton;
 
 mod mini_content_block;
 pub use self::mini_content_block::MiniContentBlock;
@@ -90,17 +96,14 @@ pub use self::navigation_rail::NavigationRail;
 mod navigation_section;
 pub use self::navigation_section::NavigationSection;
 
-mod outline_button;
-pub use self::outline_button::OutlineButton;
-
 mod overlay_button;
 pub use self::overlay_button::OverlayButton;
 
-mod pill_button;
-pub use self::pill_button::PillButton;
-
 mod progress_bar;
 pub use self::progress_bar::ProgressBar;
+
+mod property_animation_target;
+pub use self::property_animation_target::PropertyAnimationTarget;
 
 mod segmented_button;
 pub use self::segmented_button::SegmentedButton;
@@ -123,6 +126,12 @@ pub use self::side_bar::SideBar;
 mod slider;
 pub use self::slider::Slider;
 
+mod spring_animation;
+pub use self::spring_animation::SpringAnimation;
+
+mod spring_params;
+pub use self::spring_params::SpringParams;
+
 mod switch;
 pub use self::switch::Switch;
 
@@ -138,17 +147,17 @@ pub use self::tab_page::TabPage;
 mod tab_switcher;
 pub use self::tab_switcher::TabSwitcher;
 
-mod text_button;
-pub use self::text_button::TextButton;
-
 mod text_field;
 pub use self::text_field::TextField;
 
 mod time_picker;
 pub use self::time_picker::TimePicker;
 
-mod tint_button;
-pub use self::tint_button::TintButton;
+mod timed_animation;
+pub use self::timed_animation::TimedAnimation;
+
+mod tip;
+pub use self::tip::Tip;
 
 mod toast;
 pub use self::toast::Toast;
@@ -194,20 +203,25 @@ pub use self::color_xyz_color::ColorXYZColor;
 
 mod enums;
 pub use self::enums::AboutWindowLicenses;
+pub use self::enums::AnimationState;
 pub use self::enums::BannerStyle;
 pub use self::enums::BottomBarPosition;
 pub use self::enums::Colors;
 pub use self::enums::ContentBlockImageClusterImagePosition;
 pub use self::enums::DesktopColorScheme;
 pub use self::enums::DesktopEnsorScheme;
+pub use self::enums::Easing;
 pub use self::enums::ModifierBadgeAlignment;
 pub use self::enums::OverlayButtonAlignment;
 pub use self::enums::OverlayButtonSize;
 pub use self::enums::OverlayButtonTypeButton;
 pub use self::enums::TabSwitcherTabBarBehavior;
+pub use self::enums::TipViewStyle;
 
 pub(crate) mod traits {
     pub use super::about_window::AboutWindowExt;
+    pub use super::animation::AnimationExt;
+    pub use super::animation_target::AnimationTargetExt;
     pub use super::app_bar::AppBarExt;
     pub use super::application::HeApplicationExt;
     pub use super::application_window::ApplicationWindowExt;
@@ -216,6 +230,7 @@ pub(crate) mod traits {
     pub use super::banner::BannerExt;
     pub use super::bin::BinExt;
     pub use super::bottom_bar::BottomBarExt;
+    pub use super::bottom_sheet::BottomSheetExt;
     pub use super::button::ButtonExt;
     pub use super::button_content::ButtonContentExt;
     pub use super::chip::ChipExt;
@@ -227,10 +242,8 @@ pub(crate) mod traits {
     pub use super::date_picker::DatePickerExt;
     pub use super::desktop::DesktopExt;
     pub use super::dialog::DialogExt;
-    pub use super::disclosure_button::DisclosureButtonExt;
     pub use super::divider::DividerExt;
     pub use super::empty_page::EmptyPageExt;
-    pub use super::iconic_button::IconicButtonExt;
     pub use super::mini_content_block::MiniContentBlockExt;
     pub use super::modifier_badge::ModifierBadgeExt;
     pub use super::navigation_rail::NavigationRailExt;
@@ -244,6 +257,8 @@ pub(crate) mod traits {
     pub use super::settings_window::SettingsWindowExt;
     pub use super::side_bar::SideBarExt;
     pub use super::slider::SliderExt;
+    pub use super::spring_animation::SpringAnimationExt;
+    pub use super::spring_params::SpringParamsExt;
     pub use super::switch::SwitchExt;
     pub use super::switch_bar::SwitchBarExt;
     pub use super::tab::TabExt;
@@ -251,10 +266,13 @@ pub(crate) mod traits {
     pub use super::tab_switcher::TabSwitcherExt;
     pub use super::text_field::TextFieldExt;
     pub use super::time_picker::TimePickerExt;
+    pub use super::timed_animation::TimedAnimationExt;
+    pub use super::tip::TipExt;
     pub use super::toast::ToastExt;
     pub use super::view::ViewExt;
     pub use super::view_aux::ViewAuxExt;
     pub use super::view_chooser::ViewChooserExt;
+    pub use super::view_dual::ViewDualExt;
     pub use super::view_sub_title::ViewSubTitleExt;
     pub use super::view_switcher::ViewSwitcherExt;
     pub use super::view_title::ViewTitleExt;
@@ -271,6 +289,8 @@ pub(crate) mod builders {
     pub use super::banner::BannerBuilder;
     pub use super::bin::BinBuilder;
     pub use super::bottom_bar::BottomBarBuilder;
+    pub use super::bottom_sheet::BottomSheetBuilder;
+    pub use super::button::ButtonBuilder;
     pub use super::button_content::ButtonContentBuilder;
     pub use super::chip::ChipBuilder;
     pub use super::chip_group::ChipGroupBuilder;
@@ -281,19 +301,16 @@ pub(crate) mod builders {
     pub use super::date_picker::DatePickerBuilder;
     pub use super::desktop::DesktopBuilder;
     pub use super::dialog::DialogBuilder;
-    pub use super::disclosure_button::DisclosureButtonBuilder;
     pub use super::divider::DividerBuilder;
+    pub use super::dropdown::DropdownBuilder;
     pub use super::empty_page::EmptyPageBuilder;
-    pub use super::fill_button::FillButtonBuilder;
-    pub use super::iconic_button::IconicButtonBuilder;
     pub use super::mini_content_block::MiniContentBlockBuilder;
     pub use super::modifier_badge::ModifierBadgeBuilder;
     pub use super::navigation_rail::NavigationRailBuilder;
     pub use super::navigation_section::NavigationSectionBuilder;
-    pub use super::outline_button::OutlineButtonBuilder;
     pub use super::overlay_button::OverlayButtonBuilder;
-    pub use super::pill_button::PillButtonBuilder;
     pub use super::progress_bar::ProgressBarBuilder;
+    pub use super::property_animation_target::PropertyAnimationTargetBuilder;
     pub use super::segmented_button::SegmentedButtonBuilder;
     pub use super::settings_list::SettingsListBuilder;
     pub use super::settings_page::SettingsPageBuilder;
@@ -301,15 +318,17 @@ pub(crate) mod builders {
     pub use super::settings_window::SettingsWindowBuilder;
     pub use super::side_bar::SideBarBuilder;
     pub use super::slider::SliderBuilder;
+    pub use super::spring_animation::SpringAnimationBuilder;
+    pub use super::spring_params::SpringParamsBuilder;
     pub use super::switch::SwitchBuilder;
     pub use super::switch_bar::SwitchBarBuilder;
     pub use super::tab::TabBuilder;
     pub use super::tab_page::TabPageBuilder;
     pub use super::tab_switcher::TabSwitcherBuilder;
-    pub use super::text_button::TextButtonBuilder;
     pub use super::text_field::TextFieldBuilder;
     pub use super::time_picker::TimePickerBuilder;
-    pub use super::tint_button::TintButtonBuilder;
+    pub use super::timed_animation::TimedAnimationBuilder;
+    pub use super::tip::TipBuilder;
     pub use super::toast::ToastBuilder;
     pub use super::view_aux::ViewAuxBuilder;
     pub use super::view_chooser::ViewChooserBuilder;
