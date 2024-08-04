@@ -21,14 +21,14 @@ jobs:
     container:
       image: registry.fedoraproject.org/fedora-minimal:40
     steps:
+      - name: Install required packages
+        run: |
+          sudo dnf install -y --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' --setopt='terra.gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc' terra-release
+          sudo dnf install -y libhelium libbismuth sass git
+
       - uses: actions/checkout@v4
         with:
           submodules: "recursive"
-
-      - name: Install system level libraries
-        run: |
-          sudo dnf install -y --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' --setopt='terra.gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc' terra-release
-          sudo dnf install -y libhelium libbismuth sass
 
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
