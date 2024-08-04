@@ -26,7 +26,7 @@ jobs:
           dnf5 update -y --setopt=install_weak_deps=False
           dnf5 install -y --setopt=install_weak_deps=False dnf5-plugins
           dnf5 config-manager addrepo --from-repofile='https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo'
-          dnf5 install -y libhelium-devel libbismuth-devel sass git rust cargo rustdoc rustfmt meson ninja vala 'pkgconfig(gnome-desktop-4)' 'pkgconfig(accountsservice)' 'pkgconfig(udisks2)' 'pkgconfig(gudev-1.0)' 'pkgconfig(libgtop-2.0)' 'pkgconfig(gexiv2)' 'pkgconfig(gweather4)'
+          dnf5 install -y libhelium-devel libbismuth-devel sass git rust cargo rustdoc rustfmt meson ninja vala 'pkgconfig(gnome-desktop-4)' 'pkgconfig(accountsservice)' 'pkgconfig(udisks2)' 'pkgconfig(gudev-1.0)' 'pkgconfig(libgtop-2.0)' 'pkgconfig(gexiv2)' 'pkgconfig(gweather4)' 'pkgconfig(libpulse)'
 
       - uses: actions/checkout@v4
         with:
