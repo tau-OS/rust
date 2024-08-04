@@ -23,8 +23,10 @@ jobs:
     steps:
       - name: Install required packages
         run: |
-          dnf install -y --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' --setopt='terra.gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc' terra-release
-          dnf install -y libhelium libbismuth sass git
+          dnf5 update -y --setopt=install_weak_deps=False
+          dnf5 install -y --setopt=install_weak_deps=False dnf5-plugins
+          dnf5 config-manager addrepo --from-repofile='https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo'
+          dnf5 install -y libhelium libbismuth sass git
 
       - uses: actions/checkout@v4
         with:
