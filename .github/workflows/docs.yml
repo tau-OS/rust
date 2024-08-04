@@ -26,11 +26,26 @@ jobs:
           dnf5 update -y --setopt=install_weak_deps=False
           dnf5 install -y --setopt=install_weak_deps=False dnf5-plugins
           dnf5 config-manager addrepo --from-repofile='https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo'
-          dnf5 install -y libhelium-devel libbismuth-devel sass git rust cargo rustdoc rustfmt
+          dnf5 install -y libhelium-devel libbismuth-devel sass git rust cargo rustdoc rustfmt meson ninja vala
 
       - uses: actions/checkout@v4
         with:
           submodules: "recursive"
+
+      - name: Checkout fusebox
+        uses: actions/checkout@v4
+        with:
+          repository: tau-OS/fusebox
+          path: fusebox-src
+      - name: Install fusebox
+        run: meson build
+        working-directory: ./fusebox-src
+      - name: Build fusebox with Ninja
+        run: ninja
+        working-directory: ./fusebox-src/build
+      - name: Install fusebox globally
+        run: ninja install
+        working-directory: ./fusebox-src/build
 
       - name: Generate docs
         run: cargo install rustdoc-stripper
