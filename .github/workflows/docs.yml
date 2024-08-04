@@ -23,8 +23,8 @@ jobs:
     steps:
       - name: Install required packages
         run: |
-          sudo dnf install -y --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' --setopt='terra.gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc' terra-release
-          sudo dnf install -y libhelium libbismuth sass git
+          dnf install -y --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' --setopt='terra.gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc' terra-release
+          dnf install -y libhelium libbismuth sass git
 
       - uses: actions/checkout@v4
         with:
