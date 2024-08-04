@@ -28,6 +28,9 @@ jobs:
           dnf5 config-manager addrepo --from-repofile='https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo'
           dnf5 install -y libhelium libbismuth sass git rust cargo rustdoc rustfmt
 
+      - name: Add cargo bin folder to path
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
       - uses: actions/checkout@v4
         with:
           submodules: "recursive"
