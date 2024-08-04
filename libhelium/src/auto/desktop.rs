@@ -78,9 +78,9 @@ pub struct DesktopBuilder {
                             Self { builder: self.builder.property("roundness", roundness), }
                         }
 
-                            //pub fn contrast(self, contrast: /*Ignored*/DesktopContrastScheme) -> Self {
-                        //    Self { builder: self.builder.property("contrast", contrast), }
-                        //}
+                            pub fn contrast(self, contrast: f64) -> Self {
+                            Self { builder: self.builder.property("contrast", contrast), }
+                        }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`Desktop`].
@@ -156,16 +156,20 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
         }
     }
 
-    //#[doc(alias = "he_desktop_get_contrast")]
-    //#[doc(alias = "get_contrast")]
-    //fn contrast(&self) -> /*Ignored*/DesktopContrastScheme {
-    //    unsafe { TODO: call ffi:he_desktop_get_contrast() }
-    //}
+    #[doc(alias = "he_desktop_get_contrast")]
+    #[doc(alias = "get_contrast")]
+    fn contrast(&self) -> f64 {
+        unsafe {
+            ffi::he_desktop_get_contrast(self.as_ref().to_glib_none().0)
+        }
+    }
 
-    //#[doc(alias = "he_desktop_set_contrast")]
-    //fn set_contrast(&self, value: /*Ignored*/DesktopContrastScheme) {
-    //    unsafe { TODO: call ffi:he_desktop_set_contrast() }
-    //}
+    #[doc(alias = "he_desktop_set_contrast")]
+    fn set_contrast(&self, value: f64) {
+        unsafe {
+            ffi::he_desktop_set_contrast(self.as_ref().to_glib_none().0, value);
+        }
+    }
 
     #[doc(alias = "ensor-scheme")]
     fn set_ensor_scheme(&self, ensor_scheme: DesktopEnsorScheme) {

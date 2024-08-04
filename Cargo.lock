@@ -86,7 +86,7 @@ dependencies = [
 
 [[package]]
 name = "fusebox"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "bitflags",
  "fusebox-sys",
@@ -103,7 +103,7 @@ dependencies = [
 
 [[package]]
 name = "fusebox-sys"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "gdk4-sys",
  "gio-sys",
@@ -437,7 +437,7 @@ dependencies = [
 
 [[package]]
 name = "libbismuth"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "bitflags",
  "futures-channel",
@@ -454,7 +454,7 @@ dependencies = [
 
 [[package]]
 name = "libbismuth-sys"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "gdk4-sys",
  "gio-sys",
@@ -476,7 +476,7 @@ checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
 
 [[package]]
 name = "libhelium"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "bitflags",
  "futures-channel",
@@ -493,7 +493,7 @@ dependencies = [
 
 [[package]]
 name = "libhelium-sys"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "gdk4-sys",
  "gio-sys",

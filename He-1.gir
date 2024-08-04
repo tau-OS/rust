@@ -6,6 +6,7 @@
 <include name="GLib" version="2.0"/>
 <include name="Gtk" version="4.0"/>
 <include name="GObject" version="2.0"/>
+<include name="Pango" version="1.0"/>
 <package name="libhelium-1"/>
 <c:include name="libhelium-1.h"/>
 <namespace name="He" version="1" c:prefix="He" c:identifier-prefixes="He" c:symbol-prefixes="he" shared-library="libhelium-1.so.1">
@@ -317,6 +318,19 @@
 				<type name="gdouble" c:type="gdouble"/>
 			</parameter>
 			<parameter name="lstar" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="color_hex_from_hct" c:identifier="he_color_hex_from_hct">
+		<return-value transfer-ownership="full">
+			<type name="utf8" c:type="gchar*"/>
+		</return-value>
+		<parameters>
+			<parameter name="hct" transfer-ownership="none">
+				<type name="He.ColorHCTColor" c:type="HeColorHCTColor*"/>
+			</parameter>
+			<parameter name="contrast" transfer-ownership="none">
 				<type name="gdouble" c:type="gdouble"/>
 			</parameter>
 		</parameters>
@@ -751,6 +765,26 @@
 		</return-value>
 		<parameters>
 			<parameter name="x" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="math_utils_to_degrees" c:identifier="he_math_utils_to_degrees">
+		<return-value transfer-ownership="full">
+			<type name="gdouble" c:type="gdouble"/>
+		</return-value>
+		<parameters>
+			<parameter name="radians" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="math_utils_to_radians" c:identifier="he_math_utils_to_radians">
+		<return-value transfer-ownership="full">
+			<type name="gdouble" c:type="gdouble"/>
+		</return-value>
+		<parameters>
+			<parameter name="degrees" transfer-ownership="none">
 				<type name="gdouble" c:type="gdouble"/>
 			</parameter>
 		</parameters>
@@ -1350,6 +1384,17 @@ Since: 1.0</doc>
 			</parameter>
 		</parameters>
 	</function>
+	<enumeration name="AnimationState" c:type="HeAnimationState" glib:type-name="HeAnimationState" glib:get-type="he_animation_state_get_type">
+		<member name="idle" c:identifier="HE_ANIMATION_STATE_IDLE" value="0"/>
+		<member name="paused" c:identifier="HE_ANIMATION_STATE_PAUSED" value="1"/>
+		<member name="playing" c:identifier="HE_ANIMATION_STATE_PLAYING" value="2"/>
+		<member name="finished" c:identifier="HE_ANIMATION_STATE_FINISHED" value="3"/>
+	</enumeration>
+	<enumeration name="Easing" c:type="HeEasing" glib:type-name="HeEasing" glib:get-type="he_easing_get_type">
+		<member name="linear" c:identifier="HE_EASING_LINEAR" value="0"/>
+		<member name="ease_out_cubic" c:identifier="HE_EASING_EASE_OUT_CUBIC" value="1"/>
+		<member name="ease_in_out_bounce" c:identifier="HE_EASING_EASE_IN_OUT_BOUNCE" value="2"/>
+	</enumeration>
 	<enumeration name="Colors" c:type="HeColors" glib:type-name="HeColors" glib:get-type="he_colors_get_type">
 		<doc xml:whitespace="preserve">&lt;para&gt;An enum that maps colors to internal CSS classes as per HIG.&lt;/para&gt;</doc>
 		<member name="none" c:identifier="HE_COLORS_NONE" value="0"/>
@@ -1390,6 +1435,1059 @@ Since: 1.0</doc>
 			</instance-parameter>
 		</parameters>
 	</function>
+	<enumeration name="TipViewStyle" c:type="HeTipViewStyle" glib:type-name="HeTipViewStyle" glib:get-type="he_tip_view_style_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;A TipViewStyle changes the visual look of a tip.&lt;/para&gt;</doc>
+		<member name="none" c:identifier="HE_TIP_VIEW_STYLE_NONE" value="0"/>
+		<member name="popup" c:identifier="HE_TIP_VIEW_STYLE_POPUP" value="1"/>
+		<member name="view" c:identifier="HE_TIP_VIEW_STYLE_VIEW" value="2"/>
+	</enumeration>
+	<function name="tip_view_style_to_css_class" c:identifier="he_tip_view_style_to_css_class">
+		<return-value transfer-ownership="full">
+			<type name="utf8" c:type="gchar*"/>
+		</return-value>
+		<parameters>
+			<instance-parameter name="self" transfer-ownership="none">
+				<type name="He.TipViewStyle" c:type="HeTipViewStyle"/>
+			</instance-parameter>
+		</parameters>
+	</function>
+	<function name="tip_view_style_to_string" c:identifier="he_tip_view_style_to_string">
+		<return-value transfer-ownership="full">
+			<type name="utf8" c:type="gchar*"/>
+		</return-value>
+		<parameters>
+			<instance-parameter name="self" transfer-ownership="none">
+				<type name="He.TipViewStyle" c:type="HeTipViewStyle"/>
+			</instance-parameter>
+		</parameters>
+	</function>
+	<class name="AnimationTarget" c:type="HeAnimationTarget" c:symbol-prefix="animation_target" glib:type-name="HeAnimationTarget" glib:get-type="he_animation_target_get_type" glib:type-struct="AnimationTargetClass" parent="GObject.Object" abstract="1">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="AnimationTargetPrivate" c:type="HeAnimationTargetPrivate*"/>
+		</field>
+		<method name="set_value" c:identifier="he_animation_target_set_value">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_value" invoker="set_value">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+	</class>
+	<record name="AnimationTargetClass" c:type="HeAnimationTargetClass" glib:is-gtype-struct-for="AnimationTarget">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+		<field name="set_value">
+			<callback name="set_value" c:type="set_value">
+				<return-value transfer-ownership="full">
+					<type name="none" c:type="void"/>
+				</return-value>
+				<parameters>
+					<parameter name="self" transfer-ownership="none">
+						<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+					</parameter>
+					<parameter name="value" transfer-ownership="none">
+						<type name="gdouble" c:type="gdouble"/>
+					</parameter>
+				</parameters>
+			</callback>
+		</field>
+	</record>
+	<record name="AnimationTargetPrivate" c:type="HeAnimationTargetPrivate" disguised="1"/>
+	<class name="CallbackAnimationTarget" c:type="HeCallbackAnimationTarget" c:symbol-prefix="callback_animation_target" glib:type-name="HeCallbackAnimationTarget" glib:get-type="he_callback_animation_target_get_type" glib:type-struct="CallbackAnimationTargetClass" parent="He.AnimationTarget" final="1">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.AnimationTarget" c:type="HeAnimationTarget"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="CallbackAnimationTargetPrivate" c:type="HeCallbackAnimationTargetPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_callback_animation_target_new">
+			<return-value transfer-ownership="full">
+				<type name="He.CallbackAnimationTarget" c:type="HeCallbackAnimationTarget*"/>
+			</return-value>
+			<parameters>
+				<parameter name="callback" transfer-ownership="none" closure="1" scope="notified" destroy="2">
+					<type name="He.AnimationTargetFunc" c:type="HeAnimationTargetFunc"/>
+				</parameter>
+				<parameter name="callback_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="callback_target_destroy_notify" transfer-ownership="none" scope="call">
+					<type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+				</parameter>
+			</parameters>
+		</constructor>
+	</class>
+	<record name="CallbackAnimationTargetClass" c:type="HeCallbackAnimationTargetClass" glib:is-gtype-struct-for="CallbackAnimationTarget">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.AnimationTargetClass" c:type="HeAnimationTargetClass"/>
+		</field>
+	</record>
+	<record name="CallbackAnimationTargetPrivate" c:type="HeCallbackAnimationTargetPrivate" disguised="1"/>
+	<class name="PropertyAnimationTarget" c:type="HePropertyAnimationTarget" c:symbol-prefix="property_animation_target" glib:type-name="HePropertyAnimationTarget" glib:get-type="he_property_animation_target_get_type" glib:type-struct="PropertyAnimationTargetClass" parent="He.AnimationTarget" final="1">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.AnimationTarget" c:type="HeAnimationTarget"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="PropertyAnimationTargetPrivate" c:type="HePropertyAnimationTargetPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_property_animation_target_new">
+			<return-value transfer-ownership="full">
+				<type name="He.PropertyAnimationTarget" c:type="HePropertyAnimationTarget*"/>
+			</return-value>
+		</constructor>
+		<method name="animate_property" c:identifier="he_property_animation_target_animate_property">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.PropertyAnimationTarget" c:type="HePropertyAnimationTarget*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="object" writable="1">
+			<type name="GObject.Object" c:type="GObject*"/>
+		</property>
+		<method name="get_object" c:identifier="he_property_animation_target_get_object">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="GObject.Object" c:type="GObject*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.PropertyAnimationTarget" c:type="HePropertyAnimationTarget*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_object" c:identifier="he_property_animation_target_set_object">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.PropertyAnimationTarget" c:type="HePropertyAnimationTarget*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="GObject.Object" c:type="GObject*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="pspec" writable="1">
+			<type name="GObject.ParamSpec" c:type="GParamSpec*"/>
+		</property>
+		<method name="get_pspec" c:identifier="he_property_animation_target_get_pspec">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="GObject.ParamSpec" c:type="GParamSpec*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.PropertyAnimationTarget" c:type="HePropertyAnimationTarget*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_pspec" c:identifier="he_property_animation_target_set_pspec">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.PropertyAnimationTarget" c:type="HePropertyAnimationTarget*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="GObject.ParamSpec" c:type="GParamSpec*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="PropertyAnimationTargetClass" c:type="HePropertyAnimationTargetClass" glib:is-gtype-struct-for="PropertyAnimationTarget">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.AnimationTargetClass" c:type="HeAnimationTargetClass"/>
+		</field>
+	</record>
+	<record name="PropertyAnimationTargetPrivate" c:type="HePropertyAnimationTargetPrivate" disguised="1"/>
+	<class name="Animation" c:type="HeAnimation" c:symbol-prefix="animation" glib:type-name="HeAnimation" glib:get-type="he_animation_get_type" glib:type-struct="AnimationClass" parent="GObject.Object" abstract="1">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="AnimationPrivate" c:type="HeAnimationPrivate*"/>
+		</field>
+		<method name="pause" c:identifier="he_animation_pause">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="play" c:identifier="he_animation_play">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="reset" c:identifier="he_animation_reset">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="resume" c:identifier="he_animation_resume">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="skip" c:identifier="he_animation_skip">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="estimate_duration" c:identifier="he_animation_estimate_duration">
+			<return-value transfer-ownership="full">
+				<type name="guint" c:type="guint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<virtual-method name="estimate_duration" invoker="estimate_duration">
+			<return-value transfer-ownership="full">
+				<type name="guint" c:type="guint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</virtual-method>
+		<method name="calculate_value" c:identifier="he_animation_calculate_value">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+				<parameter name="t" transfer-ownership="none">
+					<type name="guint" c:type="guint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="calculate_value" invoker="calculate_value">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+				<parameter name="t" transfer-ownership="none">
+					<type name="guint" c:type="guint"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="state" writable="1">
+			<type name="He.AnimationState" c:type="HeAnimationState"/>
+		</property>
+		<method name="get_state" c:identifier="he_animation_get_state">
+			<return-value transfer-ownership="none">
+				<type name="He.AnimationState" c:type="HeAnimationState"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_state" c:identifier="he_animation_set_state">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.AnimationState" c:type="HeAnimationState"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="target" writable="1">
+			<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+		</property>
+		<method name="get_target" c:identifier="he_animation_get_target">
+			<return-value transfer-ownership="none">
+				<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_target" c:identifier="he_animation_set_target">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="widget" writable="1">
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_widget" c:identifier="he_animation_get_widget">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_widget" c:identifier="he_animation_set_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="avalue" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_avalue" c:identifier="he_animation_get_avalue">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_avalue" c:identifier="he_animation_set_avalue">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Animation" c:type="HeAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="done">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
+	</class>
+	<record name="AnimationClass" c:type="HeAnimationClass" glib:is-gtype-struct-for="Animation">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+		<field name="estimate_duration">
+			<callback name="estimate_duration" c:type="estimate_duration">
+				<return-value transfer-ownership="full">
+					<type name="guint" c:type="guint"/>
+				</return-value>
+				<parameters>
+					<parameter name="self" transfer-ownership="none">
+						<type name="He.Animation" c:type="HeAnimation*"/>
+					</parameter>
+				</parameters>
+			</callback>
+		</field>
+		<field name="calculate_value">
+			<callback name="calculate_value" c:type="calculate_value">
+				<return-value transfer-ownership="full">
+					<type name="gdouble" c:type="gdouble"/>
+				</return-value>
+				<parameters>
+					<parameter name="self" transfer-ownership="none">
+						<type name="He.Animation" c:type="HeAnimation*"/>
+					</parameter>
+					<parameter name="t" transfer-ownership="none">
+						<type name="guint" c:type="guint"/>
+					</parameter>
+				</parameters>
+			</callback>
+		</field>
+	</record>
+	<record name="AnimationPrivate" c:type="HeAnimationPrivate" disguised="1"/>
+	<class name="SpringParams" c:type="HeSpringParams" c:symbol-prefix="spring_params" glib:type-name="HeSpringParams" glib:get-type="he_spring_params_get_type" glib:type-struct="SpringParamsClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SpringParamsPrivate" c:type="HeSpringParamsPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_spring_params_new">
+			<return-value transfer-ownership="full">
+				<type name="He.SpringParams" c:type="HeSpringParams*"/>
+			</return-value>
+			<parameters>
+				<parameter name="damping_ratio" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="mass" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="stiffness" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<constructor name="full" c:identifier="he_spring_params_new_full">
+			<return-value transfer-ownership="full">
+				<type name="He.SpringParams" c:type="HeSpringParams*"/>
+			</return-value>
+			<parameters>
+				<parameter name="damping" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="mass" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="stiffness" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<property name="damping" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_damping" c:identifier="he_spring_params_get_damping">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_damping" c:identifier="he_spring_params_set_damping">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="damping-ratio" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_damping_ratio" c:identifier="he_spring_params_get_damping_ratio">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_damping_ratio" c:identifier="he_spring_params_set_damping_ratio">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="mass" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_mass" c:identifier="he_spring_params_get_mass">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_mass" c:identifier="he_spring_params_set_mass">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="stiffness" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_stiffness" c:identifier="he_spring_params_get_stiffness">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_stiffness" c:identifier="he_spring_params_set_stiffness">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="SpringParamsClass" c:type="HeSpringParamsClass" glib:is-gtype-struct-for="SpringParams">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="SpringParamsPrivate" c:type="HeSpringParamsPrivate" disguised="1"/>
+	<class name="SpringAnimation" c:type="HeSpringAnimation" c:symbol-prefix="spring_animation" glib:type-name="HeSpringAnimation" glib:get-type="he_spring_animation_get_type" glib:type-struct="SpringAnimationClass" parent="He.Animation">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Animation" c:type="HeAnimation"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SpringAnimationPrivate" c:type="HeSpringAnimationPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_spring_animation_new">
+			<return-value transfer-ownership="full">
+				<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+			</return-value>
+			<parameters>
+				<parameter name="widget" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+				<parameter name="from" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="to" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="sparams" transfer-ownership="full">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</parameter>
+				<parameter name="target" transfer-ownership="full">
+					<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<property name="epsilon" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_epsilon" c:identifier="he_spring_animation_get_epsilon">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_epsilon" c:identifier="he_spring_animation_set_epsilon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="estimated-duration" writable="1">
+			<type name="guint" c:type="guint"/>
+		</property>
+		<method name="get_estimated_duration" c:identifier="he_spring_animation_get_estimated_duration">
+			<return-value transfer-ownership="none">
+				<type name="guint" c:type="guint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_estimated_duration" c:identifier="he_spring_animation_set_estimated_duration">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="guint" c:type="guint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="initial-velocity" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_initial_velocity" c:identifier="he_spring_animation_get_initial_velocity">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_initial_velocity" c:identifier="he_spring_animation_set_initial_velocity">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="latch" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_latch" c:identifier="he_spring_animation_get_latch">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_latch" c:identifier="he_spring_animation_set_latch">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="spring-params" writable="1" construct="1">
+			<type name="He.SpringParams" c:type="HeSpringParams*"/>
+		</property>
+		<method name="get_spring_params" c:identifier="he_spring_animation_get_spring_params">
+			<return-value transfer-ownership="none">
+				<type name="He.SpringParams" c:type="HeSpringParams*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_spring_params" c:identifier="he_spring_animation_set_spring_params">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.SpringParams" c:type="HeSpringParams*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="value-from" writable="1" construct="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_value_from" c:identifier="he_spring_animation_get_value_from">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_value_from" c:identifier="he_spring_animation_set_value_from">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="value-to" writable="1" construct="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_value_to" c:identifier="he_spring_animation_get_value_to">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_value_to" c:identifier="he_spring_animation_set_value_to">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="velocity" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_velocity" c:identifier="he_spring_animation_get_velocity">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_velocity" c:identifier="he_spring_animation_set_velocity">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SpringAnimation" c:type="HeSpringAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="SpringAnimationClass" c:type="HeSpringAnimationClass" glib:is-gtype-struct-for="SpringAnimation">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.AnimationClass" c:type="HeAnimationClass"/>
+		</field>
+	</record>
+	<record name="SpringAnimationPrivate" c:type="HeSpringAnimationPrivate" disguised="1"/>
+	<class name="TimedAnimation" c:type="HeTimedAnimation" c:symbol-prefix="timed_animation" glib:type-name="HeTimedAnimation" glib:get-type="he_timed_animation_get_type" glib:type-struct="TimedAnimationClass" parent="He.Animation">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Animation" c:type="HeAnimation"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="TimedAnimationPrivate" c:type="HeTimedAnimationPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_timed_animation_new">
+			<return-value transfer-ownership="full">
+				<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+			</return-value>
+			<parameters>
+				<parameter name="widget" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+				<parameter name="from" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="to" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="duration" transfer-ownership="none">
+					<type name="guint" c:type="guint"/>
+				</parameter>
+				<parameter name="target" transfer-ownership="none">
+					<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<property name="value-from" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_value_from" c:identifier="he_timed_animation_get_value_from">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_value_from" c:identifier="he_timed_animation_set_value_from">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="value-to" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_value_to" c:identifier="he_timed_animation_get_value_to">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_value_to" c:identifier="he_timed_animation_set_value_to">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="duration" writable="1">
+			<type name="guint" c:type="guint"/>
+		</property>
+		<method name="get_duration" c:identifier="he_timed_animation_get_duration">
+			<return-value transfer-ownership="none">
+				<type name="guint" c:type="guint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_duration" c:identifier="he_timed_animation_set_duration">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="guint" c:type="guint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="easing" writable="1">
+			<type name="He.Easing" c:type="HeEasing"/>
+		</property>
+		<method name="get_easing" c:identifier="he_timed_animation_get_easing">
+			<return-value transfer-ownership="none">
+				<type name="He.Easing" c:type="HeEasing"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_easing" c:identifier="he_timed_animation_set_easing">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Easing" c:type="HeEasing"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="repeat-count" writable="1">
+			<type name="guint" c:type="guint"/>
+		</property>
+		<method name="get_repeat_count" c:identifier="he_timed_animation_get_repeat_count">
+			<return-value transfer-ownership="none">
+				<type name="guint" c:type="guint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_repeat_count" c:identifier="he_timed_animation_set_repeat_count">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="guint" c:type="guint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="reverse" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_reverse" c:identifier="he_timed_animation_get_reverse">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_reverse" c:identifier="he_timed_animation_set_reverse">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="alternate" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_alternate" c:identifier="he_timed_animation_get_alternate">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_alternate" c:identifier="he_timed_animation_set_alternate">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TimedAnimation" c:type="HeTimedAnimation*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="TimedAnimationClass" c:type="HeTimedAnimationClass" glib:is-gtype-struct-for="TimedAnimation">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.AnimationClass" c:type="HeAnimationClass"/>
+		</field>
+	</record>
+	<record name="TimedAnimationPrivate" c:type="HeTimedAnimationPrivate" disguised="1"/>
 	<class name="Application" c:type="HeApplication" c:symbol-prefix="application" glib:type-name="HeApplication" glib:get-type="he_application_get_type" glib:type-struct="ApplicationClass" parent="Gtk.Application">
 		<doc xml:whitespace="preserve">&lt;para&gt;An application.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -1608,105 +2706,6 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="BinPrivate" c:type="HeBinPrivate" disguised="1"/>
-	<class name="Button" c:type="HeButton" c:symbol-prefix="button" glib:type-name="HeButton" glib:get-type="he_button_get_type" glib:type-struct="ButtonClass" parent="Gtk.Button" abstract="1">
-		<doc xml:whitespace="preserve">&lt;para&gt;A helper class to derive Buttons from.&lt;/para&gt;
-
-Since: 1.0</doc>
-		<implements name="Gtk.Buildable"/>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="Gtk.Button" c:type="GtkButton"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="ButtonPrivate" c:type="HeButtonPrivate*"/>
-		</field>
-		<property name="color" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The color of the button.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<type name="He.Colors" c:type="HeColors"/>
-		</property>
-		<method name="get_color" c:identifier="he_button_get_color">
-			<return-value transfer-ownership="none">
-				<type name="He.Colors" c:type="HeColors"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<virtual-method name="get_color" invoker="get_color">
-			<return-value transfer-ownership="none">
-				<type name="He.Colors" c:type="HeColors"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</instance-parameter>
-			</parameters>
-		</virtual-method>
-		<method name="set_color" c:identifier="he_button_set_color">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="He.Colors" c:type="HeColors"/>
-				</parameter>
-			</parameters>
-		</method>
-		<virtual-method name="set_color" invoker="set_color">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="He.Colors" c:type="HeColors"/>
-				</parameter>
-			</parameters>
-		</virtual-method>
-		<property name="icon" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The icon of the Button.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_icon" c:identifier="he_button_get_icon">
-			<return-value transfer-ownership="full">
-				<type name="utf8" c:type="gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_icon" c:identifier="he_button_set_icon">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-	</class>
-	<record name="ButtonClass" c:type="HeButtonClass" glib:is-gtype-struct-for="Button">
-		<field name="parent_class" readable="0" private="1">
-			<type name="Gtk.ButtonClass" c:type="GtkButtonClass"/>
-		</field>
-	</record>
-	<record name="ButtonPrivate" c:type="HeButtonPrivate" disguised="1"/>
 	<class name="ButtonContent" c:type="HeButtonContent" c:symbol-prefix="button_content" glib:type-name="HeButtonContent" glib:get-type="he_button_content_get_type" glib:type-struct="ButtonContentClass" parent="Gtk.Widget">
 		<doc xml:whitespace="preserve">&lt;para&gt;A helper class to derive Buttons from.&lt;/para&gt;
 
@@ -1936,9 +2935,9 @@ used directly. Instead, let the `He.Application` class manage this for you.&lt;/
 			<doc xml:whitespace="preserve">&lt;para&gt;Whether to apply styles for dark mode.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</field>
-		<field name="is_contrast" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Whether to apply styles for high contrast mode.&lt;/para&gt;</doc>
-			<type name="gboolean" c:type="gboolean"/>
+		<field name="contrast" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether to apply styles for contrast modes. 1.0 = low, 2.0 = default, 3.0 = medium, 4.0 = high&lt;/para&gt;</doc>
+			<type name="gdouble" c:type="gdouble"/>
 		</field>
 		<field name="scheme_factory" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;A function that returns a color scheme from a given accent color and whether dark mode is enabled.&lt;/para&gt;</doc>
@@ -2032,6 +3031,144 @@ used directly. Instead, let the `He.Application` class manage this for you.&lt;/
 		</field>
 	</record>
 	<record name="StyleManagerPrivate" c:type="HeStyleManagerPrivate" disguised="1"/>
+	<class name="Tip" c:type="HeTip" c:symbol-prefix="tip" glib:type-name="HeTip" glib:get-type="he_tip_get_type" glib:type-struct="TipClass" parent="GObject.Object">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Tip is a helper object for onboarding flow tips in an app&amp;apos;s first launch.&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="TipPrivate" c:type="HeTipPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_tip_new">
+			<return-value transfer-ownership="full">
+				<type name="He.Tip" c:type="HeTip*"/>
+			</return-value>
+			<parameters>
+				<parameter name="title" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="image" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="message" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="action_label" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<property name="title" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_title" c:identifier="he_tip_get_title">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_title" c:identifier="he_tip_set_title">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="image" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_image" c:identifier="he_tip_get_image">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_image" c:identifier="he_tip_set_image">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="message" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_message" c:identifier="he_tip_get_message">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_message" c:identifier="he_tip_set_message">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="action-label" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_action_label" c:identifier="he_tip_get_action_label">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_action_label" c:identifier="he_tip_set_action_label">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="TipClass" c:type="HeTipClass" glib:is-gtype-struct-for="Tip">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="TipPrivate" c:type="HeTipPrivate" disguised="1"/>
 	<class name="View" c:type="HeView" c:symbol-prefix="view" glib:type-name="HeView" glib:get-type="he_view_get_type" glib:type-struct="ViewClass" parent="Gtk.Widget" abstract="1">
 		<doc xml:whitespace="preserve">&lt;para&gt;A helper widget that implements a View that displays items.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -2250,7 +3387,6 @@ title bar can be made always visible. Has an optional back button. The back butt
 			</return-value>
 		</constructor>
 		<property name="parent" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The parent window of this window. If this is null, then this is a top-level window.&lt;/para&gt;</doc>
 			<type name="Gtk.Window" c:type="GtkWindow*"/>
 		</property>
 		<method name="get_parent" c:identifier="he_window_get_parent">
@@ -2277,7 +3413,6 @@ title bar can be made always visible. Has an optional back button. The back butt
 			</parameters>
 		</method>
 		<property name="has-title" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;If the window has a title bar.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
 		<method name="get_has_title" c:identifier="he_window_get_has_title">
@@ -2304,9 +3439,6 @@ title bar can be made always visible. Has an optional back button. The back butt
 			</parameters>
 		</method>
 		<property name="has-back-button" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;If the window has a back button.&lt;/para&gt;
-
-Since: 1.0</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
 		<method name="get_has_back_button" c:identifier="he_window_get_has_back_button">
@@ -2470,11 +3602,11 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="contrast" writable="1">
-			<type name="He.DesktopContrastScheme" c:type="HeDesktopContrastScheme"/>
+			<type name="gdouble" c:type="gdouble"/>
 		</property>
 		<method name="get_contrast" c:identifier="he_desktop_get_contrast">
 			<return-value transfer-ownership="none">
-				<type name="He.DesktopContrastScheme" c:type="HeDesktopContrastScheme"/>
+				<type name="gdouble" c:type="gdouble"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -2491,7 +3623,7 @@ Since: 1.0</doc>
 					<type name="He.Desktop" c:type="HeDesktop*"/>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
-					<type name="He.DesktopContrastScheme" c:type="HeDesktopContrastScheme"/>
+					<type name="gdouble" c:type="gdouble"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -2507,12 +3639,6 @@ Since: 1.0</doc>
 		<member name="no_preference" c:identifier="HE_DESKTOP_COLOR_SCHEME_NO_PREFERENCE" value="0"/>
 		<member name="dark" c:identifier="HE_DESKTOP_COLOR_SCHEME_DARK" value="1"/>
 		<member name="light" c:identifier="HE_DESKTOP_COLOR_SCHEME_LIGHT" value="2"/>
-	</enumeration>
-	<enumeration name="DesktopContrastScheme" c:type="HeDesktopContrastScheme" glib:type-name="HeDesktopContrastScheme" glib:get-type="he_desktop_contrast_scheme_get_type">
-		<doc xml:whitespace="preserve">&lt;para&gt;The contrast scheme preference enum, which is used to determine the contrast scheme of the desktop.&lt;/para&gt;</doc>
-		<member name="default" c:identifier="HE_DESKTOP_CONTRAST_SCHEME_DEFAULT" value="0"/>
-		<member name="high" c:identifier="HE_DESKTOP_CONTRAST_SCHEME_HIGH" value="1"/>
-		<member name="low" c:identifier="HE_DESKTOP_CONTRAST_SCHEME_LOW" value="2"/>
 	</enumeration>
 	<enumeration name="DesktopEnsorScheme" c:type="HeDesktopEnsorScheme" glib:type-name="HeDesktopEnsorScheme" glib:get-type="he_desktop_ensor_scheme_get_type">
 		<doc xml:whitespace="preserve">&lt;para&gt;The Ensor scheme preference enum, which is used to determine the Ensor scheme of the desktop.&lt;/para&gt;</doc>
@@ -2532,6 +3658,68 @@ Since: 1.0</doc>
 			</instance-parameter>
 		</parameters>
 	</function>
+	<class name="ContrastCurve" c:type="HeContrastCurve" c:symbol-prefix="contrast_curve" glib:type-name="HeContrastCurve" glib:get-type="he_contrast_curve_get_type" glib:type-struct="ContrastCurveClass" glib:fundamental="1" glib:ref-func="he_contrast_curve_ref" glib:unref-func="he_contrast_curve_unref" glib:set-value-func="he_value_set_contrast_curve" glib:get-value-func="he_value_get_contrast_curve">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.TypeInstance" c:type="GTypeInstance"/>
+		</field>
+		<field name="ref_count">
+			<type name="gint" c:type="volatile int"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ContrastCurvePrivate" c:type="HeContrastCurvePrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_contrast_curve_new">
+			<return-value transfer-ownership="full">
+				<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+			</return-value>
+			<parameters>
+				<parameter name="target" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="low" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="normal" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="medium" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="high" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<method name="get_contrast_level" c:identifier="he_contrast_curve_get_contrast_level">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_contrast_level" c:identifier="he_contrast_curve_set_contrast_level">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="ContrastCurveClass" c:type="HeContrastCurveClass" glib:is-gtype-struct-for="ContrastCurve">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.TypeClass" c:type="GTypeClass"/>
+		</field>
+	</record>
+	<record name="ContrastCurvePrivate" c:type="HeContrastCurvePrivate" disguised="1"/>
 	<class name="Quantizer" c:type="HeQuantizer" c:symbol-prefix="quantizer" glib:type-name="HeQuantizer" glib:get-type="he_quantizer_get_type" glib:type-struct="QuantizerClass" parent="GObject.Object" abstract="1">
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
@@ -2871,6 +4059,102 @@ area of the cube.&lt;/para&gt;
 		</field>
 	</record>
 	<record name="ScoreAnnotatedColorPrivate" c:type="HeScoreAnnotatedColorPrivate" disguised="1"/>
+	<class name="TemperatureCache" c:type="HeTemperatureCache" c:symbol-prefix="temperature_cache" glib:type-name="HeTemperatureCache" glib:get-type="he_temperature_cache_get_type" glib:type-struct="TemperatureCacheClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="TemperatureCachePrivate" c:type="HeTemperatureCachePrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_temperature_cache_new">
+			<return-value transfer-ownership="full">
+				<type name="He.TemperatureCache" c:type="HeTemperatureCache*"/>
+			</return-value>
+			<parameters>
+				<parameter name="input_color" transfer-ownership="none">
+					<type name="He.ColorHCTColor" c:type="HeColorHCTColor*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<method name="get_complement" c:identifier="he_temperature_cache_get_complement">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TemperatureCache" c:type="HeTemperatureCache*"/>
+				</instance-parameter>
+				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+					<type name="He.ColorHCTColor" c:type="HeColorHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_analogous_colors_simple" c:identifier="he_temperature_cache_get_analogous_colors_simple">
+			<return-value transfer-ownership="full">
+				<array length="0" c:type="HeColorHCTColor*">
+					<type name="He.ColorHCTColor" c:type="HeColorHCTColor"/>
+				</array>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TemperatureCache" c:type="HeTemperatureCache*"/>
+				</instance-parameter>
+				<parameter name="result_length1" direction="out" transfer-ownership="none">
+					<type name="gint" c:type="gint*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_analogous_colors" c:identifier="he_temperature_cache_get_analogous_colors">
+			<return-value transfer-ownership="full">
+				<array length="2" c:type="HeColorHCTColor*">
+					<type name="He.ColorHCTColor" c:type="HeColorHCTColor"/>
+				</array>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TemperatureCache" c:type="HeTemperatureCache*"/>
+				</instance-parameter>
+				<parameter name="count" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+				<parameter name="divisions" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+				<parameter name="result_length1" direction="out" transfer-ownership="none">
+					<type name="gint" c:type="gint*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_relative_temp" c:identifier="he_temperature_cache_get_relative_temp">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TemperatureCache" c:type="HeTemperatureCache*"/>
+				</instance-parameter>
+				<parameter name="color" transfer-ownership="none">
+					<type name="He.ColorHCTColor" c:type="HeColorHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<function name="raw_temp" c:identifier="he_temperature_cache_raw_temp">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="color" transfer-ownership="none">
+					<type name="He.ColorHCTColor" c:type="HeColorHCTColor*"/>
+				</parameter>
+			</parameters>
+		</function>
+	</class>
+	<record name="TemperatureCacheClass" c:type="HeTemperatureCacheClass" glib:is-gtype-struct-for="TemperatureCache">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="TemperatureCachePrivate" c:type="HeTemperatureCachePrivate" disguised="1"/>
 	<class name="ViewingConditions" c:type="HeViewingConditions" c:symbol-prefix="viewing_conditions" glib:type-name="HeViewingConditions" glib:get-type="he_viewing_conditions_get_type" glib:type-struct="ViewingConditionsClass" parent="GObject.Object">
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
@@ -3659,14 +4943,9 @@ control.&lt;/para&gt;</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="AppBarPrivate" c:type="HeAppBarPrivate*"/>
 		</field>
-		<field name="flat" writable="1" deprecated="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The flatness of the He.AppBar&lt;/para&gt;
-&lt;para&gt;Deprecated for code use. Will break if set manually!&lt;/para&gt;</doc>
-			<type name="gboolean" c:type="gboolean"/>
-		</field>
 		<field name="back_button" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The button to go back one view displayed in the AppBar.&lt;/para&gt;</doc>
-			<type name="Gtk.Button" c:type="GtkButton*"/>
+			<type name="He.Button" c:type="HeButton*"/>
 		</field>
 		<field name="btn_box" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The button box in the AppBar, shows below and to the right side of the title, or alongside the window controls, based on scrollers.&lt;/para&gt;</doc>
@@ -3674,6 +4953,36 @@ control.&lt;/para&gt;</doc>
 		</field>
 		<method name="append" c:identifier="he_app_bar_append">
 			<doc xml:whitespace="preserve">&lt;para&gt;Append a child to the AppBar. Please note that an AppBar should only have at most three children.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The child to append. &lt;/para&gt;</doc>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="append_toggle" c:identifier="he_app_bar_append_toggle">
+			<doc xml:whitespace="preserve">&lt;para&gt;Append a togglebutton child to the AppBar. Please note that an AppBar should only have at most three children.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AppBar" c:type="HeAppBar*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The child to append. &lt;/para&gt;</doc>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="append_menu" c:identifier="he_app_bar_append_menu">
+			<doc xml:whitespace="preserve">&lt;para&gt;Append a menubutton child to the AppBar. Please note that an AppBar should only have at most three children.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -3985,7 +5294,6 @@ Since: 1.0</doc>
 			</parameters>
 		</constructor>
 		<property name="has-title" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Whether this window should display a title.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
 		<method name="get_has_title" c:identifier="he_application_window_get_has_title">
@@ -4012,7 +5320,6 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="has-back-button" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Whether this window should display a back button.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
 		<method name="get_has_back_button" c:identifier="he_application_window_get_has_back_button">
@@ -4477,7 +5784,7 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				</instance-parameter>
 				<parameter name="icon" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
@@ -4496,7 +5803,7 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				</instance-parameter>
 				<parameter name="icon" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
@@ -4515,7 +5822,7 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				</instance-parameter>
 				<parameter name="icon" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
@@ -4534,11 +5841,11 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				</instance-parameter>
 				<parameter name="icon" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="after" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action after which the action is. &lt;/para&gt;</doc>
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
@@ -4559,11 +5866,11 @@ Since: 1.0</doc>
 				</instance-parameter>
 				<parameter name="icon" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="sibling" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action after which the action is. &lt;/para&gt;</doc>
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
 					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
@@ -4691,6 +5998,505 @@ Since: 1.0</doc>
 		<member name="left" c:identifier="HE_BOTTOM_BAR_POSITION_LEFT" value="0"/>
 		<member name="right" c:identifier="HE_BOTTOM_BAR_POSITION_RIGHT" value="1"/>
 	</enumeration>
+	<class name="BottomSheet" c:type="HeBottomSheet" c:symbol-prefix="bottom_sheet" glib:type-name="HeBottomSheet" glib:get-type="he_bottom_sheet_get_type" glib:type-struct="BottomSheetClass" parent="Gtk.Widget">
+		<doc xml:whitespace="preserve">&lt;para&gt;A BottomSheet is a UI component made to showcase accessory actions. It may have an action button. It has a title label and contents.&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="Gtk.Widget" c:type="GtkWidget"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="BottomSheetPrivate" c:type="HeBottomSheetPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_bottom_sheet_new">
+			<return-value transfer-ownership="none">
+				<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+			</return-value>
+		</constructor>
+		<property name="sheet" writable="1">
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_sheet" c:identifier="he_bottom_sheet_get_sheet">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_sheet" c:identifier="he_bottom_sheet_set_sheet">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="button" writable="1">
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_button" c:identifier="he_bottom_sheet_get_button">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_button" c:identifier="he_bottom_sheet_set_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="title" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_title" c:identifier="he_bottom_sheet_get_title">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_title" c:identifier="he_bottom_sheet_set_title">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-sheet" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_sheet" c:identifier="he_bottom_sheet_get_show_sheet">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_sheet" c:identifier="he_bottom_sheet_set_show_sheet">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="modal" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_modal" c:identifier="he_bottom_sheet_get_modal">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_modal" c:identifier="he_bottom_sheet_set_modal">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-handle" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_handle" c:identifier="he_bottom_sheet_get_show_handle">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_handle" c:identifier="he_bottom_sheet_set_show_handle">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="preferred-sheet-height" writable="1">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_preferred_sheet_height" c:identifier="he_bottom_sheet_get_preferred_sheet_height">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_preferred_sheet_height" c:identifier="he_bottom_sheet_set_preferred_sheet_height">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="hidden">
+			<doc xml:whitespace="preserve">&lt;para&gt;The hidden signal fires when the sheet is hidden.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
+	</class>
+	<record name="BottomSheetClass" c:type="HeBottomSheetClass" glib:is-gtype-struct-for="BottomSheet">
+		<field name="parent_class" readable="0" private="1">
+			<type name="Gtk.WidgetClass" c:type="GtkWidgetClass"/>
+		</field>
+	</record>
+	<record name="BottomSheetPrivate" c:type="HeBottomSheetPrivate" disguised="1"/>
+	<class name="Button" c:type="HeButton" c:symbol-prefix="button" glib:type-name="HeButton" glib:get-type="he_button_get_type" glib:type-struct="ButtonClass" parent="Gtk.Button">
+		<doc xml:whitespace="preserve">&lt;para&gt;A class to derive UI Buttons from.&lt;/para&gt;
+
+Since: 1.0</doc>
+		<implements name="Gtk.Buildable"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="Gtk.Button" c:type="GtkButton"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ButtonPrivate" c:type="HeButtonPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_button_new">
+			<return-value transfer-ownership="none">
+				<type name="He.Button" c:type="HeButton*"/>
+			</return-value>
+			<parameters>
+				<parameter name="icon" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="label" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<property name="color" writable="1">
+			<type name="He.Colors" c:type="HeColors"/>
+		</property>
+		<method name="get_color" c:identifier="he_button_get_color">
+			<return-value transfer-ownership="none">
+				<type name="He.Colors" c:type="HeColors"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_color" c:identifier="he_button_set_color">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Colors" c:type="HeColors"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-disclosure" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_disclosure" c:identifier="he_button_get_is_disclosure">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_disclosure" c:identifier="he_button_set_is_disclosure">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-iconic" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_iconic" c:identifier="he_button_get_is_iconic">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_iconic" c:identifier="he_button_set_is_iconic">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-outline" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_outline" c:identifier="he_button_get_is_outline">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_outline" c:identifier="he_button_set_is_outline">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-tint" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_tint" c:identifier="he_button_get_is_tint">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_tint" c:identifier="he_button_set_is_tint">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-fill" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_fill" c:identifier="he_button_get_is_fill">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_fill" c:identifier="he_button_set_is_fill">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-pill" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_pill" c:identifier="he_button_get_is_pill">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_pill" c:identifier="he_button_set_is_pill">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-textual" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_textual" c:identifier="he_button_get_is_textual">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_textual" c:identifier="he_button_set_is_textual">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="icon" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_icon" c:identifier="he_button_get_icon">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_icon" c:identifier="he_button_set_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="label" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_label" c:identifier="he_button_get_label">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_label" c:identifier="he_button_set_label">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="ButtonClass" c:type="HeButtonClass" glib:is-gtype-struct-for="Button">
+		<field name="parent_class" readable="0" private="1">
+			<type name="Gtk.ButtonClass" c:type="GtkButtonClass"/>
+		</field>
+	</record>
+	<record name="ButtonPrivate" c:type="HeButtonPrivate" disguised="1"/>
 	<class name="Chip" c:type="HeChip" c:symbol-prefix="chip" glib:type-name="HeChip" glib:get-type="he_chip_get_type" glib:type-struct="ChipClass" parent="Gtk.ToggleButton">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Chip is an element that can facilitate entering information, making selections, filtering content, or triggering actions.&lt;/para&gt;</doc>
 		<implements name="Gtk.Actionable"/>
@@ -5504,7 +7310,7 @@ Since: 1.0</doc>
 		</field>
 		<field name="cancel_button" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The cancel button in the dialog.&lt;/para&gt;</doc>
-			<type name="He.TextButton" c:type="HeTextButton*"/>
+			<type name="He.Button" c:type="HeButton*"/>
 		</field>
 		<method name="add" c:identifier="he_dialog_add">
 			<doc xml:whitespace="preserve">&lt;para&gt;Add a child directly to the Dialog. Used only in code.&lt;/para&gt;
@@ -5556,11 +7362,11 @@ Since: 1.0</doc>
 				</parameter>
 				<parameter name="primary_button" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The primary button of the dialog. &lt;/para&gt;</doc>
-					<type name="He.FillButton" c:type="HeFillButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="secondary_button" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The secondary button of the dialog. &lt;/para&gt;</doc>
-					<type name="He.TintButton" c:type="HeTintButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 			</parameters>
 		</constructor>
@@ -5647,11 +7453,11 @@ Since: 1.0</doc>
 		</method>
 		<property name="secondary-button" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;Sets the secondary button of the dialog.&lt;/para&gt;</doc>
-			<type name="He.TintButton" c:type="HeTintButton*"/>
+			<type name="He.Button" c:type="HeButton*"/>
 		</property>
 		<method name="get_secondary_button" c:identifier="he_dialog_get_secondary_button">
 			<return-value transfer-ownership="none">
-				<type name="He.TintButton" c:type="HeTintButton*"/>
+				<type name="He.Button" c:type="HeButton*"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -5668,17 +7474,17 @@ Since: 1.0</doc>
 					<type name="He.Dialog" c:type="HeDialog*"/>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
-					<type name="He.TintButton" c:type="HeTintButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 			</parameters>
 		</method>
 		<property name="primary-button" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;Sets the primary button of the dialog.&lt;/para&gt;</doc>
-			<type name="He.FillButton" c:type="HeFillButton*"/>
+			<type name="He.Button" c:type="HeButton*"/>
 		</property>
 		<method name="get_primary_button" c:identifier="he_dialog_get_primary_button">
 			<return-value transfer-ownership="none">
-				<type name="He.FillButton" c:type="HeFillButton*"/>
+				<type name="He.Button" c:type="HeButton*"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -5695,7 +7501,7 @@ Since: 1.0</doc>
 					<type name="He.Dialog" c:type="HeDialog*"/>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
-					<type name="He.FillButton" c:type="HeFillButton*"/>
+					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -5706,74 +7512,6 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="DialogPrivate" c:type="HeDialogPrivate" disguised="1"/>
-	<class name="DisclosureButton" c:type="HeDisclosureButton" c:symbol-prefix="disclosure_button" glib:type-name="HeDisclosureButton" glib:get-type="he_disclosure_button_get_type" glib:type-struct="DisclosureButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Disclosure Button is a view-based button that acts on said view.&lt;/para&gt;</doc>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Button" c:type="HeButton"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="DisclosureButtonPrivate" c:type="HeDisclosureButtonPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_disclosure_button_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new DisclosureButton.&lt;/para&gt;</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.DisclosureButton" c:type="HeDisclosureButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The name of the icon to use. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-		<constructor name="from_icon" c:identifier="he_disclosure_button_new_from_icon">
-			<doc xml:whitespace="preserve">&lt;para&gt;Create a new DisclosureButton from an icon.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.DisclosureButton" c:type="HeDisclosureButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The icon to display on the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-		<property name="icon" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the button.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_icon" c:identifier="he_disclosure_button_get_icon">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.DisclosureButton" c:type="HeDisclosureButton*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_icon" c:identifier="he_disclosure_button_set_icon">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.DisclosureButton" c:type="HeDisclosureButton*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-	</class>
-	<record name="DisclosureButtonClass" c:type="HeDisclosureButtonClass" glib:is-gtype-struct-for="DisclosureButton">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.ButtonClass" c:type="HeButtonClass"/>
-		</field>
-	</record>
-	<record name="DisclosureButtonPrivate" c:type="HeDisclosureButtonPrivate" disguised="1"/>
 	<class name="Divider" c:type="HeDivider" c:symbol-prefix="divider" glib:type-name="HeDivider" glib:get-type="he_divider_get_type" glib:type-struct="DividerClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Divider is a thin line that groups content in a view, can be full-width &amp;lpar;default&amp;rpar; or inset&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -5814,6 +7552,32 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="is-vertical" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_vertical" c:identifier="he_divider_get_is_vertical">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_vertical" c:identifier="he_divider_set_is_vertical">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
 	</class>
 	<record name="DividerClass" c:type="HeDividerClass" glib:is-gtype-struct-for="Divider">
 		<field name="parent_class" readable="0" private="1">
@@ -5821,6 +7585,236 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="DividerPrivate" c:type="HeDividerPrivate" disguised="1"/>
+	<class name="Dropdown" c:type="HeDropdown" c:symbol-prefix="dropdown" glib:type-name="HeDropdown" glib:get-type="he_dropdown_get_type" glib:type-struct="DropdownClass" parent="Gtk.Grid" final="1">
+		<doc xml:whitespace="preserve">&lt;para&gt;A &lt;type&gt;HeDropdown&lt;/type&gt; is a simple variant of &lt;type&gt;GtkDropDown&lt;/type&gt; for easy developing.&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="Gtk.Grid" c:type="GtkGrid"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="DropdownPrivate" c:type="HeDropdownPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_dropdown_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new &lt;type&gt;HeDropdown&lt;/type&gt;.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="none">
+				<doc xml:whitespace="preserve">&lt;para&gt;A new &lt;type&gt;HeDropdown&lt;/type&gt; &lt;/para&gt;</doc>
+				<type name="He.Dropdown" c:type="HeDropdown*"/>
+			</return-value>
+		</constructor>
+		<method name="append" c:identifier="he_dropdown_append">
+			<doc xml:whitespace="preserve">&lt;para&gt;Appends text to the list of strings stored in this.&lt;/para&gt;
+&lt;para&gt;This is the same as calling &lt;function&gt;he_dropdown_insert&lt;/function&gt; with a position of -1.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="text" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;A string &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_active" c:identifier="he_dropdown_get_active">
+			<doc xml:whitespace="preserve">&lt;para&gt;Returns the currently active string in this.&lt;/para&gt;
+&lt;para&gt;If no row is currently selected, null is returned. If this contains an entry, this function will return its contents &amp;lpar;which will not
+necessarily be an item from the list&amp;rpar;.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full" nullable="1">
+				<doc xml:whitespace="preserve">&lt;para&gt;A newly allocated string containing the currently active text. Must be freed with g_free. &lt;/para&gt;</doc>
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="insert" c:identifier="he_dropdown_insert">
+			<doc xml:whitespace="preserve">&lt;para&gt;Inserts text at position in the list of strings stored in this.&lt;/para&gt;
+&lt;para&gt;If position is negative then text is appended.&lt;br/&gt; This is the same as calling &lt;function&gt;he_dropdown_insert&lt;/function&gt; with a null ID string.
+&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="position" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;An index to insert text &lt;/para&gt;</doc>
+					<type name="gint" c:type="gint"/>
+				</parameter>
+				<parameter name="text" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;A string &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="prepend" c:identifier="he_dropdown_prepend">
+			<doc xml:whitespace="preserve">&lt;para&gt;Prepends text to the list of strings stored in this.&lt;/para&gt;
+&lt;para&gt;This is the same as calling &lt;function&gt;he_dropdown_insert&lt;/function&gt; with a position of 0.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="text" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;A string &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="remove" c:identifier="he_dropdown_remove">
+			<doc xml:whitespace="preserve">&lt;para&gt;Removes the string at position from this.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="position" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;Index of the item to remove &lt;/para&gt;</doc>
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="remove_all" c:identifier="he_dropdown_remove_all">
+			<doc xml:whitespace="preserve">&lt;para&gt;Removes all the text entries from the dropdown.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<property name="active-id" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The value of the ID column of the active row.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_active_id" c:identifier="he_dropdown_get_active_id">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_active_id" c:identifier="he_dropdown_set_active_id">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="max-width-chars" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The desired maximum width of the label, in characters.&lt;/para&gt;
+&lt;para&gt;If this property is set to -1, the width will be calculated automatically.&lt;/para&gt;</doc>
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_max_width_chars" c:identifier="he_dropdown_get_max_width_chars">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_max_width_chars" c:identifier="he_dropdown_set_max_width_chars">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="ellipsize" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The preferred place to ellipsize the string, if the label does not have enough room to display the entire string.&lt;/para&gt;</doc>
+			<type name="Pango.EllipsizeMode" c:type="PangoEllipsizeMode"/>
+		</property>
+		<method name="get_ellipsize" c:identifier="he_dropdown_get_ellipsize">
+			<return-value transfer-ownership="none">
+				<type name="Pango.EllipsizeMode" c:type="PangoEllipsizeMode"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_ellipsize" c:identifier="he_dropdown_set_ellipsize">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Pango.EllipsizeMode" c:type="PangoEllipsizeMode"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="dropdown" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;A &lt;type&gt;GtkDropDown&lt;/type&gt; which this uses internally.&lt;/para&gt;</doc>
+			<type name="Gtk.DropDown" c:type="GtkDropDown*"/>
+		</property>
+		<method name="get_dropdown" c:identifier="he_dropdown_get_dropdown">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.DropDown" c:type="GtkDropDown*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_dropdown" c:identifier="he_dropdown_set_dropdown">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dropdown" c:type="HeDropdown*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.DropDown" c:type="GtkDropDown*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="changed">
+			<doc xml:whitespace="preserve">&lt;para&gt;Emitted when the active item is changed.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
+	</class>
+	<record name="DropdownClass" c:type="HeDropdownClass" glib:is-gtype-struct-for="Dropdown">
+		<field name="parent_class" readable="0" private="1">
+			<type name="Gtk.GridClass" c:type="GtkGridClass"/>
+		</field>
+	</record>
+	<record name="DropdownPrivate" c:type="HeDropdownPrivate" disguised="1"/>
 	<class name="EmptyPage" c:type="HeEmptyPage" c:symbol-prefix="empty_page" glib:type-name="HeEmptyPage" glib:get-type="he_empty_page_get_type" glib:type-struct="EmptyPageClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;An EmptyPage is a page that is used to display a message and a button when there is no data to display.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -5832,7 +7826,7 @@ Since: 1.0</doc>
 		<field name="action_button" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The action button of the empty page. Can connect to the clicked signal to get notified when the button is clicked. e.g.
 action_button.clicked.connect&amp;lpar;&amp;lpar;&amp;rpar; =&amp;gt; { ... }&amp;rpar;;&lt;/para&gt;</doc>
-			<type name="He.PillButton" c:type="HePillButton*"/>
+			<type name="He.Button" c:type="HeButton*"/>
 		</field>
 		<constructor name="new" c:identifier="he_empty_page_new">
 			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new EmptyPage.&lt;/para&gt;</doc>
@@ -5974,117 +7968,6 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="EmptyPagePrivate" c:type="HeEmptyPagePrivate" disguised="1"/>
-	<class name="FillButton" c:type="HeFillButton" c:symbol-prefix="fill_button" glib:type-name="HeFillButton" glib:get-type="he_fill_button_get_type" glib:type-struct="FillButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;A FillButton is a solid button with a label.&lt;/para&gt;</doc>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Button" c:type="HeButton"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="FillButtonPrivate" c:type="HeFillButtonPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_fill_button_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new FillButton.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.FillButton" c:type="HeFillButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="label" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The label of the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-	</class>
-	<record name="FillButtonClass" c:type="HeFillButtonClass" glib:is-gtype-struct-for="FillButton">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.ButtonClass" c:type="HeButtonClass"/>
-		</field>
-	</record>
-	<record name="FillButtonPrivate" c:type="HeFillButtonPrivate" disguised="1"/>
-	<class name="IconicButton" c:type="HeIconicButton" c:symbol-prefix="iconic_button" glib:type-name="HeIconicButton" glib:get-type="he_iconic_button_get_type" glib:type-struct="IconicButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;An Iconic Button is used in a &lt;type&gt;HeBottomBar&lt;/type&gt; to display an action.&lt;/para&gt;</doc>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Button" c:type="HeButton"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="IconicButtonPrivate" c:type="HeIconicButtonPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_iconic_button_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new IconicButton.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.IconicButton" c:type="HeIconicButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The icon name to display. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-		<property name="icon" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The icon name to display.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_icon" c:identifier="he_iconic_button_get_icon">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_icon" c:identifier="he_iconic_button_set_icon">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="tooltip" writable="1">
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_tooltip" c:identifier="he_iconic_button_get_tooltip">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_tooltip" c:identifier="he_iconic_button_set_tooltip">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.IconicButton" c:type="HeIconicButton*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-	</class>
-	<record name="IconicButtonClass" c:type="HeIconicButtonClass" glib:is-gtype-struct-for="IconicButton">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.ButtonClass" c:type="HeButtonClass"/>
-		</field>
-	</record>
-	<record name="IconicButtonPrivate" c:type="HeIconicButtonPrivate" disguised="1"/>
 	<class name="MiniContentBlock" c:type="HeMiniContentBlock" c:symbol-prefix="mini_content_block" glib:type-name="HeMiniContentBlock" glib:get-type="he_mini_content_block_get_type" glib:type-struct="MiniContentBlockClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A MiniContentBlock is a content block that is used to display content in a small area.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -6586,35 +8469,6 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="NavigationSectionPrivate" c:type="HeNavigationSectionPrivate" disguised="1"/>
-	<class name="OutlineButton" c:type="HeOutlineButton" c:symbol-prefix="outline_button" glib:type-name="HeOutlineButton" glib:get-type="he_outline_button_get_type" glib:type-struct="OutlineButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;An Outline button is a transparent FillButton with a border.&lt;/para&gt;</doc>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Button" c:type="HeButton"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="OutlineButtonPrivate" c:type="HeOutlineButtonPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_outline_button_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new OutlineButton.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.OutlineButton" c:type="HeOutlineButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="label" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The label of the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-	</class>
-	<record name="OutlineButtonClass" c:type="HeOutlineButtonClass" glib:is-gtype-struct-for="OutlineButton">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.ButtonClass" c:type="HeButtonClass"/>
-		</field>
-	</record>
-	<record name="OutlineButtonPrivate" c:type="HeOutlineButtonPrivate" disguised="1"/>
 	<class name="OverlayButton" c:type="HeOverlayButton" c:symbol-prefix="overlay_button" glib:type-name="HeOverlayButton" glib:get-type="he_overlay_button_get_type" glib:type-struct="OverlayButtonClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;An OverlayButton is a widget that can be used to show action buttons above the widget that is being overlaid.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -7051,35 +8905,6 @@ Since: 1.0</doc>
 			</parameter>
 		</parameters>
 	</function>
-	<class name="PillButton" c:type="HePillButton" c:symbol-prefix="pill_button" glib:type-name="HePillButton" glib:get-type="he_pill_button_get_type" glib:type-struct="PillButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;A PillButton is a solid button with a label. It is more round and larger than a FillButton.&lt;/para&gt;</doc>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Button" c:type="HeButton"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="PillButtonPrivate" c:type="HePillButtonPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_pill_button_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new PillButton.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.PillButton" c:type="HePillButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="label" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The label of the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-	</class>
-	<record name="PillButtonClass" c:type="HePillButtonClass" glib:is-gtype-struct-for="PillButton">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.ButtonClass" c:type="HeButtonClass"/>
-		</field>
-	</record>
-	<record name="PillButtonPrivate" c:type="HePillButtonPrivate" disguised="1"/>
 	<class name="ProgressBar" c:type="HeProgressBar" c:symbol-prefix="progress_bar" glib:type-name="HeProgressBar" glib:get-type="he_progress_bar_get_type" glib:type-struct="ProgressBarClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Progressbar indicates the progress of some process and contains a disable-able Stop Indicator for accessibility purposes.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -8931,47 +10756,6 @@ Since: 1.0</doc>
 		<member name="single" c:identifier="HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_SINGLE" value="1"/>
 		<member name="never" c:identifier="HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_NEVER" value="2"/>
 	</enumeration>
-	<class name="TextButton" c:type="HeTextButton" c:symbol-prefix="text_button" glib:type-name="HeTextButton" glib:get-type="he_text_button_get_type" glib:type-struct="TextButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;A TextButton is a button that displays text. It has a transparent background.&lt;/para&gt;</doc>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Button" c:type="HeButton"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="TextButtonPrivate" c:type="HeTextButtonPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_text_button_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new TextButton.&lt;/para&gt;</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.TextButton" c:type="HeTextButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="label" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The text to display on the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-		<constructor name="from_icon" c:identifier="he_text_button_new_from_icon">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new TextButton from an icon.&lt;/para&gt;
-
-Since: 1.0</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.TextButton" c:type="HeTextButton*"/>
-			</return-value>
-			<parameters>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The icon to display on the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-	</class>
-	<record name="TextButtonClass" c:type="HeTextButtonClass" glib:is-gtype-struct-for="TextButton">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.ButtonClass" c:type="HeButtonClass"/>
-		</field>
-	</record>
-	<record name="TextButtonPrivate" c:type="HeTextButtonPrivate" disguised="1"/>
 	<class name="TextField" c:type="HeTextField" c:symbol-prefix="text_field" glib:type-name="HeTextField" glib:get-type="he_text_field_get_type" glib:type-struct="TextFieldClass" parent="Gtk.ListBoxRow">
 		<doc xml:whitespace="preserve">&lt;para&gt;TextField is a &lt;type&gt;GtkEntry&lt;/type&gt;-like subclass that is meant to be used in forms where input must be validated before the form can be
 submitted. It provides feedback to users about the state of input validation and keeps track of its own validation state. By default, input is
@@ -9491,48 +11275,99 @@ passed to this constructor.&lt;/para&gt;
 		</field>
 	</record>
 	<record name="TimePickerPrivate" c:type="HeTimePickerPrivate" disguised="1"/>
-	<class name="TintButton" c:type="HeTintButton" c:symbol-prefix="tint_button" glib:type-name="HeTintButton" glib:get-type="he_tint_button_get_type" glib:type-struct="TintButtonClass" parent="He.Button">
-		<doc xml:whitespace="preserve">&lt;para&gt;A TintButton is similar to a FillButton, except that the color of the button has a tinted appearance. In addition, the TintButton also support
-icons.&lt;/para&gt;</doc>
+	<class name="TipView" c:type="HeTipView" c:symbol-prefix="tip_view" glib:type-name="HeTipView" glib:get-type="he_tip_view_get_type" glib:type-struct="TipViewClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A TipView is a helper widget for onboarding flow tips in an app&amp;apos;s first launch.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Button" c:type="HeButton"/>
+			<type name="He.Bin" c:type="HeBin"/>
 		</field>
 		<field name="priv" readable="0" private="1">
-			<type name="TintButtonPrivate" c:type="HeTintButtonPrivate*"/>
+			<type name="TipViewPrivate" c:type="HeTipViewPrivate*"/>
 		</field>
-		<constructor name="new" c:identifier="he_tint_button_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Create a new TintButton.&lt;/para&gt;</doc>
+		<field name="button" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The action button of the Tip.&lt;/para&gt;</doc>
+			<type name="He.Button" c:type="HeButton*"/>
+		</field>
+		<constructor name="new" c:identifier="he_tip_view_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Creates a TipView.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="none">
-				<type name="He.TintButton" c:type="HeTintButton*"/>
+				<type name="He.TipView" c:type="HeTipView*"/>
 			</return-value>
 			<parameters>
-				<parameter name="label" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The text to display on the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
+				<parameter name="tip" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The Tip to use. &lt;/para&gt;</doc>
+					<type name="He.Tip" c:type="HeTip*"/>
+				</parameter>
+				<parameter name="tip_style" transfer-ownership="none" nullable="1">
+					<doc xml:whitespace="preserve">&lt;para&gt;The TipViewStyle to use. &lt;/para&gt;</doc>
+					<type name="He.TipViewStyle" c:type="HeTipViewStyle*"/>
 				</parameter>
 			</parameters>
 		</constructor>
-		<constructor name="from_icon" c:identifier="he_tint_button_new_from_icon">
-			<doc xml:whitespace="preserve">&lt;para&gt;Create a new TintButton from an icon.&lt;/para&gt;
-
-Since: 1.0</doc>
+		<property name="tip-style" writable="1">
+			<type name="He.TipViewStyle" c:type="HeTipViewStyle"/>
+		</property>
+		<method name="get_tip_style" c:identifier="he_tip_view_get_tip_style">
 			<return-value transfer-ownership="none">
-				<type name="He.TintButton" c:type="HeTintButton*"/>
+				<type name="He.TipViewStyle" c:type="HeTipViewStyle"/>
 			</return-value>
 			<parameters>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The icon to display on the button. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TipView" c:type="HeTipView*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_tip_style" c:identifier="he_tip_view_set_tip_style">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TipView" c:type="HeTipView*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.TipViewStyle" c:type="HeTipViewStyle"/>
 				</parameter>
 			</parameters>
-		</constructor>
+		</method>
+		<property name="tip" writable="1">
+			<type name="He.Tip" c:type="HeTip*"/>
+		</property>
+		<method name="get_tip" c:identifier="he_tip_view_get_tip">
+			<return-value transfer-ownership="none">
+				<type name="He.Tip" c:type="HeTip*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TipView" c:type="HeTipView*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_tip" c:identifier="he_tip_view_set_tip">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TipView" c:type="HeTipView*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Tip" c:type="HeTip*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="closed">
+			<doc xml:whitespace="preserve">&lt;para&gt;Emitted when the Tip is closed by activating the close button.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
 	</class>
-	<record name="TintButtonClass" c:type="HeTintButtonClass" glib:is-gtype-struct-for="TintButton">
+	<record name="TipViewClass" c:type="HeTipViewClass" glib:is-gtype-struct-for="TipView">
 		<field name="parent_class" readable="0" private="1">
-			<type name="He.ButtonClass" c:type="HeButtonClass"/>
+			<type name="He.BinClass" c:type="HeBinClass"/>
 		</field>
 	</record>
-	<record name="TintButtonPrivate" c:type="HeTintButtonPrivate" disguised="1"/>
+	<record name="TipViewPrivate" c:type="HeTipViewPrivate" disguised="1"/>
 	<class name="Toast" c:type="HeToast" c:symbol-prefix="toast" glib:type-name="HeToast" glib:get-type="he_toast_get_type" glib:type-struct="ToastClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Toast is a widget containing a quick little message for the user with an optional action button.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -9744,10 +11579,11 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ViewChooserPrivate" c:type="HeViewChooserPrivate" disguised="1"/>
-	<class name="ViewDual" c:type="HeViewDual" c:symbol-prefix="view_dual" glib:type-name="HeViewDual" glib:get-type="he_view_dual_get_type" glib:type-struct="ViewDualClass" parent="He.View">
+	<class name="ViewDual" c:type="HeViewDual" c:symbol-prefix="view_dual" glib:type-name="HeViewDual" glib:get-type="he_view_dual_get_type" glib:type-struct="ViewDualClass" parent="Gtk.Widget">
 		<doc xml:whitespace="preserve">&lt;para&gt;A ViewDual is a view that displays two views side by side.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
-			<type name="He.View" c:type="HeView"/>
+			<type name="Gtk.Widget" c:type="GtkWidget"/>
 		</field>
 		<field name="priv" readable="0" private="1">
 			<type name="ViewDualPrivate" c:type="HeViewDualPrivate*"/>
@@ -9756,11 +11592,123 @@ Since: 1.0</doc>
 			<return-value transfer-ownership="none">
 				<type name="He.ViewDual" c:type="HeViewDual*"/>
 			</return-value>
+			<parameters>
+				<parameter name="orientation" transfer-ownership="none">
+					<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+				</parameter>
+				<parameter name="show_handle" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
 		</constructor>
+		<property name="orientation" writable="1">
+			<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+		</property>
+		<method name="get_orientation" c:identifier="he_view_dual_get_orientation">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_orientation" c:identifier="he_view_dual_set_orientation">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-handle" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_handle" c:identifier="he_view_dual_get_show_handle">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_handle" c:identifier="he_view_dual_set_show_handle">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="child-start" writable="1">
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_child_start" c:identifier="he_view_dual_get_child_start">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_child_start" c:identifier="he_view_dual_set_child_start">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="child-end" writable="1">
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_child_end" c:identifier="he_view_dual_get_child_end">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_child_end" c:identifier="he_view_dual_set_child_end">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewDual" c:type="HeViewDual*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
 	</class>
 	<record name="ViewDualClass" c:type="HeViewDualClass" glib:is-gtype-struct-for="ViewDual">
 		<field name="parent_class" readable="0" private="1">
-			<type name="He.ViewClass" c:type="HeViewClass"/>
+			<type name="Gtk.WidgetClass" c:type="GtkWidgetClass"/>
 		</field>
 	</record>
 	<record name="ViewDualPrivate" c:type="HeViewDualPrivate" disguised="1"/>
@@ -9786,7 +11734,7 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ViewMonoPrivate" c:type="HeViewMonoPrivate" disguised="1"/>
-	<class name="ViewSubTitle" c:type="HeViewSubTitle" c:symbol-prefix="view_sub_title" glib:type-name="HeViewSubTitle" glib:get-type="he_view_sub_title_get_type" glib:type-struct="ViewSubTitleClass" parent="He.Bin" deprecated="1">
+	<class name="ViewSubTitle" c:type="HeViewSubTitle" c:symbol-prefix="view_sub_title" glib:type-name="HeViewSubTitle" glib:get-type="he_view_sub_title_get_type" glib:type-struct="ViewSubTitleClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A ViewSubTitle is a view&amp;apos;s subtitle.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
@@ -9887,7 +11835,7 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ViewSwitcherPrivate" c:type="HeViewSwitcherPrivate" disguised="1"/>
-	<class name="ViewTitle" c:type="HeViewTitle" c:symbol-prefix="view_title" glib:type-name="HeViewTitle" glib:get-type="he_view_title_get_type" glib:type-struct="ViewTitleClass" parent="He.Bin" deprecated="1">
+	<class name="ViewTitle" c:type="HeViewTitle" c:symbol-prefix="view_title" glib:type-name="HeViewTitle" glib:get-type="he_view_title_get_type" glib:type-struct="ViewTitleClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A ViewTitle is a widget that displays a view&amp;apos;s title.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
@@ -10064,8 +12012,8 @@ dark or light. Prior runs of the generate method should not affect the output of
 				<parameter name="is_dark" transfer-ownership="none">
 					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
-				<parameter name="is_contrast" transfer-ownership="none">
-					<type name="gboolean" c:type="gboolean"/>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
 				</parameter>
 				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 					<type name="He.Scheme" c:type="HeScheme*"/>
@@ -10086,8 +12034,8 @@ dark or light. Prior runs of the generate method should not affect the output of
 				<parameter name="is_dark" transfer-ownership="none">
 					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
-				<parameter name="is_contrast" transfer-ownership="none">
-					<type name="gboolean" c:type="gboolean"/>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
 				</parameter>
 				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 					<type name="He.Scheme" c:type="HeScheme*"/>
@@ -10114,8 +12062,8 @@ dark or light. Prior runs of the generate method should not affect the output of
 					<parameter name="is_dark" transfer-ownership="none">
 						<type name="gboolean" c:type="gboolean"/>
 					</parameter>
-					<parameter name="is_contrast" transfer-ownership="none">
-						<type name="gboolean" c:type="gboolean"/>
+					<parameter name="contrast" transfer-ownership="none">
+						<type name="gdouble" c:type="gdouble"/>
 					</parameter>
 					<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 						<type name="He.Scheme" c:type="HeScheme*"/>
@@ -10223,6 +12171,19 @@ dark or light. Prior runs of the generate method should not affect the output of
 			<type name="utf8" c:type="gchar*"/>
 		</field>
 	</record>
+	<callback name="AnimationTargetFunc" c:type="HeAnimationTargetFunc">
+		<return-value transfer-ownership="full">
+			<type name="none" c:type="void"/>
+		</return-value>
+		<parameters>
+			<parameter name="value" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+			<parameter name="user_data" transfer-ownership="none" closure="1">
+				<type name="gpointer" c:type="void*"/>
+			</parameter>
+		</parameters>
+	</callback>
 	<function name="init" c:identifier="he_init">
 		<return-value transfer-ownership="full">
 			<type name="none" c:type="void"/>

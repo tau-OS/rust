@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi,FillButton,TintButton,Window};
+use crate::{ffi,Button,Window};
 use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
@@ -21,7 +21,7 @@ impl Dialog {
     
 
     #[doc(alias = "he_dialog_new")]
-    pub fn new(modal: bool, parent: Option<&impl IsA<gtk::Window>>, title: &str, subtitle: &str, info: &str, icon: &str, primary_button: Option<&impl IsA<FillButton>>, secondary_button: Option<&impl IsA<TintButton>>) -> Dialog {
+    pub fn new(modal: bool, parent: Option<&impl IsA<gtk::Window>>, title: &str, subtitle: &str, info: &str, icon: &str, primary_button: Option<&impl IsA<Button>>, secondary_button: Option<&impl IsA<Button>>) -> Dialog {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::he_dialog_new(modal.into_glib(), parent.map(|p| p.as_ref()).to_glib_none().0, title.to_glib_none().0, subtitle.to_glib_none().0, info.to_glib_none().0, icon.to_glib_none().0, primary_button.map(|p| p.as_ref()).to_glib_none().0, secondary_button.map(|p| p.as_ref()).to_glib_none().0))
@@ -70,11 +70,11 @@ pub struct DialogBuilder {
                             Self { builder: self.builder.property("icon", icon.into()), }
                         }
 
-                            pub fn secondary_button(self, secondary_button: &impl IsA<TintButton>) -> Self {
+                            pub fn secondary_button(self, secondary_button: &impl IsA<Button>) -> Self {
                             Self { builder: self.builder.property("secondary-button", secondary_button.clone().upcast()), }
                         }
 
-                            pub fn primary_button(self, primary_button: &impl IsA<FillButton>) -> Self {
+                            pub fn primary_button(self, primary_button: &impl IsA<Button>) -> Self {
                             Self { builder: self.builder.property("primary-button", primary_button.clone().upcast()), }
                         }
 
@@ -369,14 +369,14 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
 
     #[doc(alias = "he_dialog_get_secondary_button")]
     #[doc(alias = "get_secondary_button")]
-    fn secondary_button(&self) -> TintButton {
+    fn secondary_button(&self) -> Button {
         unsafe {
             from_glib_none(ffi::he_dialog_get_secondary_button(self.as_ref().to_glib_none().0))
         }
     }
 
     #[doc(alias = "he_dialog_set_secondary_button")]
-    fn set_secondary_button(&self, value: &impl IsA<TintButton>) {
+    fn set_secondary_button(&self, value: &impl IsA<Button>) {
         unsafe {
             ffi::he_dialog_set_secondary_button(self.as_ref().to_glib_none().0, value.as_ref().to_glib_none().0);
         }
@@ -384,14 +384,14 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
 
     #[doc(alias = "he_dialog_get_primary_button")]
     #[doc(alias = "get_primary_button")]
-    fn primary_button(&self) -> FillButton {
+    fn primary_button(&self) -> Button {
         unsafe {
             from_glib_none(ffi::he_dialog_get_primary_button(self.as_ref().to_glib_none().0))
         }
     }
 
     #[doc(alias = "he_dialog_set_primary_button")]
-    fn set_primary_button(&self, value: &impl IsA<FillButton>) {
+    fn set_primary_button(&self, value: &impl IsA<Button>) {
         unsafe {
             ffi::he_dialog_set_primary_button(self.as_ref().to_glib_none().0, value.as_ref().to_glib_none().0);
         }

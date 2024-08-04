@@ -62,6 +62,10 @@ pub struct DividerBuilder {
                             Self { builder: self.builder.property("is-inset", is_inset), }
                         }
 
+                            pub fn is_vertical(self, is_vertical: bool) -> Self {
+                            Self { builder: self.builder.property("is-vertical", is_vertical), }
+                        }
+
                             pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
                             Self { builder: self.builder.property("child", child.clone().upcast()), }
                         }
@@ -214,6 +218,21 @@ pub trait DividerExt: IsA<Divider> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_divider_get_is_vertical")]
+    #[doc(alias = "get_is_vertical")]
+    fn is_vertical(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_divider_get_is_vertical(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[doc(alias = "he_divider_set_is_vertical")]
+    fn set_is_vertical(&self, value: bool) {
+        unsafe {
+            ffi::he_divider_set_is_vertical(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
     #[doc(alias = "is-inset")]
     fn connect_is_inset_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_inset_trampoline<P: IsA<Divider>, F: Fn(&P) + 'static>(this: *mut ffi::HeDivider, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer) {
@@ -224,6 +243,19 @@ pub trait DividerExt: IsA<Divider> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::is-inset\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(notify_is_inset_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+        }
+    }
+
+    #[doc(alias = "is-vertical")]
+    fn connect_is_vertical_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_vertical_trampoline<P: IsA<Divider>, F: Fn(&P) + 'static>(this: *mut ffi::HeDivider, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(Divider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::is-vertical\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(notify_is_vertical_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 }

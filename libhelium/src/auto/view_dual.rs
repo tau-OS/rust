@@ -3,12 +3,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi,View};
-use glib::{prelude::*,translate::*};
+use crate::{ffi};
+use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
+use std::{boxed::Box as Box_};
 
 glib::wrapper! {
     #[doc(alias = "HeViewDual")]
-    pub struct ViewDual(Object<ffi::HeViewDual, ffi::HeViewDualClass>) @extends View, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    pub struct ViewDual(Object<ffi::HeViewDual, ffi::HeViewDualClass>) @extends gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
         type_ => || ffi::he_view_dual_get_type(),
@@ -20,10 +21,10 @@ impl ViewDual {
     
 
     #[doc(alias = "he_view_dual_new")]
-    pub fn new() -> ViewDual {
+    pub fn new(orientation: gtk::Orientation, show_handle: bool) -> ViewDual {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::he_view_dual_new())
+            from_glib_none(ffi::he_view_dual_new(orientation.into_glib(), show_handle.into_glib()))
         }
     }
 
@@ -39,7 +40,7 @@ impl ViewDual {
 
 impl Default for ViewDual {
                      fn default() -> Self {
-                         Self::new()
+                         glib::object::Object::new::<Self>()
                      }
                  }
 
@@ -57,20 +58,20 @@ pub struct ViewDualBuilder {
             Self { builder: glib::object::Object::builder() }
         }
 
-                            pub fn title(self, title: impl Into<glib::GString>) -> Self {
-                            Self { builder: self.builder.property("title", title.into()), }
+                            pub fn orientation(self, orientation: gtk::Orientation) -> Self {
+                            Self { builder: self.builder.property("orientation", orientation), }
                         }
 
-                            pub fn stack(self, stack: &gtk::Stack) -> Self {
-                            Self { builder: self.builder.property("stack", stack.clone()), }
+                            pub fn show_handle(self, show_handle: bool) -> Self {
+                            Self { builder: self.builder.property("show-handle", show_handle), }
                         }
 
-                            pub fn subtitle(self, subtitle: impl Into<glib::GString>) -> Self {
-                            Self { builder: self.builder.property("subtitle", subtitle.into()), }
+                            pub fn child_start(self, child_start: &impl IsA<gtk::Widget>) -> Self {
+                            Self { builder: self.builder.property("child-start", child_start.clone().upcast()), }
                         }
 
-                            pub fn has_margins(self, has_margins: bool) -> Self {
-                            Self { builder: self.builder.property("has-margins", has_margins), }
+                            pub fn child_end(self, child_end: &impl IsA<gtk::Widget>) -> Self {
+                            Self { builder: self.builder.property("child-end", child_end.clone().upcast()), }
                         }
 
                             pub fn can_focus(self, can_focus: bool) -> Self {
@@ -199,3 +200,124 @@ pub struct ViewDualBuilder {
     pub fn build(self) -> ViewDual {
     self.builder.build() }
 }
+
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ViewDual>> Sealed for T {}
+}
+
+pub trait ViewDualExt: IsA<ViewDual> + sealed::Sealed + 'static {
+    #[doc(alias = "he_view_dual_get_orientation")]
+    #[doc(alias = "get_orientation")]
+    fn orientation(&self) -> gtk::Orientation {
+        unsafe {
+            from_glib(ffi::he_view_dual_get_orientation(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[doc(alias = "he_view_dual_set_orientation")]
+    fn set_orientation(&self, value: gtk::Orientation) {
+        unsafe {
+            ffi::he_view_dual_set_orientation(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_view_dual_get_show_handle")]
+    #[doc(alias = "get_show_handle")]
+    fn shows_handle(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_view_dual_get_show_handle(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[doc(alias = "he_view_dual_set_show_handle")]
+    fn set_show_handle(&self, value: bool) {
+        unsafe {
+            ffi::he_view_dual_set_show_handle(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_view_dual_get_child_start")]
+    #[doc(alias = "get_child_start")]
+    fn child_start(&self) -> Option<gtk::Widget> {
+        unsafe {
+            from_glib_none(ffi::he_view_dual_get_child_start(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[doc(alias = "he_view_dual_set_child_start")]
+    fn set_child_start(&self, value: Option<&impl IsA<gtk::Widget>>) {
+        unsafe {
+            ffi::he_view_dual_set_child_start(self.as_ref().to_glib_none().0, value.map(|p| p.as_ref()).to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_view_dual_get_child_end")]
+    #[doc(alias = "get_child_end")]
+    fn child_end(&self) -> Option<gtk::Widget> {
+        unsafe {
+            from_glib_none(ffi::he_view_dual_get_child_end(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[doc(alias = "he_view_dual_set_child_end")]
+    fn set_child_end(&self, value: Option<&impl IsA<gtk::Widget>>) {
+        unsafe {
+            ffi::he_view_dual_set_child_end(self.as_ref().to_glib_none().0, value.map(|p| p.as_ref()).to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "orientation")]
+    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_orientation_trampoline<P: IsA<ViewDual>, F: Fn(&P) + 'static>(this: *mut ffi::HeViewDual, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(ViewDual::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::orientation\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(notify_orientation_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+        }
+    }
+
+    #[doc(alias = "show-handle")]
+    fn connect_show_handle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_handle_trampoline<P: IsA<ViewDual>, F: Fn(&P) + 'static>(this: *mut ffi::HeViewDual, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(ViewDual::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-handle\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(notify_show_handle_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+        }
+    }
+
+    #[doc(alias = "child-start")]
+    fn connect_child_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_child_start_trampoline<P: IsA<ViewDual>, F: Fn(&P) + 'static>(this: *mut ffi::HeViewDual, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(ViewDual::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::child-start\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(notify_child_start_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+        }
+    }
+
+    #[doc(alias = "child-end")]
+    fn connect_child_end_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_child_end_trampoline<P: IsA<ViewDual>, F: Fn(&P) + 'static>(this: *mut ffi::HeViewDual, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(ViewDual::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::child-end\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(notify_child_end_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+        }
+    }
+}
+
+impl<O: IsA<ViewDual>> ViewDualExt for O {}
