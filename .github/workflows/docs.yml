@@ -26,18 +26,11 @@ jobs:
           dnf5 update -y --setopt=install_weak_deps=False
           dnf5 install -y --setopt=install_weak_deps=False dnf5-plugins
           dnf5 config-manager addrepo --from-repofile='https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo'
-          dnf5 install -y libhelium libbismuth sass git
+          dnf5 install -y libhelium libbismuth sass git rust
 
       - uses: actions/checkout@v4
         with:
           submodules: "recursive"
-
-      - name: Install latest nightly
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          default: true
-          components: rustfmt, clippy
 
       - name: Generate docs
         run: cargo install rustdoc-stripper
