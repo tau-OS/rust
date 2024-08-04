@@ -18,65 +18,17 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    container:
+      image: registry.fedoraproject.org/fedora-minimal:40
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: "recursive"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm install -g sass
-
-      - name: Update repos
-        run: sudo apt update
 
       - name: Install system level libraries
-        run: sudo apt install libpango1.0-dev libgtk-4-dev libgee-0.8-dev libgexiv2-dev meson ninja-build valac valadoc libpulse-dev libgnome-desktop-4-dev libgweather-4-dev libaccountsservice-dev libudisks2-dev libgudev-1.0-dev libgtop2-dev libxml2-dev libibus-1.0-dev desktop-file-utils
-
-      - name: Checkout libhelium
-        uses: actions/checkout@v4
-        with:
-          repository: tau-OS/libhelium
-          path: libhelium-src
-      - name: Install libhelium
-        run: meson build -Ddemo=false
-        working-directory: ./libhelium-src
-      - name: Build libhelium with Ninja
-        run: ninja
-        working-directory: ./libhelium-src/build
-      - name: Install libhelium globally
-        run: sudo ninja install
-        working-directory: ./libhelium-src/build
-
-      - name: Checkout libbismuth
-        uses: actions/checkout@v4
-        with:
-          repository: tau-OS/libbismuth
-          path: libbismuth-src
-      - name: Install libbismuth
-        run: meson build
-        working-directory: ./libbismuth-src
-      - name: Build libbismuth with Ninja
-        run: ninja
-        working-directory: ./libbismuth-src/build
-      - name: Install libbismuth globally
-        run: sudo ninja install
-        working-directory: ./libbismuth-src/build
-
-      - name: Checkout fusebox
-        uses: actions/checkout@v4
-        with:
-          repository: tau-OS/fusebox
-          path: fusebox-src
-      - name: Install fusebox
-        run: meson build
-        working-directory: ./fusebox-src
-      - name: Build fusebox with Ninja
-        run: ninja
-        working-directory: ./fusebox-src/build
-      - name: Install fusebox globally
-        run: sudo ninja install
-        working-directory: ./fusebox-src/build
+        run: |
+          sudo dnf install -y --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' --setopt='terra.gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc' terra-release
+          sudo dnf install -y libhelium libbismuth sass
 
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
