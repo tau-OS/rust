@@ -23,7 +23,6 @@ generate = [
     "He.ColorLCHColor",
     "He.Colors",
     "He.Bin",
-    "He.Button",
     "He.ButtonContent",
     "He.Window",
     "He.DesktopColorScheme",
@@ -179,3 +178,9 @@ status = "generate"
 [[object.function]]
 name = "new"  # the status parameter is nullable/optional (which doesn't make much sense)
 manual = true
+
+# Disambiguate from gtk::ButtonExt
+[[object]]
+name = "He.Button"
+status = "generate"
+trait_name = "HeButtonExt"
