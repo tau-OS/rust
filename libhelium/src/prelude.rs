@@ -8,7 +8,7 @@ use std::mem;
 pub use crate::auto::traits::*;
 
 #[doc(hidden)]
-impl Uninitialized for crate::ColorRGBColor {
+impl Uninitialized for crate::RGBColor {
     #[inline]
     unsafe fn uninitialized() -> Self {
         mem::uninitialized()

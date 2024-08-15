@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, ColorRGBColor, DesktopColorScheme, DesktopEnsorScheme};
+use crate::{ffi, RGBColor};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -60,21 +60,15 @@ impl DesktopBuilder {
         }
     }
 
-    pub fn prefers_color_scheme(self, prefers_color_scheme: DesktopColorScheme) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("prefers-color-scheme", prefers_color_scheme),
-        }
-    }
+    //pub fn prefers_color_scheme(self, prefers_color_scheme: /*Ignored*/DesktopColorScheme) -> Self {
+    //    Self { builder: self.builder.property("prefers-color-scheme", prefers_color_scheme), }
+    //}
 
-    pub fn ensor_scheme(self, ensor_scheme: DesktopEnsorScheme) -> Self {
-        Self {
-            builder: self.builder.property("ensor-scheme", ensor_scheme),
-        }
-    }
+    //pub fn scheme_variant(self, scheme_variant: /*Ignored*/SchemeVariant) -> Self {
+    //    Self { builder: self.builder.property("scheme-variant", scheme_variant), }
+    //}
 
-    pub fn accent_color(self, accent_color: &ColorRGBColor) -> Self {
+    pub fn accent_color(self, accent_color: &RGBColor) -> Self {
         Self {
             builder: self.builder.property("accent-color", accent_color),
         }
@@ -112,39 +106,26 @@ mod sealed {
 }
 
 pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
-    #[doc(alias = "he_desktop_get_prefers_color_scheme")]
-    #[doc(alias = "get_prefers_color_scheme")]
-    fn prefers_color_scheme(&self) -> DesktopColorScheme {
-        unsafe {
-            from_glib(ffi::he_desktop_get_prefers_color_scheme(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
+    //#[doc(alias = "he_desktop_get_prefers_color_scheme")]
+    //#[doc(alias = "get_prefers_color_scheme")]
+    //fn prefers_color_scheme(&self) -> /*Ignored*/DesktopColorScheme {
+    //    unsafe { TODO: call ffi:he_desktop_get_prefers_color_scheme() }
+    //}
 
-    #[doc(alias = "he_desktop_set_prefers_color_scheme")]
-    fn set_prefers_color_scheme(&self, value: DesktopColorScheme) {
-        unsafe {
-            ffi::he_desktop_set_prefers_color_scheme(
-                self.as_ref().to_glib_none().0,
-                value.into_glib(),
-            );
-        }
-    }
+    //#[doc(alias = "he_desktop_set_prefers_color_scheme")]
+    //fn set_prefers_color_scheme(&self, value: /*Ignored*/DesktopColorScheme) {
+    //    unsafe { TODO: call ffi:he_desktop_set_prefers_color_scheme() }
+    //}
 
-    #[doc(alias = "he_desktop_get_ensor_scheme")]
-    #[doc(alias = "get_ensor_scheme")]
-    fn ensor_scheme(&self) -> DesktopEnsorScheme {
-        unsafe {
-            from_glib(ffi::he_desktop_get_ensor_scheme(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
+    //#[doc(alias = "he_desktop_get_scheme_variant")]
+    //#[doc(alias = "get_scheme_variant")]
+    //fn scheme_variant(&self) -> /*Ignored*/SchemeVariant {
+    //    unsafe { TODO: call ffi:he_desktop_get_scheme_variant() }
+    //}
 
     #[doc(alias = "he_desktop_get_accent_color")]
     #[doc(alias = "get_accent_color")]
-    fn accent_color(&self) -> Option<ColorRGBColor> {
+    fn accent_color(&self) -> Option<RGBColor> {
         unsafe {
             from_glib_none(ffi::he_desktop_get_accent_color(
                 self.as_ref().to_glib_none().0,
@@ -191,13 +172,13 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "ensor-scheme")]
-    fn set_ensor_scheme(&self, ensor_scheme: DesktopEnsorScheme) {
-        ObjectExt::set_property(self.as_ref(), "ensor-scheme", ensor_scheme)
-    }
+    //#[doc(alias = "scheme-variant")]
+    //fn set_scheme_variant(&self, scheme_variant: /*Ignored*/SchemeVariant) {
+    //    ObjectExt::set_property(self.as_ref(),"scheme-variant", scheme_variant)
+    //}
 
     #[doc(alias = "accent-color")]
-    fn set_accent_color(&self, accent_color: Option<&ColorRGBColor>) {
+    fn set_accent_color(&self, accent_color: Option<&RGBColor>) {
         ObjectExt::set_property(self.as_ref(), "accent-color", accent_color)
     }
 
@@ -227,9 +208,9 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "ensor-scheme")]
-    fn connect_ensor_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_ensor_scheme_trampoline<
+    #[doc(alias = "scheme-variant")]
+    fn connect_scheme_variant_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_scheme_variant_trampoline<
             P: IsA<Desktop>,
             F: Fn(&P) + 'static,
         >(
@@ -244,9 +225,9 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::ensor-scheme\0".as_ptr() as *const _,
+                b"notify::scheme-variant\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_ensor_scheme_trampoline::<Self, F> as *const (),
+                    notify_scheme_variant_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

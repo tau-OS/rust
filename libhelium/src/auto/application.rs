@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, ColorRGBColor};
+use crate::{ffi, RGBColor};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -48,7 +48,7 @@ impl ApplicationBuilder {
         }
     }
 
-    pub fn default_accent_color(self, default_accent_color: &ColorRGBColor) -> Self {
+    pub fn default_accent_color(self, default_accent_color: &RGBColor) -> Self {
         Self {
             builder: self
                 .builder
@@ -64,9 +64,27 @@ impl ApplicationBuilder {
         }
     }
 
-    //pub fn scheme_factory(self, scheme_factory: &impl IsA</*Ignored*/SchemeFactory>) -> Self {
-    //    Self { builder: self.builder.property("scheme-factory", scheme_factory.clone().upcast()), }
-    //}
+    pub fn override_dark_style(self, override_dark_style: bool) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("override-dark-style", override_dark_style),
+        }
+    }
+
+    pub fn override_contrast(self, override_contrast: bool) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("override-contrast", override_contrast),
+        }
+    }
+
+    pub fn default_contrast(self, default_contrast: f64) -> Self {
+        Self {
+            builder: self.builder.property("default-contrast", default_contrast),
+        }
+    }
 
     pub fn menubar(self, menubar: &impl IsA<gio::MenuModel>) -> Self {
         Self {
@@ -138,7 +156,7 @@ mod sealed {
 pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
     #[doc(alias = "he_application_get_default_accent_color")]
     #[doc(alias = "get_default_accent_color")]
-    fn default_accent_color(&self) -> Option<ColorRGBColor> {
+    fn default_accent_color(&self) -> Option<RGBColor> {
         unsafe {
             from_glib_none(ffi::he_application_get_default_accent_color(
                 self.as_ref().to_glib_none().0,
@@ -166,14 +184,67 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_application_get_override_dark_style")]
+    #[doc(alias = "get_override_dark_style")]
+    fn is_override_dark_style(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_application_get_override_dark_style(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_application_set_override_dark_style")]
+    fn set_override_dark_style(&self, value: bool) {
+        unsafe {
+            ffi::he_application_set_override_dark_style(
+                self.as_ref().to_glib_none().0,
+                value.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "he_application_get_override_contrast")]
+    #[doc(alias = "get_override_contrast")]
+    fn is_override_contrast(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_application_get_override_contrast(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_application_set_override_contrast")]
+    fn set_override_contrast(&self, value: bool) {
+        unsafe {
+            ffi::he_application_set_override_contrast(
+                self.as_ref().to_glib_none().0,
+                value.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "he_application_get_default_contrast")]
+    #[doc(alias = "get_default_contrast")]
+    fn default_contrast(&self) -> f64 {
+        unsafe { ffi::he_application_get_default_contrast(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_application_set_default_contrast")]
+    fn set_default_contrast(&self, value: f64) {
+        unsafe {
+            ffi::he_application_set_default_contrast(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
     //#[doc(alias = "he_application_get_scheme_factory")]
     //#[doc(alias = "get_scheme_factory")]
-    //fn scheme_factory(&self) -> /*Ignored*/Option<SchemeFactory> {
+    //fn scheme_factory(&self) -> /*Ignored*/Option<SchemeVariant> {
     //    unsafe { TODO: call ffi:he_application_get_scheme_factory() }
     //}
 
     //#[doc(alias = "he_application_set_scheme_factory")]
-    //fn set_scheme_factory(&self, value: /*Ignored*/Option<&SchemeFactory>) {
+    //fn set_scheme_factory(&self, value: /*Ignored*/Option<SchemeVariant>) {
     //    unsafe { TODO: call ffi:he_application_set_scheme_factory() }
     //}
 
@@ -232,9 +303,9 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "scheme-factory")]
-    fn connect_scheme_factory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_scheme_factory_trampoline<
+    #[doc(alias = "override-dark-style")]
+    fn connect_override_dark_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_override_dark_style_trampoline<
             P: IsA<Application>,
             F: Fn(&P) + 'static,
         >(
@@ -249,9 +320,61 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::scheme-factory\0".as_ptr() as *const _,
+                b"notify::override-dark-style\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_scheme_factory_trampoline::<Self, F> as *const (),
+                    notify_override_dark_style_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "override-contrast")]
+    fn connect_override_contrast_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_override_contrast_trampoline<
+            P: IsA<Application>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeApplication,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Application::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::override-contrast\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_override_contrast_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "default-contrast")]
+    fn connect_default_contrast_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_default_contrast_trampoline<
+            P: IsA<Application>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeApplication,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Application::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::default-contrast\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_default_contrast_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

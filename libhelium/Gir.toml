@@ -18,14 +18,16 @@ trust_return_value_nullability = true
 external_libraries = ["GLib", "GObject", "Gdk", "GdkPixbuf", "Gtk", "Pango"]
 
 generate = [
-    "He.ColorRGBColor",
-    "He.ColorXYZColor",
-    "He.ColorLCHColor",
+    "He.RGBColor",
+    "He.XYZColor",
+    "He.LCHColor",
+    "He.LABColor",
+    "He.CAM16Color",
+    "He.HCTColor",
     "He.Colors",
     "He.Bin",
     "He.ButtonContent",
     "He.Window",
-    "He.DesktopColorScheme",
     "He.AboutWindow",
     "He.AboutWindowLicenses",
     "He.AppBar",
@@ -70,7 +72,6 @@ generate = [
     "He.ViewChooser",
     "He.WelcomeScreen",
     "He.SegmentedButton",
-    "He.DesktopEnsorScheme",
     "He.ChipGroup",
     "He.DatePicker",
     "He.OverlayButtonTypeButton",
