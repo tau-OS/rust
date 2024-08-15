@@ -72,6 +72,12 @@ impl AppBarBuilder {
         }
     }
 
+    pub fn is_compact(self, is_compact: bool) -> Self {
+        Self {
+            builder: self.builder.property("is-compact", is_compact),
+        }
+    }
+
     pub fn viewtitle_label(self, viewtitle_label: impl Into<glib::GString>) -> Self {
         Self {
             builder: self
@@ -386,6 +392,23 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_app_bar_get_is_compact")]
+    #[doc(alias = "get_is_compact")]
+    fn is_compact(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_app_bar_get_is_compact(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_app_bar_set_is_compact")]
+    fn set_is_compact(&self, value: bool) {
+        unsafe {
+            ffi::he_app_bar_set_is_compact(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
     #[doc(alias = "he_app_bar_get_viewtitle_label")]
     #[doc(alias = "get_viewtitle_label")]
     fn viewtitle_label(&self) -> glib::GString {
@@ -563,6 +586,29 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
                 b"notify::scroller\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scroller_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "is-compact")]
+    fn connect_is_compact_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_compact_trampoline<P: IsA<AppBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeAppBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(AppBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::is-compact\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_is_compact_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

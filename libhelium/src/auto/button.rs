@@ -24,12 +24,12 @@ impl Button {
     pub const NONE: Option<&'static Button> = None;
 
     #[doc(alias = "he_button_new")]
-    pub fn new(icon: Option<&str>, label: Option<&str>) -> Button {
+    pub fn new(icon: Option<&str>, text: Option<&str>) -> Button {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::he_button_new(
                 icon.to_glib_none().0,
-                label.to_glib_none().0,
+                text.to_glib_none().0,
             ))
         }
     }
@@ -119,9 +119,9 @@ impl ButtonBuilder {
         }
     }
 
-    pub fn label(self, label: impl Into<glib::GString>) -> Self {
+    pub fn text(self, text: impl Into<glib::GString>) -> Self {
         Self {
-            builder: self.builder.property("label", label.into()),
+            builder: self.builder.property("text", text.into()),
         }
     }
 
@@ -148,6 +148,12 @@ impl ButtonBuilder {
     pub fn icon_name(self, icon_name: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("icon-name", icon_name.into()),
+        }
+    }
+
+    pub fn label(self, label: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("label", label.into()),
         }
     }
 
@@ -488,16 +494,16 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "he_button_get_label")]
-    #[doc(alias = "get_label")]
-    fn label(&self) -> glib::GString {
-        unsafe { from_glib_none(ffi::he_button_get_label(self.as_ref().to_glib_none().0)) }
+    #[doc(alias = "he_button_get_text")]
+    #[doc(alias = "get_text")]
+    fn text(&self) -> glib::GString {
+        unsafe { from_glib_none(ffi::he_button_get_text(self.as_ref().to_glib_none().0)) }
     }
 
-    #[doc(alias = "he_button_set_label")]
-    fn set_label(&self, value: &str) {
+    #[doc(alias = "he_button_set_text")]
+    fn set_text(&self, value: &str) {
         unsafe {
-            ffi::he_button_set_label(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+            ffi::he_button_set_text(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
@@ -705,6 +711,29 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
                 b"notify::icon\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "text")]
+    fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_text_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Button::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::text\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -86,13 +86,6 @@ pub const HE_DESKTOP_COLOR_SCHEME_NO_PREFERENCE: HeDesktopColorScheme = 0;
 pub const HE_DESKTOP_COLOR_SCHEME_DARK: HeDesktopColorScheme = 1;
 pub const HE_DESKTOP_COLOR_SCHEME_LIGHT: HeDesktopColorScheme = 2;
 
-pub type HeDesktopEnsorScheme = c_int;
-pub const HE_DESKTOP_ENSOR_SCHEME_DEFAULT: HeDesktopEnsorScheme = 0;
-pub const HE_DESKTOP_ENSOR_SCHEME_VIBRANT: HeDesktopEnsorScheme = 1;
-pub const HE_DESKTOP_ENSOR_SCHEME_MUTED: HeDesktopEnsorScheme = 2;
-pub const HE_DESKTOP_ENSOR_SCHEME_MONOCHROMATIC: HeDesktopEnsorScheme = 3;
-pub const HE_DESKTOP_ENSOR_SCHEME_SALAD: HeDesktopEnsorScheme = 4;
-
 pub type HeEasing = c_int;
 pub const HE_EASING_LINEAR: HeEasing = 0;
 pub const HE_EASING_EASE_OUT_CUBIC: HeEasing = 1;
@@ -119,6 +112,14 @@ pub const HE_OVERLAY_BUTTON_TYPE_BUTTON_PRIMARY: HeOverlayButtonTypeButton = 1;
 pub const HE_OVERLAY_BUTTON_TYPE_BUTTON_SECONDARY: HeOverlayButtonTypeButton = 2;
 pub const HE_OVERLAY_BUTTON_TYPE_BUTTON_TERTIARY: HeOverlayButtonTypeButton = 3;
 
+pub type HeSchemeVariant = c_int;
+pub const HE_SCHEME_VARIANT_DEFAULT: HeSchemeVariant = 0;
+pub const HE_SCHEME_VARIANT_VIBRANT: HeSchemeVariant = 1;
+pub const HE_SCHEME_VARIANT_MUTED: HeSchemeVariant = 2;
+pub const HE_SCHEME_VARIANT_MONOCHROME: HeSchemeVariant = 3;
+pub const HE_SCHEME_VARIANT_SALAD: HeSchemeVariant = 4;
+pub const HE_SCHEME_VARIANT_CONTENT: HeSchemeVariant = 5;
+
 pub type HeTabSwitcherTabBarBehavior = c_int;
 pub const HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_ALWAYS: HeTabSwitcherTabBarBehavior = 0;
 pub const HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_SINGLE: HeTabSwitcherTabBarBehavior = 1;
@@ -128,6 +129,12 @@ pub type HeTipViewStyle = c_int;
 pub const HE_TIP_VIEW_STYLE_NONE: HeTipViewStyle = 0;
 pub const HE_TIP_VIEW_STYLE_POPUP: HeTipViewStyle = 1;
 pub const HE_TIP_VIEW_STYLE_VIEW: HeTipViewStyle = 2;
+
+pub type HeTonePolarity = c_int;
+pub const HE_TONE_POLARITY_DARKER: HeTonePolarity = 0;
+pub const HE_TONE_POLARITY_LIGHTER: HeTonePolarity = 1;
+pub const HE_TONE_POLARITY_NEARER: HeTonePolarity = 2;
+pub const HE_TONE_POLARITY_FARTHER: HeTonePolarity = 3;
 
 // Callbacks
 pub type HeAnimationTargetFunc = Option<unsafe extern "C" fn(c_double, *mut c_void)>;
@@ -443,6 +450,32 @@ pub type HeButtonPrivate = _HeButtonPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeCAM16Color {
+    pub j: c_double,
+    pub a: c_double,
+    pub b: c_double,
+    pub c: c_double,
+    pub h: c_double,
+    pub m: c_double,
+    pub s: c_double,
+}
+
+impl ::std::fmt::Debug for HeCAM16Color {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeCAM16Color @ {self:p}"))
+            .field("j", &self.j)
+            .field("a", &self.a)
+            .field("b", &self.b)
+            .field("c", &self.c)
+            .field("h", &self.h)
+            .field("m", &self.m)
+            .field("s", &self.s)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeCallbackAnimationTargetClass {
     pub parent_class: HeAnimationTargetClass,
 }
@@ -502,124 +535,6 @@ pub struct _HeChipPrivate {
 }
 
 pub type HeChipPrivate = _HeChipPrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeColorCAM16Color {
-    pub j: c_double,
-    pub a: c_double,
-    pub b: c_double,
-    pub c: c_double,
-    pub h: c_double,
-    pub m: c_double,
-    pub s: c_double,
-}
-
-impl ::std::fmt::Debug for HeColorCAM16Color {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeColorCAM16Color @ {self:p}"))
-            .field("j", &self.j)
-            .field("a", &self.a)
-            .field("b", &self.b)
-            .field("c", &self.c)
-            .field("h", &self.h)
-            .field("m", &self.m)
-            .field("s", &self.s)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeColorHCTColor {
-    pub h: c_double,
-    pub c: c_double,
-    pub t: c_double,
-    pub a: c_int,
-}
-
-impl ::std::fmt::Debug for HeColorHCTColor {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeColorHCTColor @ {self:p}"))
-            .field("h", &self.h)
-            .field("c", &self.c)
-            .field("t", &self.t)
-            .field("a", &self.a)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeColorLABColor {
-    pub l: c_double,
-    pub a: c_double,
-    pub b: c_double,
-}
-
-impl ::std::fmt::Debug for HeColorLABColor {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeColorLABColor @ {self:p}"))
-            .field("l", &self.l)
-            .field("a", &self.a)
-            .field("b", &self.b)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeColorLCHColor {
-    pub l: c_double,
-    pub c: c_double,
-    pub h: c_double,
-}
-
-impl ::std::fmt::Debug for HeColorLCHColor {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeColorLCHColor @ {self:p}"))
-            .field("l", &self.l)
-            .field("c", &self.c)
-            .field("h", &self.h)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeColorRGBColor {
-    pub r: c_double,
-    pub g: c_double,
-    pub b: c_double,
-}
-
-impl ::std::fmt::Debug for HeColorRGBColor {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeColorRGBColor @ {self:p}"))
-            .field("r", &self.r)
-            .field("g", &self.g)
-            .field("b", &self.b)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeColorXYZColor {
-    pub x: c_double,
-    pub y: c_double,
-    pub z: c_double,
-}
-
-impl ::std::fmt::Debug for HeColorXYZColor {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeColorXYZColor @ {self:p}"))
-            .field("x", &self.x)
-            .field("y", &self.y)
-            .field("z", &self.z)
-            .finish()
-    }
-}
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -707,48 +622,6 @@ pub type HeContentListPrivate = _HeContentListPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct HeContentSchemeClass {
-    pub parent_class: gobject::GObjectClass,
-}
-
-impl ::std::fmt::Debug for HeContentSchemeClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeContentSchemeClass @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-pub struct _HeContentSchemePrivate {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-pub type HeContentSchemePrivate = _HeContentSchemePrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeContrastCurveClass {
-    pub parent_class: gobject::GTypeClass,
-}
-
-impl ::std::fmt::Debug for HeContrastCurveClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeContrastCurveClass @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-pub struct _HeContrastCurvePrivate {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-pub type HeContrastCurvePrivate = _HeContrastCurvePrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct HeDatePickerClass {
     pub parent_class: gtk::GtkEntryClass,
 }
@@ -767,27 +640,6 @@ pub struct _HeDatePickerPrivate {
 }
 
 pub type HeDatePickerPrivate = _HeDatePickerPrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeDefaultSchemeClass {
-    pub parent_class: gobject::GObjectClass,
-}
-
-impl ::std::fmt::Debug for HeDefaultSchemeClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeDefaultSchemeClass @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-pub struct _HeDefaultSchemePrivate {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-pub type HeDefaultSchemePrivate = _HeDefaultSchemePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -896,6 +748,62 @@ pub type HeEmptyPagePrivate = _HeEmptyPagePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct HeHCTColor {
+    pub h: c_double,
+    pub c: c_double,
+    pub t: c_double,
+    pub a: c_int,
+}
+
+impl ::std::fmt::Debug for HeHCTColor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeHCTColor @ {self:p}"))
+            .field("h", &self.h)
+            .field("c", &self.c)
+            .field("t", &self.t)
+            .field("a", &self.a)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeLABColor {
+    pub l: c_double,
+    pub a: c_double,
+    pub b: c_double,
+}
+
+impl ::std::fmt::Debug for HeLABColor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeLABColor @ {self:p}"))
+            .field("l", &self.l)
+            .field("a", &self.a)
+            .field("b", &self.b)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeLCHColor {
+    pub l: c_double,
+    pub c: c_double,
+    pub h: c_double,
+}
+
+impl ::std::fmt::Debug for HeLCHColor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeLCHColor @ {self:p}"))
+            .field("l", &self.l)
+            .field("c", &self.c)
+            .field("h", &self.h)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HeMiniContentBlockClass {
     pub parent_class: HeBinClass,
 }
@@ -935,48 +843,6 @@ pub struct _HeModifierBadgePrivate {
 }
 
 pub type HeModifierBadgePrivate = _HeModifierBadgePrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeMonochromaticSchemeClass {
-    pub parent_class: gobject::GObjectClass,
-}
-
-impl ::std::fmt::Debug for HeMonochromaticSchemeClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeMonochromaticSchemeClass @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-pub struct _HeMonochromaticSchemePrivate {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-pub type HeMonochromaticSchemePrivate = _HeMonochromaticSchemePrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeMutedSchemeClass {
-    pub parent_class: gobject::GObjectClass,
-}
-
-impl ::std::fmt::Debug for HeMutedSchemeClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeMutedSchemeClass @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-pub struct _HeMutedSchemePrivate {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-pub type HeMutedSchemePrivate = _HeMutedSchemePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1215,135 +1081,18 @@ pub type HeQuantizerWuPrivate = _HeQuantizerWuPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct HeSaladSchemeClass {
-    pub parent_class: gobject::GObjectClass,
+pub struct HeRGBColor {
+    pub r: c_double,
+    pub g: c_double,
+    pub b: c_double,
 }
 
-impl ::std::fmt::Debug for HeSaladSchemeClass {
+impl ::std::fmt::Debug for HeRGBColor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeSaladSchemeClass @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-pub struct _HeSaladSchemePrivate {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-pub type HeSaladSchemePrivate = _HeSaladSchemePrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeScheme {
-    pub surface_bg_hex: *mut c_char,
-    pub surface_bg_variant_hex: *mut c_char,
-    pub surface_fg_hex: *mut c_char,
-    pub surface_fg_variant_hex: *mut c_char,
-    pub inverse_surface_bg_hex: *mut c_char,
-    pub inverse_surface_fg_hex: *mut c_char,
-    pub surface_bright_bg_hex: *mut c_char,
-    pub surface_dim_bg_hex: *mut c_char,
-    pub surface_container_lowest_bg_hex: *mut c_char,
-    pub surface_container_low_bg_hex: *mut c_char,
-    pub surface_container_bg_hex: *mut c_char,
-    pub surface_container_high_bg_hex: *mut c_char,
-    pub surface_container_highest_bg_hex: *mut c_char,
-    pub primary_hex: *mut c_char,
-    pub on_primary_hex: *mut c_char,
-    pub primary_container_hex: *mut c_char,
-    pub on_primary_container_hex: *mut c_char,
-    pub inverse_primary_hex: *mut c_char,
-    pub error_hex: *mut c_char,
-    pub on_error_hex: *mut c_char,
-    pub secondary_hex: *mut c_char,
-    pub on_secondary_hex: *mut c_char,
-    pub secondary_container_hex: *mut c_char,
-    pub on_secondary_container_hex: *mut c_char,
-    pub tertiary_hex: *mut c_char,
-    pub on_tertiary_hex: *mut c_char,
-    pub tertiary_container_hex: *mut c_char,
-    pub on_tertiary_container_hex: *mut c_char,
-    pub outline_hex: *mut c_char,
-    pub outline_variant_hex: *mut c_char,
-    pub shadow_hex: *mut c_char,
-    pub scrim_hex: *mut c_char,
-}
-
-impl ::std::fmt::Debug for HeScheme {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeScheme @ {self:p}"))
-            .field("surface_bg_hex", &self.surface_bg_hex)
-            .field("surface_bg_variant_hex", &self.surface_bg_variant_hex)
-            .field("surface_fg_hex", &self.surface_fg_hex)
-            .field("surface_fg_variant_hex", &self.surface_fg_variant_hex)
-            .field("inverse_surface_bg_hex", &self.inverse_surface_bg_hex)
-            .field("inverse_surface_fg_hex", &self.inverse_surface_fg_hex)
-            .field("surface_bright_bg_hex", &self.surface_bright_bg_hex)
-            .field("surface_dim_bg_hex", &self.surface_dim_bg_hex)
-            .field(
-                "surface_container_lowest_bg_hex",
-                &self.surface_container_lowest_bg_hex,
-            )
-            .field(
-                "surface_container_low_bg_hex",
-                &self.surface_container_low_bg_hex,
-            )
-            .field("surface_container_bg_hex", &self.surface_container_bg_hex)
-            .field(
-                "surface_container_high_bg_hex",
-                &self.surface_container_high_bg_hex,
-            )
-            .field(
-                "surface_container_highest_bg_hex",
-                &self.surface_container_highest_bg_hex,
-            )
-            .field("primary_hex", &self.primary_hex)
-            .field("on_primary_hex", &self.on_primary_hex)
-            .field("primary_container_hex", &self.primary_container_hex)
-            .field("on_primary_container_hex", &self.on_primary_container_hex)
-            .field("inverse_primary_hex", &self.inverse_primary_hex)
-            .field("error_hex", &self.error_hex)
-            .field("on_error_hex", &self.on_error_hex)
-            .field("secondary_hex", &self.secondary_hex)
-            .field("on_secondary_hex", &self.on_secondary_hex)
-            .field("secondary_container_hex", &self.secondary_container_hex)
-            .field(
-                "on_secondary_container_hex",
-                &self.on_secondary_container_hex,
-            )
-            .field("tertiary_hex", &self.tertiary_hex)
-            .field("on_tertiary_hex", &self.on_tertiary_hex)
-            .field("tertiary_container_hex", &self.tertiary_container_hex)
-            .field("on_tertiary_container_hex", &self.on_tertiary_container_hex)
-            .field("outline_hex", &self.outline_hex)
-            .field("outline_variant_hex", &self.outline_variant_hex)
-            .field("shadow_hex", &self.shadow_hex)
-            .field("scrim_hex", &self.scrim_hex)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeSchemeFactoryIface {
-    pub parent_iface: gobject::GTypeInterface,
-    pub generate: Option<
-        unsafe extern "C" fn(
-            *mut HeSchemeFactory,
-            *mut HeColorCAM16Color,
-            gboolean,
-            c_double,
-            *mut HeScheme,
-        ),
-    >,
-}
-
-impl ::std::fmt::Debug for HeSchemeFactoryIface {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeSchemeFactoryIface @ {self:p}"))
-            .field("generate", &self.generate)
+        f.debug_struct(&format!("HeRGBColor @ {self:p}"))
+            .field("r", &self.r)
+            .field("g", &self.g)
+            .field("b", &self.b)
             .finish()
     }
 }
@@ -1850,27 +1599,6 @@ pub type HeToastPrivate = _HeToastPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct HeVibrantSchemeClass {
-    pub parent_class: gobject::GObjectClass,
-}
-
-impl ::std::fmt::Debug for HeVibrantSchemeClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeVibrantSchemeClass @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-pub struct _HeVibrantSchemePrivate {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-pub type HeVibrantSchemePrivate = _HeVibrantSchemePrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct HeViewAuxClass {
     pub parent_class: HeViewClass,
 }
@@ -2108,6 +1836,24 @@ pub struct _HeWindowPrivate {
 }
 
 pub type HeWindowPrivate = _HeWindowPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct HeXYZColor {
+    pub x: c_double,
+    pub y: c_double,
+    pub z: c_double,
+}
+
+impl ::std::fmt::Debug for HeXYZColor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("HeXYZColor @ {self:p}"))
+            .field("x", &self.x)
+            .field("y", &self.y)
+            .field("z", &self.z)
+            .finish()
+    }
+}
 
 // Classes
 #[derive(Copy, Clone)]
@@ -2405,35 +2151,6 @@ impl ::std::fmt::Debug for HeContentList {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct HeContentScheme {
-    pub parent_instance: gobject::GObject,
-    pub priv_: *mut HeContentSchemePrivate,
-}
-
-impl ::std::fmt::Debug for HeContentScheme {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeContentScheme @ {self:p}"))
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeContrastCurve {
-    pub parent_instance: gobject::GTypeInstance,
-    pub ref_count: c_int,
-    pub priv_: *mut HeContrastCurvePrivate,
-}
-
-impl ::std::fmt::Debug for HeContrastCurve {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeContrastCurve @ {self:p}"))
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct HeDatePicker {
     pub parent_instance: gtk::GtkEntry,
     pub priv_: *mut HeDatePickerPrivate,
@@ -2442,20 +2159,6 @@ pub struct HeDatePicker {
 impl ::std::fmt::Debug for HeDatePicker {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeDatePicker @ {self:p}")).finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeDefaultScheme {
-    pub parent_instance: gobject::GObject,
-    pub priv_: *mut HeDefaultSchemePrivate,
-}
-
-impl ::std::fmt::Debug for HeDefaultScheme {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeDefaultScheme @ {self:p}"))
-            .finish()
     }
 }
 
@@ -2554,34 +2257,6 @@ pub struct HeModifierBadge {
 impl ::std::fmt::Debug for HeModifierBadge {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeModifierBadge @ {self:p}"))
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeMonochromaticScheme {
-    pub parent_instance: gobject::GObject,
-    pub priv_: *mut HeMonochromaticSchemePrivate,
-}
-
-impl ::std::fmt::Debug for HeMonochromaticScheme {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeMonochromaticScheme @ {self:p}"))
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeMutedScheme {
-    pub parent_instance: gobject::GObject,
-    pub priv_: *mut HeMutedSchemePrivate,
-}
-
-impl ::std::fmt::Debug for HeMutedScheme {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeMutedScheme @ {self:p}"))
             .finish()
     }
 }
@@ -2740,20 +2415,6 @@ pub struct HeQuantizerWu {
 impl ::std::fmt::Debug for HeQuantizerWu {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeQuantizerWu @ {self:p}"))
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct HeSaladScheme {
-    pub parent_instance: gobject::GObject,
-    pub priv_: *mut HeSaladSchemePrivate,
-}
-
-impl ::std::fmt::Debug for HeSaladScheme {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeSaladScheme @ {self:p}"))
             .finish()
     }
 }
@@ -2936,12 +2597,12 @@ impl ::std::fmt::Debug for HeSpringParams {
 pub struct HeStyleManager {
     pub parent_instance: gobject::GObject,
     pub priv_: *mut HeStyleManagerPrivate,
-    pub accent_color: *mut HeColorRGBColor,
+    pub accent_color: *mut HeRGBColor,
     pub font_weight: c_double,
     pub roundness: c_double,
     pub is_dark: gboolean,
     pub contrast: c_double,
-    pub scheme_factory: *mut HeSchemeFactory,
+    pub scheme_variant: HeSchemeVariant,
 }
 
 impl ::std::fmt::Debug for HeStyleManager {
@@ -2952,7 +2613,7 @@ impl ::std::fmt::Debug for HeStyleManager {
             .field("roundness", &self.roundness)
             .field("is_dark", &self.is_dark)
             .field("contrast", &self.contrast)
-            .field("scheme_factory", &self.scheme_factory)
+            .field("scheme_variant", &self.scheme_variant)
             .finish()
     }
 }
@@ -3132,20 +2793,6 @@ impl ::std::fmt::Debug for HeToast {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct HeVibrantScheme {
-    pub parent_instance: gobject::GObject,
-    pub priv_: *mut HeVibrantSchemePrivate,
-}
-
-impl ::std::fmt::Debug for HeVibrantScheme {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HeVibrantScheme @ {self:p}"))
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct HeView {
     pub parent_instance: gtk::GtkWidget,
     pub priv_: *mut HeViewPrivate,
@@ -3301,19 +2948,6 @@ impl ::std::fmt::Debug for HeWindow {
     }
 }
 
-// Interfaces
-#[repr(C)]
-pub struct HeSchemeFactory {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-impl ::std::fmt::Debug for HeSchemeFactory {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "HeSchemeFactory @ {self:p}")
-    }
-}
-
 #[link(name = "helium-1")]
 extern "C" {
 
@@ -3353,11 +2987,6 @@ extern "C" {
     pub fn he_desktop_color_scheme_get_type() -> GType;
 
     //=========================================================================
-    // HeDesktopEnsorScheme
-    //=========================================================================
-    pub fn he_desktop_ensor_scheme_get_type() -> GType;
-
-    //=========================================================================
     // HeEasing
     //=========================================================================
     pub fn he_easing_get_type() -> GType;
@@ -3383,6 +3012,11 @@ extern "C" {
     pub fn he_overlay_button_type_button_get_type() -> GType;
 
     //=========================================================================
+    // HeSchemeVariant
+    //=========================================================================
+    pub fn he_scheme_variant_get_type() -> GType;
+
+    //=========================================================================
     // HeTabSwitcherTabBarBehavior
     //=========================================================================
     pub fn he_tab_switcher_tab_bar_behavior_get_type() -> GType;
@@ -3393,43 +3027,40 @@ extern "C" {
     pub fn he_tip_view_style_get_type() -> GType;
 
     //=========================================================================
-    // HeColorCAM16Color
+    // HeTonePolarity
     //=========================================================================
-    pub fn he_color_ca_m16_color_get_type() -> GType;
+    pub fn he_tone_polarity_get_type() -> GType;
 
     //=========================================================================
-    // HeColorHCTColor
+    // HeCAM16Color
     //=========================================================================
-    pub fn he_color_hct_color_get_type() -> GType;
+    pub fn he_ca_m16_color_get_type() -> GType;
 
     //=========================================================================
-    // HeColorLABColor
+    // HeHCTColor
     //=========================================================================
-    pub fn he_color_lab_color_get_type() -> GType;
-    pub fn he_color_lab_color_distance(
-        self_: *mut HeColorLABColor,
-        lab: *mut HeColorLABColor,
-    ) -> c_double;
+    pub fn he_hct_color_get_type() -> GType;
 
     //=========================================================================
-    // HeColorLCHColor
+    // HeLABColor
     //=========================================================================
-    pub fn he_color_lch_color_get_type() -> GType;
+    pub fn he_lab_color_get_type() -> GType;
+    pub fn he_lab_color_distance(self_: *mut HeLABColor, lab: *mut HeLABColor) -> c_double;
 
     //=========================================================================
-    // HeColorRGBColor
+    // HeLCHColor
     //=========================================================================
-    pub fn he_color_rgb_color_get_type() -> GType;
+    pub fn he_lch_color_get_type() -> GType;
 
     //=========================================================================
-    // HeColorXYZColor
+    // HeRGBColor
     //=========================================================================
-    pub fn he_color_xyz_color_get_type() -> GType;
+    pub fn he_rgb_color_get_type() -> GType;
 
     //=========================================================================
-    // HeScheme
+    // HeXYZColor
     //=========================================================================
-    pub fn he_scheme_get_type() -> GType;
+    pub fn he_xyz_color_get_type() -> GType;
 
     //=========================================================================
     // HeAboutWindow
@@ -3530,6 +3161,8 @@ extern "C" {
     pub fn he_app_bar_set_stack(self_: *mut HeAppBar, value: *mut gtk::GtkStack);
     pub fn he_app_bar_get_scroller(self_: *mut HeAppBar) -> *mut gtk::GtkScrolledWindow;
     pub fn he_app_bar_set_scroller(self_: *mut HeAppBar, value: *mut gtk::GtkScrolledWindow);
+    pub fn he_app_bar_get_is_compact(self_: *mut HeAppBar) -> gboolean;
+    pub fn he_app_bar_set_is_compact(self_: *mut HeAppBar, value: gboolean);
     pub fn he_app_bar_get_viewtitle_label(self_: *mut HeAppBar) -> *const c_char;
     pub fn he_app_bar_set_viewtitle_label(self_: *mut HeAppBar, value: *const c_char);
     pub fn he_app_bar_get_viewtitle_widget(self_: *mut HeAppBar) -> *mut gtk::GtkWidget;
@@ -3553,19 +3186,23 @@ extern "C" {
         application_id: *const c_char,
         flags: gio::GApplicationFlags,
     ) -> *mut HeApplication;
-    pub fn he_application_get_default_accent_color(
-        self_: *mut HeApplication,
-    ) -> *mut HeColorRGBColor;
+    pub fn he_application_get_default_accent_color(self_: *mut HeApplication) -> *mut HeRGBColor;
     pub fn he_application_set_default_accent_color(
         self_: *mut HeApplication,
-        value: *mut HeColorRGBColor,
+        value: *mut HeRGBColor,
     );
     pub fn he_application_get_override_accent_color(self_: *mut HeApplication) -> gboolean;
     pub fn he_application_set_override_accent_color(self_: *mut HeApplication, value: gboolean);
-    pub fn he_application_get_scheme_factory(self_: *mut HeApplication) -> *mut HeSchemeFactory;
+    pub fn he_application_get_override_dark_style(self_: *mut HeApplication) -> gboolean;
+    pub fn he_application_set_override_dark_style(self_: *mut HeApplication, value: gboolean);
+    pub fn he_application_get_override_contrast(self_: *mut HeApplication) -> gboolean;
+    pub fn he_application_set_override_contrast(self_: *mut HeApplication, value: gboolean);
+    pub fn he_application_get_default_contrast(self_: *mut HeApplication) -> c_double;
+    pub fn he_application_set_default_contrast(self_: *mut HeApplication, value: c_double);
+    pub fn he_application_get_scheme_factory(self_: *mut HeApplication) -> *mut HeSchemeVariant;
     pub fn he_application_set_scheme_factory(
         self_: *mut HeApplication,
-        value: *mut HeSchemeFactory,
+        value: *mut HeSchemeVariant,
     );
 
     //=========================================================================
@@ -3708,7 +3345,7 @@ extern "C" {
     // HeButton
     //=========================================================================
     pub fn he_button_get_type() -> GType;
-    pub fn he_button_new(icon: *const c_char, label: *const c_char) -> *mut HeButton;
+    pub fn he_button_new(icon: *const c_char, text: *const c_char) -> *mut HeButton;
     pub fn he_button_get_color(self_: *mut HeButton) -> HeColors;
     pub fn he_button_set_color(self_: *mut HeButton, value: HeColors);
     pub fn he_button_get_is_disclosure(self_: *mut HeButton) -> gboolean;
@@ -3727,8 +3364,8 @@ extern "C" {
     pub fn he_button_set_is_textual(self_: *mut HeButton, value: gboolean);
     pub fn he_button_get_icon(self_: *mut HeButton) -> *const c_char;
     pub fn he_button_set_icon(self_: *mut HeButton, value: *const c_char);
-    pub fn he_button_get_label(self_: *mut HeButton) -> *const c_char;
-    pub fn he_button_set_label(self_: *mut HeButton, value: *const c_char);
+    pub fn he_button_get_text(self_: *mut HeButton) -> *const c_char;
+    pub fn he_button_set_text(self_: *mut HeButton, value: *const c_char);
 
     //=========================================================================
     // HeButtonContent
@@ -3867,26 +3504,6 @@ extern "C" {
     pub fn he_content_list_set_description(self_: *mut HeContentList, value: *const c_char);
 
     //=========================================================================
-    // HeContentScheme
-    //=========================================================================
-    pub fn he_content_scheme_get_type() -> GType;
-    pub fn he_content_scheme_new() -> *mut HeContentScheme;
-
-    //=========================================================================
-    // HeContrastCurve
-    //=========================================================================
-    pub fn he_contrast_curve_get_type() -> GType;
-    pub fn he_contrast_curve_new(
-        target: c_double,
-        low: c_double,
-        normal: c_double,
-        medium: c_double,
-        high: c_double,
-    ) -> *mut HeContrastCurve;
-    pub fn he_contrast_curve_get_contrast_level(self_: *mut HeContrastCurve) -> c_double;
-    pub fn he_contrast_curve_set_contrast_level(self_: *mut HeContrastCurve, value: c_double);
-
-    //=========================================================================
     // HeDatePicker
     //=========================================================================
     pub fn he_date_picker_get_type() -> GType;
@@ -3897,21 +3514,15 @@ extern "C" {
     pub fn he_date_picker_set_date(self_: *mut HeDatePicker, value: *mut glib::GDateTime);
 
     //=========================================================================
-    // HeDefaultScheme
-    //=========================================================================
-    pub fn he_default_scheme_get_type() -> GType;
-    pub fn he_default_scheme_new() -> *mut HeDefaultScheme;
-
-    //=========================================================================
     // HeDesktop
     //=========================================================================
     pub fn he_desktop_get_type() -> GType;
     pub fn he_desktop_new() -> *mut HeDesktop;
     pub fn he_desktop_get_prefers_color_scheme(self_: *mut HeDesktop) -> HeDesktopColorScheme;
     pub fn he_desktop_set_prefers_color_scheme(self_: *mut HeDesktop, value: HeDesktopColorScheme);
-    pub fn he_desktop_get_ensor_scheme(self_: *mut HeDesktop) -> HeDesktopEnsorScheme;
-    pub fn he_desktop_get_accent_color(self_: *mut HeDesktop) -> *mut HeColorRGBColor;
-    pub fn he_desktop_set_accent_color(self_: *mut HeDesktop, value: *mut HeColorRGBColor);
+    pub fn he_desktop_get_scheme_variant(self_: *mut HeDesktop) -> HeSchemeVariant;
+    pub fn he_desktop_get_accent_color(self_: *mut HeDesktop) -> *mut HeRGBColor;
+    pub fn he_desktop_set_accent_color(self_: *mut HeDesktop, value: *mut HeRGBColor);
     pub fn he_desktop_get_font_weight(self_: *mut HeDesktop) -> c_double;
     pub fn he_desktop_set_font_weight(self_: *mut HeDesktop, value: c_double);
     pub fn he_desktop_get_roundness(self_: *mut HeDesktop) -> c_double;
@@ -4036,18 +3647,6 @@ extern "C" {
         self_: *mut HeModifierBadge,
         value: HeModifierBadgeAlignment,
     );
-
-    //=========================================================================
-    // HeMonochromaticScheme
-    //=========================================================================
-    pub fn he_monochromatic_scheme_get_type() -> GType;
-    pub fn he_monochromatic_scheme_new() -> *mut HeMonochromaticScheme;
-
-    //=========================================================================
-    // HeMutedScheme
-    //=========================================================================
-    pub fn he_muted_scheme_get_type() -> GType;
-    pub fn he_muted_scheme_new() -> *mut HeMutedScheme;
 
     //=========================================================================
     // HeNavigationRail
@@ -4219,12 +3818,6 @@ extern "C" {
     //=========================================================================
     pub fn he_quantizer_wu_get_type() -> GType;
     pub fn he_quantizer_wu_new() -> *mut HeQuantizerWu;
-
-    //=========================================================================
-    // HeSaladScheme
-    //=========================================================================
-    pub fn he_salad_scheme_get_type() -> GType;
-    pub fn he_salad_scheme_new() -> *mut HeSaladScheme;
 
     //=========================================================================
     // HeScore
@@ -4506,26 +4099,41 @@ extern "C" {
     // HeTemperatureCache
     //=========================================================================
     pub fn he_temperature_cache_get_type() -> GType;
-    pub fn he_temperature_cache_new(input_color: *mut HeColorHCTColor) -> *mut HeTemperatureCache;
+    pub fn he_temperature_cache_new(input: *mut HeHCTColor) -> *mut HeTemperatureCache;
+    pub fn he_temperature_cache_get_hcts_by_temp(
+        self_: *mut HeTemperatureCache,
+    ) -> *mut glib::GList;
+    pub fn he_temperature_cache_diff_temps(
+        self_: *mut HeTemperatureCache,
+        a: *mut HeHCTColor,
+        b: *mut HeHCTColor,
+    ) -> c_int;
+    pub fn he_temperature_cache_get_warmest(
+        self_: *mut HeTemperatureCache,
+        result: *mut HeHCTColor,
+    );
+    pub fn he_temperature_cache_get_coldest(
+        self_: *mut HeTemperatureCache,
+        result: *mut HeHCTColor,
+    );
     pub fn he_temperature_cache_get_complement(
         self_: *mut HeTemperatureCache,
-        result: *mut HeColorHCTColor,
+        result: *mut HeHCTColor,
     );
-    pub fn he_temperature_cache_get_analogous_colors_simple(
-        self_: *mut HeTemperatureCache,
-        result_length1: *mut c_int,
-    ) -> *mut HeColorHCTColor;
-    pub fn he_temperature_cache_get_analogous_colors(
+    pub fn he_temperature_cache_analogous(
         self_: *mut HeTemperatureCache,
         count: c_int,
         divisions: c_int,
-        result_length1: *mut c_int,
-    ) -> *mut HeColorHCTColor;
-    pub fn he_temperature_cache_get_relative_temp(
+    ) -> *mut glib::GList;
+    pub fn he_temperature_cache_get_input_relative_temperature(
         self_: *mut HeTemperatureCache,
-        color: *mut HeColorHCTColor,
     ) -> c_double;
-    pub fn he_temperature_cache_raw_temp(color: *mut HeColorHCTColor) -> c_double;
+    pub fn he_temperature_cache_get_temp(
+        self_: *mut HeTemperatureCache,
+        hct: *mut HeHCTColor,
+    ) -> c_double;
+    pub fn he_temperature_cache_get_input(self_: *mut HeTemperatureCache, result: *mut HeHCTColor);
+    pub fn he_temperature_cache_set_input(self_: *mut HeTemperatureCache, value: *mut HeHCTColor);
 
     //=========================================================================
     // HeTextField
@@ -4641,12 +4249,6 @@ extern "C" {
     pub fn he_toast_set_label(self_: *mut HeToast, value: *const c_char);
     pub fn he_toast_get_default_action(self_: *mut HeToast) -> *const c_char;
     pub fn he_toast_set_default_action(self_: *mut HeToast, value: *const c_char);
-
-    //=========================================================================
-    // HeVibrantScheme
-    //=========================================================================
-    pub fn he_vibrant_scheme_get_type() -> GType;
-    pub fn he_vibrant_scheme_new() -> *mut HeVibrantScheme;
 
     //=========================================================================
     // HeView
@@ -4801,81 +4403,8 @@ extern "C" {
     pub fn he_window_set_has_back_button(self_: *mut HeWindow, value: gboolean);
 
     //=========================================================================
-    // HeSchemeFactory
-    //=========================================================================
-    pub fn he_scheme_factory_get_type() -> GType;
-    pub fn he_scheme_factory_generate(
-        self_: *mut HeSchemeFactory,
-        accent: *mut HeColorCAM16Color,
-        is_dark: gboolean,
-        contrast: c_double,
-        result: *mut HeScheme,
-    );
-
-    //=========================================================================
     // Other functions
     //=========================================================================
-    pub fn he_color_rgb_to_argb_int(color: *mut HeColorRGBColor) -> c_int;
-    pub fn he_color_lab_to_argb_int(lab: *mut HeColorLABColor) -> c_int;
-    pub fn he_color_argb_from_rgb_int(red: c_int, green: c_int, blue: c_int) -> c_int;
-    pub fn he_color_xyz_to_argb(xyz: *mut HeColorXYZColor) -> c_int;
-    pub fn he_color_argb_to_rgb(argb: c_int, result_length1: *mut c_int) -> *mut c_double;
-    pub fn he_color_alpha_from_rgba_int(argb: c_int) -> c_int;
-    pub fn he_color_red_from_rgba_int(argb: c_int) -> c_int;
-    pub fn he_color_green_from_rgba_int(argb: c_int) -> c_int;
-    pub fn he_color_blue_from_rgba_int(argb: c_int) -> c_int;
-    pub fn he_color_xyz_to_cam16(color: *mut HeColorXYZColor, result: *mut HeColorCAM16Color);
-    pub fn he_color_cam16_from_int(argb: c_int, result: *mut HeColorCAM16Color);
-    pub fn he_color_to_gdk_rgba(color: *mut HeColorRGBColor, result: *mut gdk::GdkRGBA);
-    pub fn he_color_critical_plane_below(x: c_double) -> c_int;
-    pub fn he_color_critical_plane_above(x: c_double) -> c_int;
-    pub fn he_color_from_params(
-        hue: c_double,
-        chroma: c_double,
-        tone: c_double,
-        result: *mut HeColorHCTColor,
-    );
-    pub fn he_color_disliked(hct: *mut HeColorHCTColor) -> gboolean;
-    pub fn he_color_fix_disliked(hct: *mut HeColorHCTColor, result: *mut HeColorHCTColor);
-    pub fn he_color_hct_to_hex(hue: c_double, chroma: c_double, lstar: c_double) -> *mut c_char;
-    pub fn he_color_hex_from_hct(hct: *mut HeColorHCTColor, contrast: c_double) -> *mut c_char;
-    pub fn he_color_hct_to_argb(hue: c_double, chroma: c_double, lstar: c_double) -> c_int;
-    pub fn he_color_hct_blend(
-        a: *mut HeColorHCTColor,
-        b: *mut HeColorHCTColor,
-        result: *mut HeColorHCTColor,
-    );
-    pub fn he_color_get_rotated_hue(
-        hue: c_double,
-        hues: *mut c_double,
-        hues_length1: c_int,
-        rotations: *mut c_double,
-        rotations_length1: c_int,
-    ) -> c_double;
-    pub fn he_color_rgb_from_linrgb(red: c_int, green: c_int, blue: c_int) -> c_int;
-    pub fn he_color_argb_from_linrgb(linrgb: *mut c_double, linrgb_length1: c_int) -> c_int;
-    pub fn he_color_find_result_by_j(hr: c_double, c: c_double, y: c_double) -> c_int;
-    pub fn he_color_hexcode(r: c_double, g: c_double, b: c_double) -> *mut c_char;
-    pub fn he_color_hexcode_argb(color: c_int) -> *mut c_char;
-    pub fn he_color_xyz_value_to_lab(v: c_double) -> c_double;
-    pub fn he_color_xyz_to_lab(color: *mut HeColorXYZColor, result: *mut HeColorLABColor);
-    pub fn he_color_lch_to_lab(color: *mut HeColorLCHColor, result: *mut HeColorLABColor);
-    pub fn he_color_rgb_to_lab(color: *mut HeColorRGBColor, result: *mut HeColorLABColor);
-    pub fn he_color_lab_from_argb(argb: c_int, result: *mut HeColorLABColor);
-    pub fn he_color_rgb_to_lch(color: *mut HeColorRGBColor, result: *mut HeColorLCHColor);
-    pub fn he_color_lab_to_lch(color: *mut HeColorLABColor, result: *mut HeColorLCHColor);
-    pub fn he_color_hct_to_lch(color: *mut HeColorHCTColor, result: *mut HeColorLCHColor);
-    pub fn he_color_xyz_to_rgb(color: *mut HeColorXYZColor, result: *mut HeColorRGBColor);
-    pub fn he_color_lab_to_rgb(color: *mut HeColorLABColor, result: *mut HeColorRGBColor);
-    pub fn he_color_lch_to_rgb(color: *mut HeColorLCHColor, result: *mut HeColorRGBColor);
-    pub fn he_color_from_gdk_rgba(color: *mut gdk::GdkRGBA, result: *mut HeColorRGBColor);
-    pub fn he_color_from_hex(color: *const c_char, result: *mut HeColorRGBColor);
-    pub fn he_color_from_argb_int(argb: c_int, result: *mut HeColorRGBColor);
-    pub fn he_color_argb_to_xyz(argb: c_int, result: *mut HeColorXYZColor);
-    pub fn he_color_rgb_value_to_xyz(v: c_double) -> c_double;
-    pub fn he_color_rgb_to_xyz(color: *mut HeColorRGBColor, result: *mut HeColorXYZColor);
-    pub fn he_color_cam16_to_xyz(color: *mut HeColorCAM16Color, result: *mut HeColorXYZColor);
-    pub fn he_color_lab_to_xyz(color: *mut HeColorLABColor, result: *mut HeColorXYZColor);
     pub fn he_ensor_accent_from_pixels_async(
         pixels: *mut u8,
         pixels_length1: c_int,
@@ -4960,6 +4489,8 @@ extern "C" {
     pub fn he_math_utils_y_from_lstar(lstar: c_double) -> c_double;
     pub fn he_math_utils_argb_from_lstar(lstar: c_double) -> c_int;
     pub fn he_math_utils_lstar_from_argb(argb: c_int) -> c_double;
+    pub fn he_math_utils_lstar_from_y(y: c_double) -> c_double;
+    pub fn he_math_utils_clamp(start: c_double, end: c_double, value: c_double) -> c_double;
     pub fn he_misc_find_ancestor_of_type(
         t_type: GType,
         t_dup_func: gobject::GBoxedCopyFunc,
@@ -4993,7 +4524,6 @@ extern "C" {
     pub fn he_colors_to_string(self_: HeColors) -> *mut c_char;
     pub fn he_tip_view_style_to_css_class(self_: HeTipViewStyle) -> *mut c_char;
     pub fn he_tip_view_style_to_string(self_: HeTipViewStyle) -> *mut c_char;
-    pub fn he_desktop_ensor_scheme_to_factory(self_: HeDesktopEnsorScheme) -> *mut HeSchemeFactory;
     pub fn he_about_window_licenses_get_url(self_: HeAboutWindowLicenses) -> *mut c_char;
     pub fn he_about_window_licenses_get_name(self_: HeAboutWindowLicenses) -> *mut c_char;
     pub fn he_content_block_image_cluster_image_position_get_column(
@@ -5018,6 +4548,60 @@ extern "C" {
     pub fn he_overlay_button_alignment_from_gtk_align(
         align: gtk::GtkAlign,
     ) -> HeOverlayButtonAlignment;
+    pub fn he_rgb_to_argb_int(color: *mut HeRGBColor) -> c_int;
+    pub fn he_lab_to_argb_int(lab: *mut HeLABColor) -> c_int;
+    pub fn he_argb_from_rgb_int(red: c_int, green: c_int, blue: c_int) -> c_int;
+    pub fn he_xyz_to_argb(xyz: *mut HeXYZColor) -> c_int;
+    pub fn he_argb_to_rgb(argb: c_int, result_length1: *mut c_int) -> *mut c_double;
+    pub fn he_alpha_from_rgba_int(argb: c_int) -> c_int;
+    pub fn he_red_from_rgba_int(argb: c_int) -> c_int;
+    pub fn he_green_from_rgba_int(argb: c_int) -> c_int;
+    pub fn he_blue_from_rgba_int(argb: c_int) -> c_int;
+    pub fn he_xyz_to_cam16(color: *mut HeXYZColor, result: *mut HeCAM16Color);
+    pub fn he_cam16_from_int(argb: c_int, result: *mut HeCAM16Color);
+    pub fn he_to_gdk_rgba(color: *mut HeRGBColor, result: *mut gdk::GdkRGBA);
+    pub fn he_critical_plane_below(x: c_double) -> c_int;
+    pub fn he_critical_plane_above(x: c_double) -> c_int;
+    pub fn he_from_params(hue: c_double, chroma: c_double, tone: c_double, result: *mut HeHCTColor);
+    pub fn he_disliked(hct: *mut HeHCTColor) -> gboolean;
+    pub fn he_fix_disliked(hct: *mut HeHCTColor, result: *mut HeHCTColor);
+    pub fn he_hct_from_int(argb: c_int, result: *mut HeHCTColor);
+    pub fn he_hct_to_hex(hue: c_double, chroma: c_double, lstar: c_double) -> *mut c_char;
+    pub fn he_hex_from_hct_with_contrast(hct: *mut HeHCTColor, contrast: c_double) -> *mut c_char;
+    pub fn he_hex_from_hct(hct: *mut HeHCTColor) -> *mut c_char;
+    pub fn he_hct_to_argb(hue: c_double, chroma: c_double, lstar: c_double) -> c_int;
+    pub fn he_hct_blend(a: *mut HeHCTColor, b: *mut HeHCTColor, result: *mut HeHCTColor);
+    pub fn he_get_rotated_hue(
+        hue: c_double,
+        hues: *mut c_double,
+        hues_length1: c_int,
+        rotations: *mut c_double,
+        rotations_length1: c_int,
+    ) -> c_double;
+    pub fn he_rgb_from_linrgb(red: c_int, green: c_int, blue: c_int) -> c_int;
+    pub fn he_argb_from_linrgb(linrgb: *mut c_double, linrgb_length1: c_int) -> c_int;
+    pub fn he_find_result_by_j(hr: c_double, c: c_double, y: c_double) -> c_int;
+    pub fn he_hexcode(r: c_double, g: c_double, b: c_double) -> *mut c_char;
+    pub fn he_hexcode_argb(color: c_int) -> *mut c_char;
+    pub fn he_xyz_value_to_lab(v: c_double) -> c_double;
+    pub fn he_xyz_to_lab(color: *mut HeXYZColor, result: *mut HeLABColor);
+    pub fn he_lch_to_lab(color: *mut HeLCHColor, result: *mut HeLABColor);
+    pub fn he_rgb_to_lab(color: *mut HeRGBColor, result: *mut HeLABColor);
+    pub fn he_lab_from_argb(argb: c_int, result: *mut HeLABColor);
+    pub fn he_rgb_to_lch(color: *mut HeRGBColor, result: *mut HeLCHColor);
+    pub fn he_lab_to_lch(color: *mut HeLABColor, result: *mut HeLCHColor);
+    pub fn he_hct_to_lch(color: *mut HeHCTColor, result: *mut HeLCHColor);
+    pub fn he_xyz_to_rgb(color: *mut HeXYZColor, result: *mut HeRGBColor);
+    pub fn he_lab_to_rgb(color: *mut HeLABColor, result: *mut HeRGBColor);
+    pub fn he_lch_to_rgb(color: *mut HeLCHColor, result: *mut HeRGBColor);
+    pub fn he_from_gdk_rgba(color: *mut gdk::GdkRGBA, result: *mut HeRGBColor);
+    pub fn he_from_hex(color: *const c_char, result: *mut HeRGBColor);
+    pub fn he_from_argb_int(argb: c_int, result: *mut HeRGBColor);
+    pub fn he_argb_to_xyz(argb: c_int, result: *mut HeXYZColor);
+    pub fn he_rgb_value_to_xyz(v: c_double) -> c_double;
+    pub fn he_rgb_to_xyz(color: *mut HeRGBColor, result: *mut HeXYZColor);
+    pub fn he_cam16_to_xyz(color: *mut HeCAM16Color, result: *mut HeXYZColor);
+    pub fn he_lab_to_xyz(color: *mut HeLABColor, result: *mut HeXYZColor);
     pub fn he_init();
 
 }

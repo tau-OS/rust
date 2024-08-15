@@ -1,6 +1,6 @@
 // Borrowed from https://gitlab.gnome.org/World/Rust/libadwaita-rs/-/blob/master/libadwaita/src/application.rs
 
-use crate::{Application, ColorRGBColor};
+use crate::{Application, RGBColor};
 
 use glib::translate::*;
 use std::cell::RefCell;
@@ -46,11 +46,11 @@ impl Application {
 pub trait ApplicationManual {
     #[doc(alias = "he_application_set_default_accent_color")]
     #[doc(alias = "default-accent-color")]
-    fn set_default_accent_color(&self, value: Option<&mut ColorRGBColor>);
+    fn set_default_accent_color(&self, value: Option<&mut RGBColor>);
 }
 
 impl<O: IsA<Application>> ApplicationManual for O {
-    fn set_default_accent_color(&self, mut value: Option<&mut ColorRGBColor>) {
+    fn set_default_accent_color(&self, mut value: Option<&mut RGBColor>) {
         unsafe {
             ffi::he_application_set_default_accent_color(
                 self.as_ref().to_glib_none().0,

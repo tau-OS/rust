@@ -192,14 +192,23 @@ pub use self::welcome_screen::WelcomeScreen;
 mod window;
 pub use self::window::Window;
 
-mod color_lch_color;
-pub use self::color_lch_color::ColorLCHColor;
+mod cam16_color;
+pub use self::cam16_color::CAM16Color;
 
-mod color_rgb_color;
-pub use self::color_rgb_color::ColorRGBColor;
+mod hct_color;
+pub use self::hct_color::HCTColor;
 
-mod color_xyz_color;
-pub use self::color_xyz_color::ColorXYZColor;
+mod lab_color;
+pub use self::lab_color::LABColor;
+
+mod lch_color;
+pub use self::lch_color::LCHColor;
+
+mod rgb_color;
+pub use self::rgb_color::RGBColor;
+
+mod xyz_color;
+pub use self::xyz_color::XYZColor;
 
 mod enums;
 pub use self::enums::AboutWindowLicenses;
@@ -208,8 +217,6 @@ pub use self::enums::BannerStyle;
 pub use self::enums::BottomBarPosition;
 pub use self::enums::Colors;
 pub use self::enums::ContentBlockImageClusterImagePosition;
-pub use self::enums::DesktopColorScheme;
-pub use self::enums::DesktopEnsorScheme;
 pub use self::enums::Easing;
 pub use self::enums::ModifierBadgeAlignment;
 pub use self::enums::OverlayButtonAlignment;

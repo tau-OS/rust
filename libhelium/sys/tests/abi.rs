@@ -427,6 +427,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HeCAM16Color",
+        Layout {
+            size: size_of::<HeCAM16Color>(),
+            alignment: align_of::<HeCAM16Color>(),
+        },
+    ),
+    (
         "HeCallbackAnimationTarget",
         Layout {
             size: size_of::<HeCallbackAnimationTarget>(),
@@ -466,48 +473,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<HeChipGroupClass>(),
             alignment: align_of::<HeChipGroupClass>(),
-        },
-    ),
-    (
-        "HeColorCAM16Color",
-        Layout {
-            size: size_of::<HeColorCAM16Color>(),
-            alignment: align_of::<HeColorCAM16Color>(),
-        },
-    ),
-    (
-        "HeColorHCTColor",
-        Layout {
-            size: size_of::<HeColorHCTColor>(),
-            alignment: align_of::<HeColorHCTColor>(),
-        },
-    ),
-    (
-        "HeColorLABColor",
-        Layout {
-            size: size_of::<HeColorLABColor>(),
-            alignment: align_of::<HeColorLABColor>(),
-        },
-    ),
-    (
-        "HeColorLCHColor",
-        Layout {
-            size: size_of::<HeColorLCHColor>(),
-            alignment: align_of::<HeColorLCHColor>(),
-        },
-    ),
-    (
-        "HeColorRGBColor",
-        Layout {
-            size: size_of::<HeColorRGBColor>(),
-            alignment: align_of::<HeColorRGBColor>(),
-        },
-    ),
-    (
-        "HeColorXYZColor",
-        Layout {
-            size: size_of::<HeColorXYZColor>(),
-            alignment: align_of::<HeColorXYZColor>(),
         },
     ),
     (
@@ -581,34 +546,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "HeContentScheme",
-        Layout {
-            size: size_of::<HeContentScheme>(),
-            alignment: align_of::<HeContentScheme>(),
-        },
-    ),
-    (
-        "HeContentSchemeClass",
-        Layout {
-            size: size_of::<HeContentSchemeClass>(),
-            alignment: align_of::<HeContentSchemeClass>(),
-        },
-    ),
-    (
-        "HeContrastCurve",
-        Layout {
-            size: size_of::<HeContrastCurve>(),
-            alignment: align_of::<HeContrastCurve>(),
-        },
-    ),
-    (
-        "HeContrastCurveClass",
-        Layout {
-            size: size_of::<HeContrastCurveClass>(),
-            alignment: align_of::<HeContrastCurveClass>(),
-        },
-    ),
-    (
         "HeDatePicker",
         Layout {
             size: size_of::<HeDatePicker>(),
@@ -620,20 +557,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<HeDatePickerClass>(),
             alignment: align_of::<HeDatePickerClass>(),
-        },
-    ),
-    (
-        "HeDefaultScheme",
-        Layout {
-            size: size_of::<HeDefaultScheme>(),
-            alignment: align_of::<HeDefaultScheme>(),
-        },
-    ),
-    (
-        "HeDefaultSchemeClass",
-        Layout {
-            size: size_of::<HeDefaultSchemeClass>(),
-            alignment: align_of::<HeDefaultSchemeClass>(),
         },
     ),
     (
@@ -655,13 +578,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<HeDesktopColorScheme>(),
             alignment: align_of::<HeDesktopColorScheme>(),
-        },
-    ),
-    (
-        "HeDesktopEnsorScheme",
-        Layout {
-            size: size_of::<HeDesktopEnsorScheme>(),
-            alignment: align_of::<HeDesktopEnsorScheme>(),
         },
     ),
     (
@@ -728,6 +644,27 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HeHCTColor",
+        Layout {
+            size: size_of::<HeHCTColor>(),
+            alignment: align_of::<HeHCTColor>(),
+        },
+    ),
+    (
+        "HeLABColor",
+        Layout {
+            size: size_of::<HeLABColor>(),
+            alignment: align_of::<HeLABColor>(),
+        },
+    ),
+    (
+        "HeLCHColor",
+        Layout {
+            size: size_of::<HeLCHColor>(),
+            alignment: align_of::<HeLCHColor>(),
+        },
+    ),
+    (
         "HeMiniContentBlock",
         Layout {
             size: size_of::<HeMiniContentBlock>(),
@@ -760,34 +697,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<HeModifierBadgeClass>(),
             alignment: align_of::<HeModifierBadgeClass>(),
-        },
-    ),
-    (
-        "HeMonochromaticScheme",
-        Layout {
-            size: size_of::<HeMonochromaticScheme>(),
-            alignment: align_of::<HeMonochromaticScheme>(),
-        },
-    ),
-    (
-        "HeMonochromaticSchemeClass",
-        Layout {
-            size: size_of::<HeMonochromaticSchemeClass>(),
-            alignment: align_of::<HeMonochromaticSchemeClass>(),
-        },
-    ),
-    (
-        "HeMutedScheme",
-        Layout {
-            size: size_of::<HeMutedScheme>(),
-            alignment: align_of::<HeMutedScheme>(),
-        },
-    ),
-    (
-        "HeMutedSchemeClass",
-        Layout {
-            size: size_of::<HeMutedSchemeClass>(),
-            alignment: align_of::<HeMutedSchemeClass>(),
         },
     ),
     (
@@ -966,31 +875,17 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "HeSaladScheme",
+        "HeRGBColor",
         Layout {
-            size: size_of::<HeSaladScheme>(),
-            alignment: align_of::<HeSaladScheme>(),
+            size: size_of::<HeRGBColor>(),
+            alignment: align_of::<HeRGBColor>(),
         },
     ),
     (
-        "HeSaladSchemeClass",
+        "HeSchemeVariant",
         Layout {
-            size: size_of::<HeSaladSchemeClass>(),
-            alignment: align_of::<HeSaladSchemeClass>(),
-        },
-    ),
-    (
-        "HeScheme",
-        Layout {
-            size: size_of::<HeScheme>(),
-            alignment: align_of::<HeScheme>(),
-        },
-    ),
-    (
-        "HeSchemeFactoryIface",
-        Layout {
-            size: size_of::<HeSchemeFactoryIface>(),
-            alignment: align_of::<HeSchemeFactoryIface>(),
+            size: size_of::<HeSchemeVariant>(),
+            alignment: align_of::<HeSchemeVariant>(),
         },
     ),
     (
@@ -1344,17 +1239,10 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "HeVibrantScheme",
+        "HeTonePolarity",
         Layout {
-            size: size_of::<HeVibrantScheme>(),
-            alignment: align_of::<HeVibrantScheme>(),
-        },
-    ),
-    (
-        "HeVibrantSchemeClass",
-        Layout {
-            size: size_of::<HeVibrantSchemeClass>(),
-            alignment: align_of::<HeVibrantSchemeClass>(),
+            size: size_of::<HeTonePolarity>(),
+            alignment: align_of::<HeTonePolarity>(),
         },
     ),
     (
@@ -1511,6 +1399,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
             alignment: align_of::<HeWindowClass>(),
         },
     ),
+    (
+        "HeXYZColor",
+        Layout {
+            size: size_of::<HeXYZColor>(),
+            alignment: align_of::<HeXYZColor>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -1562,11 +1457,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) HE_DESKTOP_COLOR_SCHEME_DARK", "1"),
     ("(gint) HE_DESKTOP_COLOR_SCHEME_LIGHT", "2"),
     ("(gint) HE_DESKTOP_COLOR_SCHEME_NO_PREFERENCE", "0"),
-    ("(gint) HE_DESKTOP_ENSOR_SCHEME_DEFAULT", "0"),
-    ("(gint) HE_DESKTOP_ENSOR_SCHEME_MONOCHROMATIC", "3"),
-    ("(gint) HE_DESKTOP_ENSOR_SCHEME_MUTED", "2"),
-    ("(gint) HE_DESKTOP_ENSOR_SCHEME_SALAD", "4"),
-    ("(gint) HE_DESKTOP_ENSOR_SCHEME_VIBRANT", "1"),
     ("(gint) HE_EASING_EASE_IN_OUT_BOUNCE", "2"),
     ("(gint) HE_EASING_EASE_OUT_CUBIC", "1"),
     ("(gint) HE_EASING_LINEAR", "0"),
@@ -1583,10 +1473,20 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) HE_OVERLAY_BUTTON_TYPE_BUTTON_SECONDARY", "2"),
     ("(gint) HE_OVERLAY_BUTTON_TYPE_BUTTON_SURFACE", "0"),
     ("(gint) HE_OVERLAY_BUTTON_TYPE_BUTTON_TERTIARY", "3"),
+    ("(gint) HE_SCHEME_VARIANT_CONTENT", "5"),
+    ("(gint) HE_SCHEME_VARIANT_DEFAULT", "0"),
+    ("(gint) HE_SCHEME_VARIANT_MONOCHROME", "3"),
+    ("(gint) HE_SCHEME_VARIANT_MUTED", "2"),
+    ("(gint) HE_SCHEME_VARIANT_SALAD", "4"),
+    ("(gint) HE_SCHEME_VARIANT_VIBRANT", "1"),
     ("(gint) HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_ALWAYS", "0"),
     ("(gint) HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_NEVER", "2"),
     ("(gint) HE_TAB_SWITCHER_TAB_BAR_BEHAVIOR_SINGLE", "1"),
     ("(gint) HE_TIP_VIEW_STYLE_NONE", "0"),
     ("(gint) HE_TIP_VIEW_STYLE_POPUP", "1"),
     ("(gint) HE_TIP_VIEW_STYLE_VIEW", "2"),
+    ("(gint) HE_TONE_POLARITY_DARKER", "0"),
+    ("(gint) HE_TONE_POLARITY_FARTHER", "3"),
+    ("(gint) HE_TONE_POLARITY_LIGHTER", "1"),
+    ("(gint) HE_TONE_POLARITY_NEARER", "2"),
 ];
