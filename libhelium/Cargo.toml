@@ -1,6 +1,6 @@
 [package]
 name = "libhelium"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["Lleyton Gray <lleyton@fyralabs.com>"]
 edition = "2021"
 readme = "../README.md"
@@ -43,26 +43,26 @@ once_cell = "1.8"
 futures-channel = "0.3"
 
 [dependencies.glib]
-version = "0.19"
+version = "0.20"
 
 [dependencies.gio]
-version = "0.19"
+version = "0.20"
 
 [dependencies.gdk-pixbuf]
-version = "0.19"
+version = "0.20"
 
 [dependencies.pango]
-version = "0.19"
+version = "0.20"
 
 [dependencies.gdk]
 package = "gdk4"
-version = "0.8"
+version = "0.9"
 
 [dependencies.gtk]
 package = "gtk4"
-version = "0.8"
+version = "0.9"
 
 [dependencies.ffi]
 package = "libhelium-sys"
 path = './sys'
-version = "0.5.0"
+version = "0.6.0"
