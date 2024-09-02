@@ -66,6 +66,12 @@ impl BottomSheetBuilder {
         }
     }
 
+    pub fn sheet_stack(self, sheet_stack: &gtk::Stack) -> Self {
+        Self {
+            builder: self.builder.property("sheet-stack", sheet_stack.clone()),
+        }
+    }
+
     pub fn button(self, button: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self.builder.property("button", button.clone().upcast()),
@@ -312,6 +318,26 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_bottom_sheet_get_sheet_stack")]
+    #[doc(alias = "get_sheet_stack")]
+    fn sheet_stack(&self) -> Option<gtk::Stack> {
+        unsafe {
+            from_glib_none(ffi::he_bottom_sheet_get_sheet_stack(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_bottom_sheet_set_sheet_stack")]
+    fn set_sheet_stack(&self, value: Option<&gtk::Stack>) {
+        unsafe {
+            ffi::he_bottom_sheet_set_sheet_stack(
+                self.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
     #[doc(alias = "he_bottom_sheet_get_button")]
     #[doc(alias = "get_button")]
     fn button(&self) -> Option<gtk::Widget> {
@@ -452,6 +478,32 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
                 b"notify::sheet\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sheet_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "sheet-stack")]
+    fn connect_sheet_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_sheet_stack_trampoline<
+            P: IsA<BottomSheet>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeBottomSheet,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(BottomSheet::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::sheet-stack\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_sheet_stack_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

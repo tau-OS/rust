@@ -2410,11 +2410,13 @@ impl ::std::fmt::Debug for HeBottomBar {
 pub struct HeBottomSheet {
     pub parent_instance: gtk::GtkWidget,
     pub priv_: *mut HeBottomSheetPrivate,
+    pub back_button: *mut HeButton,
 }
 
 impl ::std::fmt::Debug for HeBottomSheet {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("HeBottomSheet @ {self:p}"))
+            .field("back_button", &self.back_button)
             .finish()
     }
 }
@@ -3847,13 +3849,10 @@ extern "C" {
     pub fn he_application_set_override_contrast(self_: *mut HeApplication, value: gboolean);
     pub fn he_application_get_default_contrast(self_: *mut HeApplication) -> c_double;
     pub fn he_application_set_default_contrast(self_: *mut HeApplication, value: c_double);
-    pub fn he_application_get_default_scheme_variant(
-        self_: *mut HeApplication,
-    ) -> *mut HeSchemeVariant;
-    pub fn he_application_set_default_scheme_variant(
-        self_: *mut HeApplication,
-        value: *mut HeSchemeVariant,
-    );
+    pub fn he_application_get_is_content(self_: *mut HeApplication) -> gboolean;
+    pub fn he_application_set_is_content(self_: *mut HeApplication, value: gboolean);
+    pub fn he_application_get_is_mono(self_: *mut HeApplication) -> gboolean;
+    pub fn he_application_set_is_mono(self_: *mut HeApplication, value: gboolean);
 
     //=========================================================================
     // HeApplicationWindow
@@ -3978,6 +3977,8 @@ extern "C" {
     pub fn he_bottom_sheet_new() -> *mut HeBottomSheet;
     pub fn he_bottom_sheet_get_sheet(self_: *mut HeBottomSheet) -> *mut gtk::GtkWidget;
     pub fn he_bottom_sheet_set_sheet(self_: *mut HeBottomSheet, value: *mut gtk::GtkWidget);
+    pub fn he_bottom_sheet_get_sheet_stack(self_: *mut HeBottomSheet) -> *mut gtk::GtkStack;
+    pub fn he_bottom_sheet_set_sheet_stack(self_: *mut HeBottomSheet, value: *mut gtk::GtkStack);
     pub fn he_bottom_sheet_get_button(self_: *mut HeBottomSheet) -> *mut gtk::GtkWidget;
     pub fn he_bottom_sheet_set_button(self_: *mut HeBottomSheet, value: *mut gtk::GtkWidget);
     pub fn he_bottom_sheet_get_title(self_: *mut HeBottomSheet) -> *const c_char;
@@ -5294,6 +5295,13 @@ extern "C" {
     //=========================================================================
     pub fn he_view_mono_get_type() -> GType;
     pub fn he_view_mono_new(title: *const c_char, subtitle: *const c_char) -> *mut HeViewMono;
+    pub fn he_view_mono_add_titlebar_button(self_: *mut HeViewMono, child: *mut gtk::GtkButton);
+    pub fn he_view_mono_add_titlebar_menu(self_: *mut HeViewMono, child: *mut gtk::GtkMenuButton);
+    pub fn he_view_mono_add_titlebar_toggle(
+        self_: *mut HeViewMono,
+        child: *mut gtk::GtkToggleButton,
+    );
+    pub fn he_view_mono_append(self_: *mut HeViewMono, child: *mut gtk::GtkWidget);
     pub fn he_view_mono_get_title(self_: *mut HeViewMono) -> *const c_char;
     pub fn he_view_mono_set_title(self_: *mut HeViewMono, value: *const c_char);
     pub fn he_view_mono_get_titlewidget(self_: *mut HeViewMono) -> *mut gtk::GtkWidget;

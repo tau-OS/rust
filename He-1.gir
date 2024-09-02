@@ -1985,9 +1985,12 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
-		<method name="get_default_scheme_variant" c:identifier="he_application_get_default_scheme_variant">
-			<return-value transfer-ownership="none" nullable="1">
-				<type name="He.SchemeVariant" c:type="HeSchemeVariant*"/>
+		<property name="is-content" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_content" c:identifier="he_application_get_is_content">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -1995,7 +1998,7 @@ Since: 1.0</doc>
 				</instance-parameter>
 			</parameters>
 		</method>
-		<method name="set_default_scheme_variant" c:identifier="he_application_set_default_scheme_variant">
+		<method name="set_is_content" c:identifier="he_application_set_is_content">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -2003,8 +2006,34 @@ Since: 1.0</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.Application" c:type="HeApplication*"/>
 				</instance-parameter>
-				<parameter name="value" transfer-ownership="none" nullable="1">
-					<type name="He.SchemeVariant" c:type="HeSchemeVariant*"/>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-mono" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_mono" c:identifier="he_application_get_is_mono">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Application" c:type="HeApplication*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_mono" c:identifier="he_application_set_is_mono">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Application" c:type="HeApplication*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -7278,6 +7307,10 @@ Since: 1.0</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="BottomSheetPrivate" c:type="HeBottomSheetPrivate*"/>
 		</field>
+		<field name="back_button" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The back button in case of a stack-type content.&lt;/para&gt;</doc>
+			<type name="He.Button" c:type="HeButton*"/>
+		</field>
 		<constructor name="new" c:identifier="he_bottom_sheet_new">
 			<return-value transfer-ownership="none">
 				<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
@@ -7306,6 +7339,32 @@ Since: 1.0</doc>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none" nullable="1">
 					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="sheet-stack" writable="1">
+			<type name="Gtk.Stack" c:type="GtkStack*"/>
+		</property>
+		<method name="get_sheet_stack" c:identifier="he_bottom_sheet_get_sheet_stack">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Stack" c:type="GtkStack*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_sheet_stack" c:identifier="he_bottom_sheet_set_sheet_stack">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomSheet" c:type="HeBottomSheet*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Stack" c:type="GtkStack*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -13070,6 +13129,70 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</constructor>
+		<method name="add_titlebar_button" c:identifier="he_view_mono_add_titlebar_button">
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a titlebar button to the view&amp;apos;s appbar.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<type name="Gtk.Button" c:type="GtkButton*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="add_titlebar_menu" c:identifier="he_view_mono_add_titlebar_menu">
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a titlebar menu to the view&amp;apos;s appbar.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<type name="Gtk.MenuButton" c:type="GtkMenuButton*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="add_titlebar_toggle" c:identifier="he_view_mono_add_titlebar_toggle">
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a titlebar toggle to the view&amp;apos;s appbar.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<type name="Gtk.ToggleButton" c:type="GtkToggleButton*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="append" c:identifier="he_view_mono_append">
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a child to the view.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="child" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="title" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The title of the sidebar.&lt;/para&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
