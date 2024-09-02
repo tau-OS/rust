@@ -28,14 +28,14 @@ jobs:
           dnf5 config-manager addrepo --from-repofile='https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo'
           dnf5 install -y libhelium-devel libbismuth-devel sass git rust cargo rustdoc rustfmt meson ninja vala 'pkgconfig(gnome-desktop-4)' 'pkgconfig(accountsservice)' 'pkgconfig(udisks2)' 'pkgconfig(gudev-1.0)' 'pkgconfig(libgtop-2.0)' 'pkgconfig(gexiv2)' 'pkgconfig(gweather4)' 'pkgconfig(libpulse)' 'pkgconfig(ibus-1.0)' 'pkgconfig(gl)' desktop-file-utils
 
-      - name: Install git-rustdoc
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
-          chmod +x gir-rustdoc.py
-
       - uses: actions/checkout@v4
         with:
           submodules: "recursive"
+
+      - name: Install gir-rustdoc
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
+          chmod +x gir-rustdoc.py
 
       - name: Checkout fusebox
         uses: actions/checkout@v4
