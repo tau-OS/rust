@@ -1985,7 +1985,7 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
-		<method name="get_scheme_factory" c:identifier="he_application_get_scheme_factory">
+		<method name="get_default_scheme_variant" c:identifier="he_application_get_default_scheme_variant">
 			<return-value transfer-ownership="none" nullable="1">
 				<type name="He.SchemeVariant" c:type="HeSchemeVariant*"/>
 			</return-value>
@@ -1995,7 +1995,7 @@ Since: 1.0</doc>
 				</instance-parameter>
 			</parameters>
 		</method>
-		<method name="set_scheme_factory" c:identifier="he_application_set_scheme_factory">
+		<method name="set_default_scheme_variant" c:identifier="he_application_set_default_scheme_variant">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -2237,9 +2237,9 @@ used directly. Instead, let the `He.Application` class manage this for you.&lt;/
 			<doc xml:whitespace="preserve">&lt;para&gt;Whether to apply styles for contrast modes. -1.0 = low, 0.0 = default, 0.5 = medium, 1.0 = high&lt;/para&gt;</doc>
 			<type name="gdouble" c:type="gdouble"/>
 		</field>
-		<field name="scheme_variant" writable="1">
+		<field name="scheme_variant" writable="1" nullable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;A function that returns a color scheme from a given accent color and whether dark mode is enabled.&lt;/para&gt;</doc>
-			<type name="He.SchemeVariant" c:type="HeSchemeVariant"/>
+			<type name="He.SchemeVariant" c:type="HeSchemeVariant*"/>
 		</field>
 		<method name="update" c:identifier="he_style_manager_update">
 			<doc xml:whitespace="preserve">&lt;para&gt;Runs all the necessary updates to apply the current style. If is_registered is false, this will do nothing.&lt;/para&gt;</doc>
@@ -2250,6 +2250,32 @@ used directly. Instead, let the `He.Application` class manage this for you.&lt;/
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.StyleManager" c:type="HeStyleManager*"/>
 				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="style_refresh" c:identifier="he_style_manager_style_refresh">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.StyleManager" c:type="HeStyleManager*"/>
+				</instance-parameter>
+				<parameter name="scheme_factory" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="weight_refresh" c:identifier="he_style_manager_weight_refresh">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.StyleManager" c:type="HeStyleManager*"/>
+				</instance-parameter>
+				<parameter name="font_weight" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
 			</parameters>
 		</method>
 		<method name="register" c:identifier="he_style_manager_register">
@@ -2808,12 +2834,12 @@ title bar can be made always visible. Has an optional back button. The back butt
 				</parameter>
 			</parameters>
 		</method>
-		<property name="scheme-variant" writable="1">
-			<type name="He.SchemeVariant" c:type="HeSchemeVariant"/>
+		<property name="ensor-scheme" writable="1">
+			<type name="He.DesktopEnsorScheme" c:type="HeDesktopEnsorScheme"/>
 		</property>
-		<method name="get_scheme_variant" c:identifier="he_desktop_get_scheme_variant">
+		<method name="get_ensor_scheme" c:identifier="he_desktop_get_ensor_scheme">
 			<return-value transfer-ownership="none">
-				<type name="He.SchemeVariant" c:type="HeSchemeVariant"/>
+				<type name="He.DesktopEnsorScheme" c:type="HeDesktopEnsorScheme"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -2938,6 +2964,1039 @@ title bar can be made always visible. Has an optional back button. The back butt
 		<member name="dark" c:identifier="HE_DESKTOP_COLOR_SCHEME_DARK" value="1"/>
 		<member name="light" c:identifier="HE_DESKTOP_COLOR_SCHEME_LIGHT" value="2"/>
 	</enumeration>
+	<enumeration name="DesktopEnsorScheme" c:type="HeDesktopEnsorScheme" glib:type-name="HeDesktopEnsorScheme" glib:get-type="he_desktop_ensor_scheme_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;The Ensor scheme preference enum, which is used to determine the Ensor scheme of the desktop.&lt;/para&gt;</doc>
+		<member name="default" c:identifier="HE_DESKTOP_ENSOR_SCHEME_DEFAULT" value="0"/>
+		<member name="vibrant" c:identifier="HE_DESKTOP_ENSOR_SCHEME_VIBRANT" value="1"/>
+		<member name="muted" c:identifier="HE_DESKTOP_ENSOR_SCHEME_MUTED" value="2"/>
+		<member name="monochromatic" c:identifier="HE_DESKTOP_ENSOR_SCHEME_MONOCHROMATIC" value="3"/>
+		<member name="salad" c:identifier="HE_DESKTOP_ENSOR_SCHEME_SALAD" value="4"/>
+	</enumeration>
+	<function name="desktop_ensor_scheme_to_variant" c:identifier="he_desktop_ensor_scheme_to_variant">
+		<return-value transfer-ownership="full">
+			<type name="He.SchemeVariant" c:type="HeSchemeVariant"/>
+		</return-value>
+		<parameters>
+			<instance-parameter name="self" transfer-ownership="none">
+				<type name="He.DesktopEnsorScheme" c:type="HeDesktopEnsorScheme"/>
+			</instance-parameter>
+		</parameters>
+	</function>
+	<class name="Contrast" c:type="HeContrast" c:symbol-prefix="contrast" glib:type-name="HeContrast" glib:get-type="he_contrast_get_type" glib:type-struct="ContrastClass" glib:fundamental="1" glib:ref-func="he_contrast_ref" glib:unref-func="he_contrast_unref" glib:set-value-func="he_value_set_contrast" glib:get-value-func="he_value_get_contrast">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.TypeInstance" c:type="GTypeInstance"/>
+		</field>
+		<field name="ref_count">
+			<type name="gint" c:type="volatile int"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ContrastPrivate" c:type="HeContrastPrivate*"/>
+		</field>
+		<function name="ratio_of_ys" c:identifier="he_contrast_ratio_of_ys">
+			<doc xml:whitespace="preserve">&lt;para&gt;Contrast ratio is a measure of legibility, used to compare the lightness of two colors.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="y1" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="y2" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="ratio_of_tones" c:identifier="he_contrast_ratio_of_tones">
+			<doc xml:whitespace="preserve">&lt;para&gt;Contrast ratio of two tones &amp;lpar;T in HCT, L* in L*a*b*&amp;rpar;.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="t1" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="t2" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="lighter" c:identifier="he_contrast_lighter">
+			<doc xml:whitespace="preserve">&lt;para&gt;Returns tone &amp;gt;= tone parameter that ensures the ratio with the input tone.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="ratio" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="lighter_unsafe" c:identifier="he_contrast_lighter_unsafe">
+			<doc xml:whitespace="preserve">&lt;para&gt;Tone &amp;gt;= tone parameter that ensures ratio. Returns 100 if ratio cannot be achieved.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="ratio" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="darker" c:identifier="he_contrast_darker">
+			<doc xml:whitespace="preserve">&lt;para&gt;Returns tone &amp;lt;= tone parameter that ensures the ratio with the input tone.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="ratio" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="darker_unsafe" c:identifier="he_contrast_darker_unsafe">
+			<doc xml:whitespace="preserve">&lt;para&gt;Tone &amp;lt;= tone parameter that ensures ratio. Returns 0 if ratio cannot be achieved.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="ratio" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+	</class>
+	<record name="ContrastClass" c:type="HeContrastClass" glib:is-gtype-struct-for="Contrast">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.TypeClass" c:type="GTypeClass"/>
+		</field>
+	</record>
+	<record name="ContrastPrivate" c:type="HeContrastPrivate" disguised="1"/>
+	<class name="ContrastCurve" c:type="HeContrastCurve" c:symbol-prefix="contrast_curve" glib:type-name="HeContrastCurve" glib:get-type="he_contrast_curve_get_type" glib:type-struct="ContrastCurveClass" glib:fundamental="1" glib:ref-func="he_contrast_curve_ref" glib:unref-func="he_contrast_curve_unref" glib:set-value-func="he_value_set_contrast_curve" glib:get-value-func="he_value_get_contrast_curve">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.TypeInstance" c:type="GTypeInstance"/>
+		</field>
+		<field name="ref_count">
+			<type name="gint" c:type="volatile int"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ContrastCurvePrivate" c:type="HeContrastCurvePrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_contrast_curve_new">
+			<return-value transfer-ownership="full">
+				<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+			</return-value>
+			<parameters>
+				<parameter name="low" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="normal" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="medium" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="high" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<method name="get" c:identifier="he_contrast_curve_get">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+				</instance-parameter>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="ContrastCurveClass" c:type="HeContrastCurveClass" glib:is-gtype-struct-for="ContrastCurve">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.TypeClass" c:type="GTypeClass"/>
+		</field>
+	</record>
+	<record name="ContrastCurvePrivate" c:type="HeContrastCurvePrivate" disguised="1"/>
+	<class name="DynamicColor" c:type="HeDynamicColor" c:symbol-prefix="dynamic_color" glib:type-name="HeDynamicColor" glib:get-type="he_dynamic_color_get_type" glib:type-struct="DynamicColorClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="DynamicColorPrivate" c:type="HeDynamicColorPrivate*"/>
+		</field>
+		<field name="palette" writable="1">
+			<type name="He.PaletteFunc" c:type="HePaletteFunc"/>
+		</field>
+		<field name="palette_target">
+			<type name="gpointer" c:type="gpointer"/>
+		</field>
+		<field name="tonev" writable="1">
+			<type name="He.ToneFunc" c:type="HeToneFunc"/>
+		</field>
+		<field name="tonev_target">
+			<type name="gpointer" c:type="gpointer"/>
+		</field>
+		<field name="background" writable="1">
+			<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
+		</field>
+		<field name="background_target">
+			<type name="gpointer" c:type="gpointer"/>
+		</field>
+		<field name="second_background" writable="1">
+			<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
+		</field>
+		<field name="second_background_target">
+			<type name="gpointer" c:type="gpointer"/>
+		</field>
+		<field name="tone_delta_pair" writable="1">
+			<type name="He.ToneDeltaPairFunc" c:type="HeToneDeltaPairFunc"/>
+		</field>
+		<field name="tone_delta_pair_target">
+			<type name="gpointer" c:type="gpointer"/>
+		</field>
+		<constructor name="new" c:identifier="he_dynamic_color_new">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<parameter name="name" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="palette" transfer-ownership="none" closure="2" scope="call">
+					<type name="He.PaletteFunc" c:type="HePaletteFunc"/>
+				</parameter>
+				<parameter name="palette_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="tonev" transfer-ownership="none" closure="4" scope="call">
+					<type name="He.ToneFunc" c:type="HeToneFunc"/>
+				</parameter>
+				<parameter name="tonev_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="is_background" transfer-ownership="none" nullable="1">
+					<type name="gboolean" c:type="gboolean*"/>
+				</parameter>
+				<parameter name="background" transfer-ownership="none" nullable="1" closure="7" scope="call">
+					<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
+				</parameter>
+				<parameter name="background_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="second_background" transfer-ownership="none" nullable="1" closure="9" scope="call">
+					<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
+				</parameter>
+				<parameter name="second_background_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="contrast_curve" transfer-ownership="none" nullable="1">
+					<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+				</parameter>
+				<parameter name="tone_delta_pair" transfer-ownership="none" nullable="1" closure="12" scope="call">
+					<type name="He.ToneDeltaPairFunc" c:type="HeToneDeltaPairFunc"/>
+				</parameter>
+				<parameter name="tone_delta_pair_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<constructor name="from_palette" c:identifier="he_dynamic_color_new_from_palette">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<parameter name="name" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="palette" transfer-ownership="none" closure="2" scope="call">
+					<type name="He.PaletteFunc" c:type="HePaletteFunc"/>
+				</parameter>
+				<parameter name="palette_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="tonev" transfer-ownership="none" closure="4" scope="call">
+					<type name="He.ToneFunc" c:type="HeToneFunc"/>
+				</parameter>
+				<parameter name="tonev_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<method name="get_hct" c:identifier="he_dynamic_color_get_hct">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="scheme" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</parameter>
+				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_tone" c:identifier="he_dynamic_color_get_tone">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="scheme" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="foreground_tone" c:identifier="he_dynamic_color_foreground_tone">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="bg_tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="ratio" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<function name="enable_light_foreground" c:identifier="he_dynamic_color_enable_light_foreground">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="tone_prefers_light_foreground" c:identifier="he_dynamic_color_tone_prefers_light_foreground">
+			<return-value transfer-ownership="full">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="tone_allows_light_foreground" c:identifier="he_dynamic_color_tone_allows_light_foreground">
+			<doc xml:whitespace="preserve">&lt;para&gt;Tones less than ~50 always permit white at 4.5 contrast.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<property name="name" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_name" c:identifier="he_dynamic_color_get_name">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_name" c:identifier="he_dynamic_color_set_name">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-background" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_background" c:identifier="he_dynamic_color_get_is_background">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_background" c:identifier="he_dynamic_color_set_is_background">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="contrast-curve" writable="1">
+			<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+		</property>
+		<method name="get_contrast_curve" c:identifier="he_dynamic_color_get_contrast_curve">
+			<return-value transfer-ownership="none">
+				<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_contrast_curve" c:identifier="he_dynamic_color_set_contrast_curve">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="DynamicColorClass" c:type="HeDynamicColorClass" glib:is-gtype-struct-for="DynamicColor">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="DynamicColorPrivate" c:type="HeDynamicColorPrivate" disguised="1"/>
+	<class name="DynamicScheme" c:type="HeDynamicScheme" c:symbol-prefix="dynamic_scheme" glib:type-name="HeDynamicScheme" glib:get-type="he_dynamic_scheme_get_type" glib:type-struct="DynamicSchemeClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="DynamicSchemePrivate" c:type="HeDynamicSchemePrivate*"/>
+		</field>
+		<field name="hct" writable="1">
+			<type name="He.HCTColor" c:type="HeHCTColor"/>
+		</field>
+		<field name="variant" writable="1">
+			<type name="He.SchemeVariant" c:type="HeSchemeVariant"/>
+		</field>
+		<field name="is_dark" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</field>
+		<field name="contrast_level" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</field>
+		<field name="primary" writable="1">
+			<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+		</field>
+		<field name="secondary" writable="1">
+			<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+		</field>
+		<field name="tertiary" writable="1">
+			<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+		</field>
+		<field name="neutral" writable="1">
+			<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+		</field>
+		<field name="neutral_variant" writable="1">
+			<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+		</field>
+		<field name="error" writable="1">
+			<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+		</field>
+		<constructor name="new" c:identifier="he_dynamic_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</return-value>
+			<parameters>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+				<parameter name="variant" transfer-ownership="none">
+					<type name="He.SchemeVariant" c:type="HeSchemeVariant"/>
+				</parameter>
+				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="contrast_level" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="primary" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+				<parameter name="secondary" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+				<parameter name="tertiary" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+				<parameter name="neutral" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+				<parameter name="neutral_variant" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+				<parameter name="_error_" transfer-ownership="none" nullable="1">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<method name="get_hct" c:identifier="he_dynamic_scheme_get_hct">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+				<parameter name="dynamic_color" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</parameter>
+				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_primary_key" c:identifier="he_dynamic_scheme_get_primary_key">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_secondary_key" c:identifier="he_dynamic_scheme_get_secondary_key">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_tertiary_key" c:identifier="he_dynamic_scheme_get_tertiary_key">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_neutral_key" c:identifier="he_dynamic_scheme_get_neutral_key">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_neutral_variant_key" c:identifier="he_dynamic_scheme_get_neutral_variant_key">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_background" c:identifier="he_dynamic_scheme_get_background">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_background" c:identifier="he_dynamic_scheme_get_on_background">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface" c:identifier="he_dynamic_scheme_get_surface">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_dim" c:identifier="he_dynamic_scheme_get_surface_dim">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_bright" c:identifier="he_dynamic_scheme_get_surface_bright">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_container_lowest" c:identifier="he_dynamic_scheme_get_surface_container_lowest">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_container_low" c:identifier="he_dynamic_scheme_get_surface_container_low">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_container" c:identifier="he_dynamic_scheme_get_surface_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_container_high" c:identifier="he_dynamic_scheme_get_surface_container_high">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_container_highest" c:identifier="he_dynamic_scheme_get_surface_container_highest">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_surface" c:identifier="he_dynamic_scheme_get_on_surface">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_surface_variant" c:identifier="he_dynamic_scheme_get_surface_variant">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_surface_variant" c:identifier="he_dynamic_scheme_get_on_surface_variant">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_inverse_surface" c:identifier="he_dynamic_scheme_get_inverse_surface">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_inverse_on_surface" c:identifier="he_dynamic_scheme_get_inverse_on_surface">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_outline" c:identifier="he_dynamic_scheme_get_outline">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_outline_variant" c:identifier="he_dynamic_scheme_get_outline_variant">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_shadow" c:identifier="he_dynamic_scheme_get_shadow">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_scrim" c:identifier="he_dynamic_scheme_get_scrim">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_primary" c:identifier="he_dynamic_scheme_get_primary">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_primary" c:identifier="he_dynamic_scheme_get_on_primary">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_primary_container" c:identifier="he_dynamic_scheme_get_primary_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_primary_container" c:identifier="he_dynamic_scheme_get_on_primary_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_inverse_primary" c:identifier="he_dynamic_scheme_get_inverse_primary">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_secondary" c:identifier="he_dynamic_scheme_get_secondary">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_secondary" c:identifier="he_dynamic_scheme_get_on_secondary">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_secondary_container" c:identifier="he_dynamic_scheme_get_secondary_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_secondary_container" c:identifier="he_dynamic_scheme_get_on_secondary_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_tertiary" c:identifier="he_dynamic_scheme_get_tertiary">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_tertiary" c:identifier="he_dynamic_scheme_get_on_tertiary">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_tertiary_container" c:identifier="he_dynamic_scheme_get_tertiary_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_tertiary_container" c:identifier="he_dynamic_scheme_get_on_tertiary_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_error" c:identifier="he_dynamic_scheme_get_error">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_error" c:identifier="he_dynamic_scheme_get_on_error">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_error_container" c:identifier="he_dynamic_scheme_get_error_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_on_error_container" c:identifier="he_dynamic_scheme_get_on_error_container">
+			<return-value transfer-ownership="full">
+				<type name="utf8" c:type="gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="DynamicSchemeClass" c:type="HeDynamicSchemeClass" glib:is-gtype-struct-for="DynamicScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="DynamicSchemePrivate" c:type="HeDynamicSchemePrivate" disguised="1"/>
+	<class name="KeyColor" c:type="HeKeyColor" c:symbol-prefix="key_color" glib:type-name="HeKeyColor" glib:get-type="he_key_color_get_type" glib:type-struct="KeyColorClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="KeyColorPrivate" c:type="HeKeyColorPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_key_color_new">
+			<return-value transfer-ownership="full">
+				<type name="He.KeyColor" c:type="HeKeyColor*"/>
+			</return-value>
+			<parameters>
+				<parameter name="hue" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="requested_chroma" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<method name="create" c:identifier="he_key_color_create">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.KeyColor" c:type="HeKeyColor*"/>
+				</instance-parameter>
+				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="hue" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_hue" c:identifier="he_key_color_get_hue">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.KeyColor" c:type="HeKeyColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_hue" c:identifier="he_key_color_set_hue">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.KeyColor" c:type="HeKeyColor*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="requested-chroma" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_requested_chroma" c:identifier="he_key_color_get_requested_chroma">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.KeyColor" c:type="HeKeyColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_requested_chroma" c:identifier="he_key_color_set_requested_chroma">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.KeyColor" c:type="HeKeyColor*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="KeyColorClass" c:type="HeKeyColorClass" glib:is-gtype-struct-for="KeyColor">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="KeyColorPrivate" c:type="HeKeyColorPrivate" disguised="1"/>
 	<class name="Quantizer" c:type="HeQuantizer" c:symbol-prefix="quantizer" glib:type-name="HeQuantizer" glib:get-type="he_quantizer_get_type" glib:type-struct="QuantizerClass" parent="GObject.Object" abstract="1">
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
@@ -3194,6 +4253,686 @@ area of the cube.&lt;/para&gt;
 		</field>
 	</record>
 	<record name="QuantizerWuPrivate" c:type="HeQuantizerWuPrivate" disguised="1"/>
+	<class name="ContentScheme" c:type="HeContentScheme" c:symbol-prefix="content_scheme" glib:type-name="HeContentScheme" glib:get-type="he_content_scheme_get_type" glib:type-struct="ContentSchemeClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ContentSchemePrivate" c:type="HeContentSchemePrivate*"/>
+		</field>
+		<method name="generate" c:identifier="he_content_scheme_generate">
+			<doc xml:whitespace="preserve">&lt;para&gt;A theme in which the primary color does not shift. Useful for content such as Album Art, Images, etc. suppling color for UI.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ContentScheme" c:type="HeContentScheme*"/>
+				</instance-parameter>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<constructor name="new" c:identifier="he_content_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.ContentScheme" c:type="HeContentScheme*"/>
+			</return-value>
+		</constructor>
+	</class>
+	<record name="ContentSchemeClass" c:type="HeContentSchemeClass" glib:is-gtype-struct-for="ContentScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="ContentSchemePrivate" c:type="HeContentSchemePrivate" disguised="1"/>
+	<class name="DefaultScheme" c:type="HeDefaultScheme" c:symbol-prefix="default_scheme" glib:type-name="HeDefaultScheme" glib:get-type="he_default_scheme_get_type" glib:type-struct="DefaultSchemeClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="DefaultSchemePrivate" c:type="HeDefaultSchemePrivate*"/>
+		</field>
+		<method name="generate" c:identifier="he_default_scheme_generate">
+			<doc xml:whitespace="preserve">&lt;para&gt;The default theme&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DefaultScheme" c:type="HeDefaultScheme*"/>
+				</instance-parameter>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<constructor name="new" c:identifier="he_default_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.DefaultScheme" c:type="HeDefaultScheme*"/>
+			</return-value>
+		</constructor>
+	</class>
+	<record name="DefaultSchemeClass" c:type="HeDefaultSchemeClass" glib:is-gtype-struct-for="DefaultScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="DefaultSchemePrivate" c:type="HeDefaultSchemePrivate" disguised="1"/>
+	<class name="MonochromaticScheme" c:type="HeMonochromaticScheme" c:symbol-prefix="monochromatic_scheme" glib:type-name="HeMonochromaticScheme" glib:get-type="he_monochromatic_scheme_get_type" glib:type-struct="MonochromaticSchemeClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="MonochromaticSchemePrivate" c:type="HeMonochromaticSchemePrivate*"/>
+		</field>
+		<method name="generate" c:identifier="he_monochromatic_scheme_generate">
+			<doc xml:whitespace="preserve">&lt;para&gt;A theme with no colors&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.MonochromaticScheme" c:type="HeMonochromaticScheme*"/>
+				</instance-parameter>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<constructor name="new" c:identifier="he_monochromatic_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.MonochromaticScheme" c:type="HeMonochromaticScheme*"/>
+			</return-value>
+		</constructor>
+	</class>
+	<record name="MonochromaticSchemeClass" c:type="HeMonochromaticSchemeClass" glib:is-gtype-struct-for="MonochromaticScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="MonochromaticSchemePrivate" c:type="HeMonochromaticSchemePrivate" disguised="1"/>
+	<class name="MutedScheme" c:type="HeMutedScheme" c:symbol-prefix="muted_scheme" glib:type-name="HeMutedScheme" glib:get-type="he_muted_scheme_get_type" glib:type-struct="MutedSchemeClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="MutedSchemePrivate" c:type="HeMutedSchemePrivate*"/>
+		</field>
+		<method name="generate" c:identifier="he_muted_scheme_generate">
+			<doc xml:whitespace="preserve">&lt;para&gt;A theme with just a tiny amount of color&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.MutedScheme" c:type="HeMutedScheme*"/>
+				</instance-parameter>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<constructor name="new" c:identifier="he_muted_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.MutedScheme" c:type="HeMutedScheme*"/>
+			</return-value>
+		</constructor>
+	</class>
+	<record name="MutedSchemeClass" c:type="HeMutedSchemeClass" glib:is-gtype-struct-for="MutedScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="MutedSchemePrivate" c:type="HeMutedSchemePrivate" disguised="1"/>
+	<class name="SaladScheme" c:type="HeSaladScheme" c:symbol-prefix="salad_scheme" glib:type-name="HeSaladScheme" glib:get-type="he_salad_scheme_get_type" glib:type-struct="SaladSchemeClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SaladSchemePrivate" c:type="HeSaladSchemePrivate*"/>
+		</field>
+		<method name="generate" c:identifier="he_salad_scheme_generate">
+			<doc xml:whitespace="preserve">&lt;para&gt;A theme with a party of color&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.SaladScheme" c:type="HeSaladScheme*"/>
+				</instance-parameter>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<constructor name="new" c:identifier="he_salad_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.SaladScheme" c:type="HeSaladScheme*"/>
+			</return-value>
+		</constructor>
+	</class>
+	<record name="SaladSchemeClass" c:type="HeSaladSchemeClass" glib:is-gtype-struct-for="SaladScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="SaladSchemePrivate" c:type="HeSaladSchemePrivate" disguised="1"/>
+	<class name="Scheme" c:type="HeScheme" c:symbol-prefix="scheme" glib:type-name="HeScheme" glib:get-type="he_scheme_get_type" glib:type-struct="SchemeClass" glib:fundamental="1" glib:ref-func="he_scheme_ref" glib:unref-func="he_scheme_unref" glib:set-value-func="he_value_set_scheme" glib:get-value-func="he_value_get_scheme">
+		<doc xml:whitespace="preserve">&lt;para&gt;A class that contains the color scheme of the app.&lt;/para&gt;</doc>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.TypeInstance" c:type="GTypeInstance"/>
+		</field>
+		<field name="ref_count">
+			<type name="gint" c:type="volatile int"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="SchemePrivate" c:type="HeSchemePrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.Scheme" c:type="HeScheme*"/>
+			</return-value>
+		</constructor>
+		<method name="highest_surface" c:identifier="he_scheme_highest_surface">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+				<parameter name="s" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="primary_key" c:identifier="he_scheme_primary_key">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="secondary_key" c:identifier="he_scheme_secondary_key">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="tertiary_key" c:identifier="he_scheme_tertiary_key">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="neutral_key" c:identifier="he_scheme_neutral_key">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="neutral_variant_key" c:identifier="he_scheme_neutral_variant_key">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="background" c:identifier="he_scheme_background">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_background" c:identifier="he_scheme_on_background">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface" c:identifier="he_scheme_surface">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_variant" c:identifier="he_scheme_surface_variant">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_surface" c:identifier="he_scheme_on_surface">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_surface_variant" c:identifier="he_scheme_on_surface_variant">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="outline" c:identifier="he_scheme_outline">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="outline_variant" c:identifier="he_scheme_outline_variant">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="inverse_surface" c:identifier="he_scheme_inverse_surface">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="inverse_on_surface" c:identifier="he_scheme_inverse_on_surface">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="inverse_primary" c:identifier="he_scheme_inverse_primary">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_bright" c:identifier="he_scheme_surface_bright">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_dim" c:identifier="he_scheme_surface_dim">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_container_lowest" c:identifier="he_scheme_surface_container_lowest">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_container_low" c:identifier="he_scheme_surface_container_low">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_container" c:identifier="he_scheme_surface_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_container_high" c:identifier="he_scheme_surface_container_high">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="surface_container_highest" c:identifier="he_scheme_surface_container_highest">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="primary" c:identifier="he_scheme_primary">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_primary" c:identifier="he_scheme_on_primary">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="primary_container" c:identifier="he_scheme_primary_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_primary_container" c:identifier="he_scheme_on_primary_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="secondary" c:identifier="he_scheme_secondary">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_secondary" c:identifier="he_scheme_on_secondary">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="secondary_container" c:identifier="he_scheme_secondary_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_secondary_container" c:identifier="he_scheme_on_secondary_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="tertiary" c:identifier="he_scheme_tertiary">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_tertiary" c:identifier="he_scheme_on_tertiary">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="tertiary_container" c:identifier="he_scheme_tertiary_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_tertiary_container" c:identifier="he_scheme_on_tertiary_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="shadow" c:identifier="he_scheme_shadow">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="scrim" c:identifier="he_scheme_scrim">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="error" c:identifier="he_scheme_error">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_error" c:identifier="he_scheme_on_error">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="error_container" c:identifier="he_scheme_error_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="on_error_container" c:identifier="he_scheme_on_error_container">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="SchemeClass" c:type="HeSchemeClass" glib:is-gtype-struct-for="Scheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.TypeClass" c:type="GTypeClass"/>
+		</field>
+	</record>
+	<record name="SchemePrivate" c:type="HeSchemePrivate" disguised="1"/>
+	<class name="VibrantScheme" c:type="HeVibrantScheme" c:symbol-prefix="vibrant_scheme" glib:type-name="HeVibrantScheme" glib:get-type="he_vibrant_scheme_get_type" glib:type-struct="VibrantSchemeClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="VibrantSchemePrivate" c:type="HeVibrantSchemePrivate*"/>
+		</field>
+		<method name="generate" c:identifier="he_vibrant_scheme_generate">
+			<doc xml:whitespace="preserve">&lt;para&gt;A theme with ALL the color&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.VibrantScheme" c:type="HeVibrantScheme*"/>
+				</instance-parameter>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+				<parameter name="is_dark" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="contrast" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<constructor name="new" c:identifier="he_vibrant_scheme_new">
+			<return-value transfer-ownership="full">
+				<type name="He.VibrantScheme" c:type="HeVibrantScheme*"/>
+			</return-value>
+		</constructor>
+	</class>
+	<record name="VibrantSchemeClass" c:type="HeVibrantSchemeClass" glib:is-gtype-struct-for="VibrantScheme">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="VibrantSchemePrivate" c:type="HeVibrantSchemePrivate" disguised="1"/>
 	<class name="Score" c:type="HeScore" c:symbol-prefix="score" glib:type-name="HeScore" glib:get-type="he_score_get_type" glib:type-struct="ScoreClass" glib:fundamental="1" glib:ref-func="he_score_ref" glib:unref-func="he_score_unref" glib:set-value-func="he_value_set_score" glib:get-value-func="he_value_get_score">
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.TypeInstance" c:type="GTypeInstance"/>
@@ -3438,6 +5177,230 @@ area of the cube.&lt;/para&gt;
 		</field>
 	</record>
 	<record name="TemperatureCachePrivate" c:type="HeTemperatureCachePrivate" disguised="1"/>
+	<class name="TonalPalette" c:type="HeTonalPalette" c:symbol-prefix="tonal_palette" glib:type-name="HeTonalPalette" glib:get-type="he_tonal_palette_get_type" glib:type-struct="TonalPaletteClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="TonalPalettePrivate" c:type="HeTonalPalettePrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_tonal_palette_new">
+			<return-value transfer-ownership="full">
+				<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+			</return-value>
+			<parameters>
+				<parameter name="hue" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="chroma" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="key_color" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<function name="from_int" c:identifier="he_tonal_palette_from_int">
+			<return-value transfer-ownership="full">
+				<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+			</return-value>
+			<parameters>
+				<parameter name="argb" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="from_hct" c:identifier="he_tonal_palette_from_hct">
+			<return-value transfer-ownership="full">
+				<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+			</return-value>
+			<parameters>
+				<parameter name="hct" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="from_hue_and_chroma" c:identifier="he_tonal_palette_from_hue_and_chroma">
+			<return-value transfer-ownership="full">
+				<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+			</return-value>
+			<parameters>
+				<parameter name="hue" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="chroma" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<method name="get_tone" c:identifier="he_tonal_palette_get_tone">
+			<return-value transfer-ownership="full">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_hct" c:identifier="he_tonal_palette_get_hct">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="hue" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_hue" c:identifier="he_tonal_palette_get_hue">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_hue" c:identifier="he_tonal_palette_set_hue">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="chroma" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_chroma" c:identifier="he_tonal_palette_get_chroma">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_chroma" c:identifier="he_tonal_palette_set_chroma">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="key-color" writable="1">
+			<type name="He.HCTColor" c:type="HeHCTColor"/>
+		</property>
+		<method name="get_key_color" c:identifier="he_tonal_palette_get_key_color">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+				<parameter name="result" direction="out" transfer-ownership="none" caller-allocates="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="set_key_color" c:identifier="he_tonal_palette_set_key_color">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+	</class>
+	<record name="TonalPaletteClass" c:type="HeTonalPaletteClass" glib:is-gtype-struct-for="TonalPalette">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="TonalPalettePrivate" c:type="HeTonalPalettePrivate" disguised="1"/>
+	<class name="ToneDeltaPair" c:type="HeToneDeltaPair" c:symbol-prefix="tone_delta_pair" glib:type-name="HeToneDeltaPair" glib:get-type="he_tone_delta_pair_get_type" glib:type-struct="ToneDeltaPairClass" parent="GObject.Object">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="GObject.Object" c:type="GObject"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ToneDeltaPairPrivate" c:type="HeToneDeltaPairPrivate*"/>
+		</field>
+		<field name="role_a" writable="1">
+			<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+		</field>
+		<field name="role_b" writable="1">
+			<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+		</field>
+		<field name="delta" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</field>
+		<field name="polarity" writable="1">
+			<type name="He.TonePolarity" c:type="HeTonePolarity"/>
+		</field>
+		<field name="stay_together" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</field>
+		<constructor name="new" c:identifier="he_tone_delta_pair_new">
+			<return-value transfer-ownership="full">
+				<type name="He.ToneDeltaPair" c:type="HeToneDeltaPair*"/>
+			</return-value>
+			<parameters>
+				<parameter name="role_a" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</parameter>
+				<parameter name="role_b" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</parameter>
+				<parameter name="delta" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="polarity" transfer-ownership="none" nullable="1">
+					<type name="He.TonePolarity" c:type="HeTonePolarity*"/>
+				</parameter>
+				<parameter name="stay_together" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</constructor>
+	</class>
+	<record name="ToneDeltaPairClass" c:type="HeToneDeltaPairClass" glib:is-gtype-struct-for="ToneDeltaPair">
+		<field name="parent_class" readable="0" private="1">
+			<type name="GObject.ObjectClass" c:type="GObjectClass"/>
+		</field>
+	</record>
+	<record name="ToneDeltaPairPrivate" c:type="HeToneDeltaPairPrivate" disguised="1"/>
 	<class name="ViewingConditions" c:type="HeViewingConditions" c:symbol-prefix="viewing_conditions" glib:type-name="HeViewingConditions" glib:get-type="he_viewing_conditions_get_type" glib:type-struct="ViewingConditionsClass" parent="GObject.Object">
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
@@ -7294,17 +9257,21 @@ Since: 1.0</doc>
 				<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
 			</return-value>
 			<parameters>
-				<parameter name="title" transfer-ownership="none" nullable="1">
+				<parameter name="t" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The title of the content block. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="subtitle" transfer-ownership="none" nullable="1">
+				<parameter name="s" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the content block. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="primary_button" transfer-ownership="none" nullable="1">
+				<parameter name="pb" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The primary button of the content block. &lt;/para&gt;</doc>
 					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+				<parameter name="w" transfer-ownership="none" nullable="1">
+					<doc xml:whitespace="preserve">&lt;para&gt;The widget of the content block. &lt;/para&gt;</doc>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
 		</constructor>
@@ -7316,6 +9283,32 @@ Since: 1.0</doc>
 				<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
 			</return-value>
 		</constructor>
+		<property name="widget" writable="1">
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_widget" c:identifier="he_mini_content_block_get_widget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_widget" c:identifier="he_mini_content_block_set_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="title" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;Sets the title of the content block.&lt;/para&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
@@ -7699,6 +9692,35 @@ Since: 1.0</doc>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
 					<type name="Gtk.Orientation" c:type="GtkOrientation"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="hide-labels" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether to hide the item labels or not. Useful if the icon for the item is descriptive enough.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_hide_labels" c:identifier="he_navigation_rail_get_hide_labels">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_hide_labels" c:identifier="he_navigation_rail_set_hide_labels">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -11023,25 +13045,278 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ViewDualPrivate" c:type="HeViewDualPrivate" disguised="1"/>
-	<class name="ViewMono" c:type="HeViewMono" c:symbol-prefix="view_mono" glib:type-name="HeViewMono" glib:get-type="he_view_mono_get_type" glib:type-struct="ViewMonoClass" parent="He.View">
-		<doc xml:whitespace="preserve">&lt;para&gt;A ViewMono is a view that is a single-column layout.&lt;/para&gt;
-
-Since: 1.0</doc>
+	<class name="ViewMono" c:type="HeViewMono" c:symbol-prefix="view_mono" glib:type-name="HeViewMono" glib:get-type="he_view_mono_get_type" glib:type-struct="ViewMonoClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A ViewMono is a component containing its own AppBar, title, subtitle, and elements.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
-			<type name="He.View" c:type="HeView"/>
+			<type name="He.Bin" c:type="HeBin"/>
 		</field>
 		<field name="priv" readable="0" private="1">
 			<type name="ViewMonoPrivate" c:type="HeViewMonoPrivate*"/>
 		</field>
 		<constructor name="new" c:identifier="he_view_mono_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Create a new ViewMono.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="none">
 				<type name="He.ViewMono" c:type="HeViewMono*"/>
 			</return-value>
+			<parameters>
+				<parameter name="title" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The title of the ViewMono. &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="subtitle" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the ViewMono. &lt;/para&gt;</doc>
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
 		</constructor>
+		<property name="title" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The title of the sidebar.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_title" c:identifier="he_view_mono_get_title">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_title" c:identifier="he_view_mono_set_title">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="titlewidget" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The title widget of the sidebar.&lt;/para&gt;</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_titlewidget" c:identifier="he_view_mono_get_titlewidget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_titlewidget" c:identifier="he_view_mono_set_titlewidget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="subtitle" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The title of the sidebar.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_subtitle" c:identifier="he_view_mono_get_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_subtitle" c:identifier="he_view_mono_set_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-right-title-buttons" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether the ViewMono should show the buttons.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_right_title_buttons" c:identifier="he_view_mono_get_show_right_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_right_title_buttons" c:identifier="he_view_mono_set_show_right_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-left-title-buttons" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether the ViewMono should show the buttons.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_left_title_buttons" c:identifier="he_view_mono_get_show_left_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_left_title_buttons" c:identifier="he_view_mono_set_show_left_title_buttons">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-back" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether the back button should be shown.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_back" c:identifier="he_view_mono_get_show_back">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_back" c:identifier="he_view_mono_set_show_back">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="stack" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The stack that the ViewMono&amp;apos;s AppBar is attached to.&lt;/para&gt;</doc>
+			<type name="Gtk.Stack" c:type="GtkStack*"/>
+		</property>
+		<method name="get_stack" c:identifier="he_view_mono_get_stack">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.Stack" c:type="GtkStack*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_stack" c:identifier="he_view_mono_set_stack">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.Stack" c:type="GtkStack*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="scroller" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The stack that the ViewMono&amp;apos;s AppBar is attached to.&lt;/para&gt;</doc>
+			<type name="Gtk.ScrolledWindow" c:type="GtkScrolledWindow*"/>
+		</property>
+		<method name="get_scroller" c:identifier="he_view_mono_get_scroller">
+			<return-value transfer-ownership="none">
+				<type name="Gtk.ScrolledWindow" c:type="GtkScrolledWindow*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_scroller" c:identifier="he_view_mono_set_scroller">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gtk.ScrolledWindow" c:type="GtkScrolledWindow*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="has-margins" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether the view child has margins or is full-bleed.&lt;/para&gt;</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_has_margins" c:identifier="he_view_mono_get_has_margins">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_has_margins" c:identifier="he_view_mono_set_has_margins">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ViewMono" c:type="HeViewMono*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
 	</class>
 	<record name="ViewMonoClass" c:type="HeViewMonoClass" glib:is-gtype-struct-for="ViewMono">
 		<field name="parent_class" readable="0" private="1">
-			<type name="He.ViewClass" c:type="HeViewClass"/>
+			<type name="He.BinClass" c:type="HeBinClass"/>
 		</field>
 	</record>
 	<record name="ViewMonoPrivate" c:type="HeViewMonoPrivate" disguised="1"/>
@@ -11406,6 +13681,58 @@ Since: 1.0</doc>
 		<parameters>
 			<parameter name="value" transfer-ownership="none">
 				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+			<parameter name="user_data" transfer-ownership="none" closure="1">
+				<type name="gpointer" c:type="void*"/>
+			</parameter>
+		</parameters>
+	</callback>
+	<callback name="PaletteFunc" c:type="HePaletteFunc">
+		<return-value transfer-ownership="full">
+			<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+		</return-value>
+		<parameters>
+			<parameter name="s" transfer-ownership="none">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</parameter>
+			<parameter name="user_data" transfer-ownership="none" closure="1">
+				<type name="gpointer" c:type="void*"/>
+			</parameter>
+		</parameters>
+	</callback>
+	<callback name="ToneDeltaPairFunc" c:type="HeToneDeltaPairFunc">
+		<return-value transfer-ownership="full">
+			<type name="He.ToneDeltaPair" c:type="HeToneDeltaPair*"/>
+		</return-value>
+		<parameters>
+			<parameter name="s" transfer-ownership="none">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</parameter>
+			<parameter name="user_data" transfer-ownership="none" closure="1">
+				<type name="gpointer" c:type="void*"/>
+			</parameter>
+		</parameters>
+	</callback>
+	<callback name="BackgroundFunc" c:type="HeBackgroundFunc">
+		<return-value transfer-ownership="full">
+			<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+		</return-value>
+		<parameters>
+			<parameter name="s" transfer-ownership="none">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+			</parameter>
+			<parameter name="user_data" transfer-ownership="none" closure="1">
+				<type name="gpointer" c:type="void*"/>
+			</parameter>
+		</parameters>
+	</callback>
+	<callback name="ToneFunc" c:type="HeToneFunc">
+		<return-value transfer-ownership="full">
+			<type name="gdouble" c:type="gdouble"/>
+		</return-value>
+		<parameters>
+			<parameter name="s" transfer-ownership="none">
+				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
 			</parameter>
 			<parameter name="user_data" transfer-ownership="none" closure="1">
 				<type name="gpointer" c:type="void*"/>

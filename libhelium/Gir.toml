@@ -151,7 +151,7 @@ manual = [
     "GLib.Regex",
     "Gtk.Grid",
     "Gtk.DropDown",
-    "Pango.EllipsizeMode",
+    "Pango.EllipsizeMode"
 ]
 
 [[object]]
