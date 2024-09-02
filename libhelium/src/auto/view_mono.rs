@@ -319,6 +319,41 @@ mod sealed {
 }
 
 pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
+    #[doc(alias = "he_view_mono_add_titlebar_button")]
+    fn add_titlebar_button(&self, child: &impl IsA<gtk::Button>) {
+        unsafe {
+            ffi::he_view_mono_add_titlebar_button(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    //#[doc(alias = "he_view_mono_add_titlebar_menu")]
+    //fn add_titlebar_menu(&self, child: /*Ignored*/&gtk::MenuButton) {
+    //    unsafe { TODO: call ffi:he_view_mono_add_titlebar_menu() }
+    //}
+
+    #[doc(alias = "he_view_mono_add_titlebar_toggle")]
+    fn add_titlebar_toggle(&self, child: &impl IsA<gtk::ToggleButton>) {
+        unsafe {
+            ffi::he_view_mono_add_titlebar_toggle(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "he_view_mono_append")]
+    fn append(&self, child: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_view_mono_append(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     #[doc(alias = "he_view_mono_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {

@@ -86,6 +86,18 @@ impl ApplicationBuilder {
         }
     }
 
+    pub fn is_content(self, is_content: bool) -> Self {
+        Self {
+            builder: self.builder.property("is-content", is_content),
+        }
+    }
+
+    pub fn is_mono(self, is_mono: bool) -> Self {
+        Self {
+            builder: self.builder.property("is-mono", is_mono),
+        }
+    }
+
     pub fn menubar(self, menubar: &impl IsA<gio::MenuModel>) -> Self {
         Self {
             builder: self.builder.property("menubar", menubar.clone().upcast()),
@@ -237,16 +249,39 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
         }
     }
 
-    //#[doc(alias = "he_application_get_default_scheme_variant")]
-    //#[doc(alias = "get_default_scheme_variant")]
-    //fn default_scheme_variant(&self) -> /*Ignored*/Option<SchemeVariant> {
-    //    unsafe { TODO: call ffi:he_application_get_default_scheme_variant() }
-    //}
+    #[doc(alias = "he_application_get_is_content")]
+    #[doc(alias = "get_is_content")]
+    fn is_content(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_application_get_is_content(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
-    //#[doc(alias = "he_application_set_default_scheme_variant")]
-    //fn set_default_scheme_variant(&self, value: /*Ignored*/Option<SchemeVariant>) {
-    //    unsafe { TODO: call ffi:he_application_set_default_scheme_variant() }
-    //}
+    #[doc(alias = "he_application_set_is_content")]
+    fn set_is_content(&self, value: bool) {
+        unsafe {
+            ffi::he_application_set_is_content(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_application_get_is_mono")]
+    #[doc(alias = "get_is_mono")]
+    fn is_mono(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_application_get_is_mono(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_application_set_is_mono")]
+    fn set_is_mono(&self, value: bool) {
+        unsafe {
+            ffi::he_application_set_is_mono(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
 
     #[doc(alias = "default-accent-color")]
     fn connect_default_accent_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -375,6 +410,55 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
                 b"notify::default-contrast\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_contrast_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "is-content")]
+    fn connect_is_content_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_content_trampoline<
+            P: IsA<Application>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeApplication,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Application::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::is-content\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_is_content_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "is-mono")]
+    fn connect_is_mono_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_mono_trampoline<P: IsA<Application>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeApplication,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Application::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::is-mono\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_is_mono_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
