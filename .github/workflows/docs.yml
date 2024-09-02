@@ -32,11 +32,6 @@ jobs:
         with:
           submodules: "recursive"
 
-      - name: Install gir-rustdoc
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
-          chmod +x gir-rustdoc.py
-
       - name: Checkout fusebox
         uses: actions/checkout@v4
         with:
@@ -55,7 +50,6 @@ jobs:
       - name: Generate docs
         run: cargo install rustdoc-stripper
       - run: PATH="$HOME/.cargo/bin:$PATH" ./generator.py --embed-docs
-      - run: eval $(./gir-rustdoc.py pre-docs)
       - run: cargo doc --all-features --no-deps
       - run: mv target/doc/ docs
 
