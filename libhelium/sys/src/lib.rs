@@ -3813,8 +3813,6 @@ extern "C" {
     pub fn he_app_bar_set_scroller(self_: *mut HeAppBar, value: *mut gtk::GtkScrolledWindow);
     pub fn he_app_bar_get_is_compact(self_: *mut HeAppBar) -> gboolean;
     pub fn he_app_bar_set_is_compact(self_: *mut HeAppBar, value: gboolean);
-    pub fn he_app_bar_get_viewtitle_label(self_: *mut HeAppBar) -> *const c_char;
-    pub fn he_app_bar_set_viewtitle_label(self_: *mut HeAppBar, value: *const c_char);
     pub fn he_app_bar_get_viewtitle_widget(self_: *mut HeAppBar) -> *mut gtk::GtkWidget;
     pub fn he_app_bar_set_viewtitle_widget(self_: *mut HeAppBar, value: *mut gtk::GtkWidget);
     pub fn he_app_bar_get_viewsubtitle_label(self_: *mut HeAppBar) -> *const c_char;
@@ -4835,9 +4833,9 @@ extern "C" {
     // HeSideBar
     //=========================================================================
     pub fn he_side_bar_get_type() -> GType;
-    pub fn he_side_bar_new(title: *const c_char, subtitle: *const c_char) -> *mut HeSideBar;
-    pub fn he_side_bar_get_title(self_: *mut HeSideBar) -> *const c_char;
-    pub fn he_side_bar_set_title(self_: *mut HeSideBar, value: *const c_char);
+    pub fn he_side_bar_new(title: *mut gtk::GtkWidget, subtitle: *const c_char) -> *mut HeSideBar;
+    pub fn he_side_bar_get_title(self_: *mut HeSideBar) -> *mut gtk::GtkWidget;
+    pub fn he_side_bar_set_title(self_: *mut HeSideBar, value: *mut gtk::GtkWidget);
     pub fn he_side_bar_get_titlewidget(self_: *mut HeSideBar) -> *mut gtk::GtkWidget;
     pub fn he_side_bar_set_titlewidget(self_: *mut HeSideBar, value: *mut gtk::GtkWidget);
     pub fn he_side_bar_get_subtitle(self_: *mut HeSideBar) -> *const c_char;
@@ -5294,7 +5292,8 @@ extern "C" {
     // HeViewMono
     //=========================================================================
     pub fn he_view_mono_get_type() -> GType;
-    pub fn he_view_mono_new(title: *const c_char, subtitle: *const c_char) -> *mut HeViewMono;
+    pub fn he_view_mono_new(title: *mut gtk::GtkWidget, subtitle: *const c_char)
+        -> *mut HeViewMono;
     pub fn he_view_mono_add_titlebar_button(self_: *mut HeViewMono, child: *mut gtk::GtkButton);
     pub fn he_view_mono_add_titlebar_menu(self_: *mut HeViewMono, child: *mut gtk::GtkMenuButton);
     pub fn he_view_mono_add_titlebar_toggle(
@@ -5302,8 +5301,8 @@ extern "C" {
         child: *mut gtk::GtkToggleButton,
     );
     pub fn he_view_mono_append(self_: *mut HeViewMono, child: *mut gtk::GtkWidget);
-    pub fn he_view_mono_get_title(self_: *mut HeViewMono) -> *const c_char;
-    pub fn he_view_mono_set_title(self_: *mut HeViewMono, value: *const c_char);
+    pub fn he_view_mono_get_title(self_: *mut HeViewMono) -> *mut gtk::GtkWidget;
+    pub fn he_view_mono_set_title(self_: *mut HeViewMono, value: *mut gtk::GtkWidget);
     pub fn he_view_mono_get_titlewidget(self_: *mut HeViewMono) -> *mut gtk::GtkWidget;
     pub fn he_view_mono_set_titlewidget(self_: *mut HeViewMono, value: *mut gtk::GtkWidget);
     pub fn he_view_mono_get_subtitle(self_: *mut HeViewMono) -> *const c_char;

@@ -6374,33 +6374,6 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
-		<property name="viewtitle-label" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title to the left on the AppBar.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_viewtitle_label" c:identifier="he_app_bar_get_viewtitle_label">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.AppBar" c:type="HeAppBar*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_viewtitle_label" c:identifier="he_app_bar_set_viewtitle_label">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.AppBar" c:type="HeAppBar*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
 		<property name="viewtitle-widget" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The title widget to the left on the AppBar. If this is set, the other title &amp;lpar;not subtitle&amp;rpar; props won&amp;apos;t work, and the mini title
 on collapsed state won&amp;apos;t show.&lt;/para&gt;</doc>
@@ -10910,11 +10883,11 @@ Since: 1.0</doc>
 				<type name="He.SideBar" c:type="HeSideBar*"/>
 			</return-value>
 			<parameters>
-				<parameter name="title" transfer-ownership="none">
+				<parameter name="title" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The title of the SideBar. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
-				<parameter name="subtitle" transfer-ownership="none">
+				<parameter name="subtitle" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the SideBar. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
@@ -10922,11 +10895,11 @@ Since: 1.0</doc>
 		</constructor>
 		<property name="title" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The title of the sidebar.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
 		</property>
 		<method name="get_title" c:identifier="he_side_bar_get_title">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -10942,8 +10915,8 @@ Since: 1.0</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.SideBar" c:type="HeSideBar*"/>
 				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -13119,11 +13092,11 @@ Since: 1.0</doc>
 				<type name="He.ViewMono" c:type="HeViewMono*"/>
 			</return-value>
 			<parameters>
-				<parameter name="title" transfer-ownership="none">
+				<parameter name="title" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The title of the ViewMono. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
-				<parameter name="subtitle" transfer-ownership="none">
+				<parameter name="subtitle" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the ViewMono. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
@@ -13194,12 +13167,12 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="title" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title of the sidebar.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
+			<doc xml:whitespace="preserve">&lt;para&gt;The title of the view.&lt;/para&gt;</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
 		</property>
 		<method name="get_title" c:identifier="he_view_mono_get_title">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -13215,13 +13188,13 @@ Since: 1.0</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.ViewMono" c:type="HeViewMono*"/>
 				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
 		</method>
 		<property name="titlewidget" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title widget of the sidebar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;The title widget of the view.&lt;/para&gt;</doc>
 			<type name="Gtk.Widget" c:type="GtkWidget*"/>
 		</property>
 		<method name="get_titlewidget" c:identifier="he_view_mono_get_titlewidget">
@@ -13248,7 +13221,7 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<property name="subtitle" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title of the sidebar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the view.&lt;/para&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
 		</property>
 		<method name="get_subtitle" c:identifier="he_view_mono_get_subtitle">
