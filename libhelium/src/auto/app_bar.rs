@@ -78,14 +78,6 @@ impl AppBarBuilder {
         }
     }
 
-    pub fn viewtitle_label(self, viewtitle_label: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("viewtitle-label", viewtitle_label.into()),
-        }
-    }
-
     pub fn viewtitle_widget(self, viewtitle_widget: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self
@@ -409,26 +401,6 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "he_app_bar_get_viewtitle_label")]
-    #[doc(alias = "get_viewtitle_label")]
-    fn viewtitle_label(&self) -> glib::GString {
-        unsafe {
-            from_glib_none(ffi::he_app_bar_get_viewtitle_label(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "he_app_bar_set_viewtitle_label")]
-    fn set_viewtitle_label(&self, value: &str) {
-        unsafe {
-            ffi::he_app_bar_set_viewtitle_label(
-                self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
-        }
-    }
-
     #[doc(alias = "he_app_bar_get_viewtitle_widget")]
     #[doc(alias = "get_viewtitle_widget")]
     fn viewtitle_widget(&self) -> Option<gtk::Widget> {
@@ -609,32 +581,6 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
                 b"notify::is-compact\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_compact_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "viewtitle-label")]
-    fn connect_viewtitle_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_viewtitle_label_trampoline<
-            P: IsA<AppBar>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeAppBar,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(AppBar::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::viewtitle-label\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_viewtitle_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -24,11 +24,11 @@ impl ViewMono {
     pub const NONE: Option<&'static ViewMono> = None;
 
     #[doc(alias = "he_view_mono_new")]
-    pub fn new(title: &str, subtitle: &str) -> ViewMono {
+    pub fn new(title: Option<&impl IsA<gtk::Widget>>, subtitle: Option<&str>) -> ViewMono {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::he_view_mono_new(
-                title.to_glib_none().0,
+                title.map(|p| p.as_ref()).to_glib_none().0,
                 subtitle.to_glib_none().0,
             ))
         }
@@ -65,9 +65,9 @@ impl ViewMonoBuilder {
         }
     }
 
-    pub fn title(self, title: impl Into<glib::GString>) -> Self {
+    pub fn title(self, title: &impl IsA<gtk::Widget>) -> Self {
         Self {
-            builder: self.builder.property("title", title.into()),
+            builder: self.builder.property("title", title.clone().upcast()),
         }
     }
 
@@ -356,14 +356,17 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
 
     #[doc(alias = "he_view_mono_get_title")]
     #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString {
+    fn title(&self) -> Option<gtk::Widget> {
         unsafe { from_glib_none(ffi::he_view_mono_get_title(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "he_view_mono_set_title")]
-    fn set_title(&self, value: &str) {
+    fn set_title(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
-            ffi::he_view_mono_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+            ffi::he_view_mono_set_title(
+                self.as_ref().to_glib_none().0,
+                value.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 

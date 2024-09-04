@@ -24,11 +24,11 @@ impl SideBar {
     pub const NONE: Option<&'static SideBar> = None;
 
     #[doc(alias = "he_side_bar_new")]
-    pub fn new(title: &str, subtitle: &str) -> SideBar {
+    pub fn new(title: Option<&impl IsA<gtk::Widget>>, subtitle: Option<&str>) -> SideBar {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::he_side_bar_new(
-                title.to_glib_none().0,
+                title.map(|p| p.as_ref()).to_glib_none().0,
                 subtitle.to_glib_none().0,
             ))
         }
@@ -65,9 +65,9 @@ impl SideBarBuilder {
         }
     }
 
-    pub fn title(self, title: impl Into<glib::GString>) -> Self {
+    pub fn title(self, title: &impl IsA<gtk::Widget>) -> Self {
         Self {
-            builder: self.builder.property("title", title.into()),
+            builder: self.builder.property("title", title.clone().upcast()),
         }
     }
 
@@ -321,14 +321,17 @@ mod sealed {
 pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
     #[doc(alias = "he_side_bar_get_title")]
     #[doc(alias = "get_title")]
-    fn title(&self) -> glib::GString {
+    fn title(&self) -> Option<gtk::Widget> {
         unsafe { from_glib_none(ffi::he_side_bar_get_title(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "he_side_bar_set_title")]
-    fn set_title(&self, value: &str) {
+    fn set_title(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
-            ffi::he_side_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+            ffi::he_side_bar_set_title(
+                self.as_ref().to_glib_none().0,
+                value.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
