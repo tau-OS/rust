@@ -99,6 +99,7 @@ generate = [
     # TODO: why can't this generate?
     # "He.TipView",
     "He.AnimationTargetFunc",
+    "He.AvatarStatusColor",
 ]
 
 manual = [
@@ -151,7 +152,7 @@ manual = [
     "GLib.Regex",
     "Gtk.Grid",
     "Gtk.DropDown",
-    "Pango.EllipsizeMode"
+    "Pango.EllipsizeMode",
 ]
 
 [[object]]

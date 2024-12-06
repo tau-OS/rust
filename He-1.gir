@@ -5770,11 +5770,11 @@ Since: 1.0</doc>
 					<doc xml:whitespace="preserve">&lt;para&gt;Your application&amp;apos;s reverse-domain name. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="version" transfer-ownership="none">
+				<parameter name="version" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;Your application&amp;apos;s version. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="icon" transfer-ownership="none">
+				<parameter name="icon" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;Your application&amp;apos;s icon. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
@@ -5790,7 +5790,7 @@ Since: 1.0</doc>
 					<doc xml:whitespace="preserve">&lt;para&gt;A URL where users can get more information about the application. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="translators" transfer-ownership="none">
+				<parameter name="translators" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;Your application&amp;apos;s translators. &lt;/para&gt;</doc>
 					<array length="9" c:type="gchar**">
 						<type name="utf8" c:type="gchar*"/>
@@ -5799,7 +5799,7 @@ Since: 1.0</doc>
 				<parameter name="translators_length1" transfer-ownership="none">
 					<type name="gint" c:type="gint"/>
 				</parameter>
-				<parameter name="developers" transfer-ownership="none">
+				<parameter name="developers" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;Your application&amp;apos;s developers. &lt;/para&gt;</doc>
 					<array length="11" c:type="gchar**">
 						<type name="utf8" c:type="gchar*"/>
@@ -6626,18 +6626,15 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ApplicationWindowPrivate" c:type="HeApplicationWindowPrivate" disguised="1"/>
-	<class name="Avatar" c:type="HeAvatar" c:symbol-prefix="avatar" glib:type-name="HeAvatar" glib:get-type="he_avatar_get_type" glib:type-struct="AvatarClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;An Avatar is an element that displays an image that represents a person.&lt;/para&gt;</doc>
+	<class name="Avatar" c:type="HeAvatar" c:symbol-prefix="avatar" glib:type-name="HeAvatar" glib:get-type="he_avatar_get_type" glib:type-struct="AvatarClass" parent="Gtk.Widget">
+		<doc xml:whitespace="preserve">&lt;para&gt;An Avatar is a image representation of a person, or its initials. Shows their status using a badge.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Bin" c:type="HeBin"/>
+			<type name="Gtk.Widget" c:type="GtkWidget"/>
 		</field>
 		<field name="priv" readable="0" private="1">
 			<type name="AvatarPrivate" c:type="HeAvatarPrivate*"/>
 		</field>
 		<constructor name="new" c:identifier="he_avatar_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new Avatar.&lt;/para&gt;
-
-Since: 1.1</doc>
 			<return-value transfer-ownership="none">
 				<type name="He.Avatar" c:type="HeAvatar*"/>
 			</return-value>
@@ -6646,19 +6643,20 @@ Since: 1.1</doc>
 					<type name="gint" c:type="gint"/>
 				</parameter>
 				<parameter name="image" transfer-ownership="none" nullable="1">
-					<doc xml:whitespace="preserve">&lt;para&gt;The image to display &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
 				<parameter name="text" transfer-ownership="none" nullable="1">
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="status" transfer-ownership="none" nullable="1">
-					<type name="gboolean" c:type="gboolean*"/>
+				<parameter name="status" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+				<parameter name="status_color" transfer-ownership="none" nullable="1">
+					<type name="He.AvatarStatusColor" c:type="HeAvatarStatusColor*"/>
 				</parameter>
 			</parameters>
 		</constructor>
 		<property name="size" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The size of the avatar.&lt;/para&gt;</doc>
 			<type name="gint" c:type="gint"/>
 		</property>
 		<method name="get_size" c:identifier="he_avatar_get_size">
@@ -6685,7 +6683,6 @@ Since: 1.1</doc>
 			</parameters>
 		</method>
 		<property name="text" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The text of the avatar.&lt;/para&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
 		</property>
 		<method name="get_text" c:identifier="he_avatar_get_text">
@@ -6712,7 +6709,6 @@ Since: 1.1</doc>
 			</parameters>
 		</method>
 		<property name="status" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The status shown on top of the avatar with a badge. e.g. when the user is offline, set it to false.&lt;/para&gt;</doc>
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
 		<method name="get_status" c:identifier="he_avatar_get_status">
@@ -6738,8 +6734,33 @@ Since: 1.1</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="status-color" writable="1">
+			<type name="He.AvatarStatusColor" c:type="HeAvatarStatusColor"/>
+		</property>
+		<method name="get_status_color" c:identifier="he_avatar_get_status_color">
+			<return-value transfer-ownership="none">
+				<type name="He.AvatarStatusColor" c:type="HeAvatarStatusColor"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_status_color" c:identifier="he_avatar_set_status_color">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Avatar" c:type="HeAvatar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.AvatarStatusColor" c:type="HeAvatarStatusColor"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="image" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The image of the avatar.&lt;/para&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
 		</property>
 		<method name="get_image" c:identifier="he_avatar_get_image">
@@ -6768,10 +6789,15 @@ Since: 1.1</doc>
 	</class>
 	<record name="AvatarClass" c:type="HeAvatarClass" glib:is-gtype-struct-for="Avatar">
 		<field name="parent_class" readable="0" private="1">
-			<type name="He.BinClass" c:type="HeBinClass"/>
+			<type name="Gtk.WidgetClass" c:type="GtkWidgetClass"/>
 		</field>
 	</record>
 	<record name="AvatarPrivate" c:type="HeAvatarPrivate" disguised="1"/>
+	<enumeration name="AvatarStatusColor" c:type="HeAvatarStatusColor" glib:type-name="HeAvatarStatusColor" glib:get-type="he_avatar_status_color_get_type">
+		<member name="red" c:identifier="HE_AVATAR_STATUS_COLOR_RED" value="0"/>
+		<member name="green" c:identifier="HE_AVATAR_STATUS_COLOR_GREEN" value="1"/>
+		<member name="yellow" c:identifier="HE_AVATAR_STATUS_COLOR_YELLOW" value="2"/>
+	</enumeration>
 	<class name="Badge" c:type="HeBadge" c:symbol-prefix="badge" glib:type-name="HeBadge" glib:get-type="he_badge_get_type" glib:type-struct="BadgeClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Badge is a small status indicator that can be used to provide additional information about an object.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">

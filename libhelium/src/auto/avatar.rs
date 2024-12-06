@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, Bin};
+use crate::{ffi, AvatarStatusColor};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeAvatar")]
-    pub struct Avatar(Object<ffi::HeAvatar, ffi::HeAvatarClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    pub struct Avatar(Object<ffi::HeAvatar, ffi::HeAvatarClass>) @extends gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
         type_ => || ffi::he_avatar_get_type(),
@@ -66,15 +66,15 @@ impl AvatarBuilder {
         }
     }
 
-    pub fn image(self, image: impl Into<glib::GString>) -> Self {
+    pub fn status_color(self, status_color: AvatarStatusColor) -> Self {
         Self {
-            builder: self.builder.property("image", image.into()),
+            builder: self.builder.property("status-color", status_color),
         }
     }
 
-    pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
+    pub fn image(self, image: impl Into<glib::GString>) -> Self {
         Self {
-            builder: self.builder.property("child", child.clone().upcast()),
+            builder: self.builder.property("image", image.into()),
         }
     }
 
@@ -305,6 +305,23 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_avatar_get_status_color")]
+    #[doc(alias = "get_status_color")]
+    fn status_color(&self) -> AvatarStatusColor {
+        unsafe {
+            from_glib(ffi::he_avatar_get_status_color(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_avatar_set_status_color")]
+    fn set_status_color(&self, value: AvatarStatusColor) {
+        unsafe {
+            ffi::he_avatar_set_status_color(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
     #[doc(alias = "he_avatar_get_image")]
     #[doc(alias = "get_image")]
     fn image(&self) -> Option<glib::GString> {
@@ -381,6 +398,29 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
                 b"notify::status\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_status_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "status-color")]
+    fn connect_status_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_status_color_trampoline<P: IsA<Avatar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeAvatar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Avatar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::status-color\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_status_color_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

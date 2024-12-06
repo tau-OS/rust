@@ -213,6 +213,7 @@ pub use self::xyz_color::XYZColor;
 mod enums;
 pub use self::enums::AboutWindowLicenses;
 pub use self::enums::AnimationState;
+pub use self::enums::AvatarStatusColor;
 pub use self::enums::BannerStyle;
 pub use self::enums::BottomBarPosition;
 pub use self::enums::Colors;
