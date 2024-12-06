@@ -1,6 +1,6 @@
 [package]
 name = "libhelium"
-version = "0.9.0"
+version = "0.10.0"
 authors = ["Lleyton Gray <lleyton@fyralabs.com>"]
 edition = "2021"
 readme = "../README.md"
@@ -78,4 +78,4 @@ branch = "master"
 [dependencies.ffi]
 package = "libhelium-sys"
 path = './sys'
-version = "0.9.0"
+version = "0.10.0"
