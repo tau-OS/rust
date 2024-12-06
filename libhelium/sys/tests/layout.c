@@ -24,6 +24,7 @@ int main() {
     printf("%s;%zu;%zu\n", "HeApplicationWindowClass", sizeof(HeApplicationWindowClass), alignof(HeApplicationWindowClass));
     printf("%s;%zu;%zu\n", "HeAvatar", sizeof(HeAvatar), alignof(HeAvatar));
     printf("%s;%zu;%zu\n", "HeAvatarClass", sizeof(HeAvatarClass), alignof(HeAvatarClass));
+    printf("%s;%zu;%zu\n", "HeAvatarStatusColor", sizeof(HeAvatarStatusColor), alignof(HeAvatarStatusColor));
     printf("%s;%zu;%zu\n", "HeBadge", sizeof(HeBadge), alignof(HeBadge));
     printf("%s;%zu;%zu\n", "HeBadgeClass", sizeof(HeBadgeClass), alignof(HeBadgeClass));
     printf("%s;%zu;%zu\n", "HeBanner", sizeof(HeBanner), alignof(HeBanner));

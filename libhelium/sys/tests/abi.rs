@@ -315,6 +315,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HeAvatarStatusColor",
+        Layout {
+            size: size_of::<HeAvatarStatusColor>(),
+            alignment: align_of::<HeAvatarStatusColor>(),
+        },
+    ),
+    (
         "HeBadge",
         Layout {
             size: size_of::<HeBadge>(),
@@ -1623,6 +1630,9 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) HE_ANIMATION_STATE_IDLE", "0"),
     ("(gint) HE_ANIMATION_STATE_PAUSED", "1"),
     ("(gint) HE_ANIMATION_STATE_PLAYING", "2"),
+    ("(gint) HE_AVATAR_STATUS_COLOR_GREEN", "1"),
+    ("(gint) HE_AVATAR_STATUS_COLOR_RED", "0"),
+    ("(gint) HE_AVATAR_STATUS_COLOR_YELLOW", "2"),
     ("(gint) HE_BANNER_STYLE_ERROR", "2"),
     ("(gint) HE_BANNER_STYLE_INFO", "0"),
     ("(gint) HE_BANNER_STYLE_WARNING", "1"),

@@ -47,6 +47,11 @@ pub const HE_ANIMATION_STATE_PAUSED: HeAnimationState = 1;
 pub const HE_ANIMATION_STATE_PLAYING: HeAnimationState = 2;
 pub const HE_ANIMATION_STATE_FINISHED: HeAnimationState = 3;
 
+pub type HeAvatarStatusColor = c_int;
+pub const HE_AVATAR_STATUS_COLOR_RED: HeAvatarStatusColor = 0;
+pub const HE_AVATAR_STATUS_COLOR_GREEN: HeAvatarStatusColor = 1;
+pub const HE_AVATAR_STATUS_COLOR_YELLOW: HeAvatarStatusColor = 2;
+
 pub type HeBannerStyle = c_int;
 pub const HE_BANNER_STYLE_INFO: HeBannerStyle = 0;
 pub const HE_BANNER_STYLE_WARNING: HeBannerStyle = 1;
@@ -295,7 +300,7 @@ pub type HeApplicationWindowPrivate = _HeApplicationWindowPrivate;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeAvatarClass {
-    pub parent_class: HeBinClass,
+    pub parent_class: gtk::GtkWidgetClass,
 }
 
 impl ::std::fmt::Debug for HeAvatarClass {
@@ -2343,7 +2348,7 @@ impl ::std::fmt::Debug for HeApplicationWindow {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeAvatar {
-    pub parent_instance: HeBin,
+    pub parent_instance: gtk::GtkWidget,
     pub priv_: *mut HeAvatarPrivate,
 }
 
@@ -3607,6 +3612,11 @@ extern "C" {
     pub fn he_animation_state_get_type() -> GType;
 
     //=========================================================================
+    // HeAvatarStatusColor
+    //=========================================================================
+    pub fn he_avatar_status_color_get_type() -> GType;
+
+    //=========================================================================
     // HeBannerStyle
     //=========================================================================
     pub fn he_banner_style_get_type() -> GType;
@@ -3873,7 +3883,8 @@ extern "C" {
         size: c_int,
         image: *const c_char,
         text: *const c_char,
-        status: *mut gboolean,
+        status: gboolean,
+        status_color: *mut HeAvatarStatusColor,
     ) -> *mut HeAvatar;
     pub fn he_avatar_get_size(self_: *mut HeAvatar) -> c_int;
     pub fn he_avatar_set_size(self_: *mut HeAvatar, value: c_int);
@@ -3881,6 +3892,8 @@ extern "C" {
     pub fn he_avatar_set_text(self_: *mut HeAvatar, value: *const c_char);
     pub fn he_avatar_get_status(self_: *mut HeAvatar) -> gboolean;
     pub fn he_avatar_set_status(self_: *mut HeAvatar, value: gboolean);
+    pub fn he_avatar_get_status_color(self_: *mut HeAvatar) -> HeAvatarStatusColor;
+    pub fn he_avatar_set_status_color(self_: *mut HeAvatar, value: HeAvatarStatusColor);
     pub fn he_avatar_get_image(self_: *mut HeAvatar) -> *const c_char;
     pub fn he_avatar_set_image(self_: *mut HeAvatar, value: *const c_char);
 
