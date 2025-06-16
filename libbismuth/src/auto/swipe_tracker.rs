@@ -5,6 +5,7 @@
 
 use crate::{ffi, NavigationDirection, Swipeable};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -139,7 +140,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"begin-swipe\0".as_ptr() as *const _,
+                c"begin-swipe".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     begin_swipe_trampoline::<F> as *const (),
                 )),
@@ -152,8 +153,8 @@ impl SwipeTracker {
     pub fn connect_end_swipe<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn end_swipe_trampoline<F: Fn(&SwipeTracker, f64, f64) + 'static>(
             this: *mut ffi::BisSwipeTracker,
-            velocity: libc::c_double,
-            to: libc::c_double,
+            velocity: std::ffi::c_double,
+            to: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -163,7 +164,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"end-swipe\0".as_ptr() as *const _,
+                c"end-swipe".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     end_swipe_trampoline::<F> as *const (),
                 )),
@@ -191,7 +192,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"prepare\0".as_ptr() as *const _,
+                c"prepare".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     prepare_trampoline::<F> as *const (),
                 )),
@@ -204,7 +205,7 @@ impl SwipeTracker {
     pub fn connect_update_swipe<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn update_swipe_trampoline<F: Fn(&SwipeTracker, f64) + 'static>(
             this: *mut ffi::BisSwipeTracker,
-            progress: libc::c_double,
+            progress: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -214,7 +215,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"update-swipe\0".as_ptr() as *const _,
+                c"update-swipe".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     update_swipe_trampoline::<F> as *const (),
                 )),
@@ -240,7 +241,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-long-swipes\0".as_ptr() as *const _,
+                c"notify::allow-long-swipes".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_long_swipes_trampoline::<F> as *const (),
                 )),
@@ -263,7 +264,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-mouse-drag\0".as_ptr() as *const _,
+                c"notify::allow-mouse-drag".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_mouse_drag_trampoline::<F> as *const (),
                 )),
@@ -286,7 +287,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::enabled\0".as_ptr() as *const _,
+                c"notify::enabled".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enabled_trampoline::<F> as *const (),
                 )),
@@ -309,7 +310,7 @@ impl SwipeTracker {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::reversed\0".as_ptr() as *const _,
+                c"notify::reversed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_reversed_trampoline::<F> as *const (),
                 )),
@@ -383,6 +384,7 @@ impl SwipeTrackerBuilder {
     /// Build the [`SwipeTracker`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SwipeTracker {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

@@ -28,8 +28,8 @@ impl SpringAnimation {
         widget: &impl IsA<gtk::Widget>,
         from: f64,
         to: f64,
-        sparams: impl IsA<SpringParams>,
-        target: impl IsA<AnimationTarget>,
+        sparams: &impl IsA<SpringParams>,
+        target: &impl IsA<AnimationTarget>,
     ) -> SpringAnimation {
         skip_assert_initialized!();
         unsafe {
@@ -37,8 +37,8 @@ impl SpringAnimation {
                 widget.as_ref().to_glib_none().0,
                 from,
                 to,
-                sparams.upcast().into_glib_ptr(),
-                target.upcast().into_glib_ptr(),
+                sparams.as_ref().to_glib_none().0,
+                target.as_ref().to_glib_none().0,
             ))
         }
     }
@@ -154,16 +154,12 @@ impl SpringAnimationBuilder {
     /// Build the [`SpringAnimation`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SpringAnimation {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::SpringAnimation>> Sealed for T {}
-}
-
-pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
+pub trait SpringAnimationExt: IsA<SpringAnimation> + 'static {
     #[doc(alias = "he_spring_animation_get_epsilon")]
     #[doc(alias = "get_epsilon")]
     fn epsilon(&self) -> f64 {
@@ -296,7 +292,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::epsilon\0".as_ptr() as *const _,
+                c"notify::epsilon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_epsilon_trampoline::<Self, F> as *const (),
                 )),
@@ -322,7 +318,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::estimated-duration\0".as_ptr() as *const _,
+                c"notify::estimated-duration".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_estimated_duration_trampoline::<Self, F> as *const (),
                 )),
@@ -348,7 +344,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::initial-velocity\0".as_ptr() as *const _,
+                c"notify::initial-velocity".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_initial_velocity_trampoline::<Self, F> as *const (),
                 )),
@@ -374,7 +370,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::latch\0".as_ptr() as *const _,
+                c"notify::latch".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latch_trampoline::<Self, F> as *const (),
                 )),
@@ -400,7 +396,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::spring-params\0".as_ptr() as *const _,
+                c"notify::spring-params".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spring_params_trampoline::<Self, F> as *const (),
                 )),
@@ -426,7 +422,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::value-from\0".as_ptr() as *const _,
+                c"notify::value-from".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_from_trampoline::<Self, F> as *const (),
                 )),
@@ -452,7 +448,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::value-to\0".as_ptr() as *const _,
+                c"notify::value-to".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_to_trampoline::<Self, F> as *const (),
                 )),
@@ -478,7 +474,7 @@ pub trait SpringAnimationExt: IsA<SpringAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::velocity\0".as_ptr() as *const _,
+                c"notify::velocity".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_velocity_trampoline::<Self, F> as *const (),
                 )),

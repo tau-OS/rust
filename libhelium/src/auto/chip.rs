@@ -5,6 +5,7 @@
 
 use crate::ffi;
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -63,6 +64,14 @@ impl ChipBuilder {
     pub fn chip_label(self, chip_label: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("chip-label", chip_label.into()),
+        }
+    }
+
+    pub fn show_close_button(self, show_close_button: bool) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("show-close-button", show_close_button),
         }
     }
 
@@ -190,6 +199,14 @@ impl ChipBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -308,16 +325,12 @@ impl ChipBuilder {
     /// Build the [`Chip`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Chip {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Chip>> Sealed for T {}
-}
-
-pub trait ChipExt: IsA<Chip> + sealed::Sealed + 'static {
+pub trait ChipExt: IsA<Chip> + 'static {
     #[doc(alias = "he_chip_get_chip_label")]
     #[doc(alias = "get_chip_label")]
     fn chip_label(&self) -> glib::GString {
@@ -328,6 +341,45 @@ pub trait ChipExt: IsA<Chip> + sealed::Sealed + 'static {
     fn set_chip_label(&self, value: &str) {
         unsafe {
             ffi::he_chip_set_chip_label(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_chip_get_show_close_button")]
+    #[doc(alias = "get_show_close_button")]
+    fn shows_close_button(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_chip_get_show_close_button(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_chip_set_show_close_button")]
+    fn set_show_close_button(&self, value: bool) {
+        unsafe {
+            ffi::he_chip_set_show_close_button(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "close-clicked")]
+    fn connect_close_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn close_clicked_trampoline<P: IsA<Chip>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeChip,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Chip::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"close-clicked".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    close_clicked_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
@@ -345,9 +397,35 @@ pub trait ChipExt: IsA<Chip> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::chip-label\0".as_ptr() as *const _,
+                c"notify::chip-label".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_chip_label_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "show-close-button")]
+    fn connect_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_close_button_trampoline<
+            P: IsA<Chip>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeChip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Chip::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::show-close-button".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_show_close_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

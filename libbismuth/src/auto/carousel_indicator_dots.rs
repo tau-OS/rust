@@ -70,7 +70,7 @@ impl CarouselIndicatorDots {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::carousel\0".as_ptr() as *const _,
+                c"notify::carousel".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_carousel_trampoline::<F> as *const (),
                 )),
@@ -184,6 +184,14 @@ impl CarouselIndicatorDotsBuilder {
         }
     }
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -290,6 +298,7 @@ impl CarouselIndicatorDotsBuilder {
     /// Build the [`CarouselIndicatorDots`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> CarouselIndicatorDots {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

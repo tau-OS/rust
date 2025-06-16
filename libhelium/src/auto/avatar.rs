@@ -152,6 +152,14 @@ impl AvatarBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -256,16 +264,12 @@ impl AvatarBuilder {
     /// Build the [`Avatar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Avatar {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Avatar>> Sealed for T {}
-}
-
-pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
+pub trait AvatarExt: IsA<Avatar> + 'static {
     #[doc(alias = "he_avatar_get_size")]
     #[doc(alias = "get_size")]
     fn size(&self) -> i32 {
@@ -349,7 +353,7 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::size\0".as_ptr() as *const _,
+                c"notify::size".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_size_trampoline::<Self, F> as *const (),
                 )),
@@ -372,7 +376,7 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::text\0".as_ptr() as *const _,
+                c"notify::text".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
                 )),
@@ -395,7 +399,7 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::status\0".as_ptr() as *const _,
+                c"notify::status".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_status_trampoline::<Self, F> as *const (),
                 )),
@@ -418,7 +422,7 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::status-color\0".as_ptr() as *const _,
+                c"notify::status-color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_status_color_trampoline::<Self, F> as *const (),
                 )),
@@ -441,7 +445,7 @@ pub trait AvatarExt: IsA<Avatar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::image\0".as_ptr() as *const _,
+                c"notify::image".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_image_trampoline::<Self, F> as *const (),
                 )),

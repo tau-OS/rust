@@ -4,6 +4,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
+use glib::translate::*;
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -13,5 +14,36 @@ glib::wrapper! {
         copy => |ptr| glib::gobject_ffi::g_boxed_copy(ffi::he_hct_color_get_type(), ptr as *mut _) as *mut ffi::HeHCTColor,
         free => |ptr| glib::gobject_ffi::g_boxed_free(ffi::he_hct_color_get_type(), ptr as *mut _),
         type_ => || ffi::he_hct_color_get_type(),
+    }
+}
+
+impl HCTColor {
+    #[doc(alias = "he_hct_color_to_int")]
+    pub fn to_int(&mut self) -> i32 {
+        unsafe { ffi::he_hct_color_to_int(self.to_glib_none_mut().0) }
+    }
+
+    #[doc(alias = "he_hct_color_get_argb")]
+    #[doc(alias = "get_argb")]
+    pub fn argb(&mut self) -> i32 {
+        unsafe { ffi::he_hct_color_get_argb(self.to_glib_none_mut().0) }
+    }
+
+    #[doc(alias = "he_hct_color_hue_is_yellow")]
+    pub fn hue_is_yellow(hue: f64) -> bool {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::he_hct_color_hue_is_yellow(hue)) }
+    }
+
+    #[doc(alias = "he_hct_color_hue_is_blue")]
+    pub fn hue_is_blue(hue: f64) -> bool {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::he_hct_color_hue_is_blue(hue)) }
+    }
+
+    #[doc(alias = "he_hct_color_hue_is_cyan")]
+    pub fn hue_is_cyan(hue: f64) -> bool {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::he_hct_color_hue_is_cyan(hue)) }
     }
 }

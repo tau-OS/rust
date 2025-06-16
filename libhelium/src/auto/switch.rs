@@ -152,6 +152,14 @@ impl SwitchBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -256,16 +264,12 @@ impl SwitchBuilder {
     /// Build the [`Switch`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Switch {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Switch>> Sealed for T {}
-}
-
-pub trait SwitchExt: IsA<Switch> + sealed::Sealed + 'static {
+pub trait SwitchExt: IsA<Switch> + 'static {
     #[doc(alias = "he_switch_get_left_icon")]
     #[doc(alias = "get_left_icon")]
     fn left_icon(&self) -> glib::GString {
@@ -310,7 +314,7 @@ pub trait SwitchExt: IsA<Switch> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::left-icon\0".as_ptr() as *const _,
+                c"notify::left-icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_left_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -333,7 +337,7 @@ pub trait SwitchExt: IsA<Switch> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::right-icon\0".as_ptr() as *const _,
+                c"notify::right-icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_right_icon_trampoline::<Self, F> as *const (),
                 )),

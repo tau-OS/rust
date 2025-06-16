@@ -158,6 +158,14 @@ impl ContentBlockImageBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -262,16 +270,12 @@ impl ContentBlockImageBuilder {
     /// Build the [`ContentBlockImage`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ContentBlockImage {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ContentBlockImage>> Sealed for T {}
-}
-
-pub trait ContentBlockImageExt: IsA<ContentBlockImage> + sealed::Sealed + 'static {
+pub trait ContentBlockImageExt: IsA<ContentBlockImage> + 'static {
     #[doc(alias = "he_content_block_image_get_file")]
     #[doc(alias = "get_file")]
     fn file(&self) -> glib::GString {
@@ -335,7 +339,7 @@ pub trait ContentBlockImageExt: IsA<ContentBlockImage> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::file\0".as_ptr() as *const _,
+                c"notify::file".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_file_trampoline::<Self, F> as *const (),
                 )),
@@ -361,7 +365,7 @@ pub trait ContentBlockImageExt: IsA<ContentBlockImage> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::requested-height\0".as_ptr() as *const _,
+                c"notify::requested-height".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_requested_height_trampoline::<Self, F> as *const (),
                 )),
@@ -387,7 +391,7 @@ pub trait ContentBlockImageExt: IsA<ContentBlockImage> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::requested-width\0".as_ptr() as *const _,
+                c"notify::requested-width".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_requested_width_trampoline::<Self, F> as *const (),
                 )),

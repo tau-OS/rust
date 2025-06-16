@@ -5,6 +5,7 @@
 
 use crate::ffi;
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -428,6 +429,14 @@ impl TimePickerBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -574,16 +583,12 @@ impl TimePickerBuilder {
     /// Build the [`TimePicker`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> TimePicker {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TimePicker>> Sealed for T {}
-}
-
-pub trait TimePickerExt: IsA<TimePicker> + sealed::Sealed + 'static {
+pub trait TimePickerExt: IsA<TimePicker> + 'static {
     #[doc(alias = "he_time_picker_get_format_12")]
     #[doc(alias = "get_format_12")]
     fn format_12(&self) -> glib::GString {
@@ -630,7 +635,7 @@ pub trait TimePickerExt: IsA<TimePicker> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"time-changed\0".as_ptr() as *const _,
+                c"time-changed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     time_changed_trampoline::<Self, F> as *const (),
                 )),
@@ -653,7 +658,7 @@ pub trait TimePickerExt: IsA<TimePicker> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::time\0".as_ptr() as *const _,
+                c"notify::time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_time_trampoline::<Self, F> as *const (),
                 )),

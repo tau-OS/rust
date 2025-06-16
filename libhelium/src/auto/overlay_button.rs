@@ -5,6 +5,7 @@
 
 use crate::{ffi, Bin, Colors, OverlayButtonAlignment, OverlayButtonSize, OverlayButtonTypeButton};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -218,6 +219,14 @@ impl OverlayButtonBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -322,16 +331,12 @@ impl OverlayButtonBuilder {
     /// Build the [`OverlayButton`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> OverlayButton {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::OverlayButton>> Sealed for T {}
-}
-
-pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
+pub trait OverlayButtonExt: IsA<OverlayButton> + 'static {
     #[doc(alias = "he_overlay_button_get_size")]
     #[doc(alias = "get_size")]
     fn size(&self) -> OverlayButtonSize {
@@ -567,7 +572,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"clicked\0".as_ptr() as *const _,
+                c"clicked".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     clicked_trampoline::<Self, F> as *const (),
                 )),
@@ -592,7 +597,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"secondary-clicked\0".as_ptr() as *const _,
+                c"secondary-clicked".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     secondary_clicked_trampoline::<Self, F> as *const (),
                 )),
@@ -615,7 +620,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::size\0".as_ptr() as *const _,
+                c"notify::size".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_size_trampoline::<Self, F> as *const (),
                 )),
@@ -638,7 +643,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::typeb\0".as_ptr() as *const _,
+                c"notify::typeb".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_typeb_trampoline::<Self, F> as *const (),
                 )),
@@ -664,7 +669,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::typeb2\0".as_ptr() as *const _,
+                c"notify::typeb2".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_typeb2_trampoline::<Self, F> as *const (),
                 )),
@@ -687,7 +692,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::color\0".as_ptr() as *const _,
+                c"notify::color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
                 )),
@@ -713,7 +718,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::secondary-color\0".as_ptr() as *const _,
+                c"notify::secondary-color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_secondary_color_trampoline::<Self, F> as *const (),
                 )),
@@ -739,7 +744,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::secondary-icon\0".as_ptr() as *const _,
+                c"notify::secondary-icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_secondary_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -762,7 +767,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::icon\0".as_ptr() as *const _,
+                c"notify::icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -785,7 +790,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::label\0".as_ptr() as *const _,
+                c"notify::label".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
@@ -811,7 +816,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::primary-tooltip\0".as_ptr() as *const _,
+                c"notify::primary-tooltip".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_primary_tooltip_trampoline::<Self, F> as *const (),
                 )),
@@ -837,7 +842,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::secondary-tooltip\0".as_ptr() as *const _,
+                c"notify::secondary-tooltip".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_secondary_tooltip_trampoline::<Self, F> as *const (),
                 )),
@@ -863,7 +868,7 @@ pub trait OverlayButtonExt: IsA<OverlayButton> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::alignment\0".as_ptr() as *const _,
+                c"notify::alignment".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alignment_trampoline::<Self, F> as *const (),
                 )),

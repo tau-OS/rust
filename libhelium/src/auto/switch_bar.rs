@@ -5,6 +5,7 @@
 
 use crate::{ffi, Bin};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -160,6 +161,14 @@ impl SwitchBarBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -264,16 +273,12 @@ impl SwitchBarBuilder {
     /// Build the [`SwitchBar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SwitchBar {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::SwitchBar>> Sealed for T {}
-}
-
-pub trait SwitchBarExt: IsA<SwitchBar> + sealed::Sealed + 'static {
+pub trait SwitchBarExt: IsA<SwitchBar> + 'static {
     #[doc(alias = "he_switch_bar_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
@@ -337,7 +342,7 @@ pub trait SwitchBarExt: IsA<SwitchBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"activated\0".as_ptr() as *const _,
+                c"activated".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activated_trampoline::<Self, F> as *const (),
                 )),
@@ -360,7 +365,7 @@ pub trait SwitchBarExt: IsA<SwitchBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
+                c"notify::title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
@@ -383,7 +388,7 @@ pub trait SwitchBarExt: IsA<SwitchBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::subtitle\0".as_ptr() as *const _,
+                c"notify::subtitle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
@@ -409,7 +414,7 @@ pub trait SwitchBarExt: IsA<SwitchBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::sensitive-widget\0".as_ptr() as *const _,
+                c"notify::sensitive-widget".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sensitive_widget_trampoline::<Self, F> as *const (),
                 )),

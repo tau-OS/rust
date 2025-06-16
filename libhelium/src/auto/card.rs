@@ -3,9 +3,8 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, Button};
+use crate::{ffi, Bin, Button, CardLayout, CardType};
 use glib::{
-    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -13,67 +12,97 @@ use glib::{
 use std::boxed::Box as Box_;
 
 glib::wrapper! {
-    #[doc(alias = "HeSettingsRow")]
-    pub struct SettingsRow(Object<ffi::HeSettingsRow, ffi::HeSettingsRowClass>) @extends gtk::ListBoxRow, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Actionable;
+    #[doc(alias = "HeCard")]
+    pub struct Card(Object<ffi::HeCard, ffi::HeCardClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_settings_row_get_type(),
+        type_ => || ffi::he_card_get_type(),
     }
 }
 
-impl SettingsRow {
-    pub const NONE: Option<&'static SettingsRow> = None;
+impl Card {
+    pub const NONE: Option<&'static Card> = None;
 
-    #[doc(alias = "he_settings_row_new_with_details")]
-    pub fn with_details(
+    #[doc(alias = "he_card_new")]
+    pub fn new(
         title: Option<&str>,
         subtitle: Option<&str>,
+        icon: Option<&str>,
         primary_button: Option<&impl IsA<Button>>,
-    ) -> SettingsRow {
+        secondary_button: Option<&impl IsA<Button>>,
+    ) -> Card {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::he_settings_row_new_with_details(
+            from_glib_none(ffi::he_card_new(
                 title.to_glib_none().0,
                 subtitle.to_glib_none().0,
+                icon.to_glib_none().0,
                 primary_button.map(|p| p.as_ref()).to_glib_none().0,
+                secondary_button.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
     }
 
-    #[doc(alias = "he_settings_row_new")]
-    pub fn new() -> SettingsRow {
+    #[doc(alias = "he_card_new_horizontal")]
+    pub fn horizontal(
+        title: Option<&str>,
+        subtitle: Option<&str>,
+        icon: Option<&str>,
+        primary_button: Option<&impl IsA<Button>>,
+        widget: Option<&impl IsA<gtk::Widget>>,
+    ) -> Card {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::he_settings_row_new()) }
+        unsafe {
+            from_glib_none(ffi::he_card_new_horizontal(
+                title.to_glib_none().0,
+                subtitle.to_glib_none().0,
+                icon.to_glib_none().0,
+                primary_button.map(|p| p.as_ref()).to_glib_none().0,
+                widget.map(|p| p.as_ref()).to_glib_none().0,
+            ))
+        }
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`SettingsRow`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`Card`] objects.
     ///
-    /// This method returns an instance of [`SettingsRowBuilder`](crate::builders::SettingsRowBuilder) which can be used to create [`SettingsRow`] objects.
-    pub fn builder() -> SettingsRowBuilder {
-        SettingsRowBuilder::new()
+    /// This method returns an instance of [`CardBuilder`](crate::builders::CardBuilder) which can be used to create [`Card`] objects.
+    pub fn builder() -> CardBuilder {
+        CardBuilder::new()
     }
 }
 
-impl Default for SettingsRow {
+impl Default for Card {
     fn default() -> Self {
-        Self::new()
+        glib::object::Object::new::<Self>()
     }
 }
 
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`SettingsRow`] objects.
+/// A [builder-pattern] type to construct [`Card`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct SettingsRowBuilder {
-    builder: glib::object::ObjectBuilder<'static, SettingsRow>,
+pub struct CardBuilder {
+    builder: glib::object::ObjectBuilder<'static, Card>,
 }
 
-impl SettingsRowBuilder {
+impl CardBuilder {
     fn new() -> Self {
         Self {
             builder: glib::object::Object::builder(),
+        }
+    }
+
+    pub fn card_type(self, card_type: CardType) -> Self {
+        Self {
+            builder: self.builder.property("card-type", card_type),
+        }
+    }
+
+    pub fn layout(self, layout: CardLayout) -> Self {
+        Self {
+            builder: self.builder.property("layout", layout),
         }
     }
 
@@ -109,6 +138,20 @@ impl SettingsRowBuilder {
         }
     }
 
+    pub fn widget(self, widget: &impl IsA<gtk::Widget>) -> Self {
+        Self {
+            builder: self.builder.property("widget", widget.clone().upcast()),
+        }
+    }
+
+    pub fn secondary_button(self, secondary_button: &impl IsA<Button>) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("secondary-button", secondary_button.clone().upcast()),
+        }
+    }
+
     pub fn primary_button(self, primary_button: &impl IsA<Button>) -> Self {
         Self {
             builder: self
@@ -117,29 +160,9 @@ impl SettingsRowBuilder {
         }
     }
 
-    pub fn activatable_widget(self, activatable_widget: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("activatable-widget", activatable_widget.clone().upcast()),
-        }
-    }
-
-    pub fn activatable(self, activatable: bool) -> Self {
-        Self {
-            builder: self.builder.property("activatable", activatable),
-        }
-    }
-
     pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
         Self {
             builder: self.builder.property("child", child.clone().upcast()),
-        }
-    }
-
-    pub fn selectable(self, selectable: bool) -> Self {
-        Self {
-            builder: self.builder.property("selectable", selectable),
         }
     }
 
@@ -325,170 +348,197 @@ impl SettingsRowBuilder {
     //    Self { builder: self.builder.property("accessible-role", accessible_role), }
     //}
 
-    pub fn action_name(self, action_name: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("action-name", action_name.into()),
-        }
-    }
-
-    pub fn action_target(self, action_target: &glib::Variant) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("action-target", action_target.clone()),
-        }
-    }
-
     // rustdoc-stripper-ignore-next
-    /// Build the [`SettingsRow`].
+    /// Build the [`Card`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> SettingsRow {
+    pub fn build(self) -> Card {
         assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
-    #[doc(alias = "he_settings_row_add")]
-    fn add(&self, child: &impl IsA<gtk::Widget>) {
+pub trait CardExt: IsA<Card> + 'static {
+    #[doc(alias = "he_card_get_card_type")]
+    #[doc(alias = "get_card_type")]
+    fn card_type(&self) -> CardType {
+        unsafe { from_glib(ffi::he_card_get_card_type(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_card_set_card_type")]
+    fn set_card_type(&self, value: CardType) {
         unsafe {
-            ffi::he_settings_row_add(
-                self.as_ref().to_glib_none().0,
-                child.as_ref().to_glib_none().0,
-            );
+            ffi::he_card_set_card_type(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
-    #[doc(alias = "he_settings_row_get_title")]
+    #[doc(alias = "he_card_get_layout")]
+    #[doc(alias = "get_layout")]
+    fn layout(&self) -> CardLayout {
+        unsafe { from_glib(ffi::he_card_get_layout(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_card_set_layout")]
+    fn set_layout(&self, value: CardLayout) {
+        unsafe {
+            ffi::he_card_set_layout(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_card_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
-        unsafe {
-            from_glib_none(ffi::he_settings_row_get_title(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::he_card_get_title(self.as_ref().to_glib_none().0)) }
     }
 
-    #[doc(alias = "he_settings_row_set_title")]
+    #[doc(alias = "he_card_set_title")]
     fn set_title(&self, value: &str) {
         unsafe {
-            ffi::he_settings_row_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+            ffi::he_card_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
-    #[doc(alias = "he_settings_row_get_subtitle")]
+    #[doc(alias = "he_card_get_subtitle")]
     #[doc(alias = "get_subtitle")]
     fn subtitle(&self) -> glib::GString {
-        unsafe {
-            from_glib_none(ffi::he_settings_row_get_subtitle(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::he_card_get_subtitle(self.as_ref().to_glib_none().0)) }
     }
 
-    #[doc(alias = "he_settings_row_set_subtitle")]
+    #[doc(alias = "he_card_set_subtitle")]
     fn set_subtitle(&self, value: &str) {
         unsafe {
-            ffi::he_settings_row_set_subtitle(
-                self.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
+            ffi::he_card_set_subtitle(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
-    #[doc(alias = "he_settings_row_get_icon")]
+    #[doc(alias = "he_card_get_icon")]
     #[doc(alias = "get_icon")]
     fn icon(&self) -> glib::GString {
-        unsafe {
-            from_glib_none(ffi::he_settings_row_get_icon(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::he_card_get_icon(self.as_ref().to_glib_none().0)) }
     }
 
-    #[doc(alias = "he_settings_row_set_icon")]
+    #[doc(alias = "he_card_set_icon")]
     fn set_icon(&self, value: &str) {
         unsafe {
-            ffi::he_settings_row_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+            ffi::he_card_set_icon(self.as_ref().to_glib_none().0, value.to_glib_none().0);
         }
     }
 
-    #[doc(alias = "he_settings_row_set_gicon")]
+    #[doc(alias = "he_card_set_gicon")]
     fn set_gicon(&self, value: &impl IsA<gio::Icon>) {
         unsafe {
-            ffi::he_settings_row_set_gicon(
+            ffi::he_card_set_gicon(
                 self.as_ref().to_glib_none().0,
                 value.as_ref().to_glib_none().0,
             );
         }
     }
 
-    #[doc(alias = "he_settings_row_set_paintable")]
+    #[doc(alias = "he_card_set_paintable")]
     fn set_paintable(&self, value: &impl IsA<gdk::Paintable>) {
         unsafe {
-            ffi::he_settings_row_set_paintable(
+            ffi::he_card_set_paintable(
                 self.as_ref().to_glib_none().0,
                 value.as_ref().to_glib_none().0,
             );
         }
     }
 
-    #[doc(alias = "he_settings_row_get_primary_button")]
-    #[doc(alias = "get_primary_button")]
-    fn primary_button(&self) -> Button {
-        unsafe {
-            from_glib_none(ffi::he_settings_row_get_primary_button(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    #[doc(alias = "he_card_get_widget")]
+    #[doc(alias = "get_widget")]
+    fn widget(&self) -> Option<gtk::Widget> {
+        unsafe { from_glib_none(ffi::he_card_get_widget(self.as_ref().to_glib_none().0)) }
     }
 
-    #[doc(alias = "he_settings_row_set_primary_button")]
-    fn set_primary_button(&self, value: &impl IsA<Button>) {
+    #[doc(alias = "he_card_set_widget")]
+    fn set_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
-            ffi::he_settings_row_set_primary_button(
-                self.as_ref().to_glib_none().0,
-                value.as_ref().to_glib_none().0,
-            );
-        }
-    }
-
-    #[doc(alias = "he_settings_row_get_activatable_widget")]
-    #[doc(alias = "get_activatable_widget")]
-    fn activatable_widget(&self) -> Option<gtk::Widget> {
-        unsafe {
-            from_glib_none(ffi::he_settings_row_get_activatable_widget(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "he_settings_row_set_activatable_widget")]
-    fn set_activatable_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
-        unsafe {
-            ffi::he_settings_row_set_activatable_widget(
+            ffi::he_card_set_widget(
                 self.as_ref().to_glib_none().0,
                 value.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }
 
-    #[doc(alias = "activated")]
-    fn connect_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn activated_trampoline<P: IsA<SettingsRow>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeSettingsRow,
+    #[doc(alias = "he_card_get_secondary_button")]
+    #[doc(alias = "get_secondary_button")]
+    fn secondary_button(&self) -> Button {
+        unsafe {
+            from_glib_none(ffi::he_card_get_secondary_button(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_card_set_secondary_button")]
+    fn set_secondary_button(&self, value: &impl IsA<Button>) {
+        unsafe {
+            ffi::he_card_set_secondary_button(
+                self.as_ref().to_glib_none().0,
+                value.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "he_card_get_primary_button")]
+    #[doc(alias = "get_primary_button")]
+    fn primary_button(&self) -> Button {
+        unsafe {
+            from_glib_none(ffi::he_card_get_primary_button(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_card_set_primary_button")]
+    fn set_primary_button(&self, value: &impl IsA<Button>) {
+        unsafe {
+            ffi::he_card_set_primary_button(
+                self.as_ref().to_glib_none().0,
+                value.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "card-type")]
+    fn connect_card_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_card_type_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
+            _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"activated".as_ptr() as *const _,
+                c"notify::card-type".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    activated_trampoline::<Self, F> as *const (),
+                    notify_card_type_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "layout")]
+    fn connect_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_layout_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::layout".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_layout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -497,13 +547,13 @@ pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
 
     #[doc(alias = "title")]
     fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_title_trampoline<P: IsA<SettingsRow>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeSettingsRow,
+        unsafe extern "C" fn notify_title_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -520,16 +570,13 @@ pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
 
     #[doc(alias = "subtitle")]
     fn connect_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_subtitle_trampoline<
-            P: IsA<SettingsRow>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeSettingsRow,
+        unsafe extern "C" fn notify_subtitle_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -546,13 +593,13 @@ pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
 
     #[doc(alias = "icon")]
     fn connect_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_icon_trampoline<P: IsA<SettingsRow>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeSettingsRow,
+        unsafe extern "C" fn notify_icon_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -569,13 +616,13 @@ pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
 
     #[doc(alias = "gicon")]
     fn connect_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_gicon_trampoline<P: IsA<SettingsRow>, F: Fn(&P) + 'static>(
-            this: *mut ffi::HeSettingsRow,
+        unsafe extern "C" fn notify_gicon_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -592,16 +639,13 @@ pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
 
     #[doc(alias = "paintable")]
     fn connect_paintable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_paintable_trampoline<
-            P: IsA<SettingsRow>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeSettingsRow,
+        unsafe extern "C" fn notify_paintable_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -616,18 +660,64 @@ pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
         }
     }
 
-    #[doc(alias = "primary-button")]
-    fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_primary_button_trampoline<
-            P: IsA<SettingsRow>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeSettingsRow,
+    #[doc(alias = "widget")]
+    fn connect_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_widget_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::widget".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_widget_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "secondary-button")]
+    fn connect_secondary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_button_trampoline<
+            P: IsA<Card>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeCard,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::secondary-button".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_secondary_button_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "primary-button")]
+    fn connect_primary_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_button_trampoline<P: IsA<Card>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeCard,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Card::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -641,32 +731,6 @@ pub trait SettingsRowExt: IsA<SettingsRow> + 'static {
             )
         }
     }
-
-    #[doc(alias = "activatable-widget")]
-    fn connect_activatable_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_activatable_widget_trampoline<
-            P: IsA<SettingsRow>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeSettingsRow,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(SettingsRow::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                c"notify::activatable-widget".as_ptr() as *const _,
-                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_activatable_widget_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
 }
 
-impl<O: IsA<SettingsRow>> SettingsRowExt for O {}
+impl<O: IsA<Card>> CardExt for O {}

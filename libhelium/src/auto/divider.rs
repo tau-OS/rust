@@ -66,6 +66,12 @@ impl DividerBuilder {
         }
     }
 
+    pub fn is_side_inset(self, is_side_inset: bool) -> Self {
+        Self {
+            builder: self.builder.property("is-side-inset", is_side_inset),
+        }
+    }
+
     pub fn is_vertical(self, is_vertical: bool) -> Self {
         Self {
             builder: self.builder.property("is-vertical", is_vertical),
@@ -151,6 +157,14 @@ impl DividerBuilder {
     //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
+
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -256,16 +270,12 @@ impl DividerBuilder {
     /// Build the [`Divider`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Divider {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Divider>> Sealed for T {}
-}
-
-pub trait DividerExt: IsA<Divider> + sealed::Sealed + 'static {
+pub trait DividerExt: IsA<Divider> + 'static {
     #[doc(alias = "he_divider_get_is_inset")]
     #[doc(alias = "get_is_inset")]
     fn is_inset(&self) -> bool {
@@ -276,6 +286,23 @@ pub trait DividerExt: IsA<Divider> + sealed::Sealed + 'static {
     fn set_is_inset(&self, value: bool) {
         unsafe {
             ffi::he_divider_set_is_inset(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_divider_get_is_side_inset")]
+    #[doc(alias = "get_is_side_inset")]
+    fn is_side_inset(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_divider_get_is_side_inset(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_divider_set_is_side_inset")]
+    fn set_is_side_inset(&self, value: bool) {
+        unsafe {
+            ffi::he_divider_set_is_side_inset(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
@@ -310,9 +337,35 @@ pub trait DividerExt: IsA<Divider> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-inset\0".as_ptr() as *const _,
+                c"notify::is-inset".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_inset_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "is-side-inset")]
+    fn connect_is_side_inset_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_side_inset_trampoline<
+            P: IsA<Divider>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeDivider,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Divider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::is-side-inset".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_is_side_inset_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -333,7 +386,7 @@ pub trait DividerExt: IsA<Divider> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-vertical\0".as_ptr() as *const _,
+                c"notify::is-vertical".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_vertical_trampoline::<Self, F> as *const (),
                 )),

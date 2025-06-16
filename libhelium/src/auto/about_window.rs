@@ -3,8 +3,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, AboutWindowLicenses, Colors, Window};
+use crate::{ffi, AboutWindowLicenses, Colors};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -13,7 +14,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeAboutWindow")]
-    pub struct AboutWindow(Object<ffi::HeAboutWindow, ffi::HeAboutWindowClass>) @extends Window, gtk::Window, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
+    pub struct AboutWindow(Object<ffi::HeAboutWindow, ffi::HeAboutWindowClass>) @extends gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
         type_ => || ffi::he_about_window_get_type(),
@@ -94,6 +95,12 @@ impl AboutWindowBuilder {
         }
     }
 
+    pub fn visible(self, visible: bool) -> Self {
+        Self {
+            builder: self.builder.property("visible", visible),
+        }
+    }
+
     pub fn color(self, color: Colors) -> Self {
         Self {
             builder: self.builder.property("color", color),
@@ -170,178 +177,6 @@ impl AboutWindowBuilder {
         }
     }
 
-    pub fn parent(self, parent: &impl IsA<gtk::Window>) -> Self {
-        Self {
-            builder: self.builder.property("parent", parent.clone().upcast()),
-        }
-    }
-
-    pub fn has_title(self, has_title: bool) -> Self {
-        Self {
-            builder: self.builder.property("has-title", has_title),
-        }
-    }
-
-    pub fn has_back_button(self, has_back_button: bool) -> Self {
-        Self {
-            builder: self.builder.property("has-back-button", has_back_button),
-        }
-    }
-
-    pub fn application(self, application: &impl IsA<gtk::Application>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("application", application.clone().upcast()),
-        }
-    }
-
-    pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self.builder.property("child", child.clone().upcast()),
-        }
-    }
-
-    pub fn decorated(self, decorated: bool) -> Self {
-        Self {
-            builder: self.builder.property("decorated", decorated),
-        }
-    }
-
-    pub fn default_height(self, default_height: i32) -> Self {
-        Self {
-            builder: self.builder.property("default-height", default_height),
-        }
-    }
-
-    pub fn default_widget(self, default_widget: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("default-widget", default_widget.clone().upcast()),
-        }
-    }
-
-    pub fn default_width(self, default_width: i32) -> Self {
-        Self {
-            builder: self.builder.property("default-width", default_width),
-        }
-    }
-
-    pub fn deletable(self, deletable: bool) -> Self {
-        Self {
-            builder: self.builder.property("deletable", deletable),
-        }
-    }
-
-    pub fn destroy_with_parent(self, destroy_with_parent: bool) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("destroy-with-parent", destroy_with_parent),
-        }
-    }
-
-    //pub fn display(self, display: /*Ignored*/&gdk::Display) -> Self {
-    //    Self { builder: self.builder.property("display", display), }
-    //}
-
-    pub fn focus_visible(self, focus_visible: bool) -> Self {
-        Self {
-            builder: self.builder.property("focus-visible", focus_visible),
-        }
-    }
-
-    pub fn focus_widget(self, focus_widget: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("focus-widget", focus_widget.clone().upcast()),
-        }
-    }
-
-    pub fn fullscreened(self, fullscreened: bool) -> Self {
-        Self {
-            builder: self.builder.property("fullscreened", fullscreened),
-        }
-    }
-
-    #[cfg(feature = "gtk_v4_2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
-    pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("handle-menubar-accel", handle_menubar_accel),
-        }
-    }
-
-    pub fn hide_on_close(self, hide_on_close: bool) -> Self {
-        Self {
-            builder: self.builder.property("hide-on-close", hide_on_close),
-        }
-    }
-
-    pub fn icon_name(self, icon_name: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("icon-name", icon_name.into()),
-        }
-    }
-
-    pub fn maximized(self, maximized: bool) -> Self {
-        Self {
-            builder: self.builder.property("maximized", maximized),
-        }
-    }
-
-    pub fn mnemonics_visible(self, mnemonics_visible: bool) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("mnemonics-visible", mnemonics_visible),
-        }
-    }
-
-    pub fn modal(self, modal: bool) -> Self {
-        Self {
-            builder: self.builder.property("modal", modal),
-        }
-    }
-
-    pub fn resizable(self, resizable: bool) -> Self {
-        Self {
-            builder: self.builder.property("resizable", resizable),
-        }
-    }
-
-    pub fn startup_id(self, startup_id: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("startup-id", startup_id.into()),
-        }
-    }
-
-    pub fn title(self, title: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("title", title.into()),
-        }
-    }
-
-    #[cfg(feature = "gtk_v4_6")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_6")))]
-    pub fn titlebar(self, titlebar: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self.builder.property("titlebar", titlebar.clone().upcast()),
-        }
-    }
-
-    pub fn transient_for(self, transient_for: &impl IsA<gtk::Window>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("transient-for", transient_for.clone().upcast()),
-        }
-    }
-
     pub fn can_focus(self, can_focus: bool) -> Self {
         Self {
             builder: self.builder.property("can-focus", can_focus),
@@ -415,6 +250,14 @@ impl AboutWindowBuilder {
     //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
+
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -500,12 +343,6 @@ impl AboutWindowBuilder {
         }
     }
 
-    pub fn visible(self, visible: bool) -> Self {
-        Self {
-            builder: self.builder.property("visible", visible),
-        }
-    }
-
     pub fn width_request(self, width_request: i32) -> Self {
         Self {
             builder: self.builder.property("width-request", width_request),
@@ -520,16 +357,43 @@ impl AboutWindowBuilder {
     /// Build the [`AboutWindow`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AboutWindow {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AboutWindow>> Sealed for T {}
-}
+pub trait AboutWindowExt: IsA<AboutWindow> + 'static {
+    #[doc(alias = "he_about_window_present")]
+    fn present(&self) {
+        unsafe {
+            ffi::he_about_window_present(self.as_ref().to_glib_none().0);
+        }
+    }
 
-pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
+    #[doc(alias = "he_about_window_hide_about")]
+    fn hide_about(&self) {
+        unsafe {
+            ffi::he_about_window_hide_about(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_about_window_get_visible")]
+    #[doc(alias = "get_visible")]
+    fn is_visible(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_about_window_get_visible(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_about_window_set_visible")]
+    fn set_visible(&self, value: bool) {
+        unsafe {
+            ffi::he_about_window_set_visible(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
     #[doc(alias = "he_about_window_get_color")]
     #[doc(alias = "get_color")]
     fn color(&self) -> Colors {
@@ -767,6 +631,28 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "hidden")]
+    fn connect_hidden<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn hidden_trampoline<P: IsA<AboutWindow>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeAboutWindow,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(AboutWindow::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"hidden".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    hidden_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "color")]
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_color_trampoline<P: IsA<AboutWindow>, F: Fn(&P) + 'static>(
@@ -781,7 +667,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::color\0".as_ptr() as *const _,
+                c"notify::color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
                 )),
@@ -804,7 +690,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::license\0".as_ptr() as *const _,
+                c"notify::license".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_license_trampoline::<Self, F> as *const (),
                 )),
@@ -827,7 +713,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::version\0".as_ptr() as *const _,
+                c"notify::version".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_version_trampoline::<Self, F> as *const (),
                 )),
@@ -853,7 +739,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::app-name\0".as_ptr() as *const _,
+                c"notify::app-name".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_app_name_trampoline::<Self, F> as *const (),
                 )),
@@ -876,7 +762,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::icon\0".as_ptr() as *const _,
+                c"notify::icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -902,7 +788,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::translator-names\0".as_ptr() as *const _,
+                c"notify::translator-names".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_translator_names_trampoline::<Self, F> as *const (),
                 )),
@@ -928,7 +814,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::developer-names\0".as_ptr() as *const _,
+                c"notify::developer-names".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_developer_names_trampoline::<Self, F> as *const (),
                 )),
@@ -954,7 +840,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::copyright-year\0".as_ptr() as *const _,
+                c"notify::copyright-year".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_copyright_year_trampoline::<Self, F> as *const (),
                 )),
@@ -977,7 +863,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::app-id\0".as_ptr() as *const _,
+                c"notify::app-id".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_app_id_trampoline::<Self, F> as *const (),
                 )),
@@ -1003,7 +889,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::translate-url\0".as_ptr() as *const _,
+                c"notify::translate-url".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_translate_url_trampoline::<Self, F> as *const (),
                 )),
@@ -1029,7 +915,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::issue-url\0".as_ptr() as *const _,
+                c"notify::issue-url".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_issue_url_trampoline::<Self, F> as *const (),
                 )),
@@ -1055,7 +941,7 @@ pub trait AboutWindowExt: IsA<AboutWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::more-info-url\0".as_ptr() as *const _,
+                c"notify::more-info-url".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_more_info_url_trampoline::<Self, F> as *const (),
                 )),

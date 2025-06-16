@@ -205,6 +205,14 @@ impl ViewMonoBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -309,16 +317,12 @@ impl ViewMonoBuilder {
     /// Build the [`ViewMono`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ViewMono {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ViewMono>> Sealed for T {}
-}
-
-pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
+pub trait ViewMonoExt: IsA<ViewMono> + 'static {
     #[doc(alias = "he_view_mono_add_titlebar_button")]
     fn add_titlebar_button(&self, child: &impl IsA<gtk::Button>) {
         unsafe {
@@ -329,10 +333,15 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
         }
     }
 
-    //#[doc(alias = "he_view_mono_add_titlebar_menu")]
-    //fn add_titlebar_menu(&self, child: /*Ignored*/&gtk::MenuButton) {
-    //    unsafe { TODO: call ffi:he_view_mono_add_titlebar_menu() }
-    //}
+    #[doc(alias = "he_view_mono_add_titlebar_menu")]
+    fn add_titlebar_menu(&self, child: &gtk::MenuButton) {
+        unsafe {
+            ffi::he_view_mono_add_titlebar_menu(
+                self.as_ref().to_glib_none().0,
+                child.to_glib_none().0,
+            );
+        }
+    }
 
     #[doc(alias = "he_view_mono_add_titlebar_toggle")]
     fn add_titlebar_toggle(&self, child: &impl IsA<gtk::ToggleButton>) {
@@ -525,7 +534,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
+                c"notify::title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
@@ -551,7 +560,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::titlewidget\0".as_ptr() as *const _,
+                c"notify::titlewidget".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_titlewidget_trampoline::<Self, F> as *const (),
                 )),
@@ -574,7 +583,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::subtitle\0".as_ptr() as *const _,
+                c"notify::subtitle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
@@ -603,7 +612,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-right-title-buttons\0".as_ptr() as *const _,
+                c"notify::show-right-title-buttons".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_right_title_buttons_trampoline::<Self, F> as *const (),
                 )),
@@ -632,7 +641,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-left-title-buttons\0".as_ptr() as *const _,
+                c"notify::show-left-title-buttons".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_left_title_buttons_trampoline::<Self, F> as *const (),
                 )),
@@ -655,7 +664,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-back\0".as_ptr() as *const _,
+                c"notify::show-back".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_back_trampoline::<Self, F> as *const (),
                 )),
@@ -678,7 +687,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stack\0".as_ptr() as *const _,
+                c"notify::stack".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
@@ -701,7 +710,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::scroller\0".as_ptr() as *const _,
+                c"notify::scroller".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scroller_trampoline::<Self, F> as *const (),
                 )),
@@ -727,7 +736,7 @@ pub trait ViewMonoExt: IsA<ViewMono> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::has-margins\0".as_ptr() as *const _,
+                c"notify::has-margins".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_margins_trampoline::<Self, F> as *const (),
                 )),

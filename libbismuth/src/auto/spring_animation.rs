@@ -173,7 +173,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::epsilon\0".as_ptr() as *const _,
+                c"notify::epsilon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_epsilon_trampoline::<F> as *const (),
                 )),
@@ -201,7 +201,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::estimated-duration\0".as_ptr() as *const _,
+                c"notify::estimated-duration".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_estimated_duration_trampoline::<F> as *const (),
                 )),
@@ -226,7 +226,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::initial-velocity\0".as_ptr() as *const _,
+                c"notify::initial-velocity".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_initial_velocity_trampoline::<F> as *const (),
                 )),
@@ -249,7 +249,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::latch\0".as_ptr() as *const _,
+                c"notify::latch".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latch_trampoline::<F> as *const (),
                 )),
@@ -272,7 +272,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::spring-params\0".as_ptr() as *const _,
+                c"notify::spring-params".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spring_params_trampoline::<F> as *const (),
                 )),
@@ -295,7 +295,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::value-from\0".as_ptr() as *const _,
+                c"notify::value-from".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_from_trampoline::<F> as *const (),
                 )),
@@ -318,7 +318,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::value-to\0".as_ptr() as *const _,
+                c"notify::value-to".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_to_trampoline::<F> as *const (),
                 )),
@@ -341,7 +341,7 @@ impl SpringAnimation {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::velocity\0".as_ptr() as *const _,
+                c"notify::velocity".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_velocity_trampoline::<F> as *const (),
                 )),
@@ -427,6 +427,7 @@ impl SpringAnimationBuilder {
     /// Build the [`SpringAnimation`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SpringAnimation {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

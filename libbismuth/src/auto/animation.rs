@@ -5,6 +5,7 @@
 
 use crate::{ffi, AnimationState, AnimationTarget};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -24,12 +25,7 @@ impl Animation {
     pub const NONE: Option<&'static Animation> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Animation>> Sealed for T {}
-}
-
-pub trait AnimationExt: IsA<Animation> + sealed::Sealed + 'static {
+pub trait AnimationExt: IsA<Animation> + 'static {
     #[doc(alias = "bis_animation_get_state")]
     #[doc(alias = "get_state")]
     fn state(&self) -> AnimationState {
@@ -121,7 +117,7 @@ pub trait AnimationExt: IsA<Animation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"done\0".as_ptr() as *const _,
+                c"done".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     done_trampoline::<Self, F> as *const (),
                 )),
@@ -144,7 +140,7 @@ pub trait AnimationExt: IsA<Animation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::state\0".as_ptr() as *const _,
+                c"notify::state".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_state_trampoline::<Self, F> as *const (),
                 )),
@@ -167,7 +163,7 @@ pub trait AnimationExt: IsA<Animation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::target\0".as_ptr() as *const _,
+                c"notify::target".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_target_trampoline::<Self, F> as *const (),
                 )),
@@ -190,7 +186,7 @@ pub trait AnimationExt: IsA<Animation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::value\0".as_ptr() as *const _,
+                c"notify::value".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_trampoline::<Self, F> as *const (),
                 )),

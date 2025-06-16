@@ -19,12 +19,7 @@ impl AnimationTarget {
     pub const NONE: Option<&'static AnimationTarget> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AnimationTarget>> Sealed for T {}
-}
-
-pub trait AnimationTargetExt: IsA<AnimationTarget> + sealed::Sealed + 'static {
+pub trait AnimationTargetExt: IsA<AnimationTarget> + 'static {
     #[doc(alias = "he_animation_target_set_value")]
     fn set_value(&self, value: f64) {
         unsafe {

@@ -242,6 +242,14 @@ impl TextFieldBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -360,16 +368,12 @@ impl TextFieldBuilder {
     /// Build the [`TextField`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> TextField {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TextField>> Sealed for T {}
-}
-
-pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
+pub trait TextFieldExt: IsA<TextField> + 'static {
     #[doc(alias = "he_text_field_get_internal_entry")]
     #[doc(alias = "get_internal_entry")]
     fn internal_entry(&self) -> gtk::Text {
@@ -620,7 +624,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-valid\0".as_ptr() as *const _,
+                c"notify::is-valid".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_valid_trampoline::<Self, F> as *const (),
                 )),
@@ -646,7 +650,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::needs-validation\0".as_ptr() as *const _,
+                c"notify::needs-validation".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_needs_validation_trampoline::<Self, F> as *const (),
                 )),
@@ -672,7 +676,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::min-length\0".as_ptr() as *const _,
+                c"notify::min-length".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_length_trampoline::<Self, F> as *const (),
                 )),
@@ -695,7 +699,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::regex\0".as_ptr() as *const _,
+                c"notify::regex".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_regex_trampoline::<Self, F> as *const (),
                 )),
@@ -718,7 +722,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-search\0".as_ptr() as *const _,
+                c"notify::is-search".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_search_trampoline::<Self, F> as *const (),
                 )),
@@ -744,7 +748,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-outline\0".as_ptr() as *const _,
+                c"notify::is-outline".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_outline_trampoline::<Self, F> as *const (),
                 )),
@@ -767,7 +771,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::entry\0".as_ptr() as *const _,
+                c"notify::entry".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_entry_trampoline::<Self, F> as *const (),
                 )),
@@ -790,7 +794,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::text\0".as_ptr() as *const _,
+                c"notify::text".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
                 )),
@@ -816,7 +820,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::suffix-icon\0".as_ptr() as *const _,
+                c"notify::suffix-icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_suffix_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -842,7 +846,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::prefix-icon\0".as_ptr() as *const _,
+                c"notify::prefix-icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_prefix_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -868,7 +872,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::support-text\0".as_ptr() as *const _,
+                c"notify::support-text".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_support_text_trampoline::<Self, F> as *const (),
                 )),
@@ -894,7 +898,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::placeholder-text\0".as_ptr() as *const _,
+                c"notify::placeholder-text".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_placeholder_text_trampoline::<Self, F> as *const (),
                 )),
@@ -920,7 +924,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::max-length\0".as_ptr() as *const _,
+                c"notify::max-length".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_length_trampoline::<Self, F> as *const (),
                 )),
@@ -946,7 +950,7 @@ pub trait TextFieldExt: IsA<TextField> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::visibility\0".as_ptr() as *const _,
+                c"notify::visibility".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_visibility_trampoline::<Self, F> as *const (),
                 )),

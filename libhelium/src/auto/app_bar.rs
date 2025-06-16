@@ -204,6 +204,14 @@ impl AppBarBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -308,16 +316,12 @@ impl AppBarBuilder {
     /// Build the [`AppBar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AppBar {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AppBar>> Sealed for T {}
-}
-
-pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
+pub trait AppBarExt: IsA<AppBar> + 'static {
     #[doc(alias = "he_app_bar_append")]
     fn append(&self, child: &impl IsA<gtk::Widget>) {
         unsafe {
@@ -532,7 +536,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stack\0".as_ptr() as *const _,
+                c"notify::stack".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
@@ -555,7 +559,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::scroller\0".as_ptr() as *const _,
+                c"notify::scroller".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scroller_trampoline::<Self, F> as *const (),
                 )),
@@ -578,7 +582,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-compact\0".as_ptr() as *const _,
+                c"notify::is-compact".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_compact_trampoline::<Self, F> as *const (),
                 )),
@@ -604,7 +608,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::viewtitle-widget\0".as_ptr() as *const _,
+                c"notify::viewtitle-widget".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_viewtitle_widget_trampoline::<Self, F> as *const (),
                 )),
@@ -630,7 +634,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::viewsubtitle-label\0".as_ptr() as *const _,
+                c"notify::viewsubtitle-label".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_viewsubtitle_label_trampoline::<Self, F> as *const (),
                 )),
@@ -659,7 +663,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-left-title-buttons\0".as_ptr() as *const _,
+                c"notify::show-left-title-buttons".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_left_title_buttons_trampoline::<Self, F> as *const (),
                 )),
@@ -688,7 +692,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-right-title-buttons\0".as_ptr() as *const _,
+                c"notify::show-right-title-buttons".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_right_title_buttons_trampoline::<Self, F> as *const (),
                 )),
@@ -714,7 +718,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::decoration-layout\0".as_ptr() as *const _,
+                c"notify::decoration-layout".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_decoration_layout_trampoline::<Self, F> as *const (),
                 )),
@@ -737,7 +741,7 @@ pub trait AppBarExt: IsA<AppBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-back\0".as_ptr() as *const _,
+                c"notify::show-back".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_back_trampoline::<Self, F> as *const (),
                 )),

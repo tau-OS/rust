@@ -24,12 +24,7 @@ impl View {
     pub const NONE: Option<&'static View> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::View>> Sealed for T {}
-}
-
-pub trait ViewExt: IsA<View> + sealed::Sealed + 'static {
+pub trait ViewExt: IsA<View> + 'static {
     #[doc(alias = "he_view_add_child")]
     fn add_child(
         &self,
@@ -123,7 +118,7 @@ pub trait ViewExt: IsA<View> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
+                c"notify::title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
@@ -146,7 +141,7 @@ pub trait ViewExt: IsA<View> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stack\0".as_ptr() as *const _,
+                c"notify::stack".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
@@ -169,7 +164,7 @@ pub trait ViewExt: IsA<View> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::subtitle\0".as_ptr() as *const _,
+                c"notify::subtitle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
@@ -192,7 +187,7 @@ pub trait ViewExt: IsA<View> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::has-margins\0".as_ptr() as *const _,
+                c"notify::has-margins".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_margins_trampoline::<Self, F> as *const (),
                 )),

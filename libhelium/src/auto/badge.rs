@@ -146,6 +146,14 @@ impl BadgeBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -250,16 +258,12 @@ impl BadgeBuilder {
     /// Build the [`Badge`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Badge {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Badge>> Sealed for T {}
-}
-
-pub trait BadgeExt: IsA<Badge> + sealed::Sealed + 'static {
+pub trait BadgeExt: IsA<Badge> + 'static {
     #[doc(alias = "he_badge_get_child")]
     #[doc(alias = "get_child")]
     fn child(&self) -> Option<gtk::Widget> {
@@ -303,7 +307,7 @@ pub trait BadgeExt: IsA<Badge> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::label\0".as_ptr() as *const _,
+                c"notify::label".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),

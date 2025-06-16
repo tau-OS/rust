@@ -353,7 +353,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::can-navigate-back\0".as_ptr() as *const _,
+                c"notify::can-navigate-back".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_navigate_back_trampoline::<F> as *const (),
                 )),
@@ -379,7 +379,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::can-navigate-forward\0".as_ptr() as *const _,
+                c"notify::can-navigate-forward".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_navigate_forward_trampoline::<F> as *const (),
                 )),
@@ -402,7 +402,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::can-unfold\0".as_ptr() as *const _,
+                c"notify::can-unfold".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_unfold_trampoline::<F> as *const (),
                 )),
@@ -428,7 +428,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::child-transition-params\0".as_ptr() as *const _,
+                c"notify::child-transition-params".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_transition_params_trampoline::<F> as *const (),
                 )),
@@ -454,7 +454,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::child-transition-running\0".as_ptr() as *const _,
+                c"notify::child-transition-running".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_transition_running_trampoline::<F> as *const (),
                 )),
@@ -480,7 +480,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::fold-threshold-policy\0".as_ptr() as *const _,
+                c"notify::fold-threshold-policy".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_fold_threshold_policy_trampoline::<F> as *const (),
                 )),
@@ -503,7 +503,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::folded\0".as_ptr() as *const _,
+                c"notify::folded".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_folded_trampoline::<F> as *const (),
                 )),
@@ -526,7 +526,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::homogeneous\0".as_ptr() as *const _,
+                c"notify::homogeneous".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_homogeneous_trampoline::<F> as *const (),
                 )),
@@ -552,7 +552,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::mode-transition-duration\0".as_ptr() as *const _,
+                c"notify::mode-transition-duration".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mode_transition_duration_trampoline::<F> as *const (),
                 )),
@@ -575,7 +575,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::pages\0".as_ptr() as *const _,
+                c"notify::pages".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pages_trampoline::<F> as *const (),
                 )),
@@ -598,7 +598,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::transition-type\0".as_ptr() as *const _,
+                c"notify::transition-type".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transition_type_trampoline::<F> as *const (),
                 )),
@@ -621,7 +621,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::visible-child\0".as_ptr() as *const _,
+                c"notify::visible-child".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_visible_child_trampoline::<F> as *const (),
                 )),
@@ -647,7 +647,7 @@ impl Album {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::visible-child-name\0".as_ptr() as *const _,
+                c"notify::visible-child-name".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_visible_child_name_trampoline::<F> as *const (),
                 )),
@@ -829,6 +829,14 @@ impl AlbumBuilder {
         }
     }
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -935,6 +943,7 @@ impl AlbumBuilder {
     /// Build the [`Album`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Album {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

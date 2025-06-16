@@ -3,8 +3,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, Button, Window};
+use crate::{ffi, Button};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -13,7 +14,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "HeDialog")]
-    pub struct Dialog(Object<ffi::HeDialog, ffi::HeDialogClass>) @extends Window, gtk::Window, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
+    pub struct Dialog(Object<ffi::HeDialog, ffi::HeDialogClass>) @extends gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
         type_ => || ffi::he_dialog_get_type(),
@@ -25,22 +26,18 @@ impl Dialog {
 
     #[doc(alias = "he_dialog_new")]
     pub fn new(
-        modal: bool,
-        parent: Option<&impl IsA<gtk::Window>>,
-        title: &str,
-        subtitle: &str,
-        info: &str,
-        icon: &str,
+        parent: &impl IsA<gtk::Window>,
+        title: Option<&str>,
+        info: Option<&str>,
+        icon: Option<&str>,
         primary_button: Option<&impl IsA<Button>>,
         secondary_button: Option<&impl IsA<Button>>,
     ) -> Dialog {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::he_dialog_new(
-                modal.into_glib(),
-                parent.map(|p| p.as_ref()).to_glib_none().0,
+                parent.as_ref().to_glib_none().0,
                 title.to_glib_none().0,
-                subtitle.to_glib_none().0,
                 info.to_glib_none().0,
                 icon.to_glib_none().0,
                 primary_button.map(|p| p.as_ref()).to_glib_none().0,
@@ -80,6 +77,12 @@ impl DialogBuilder {
         }
     }
 
+    pub fn visible(self, visible: bool) -> Self {
+        Self {
+            builder: self.builder.property("visible", visible),
+        }
+    }
+
     pub fn title(self, title: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("title", title.into()),
@@ -111,172 +114,6 @@ impl DialogBuilder {
             builder: self
                 .builder
                 .property("primary-button", primary_button.clone().upcast()),
-        }
-    }
-
-    pub fn parent(self, parent: &impl IsA<gtk::Window>) -> Self {
-        Self {
-            builder: self.builder.property("parent", parent.clone().upcast()),
-        }
-    }
-
-    pub fn has_title(self, has_title: bool) -> Self {
-        Self {
-            builder: self.builder.property("has-title", has_title),
-        }
-    }
-
-    pub fn has_back_button(self, has_back_button: bool) -> Self {
-        Self {
-            builder: self.builder.property("has-back-button", has_back_button),
-        }
-    }
-
-    pub fn application(self, application: &impl IsA<gtk::Application>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("application", application.clone().upcast()),
-        }
-    }
-
-    pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self.builder.property("child", child.clone().upcast()),
-        }
-    }
-
-    pub fn decorated(self, decorated: bool) -> Self {
-        Self {
-            builder: self.builder.property("decorated", decorated),
-        }
-    }
-
-    pub fn default_height(self, default_height: i32) -> Self {
-        Self {
-            builder: self.builder.property("default-height", default_height),
-        }
-    }
-
-    pub fn default_widget(self, default_widget: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("default-widget", default_widget.clone().upcast()),
-        }
-    }
-
-    pub fn default_width(self, default_width: i32) -> Self {
-        Self {
-            builder: self.builder.property("default-width", default_width),
-        }
-    }
-
-    pub fn deletable(self, deletable: bool) -> Self {
-        Self {
-            builder: self.builder.property("deletable", deletable),
-        }
-    }
-
-    pub fn destroy_with_parent(self, destroy_with_parent: bool) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("destroy-with-parent", destroy_with_parent),
-        }
-    }
-
-    //pub fn display(self, display: /*Ignored*/&gdk::Display) -> Self {
-    //    Self { builder: self.builder.property("display", display), }
-    //}
-
-    pub fn focus_visible(self, focus_visible: bool) -> Self {
-        Self {
-            builder: self.builder.property("focus-visible", focus_visible),
-        }
-    }
-
-    pub fn focus_widget(self, focus_widget: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("focus-widget", focus_widget.clone().upcast()),
-        }
-    }
-
-    pub fn fullscreened(self, fullscreened: bool) -> Self {
-        Self {
-            builder: self.builder.property("fullscreened", fullscreened),
-        }
-    }
-
-    #[cfg(feature = "gtk_v4_2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
-    pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("handle-menubar-accel", handle_menubar_accel),
-        }
-    }
-
-    pub fn hide_on_close(self, hide_on_close: bool) -> Self {
-        Self {
-            builder: self.builder.property("hide-on-close", hide_on_close),
-        }
-    }
-
-    pub fn icon_name(self, icon_name: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("icon-name", icon_name.into()),
-        }
-    }
-
-    pub fn maximized(self, maximized: bool) -> Self {
-        Self {
-            builder: self.builder.property("maximized", maximized),
-        }
-    }
-
-    pub fn mnemonics_visible(self, mnemonics_visible: bool) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("mnemonics-visible", mnemonics_visible),
-        }
-    }
-
-    pub fn modal(self, modal: bool) -> Self {
-        Self {
-            builder: self.builder.property("modal", modal),
-        }
-    }
-
-    pub fn resizable(self, resizable: bool) -> Self {
-        Self {
-            builder: self.builder.property("resizable", resizable),
-        }
-    }
-
-    pub fn startup_id(self, startup_id: impl Into<glib::GString>) -> Self {
-        Self {
-            builder: self.builder.property("startup-id", startup_id.into()),
-        }
-    }
-
-    #[cfg(feature = "gtk_v4_6")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_6")))]
-    pub fn titlebar(self, titlebar: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self.builder.property("titlebar", titlebar.clone().upcast()),
-        }
-    }
-
-    pub fn transient_for(self, transient_for: &impl IsA<gtk::Window>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("transient-for", transient_for.clone().upcast()),
         }
     }
 
@@ -353,6 +190,14 @@ impl DialogBuilder {
     //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
+
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -438,12 +283,6 @@ impl DialogBuilder {
         }
     }
 
-    pub fn visible(self, visible: bool) -> Self {
-        Self {
-            builder: self.builder.property("visible", visible),
-        }
-    }
-
     pub fn width_request(self, width_request: i32) -> Self {
         Self {
             builder: self.builder.property("width-request", width_request),
@@ -458,16 +297,12 @@ impl DialogBuilder {
     /// Build the [`Dialog`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Dialog {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Dialog>> Sealed for T {}
-}
-
-pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
+pub trait DialogExt: IsA<Dialog> + 'static {
     #[doc(alias = "he_dialog_add")]
     fn add(&self, widget: &impl IsA<gtk::Widget>) {
         unsafe {
@@ -475,6 +310,33 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
                 self.as_ref().to_glib_none().0,
                 widget.as_ref().to_glib_none().0,
             );
+        }
+    }
+
+    #[doc(alias = "he_dialog_present")]
+    fn present(&self) {
+        unsafe {
+            ffi::he_dialog_present(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_dialog_hide_dialog")]
+    fn hide_dialog(&self) {
+        unsafe {
+            ffi::he_dialog_hide_dialog(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_dialog_get_visible")]
+    #[doc(alias = "get_visible")]
+    fn is_visible(&self) -> bool {
+        unsafe { from_glib(ffi::he_dialog_get_visible(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_dialog_set_visible")]
+    fn set_visible(&self, value: bool) {
+        unsafe {
+            ffi::he_dialog_set_visible(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
@@ -557,6 +419,51 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "hidden")]
+    fn connect_hidden<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn hidden_trampoline<P: IsA<Dialog>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeDialog,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Dialog::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"hidden".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    hidden_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "title")]
+    fn connect_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_title_trampoline<P: IsA<Dialog>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeDialog,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Dialog::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::title".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_title_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "info")]
     fn connect_info_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_info_trampoline<P: IsA<Dialog>, F: Fn(&P) + 'static>(
@@ -571,7 +478,7 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::info\0".as_ptr() as *const _,
+                c"notify::info".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_info_trampoline::<Self, F> as *const (),
                 )),
@@ -594,7 +501,7 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::icon\0".as_ptr() as *const _,
+                c"notify::icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -620,7 +527,7 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::secondary-button\0".as_ptr() as *const _,
+                c"notify::secondary-button".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_secondary_button_trampoline::<Self, F> as *const (),
                 )),
@@ -646,7 +553,7 @@ pub trait DialogExt: IsA<Dialog> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::primary-button\0".as_ptr() as *const _,
+                c"notify::primary-button".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_primary_button_trampoline::<Self, F> as *const (),
                 )),

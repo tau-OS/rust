@@ -3,8 +3,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, Bin};
+use crate::{ffi, Bin, ChipGroupMode};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -71,6 +72,20 @@ impl ChipGroupBuilder {
     pub fn single_line(self, single_line: bool) -> Self {
         Self {
             builder: self.builder.property("single-line", single_line),
+        }
+    }
+
+    pub fn mode(self, mode: ChipGroupMode) -> Self {
+        Self {
+            builder: self.builder.property("mode", mode),
+        }
+    }
+
+    pub fn show_close_buttons(self, show_close_buttons: bool) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("show-close-buttons", show_close_buttons),
         }
     }
 
@@ -153,6 +168,14 @@ impl ChipGroupBuilder {
     //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
+
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -258,16 +281,54 @@ impl ChipGroupBuilder {
     /// Build the [`ChipGroup`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ChipGroup {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ChipGroup>> Sealed for T {}
-}
+pub trait ChipGroupExt: IsA<ChipGroup> + 'static {
+    #[doc(alias = "he_chip_group_get_active_filters")]
+    #[doc(alias = "get_active_filters")]
+    fn active_filters(&self) -> Vec<u32> {
+        unsafe {
+            let mut result_length1 = std::mem::MaybeUninit::uninit();
+            let ret = FromGlibContainer::from_glib_full_num(
+                ffi::he_chip_group_get_active_filters(
+                    self.as_ref().to_glib_none().0,
+                    result_length1.as_mut_ptr(),
+                ),
+                result_length1.assume_init() as _,
+            );
+            ret
+        }
+    }
 
-pub trait ChipGroupExt: IsA<ChipGroup> + sealed::Sealed + 'static {
+    #[doc(alias = "he_chip_group_set_active_filters")]
+    fn set_active_filters(&self, indices: &[u32]) {
+        let indices_length1 = indices.len() as _;
+        unsafe {
+            ffi::he_chip_group_set_active_filters(
+                self.as_ref().to_glib_none().0,
+                indices.to_glib_none().0,
+                indices_length1,
+            );
+        }
+    }
+
+    #[doc(alias = "he_chip_group_clear_filters")]
+    fn clear_filters(&self) {
+        unsafe {
+            ffi::he_chip_group_clear_filters(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_chip_group_remove_chip_at")]
+    fn remove_chip_at(&self, position: u32) {
+        unsafe {
+            ffi::he_chip_group_remove_chip_at(self.as_ref().to_glib_none().0, position);
+        }
+    }
+
     #[doc(alias = "he_chip_group_get_selection_model")]
     #[doc(alias = "get_selection_model")]
     fn selection_model(&self) -> gtk::SingleSelection {
@@ -305,6 +366,90 @@ pub trait ChipGroupExt: IsA<ChipGroup> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_chip_group_get_mode")]
+    #[doc(alias = "get_mode")]
+    fn mode(&self) -> ChipGroupMode {
+        unsafe { from_glib(ffi::he_chip_group_get_mode(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_chip_group_set_mode")]
+    fn set_mode(&self, value: ChipGroupMode) {
+        unsafe {
+            ffi::he_chip_group_set_mode(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_chip_group_get_show_close_buttons")]
+    #[doc(alias = "get_show_close_buttons")]
+    fn shows_close_buttons(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_chip_group_get_show_close_buttons(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_chip_group_set_show_close_buttons")]
+    fn set_show_close_buttons(&self, value: bool) {
+        unsafe {
+            ffi::he_chip_group_set_show_close_buttons(
+                self.as_ref().to_glib_none().0,
+                value.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "filters-changed")]
+    fn connect_filters_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn filters_changed_trampoline<P: IsA<ChipGroup>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeChipGroup,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ChipGroup::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"filters-changed".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    filters_changed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "chip-removed")]
+    fn connect_chip_removed<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn chip_removed_trampoline<
+            P: IsA<ChipGroup>,
+            F: Fn(&P, u32) + 'static,
+        >(
+            this: *mut ffi::HeChipGroup,
+            position: std::ffi::c_uint,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                ChipGroup::from_glib_borrow(this).unsafe_cast_ref(),
+                position,
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"chip-removed".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    chip_removed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "selection-model")]
     fn connect_selection_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_selection_model_trampoline<
@@ -322,7 +467,7 @@ pub trait ChipGroupExt: IsA<ChipGroup> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::selection-model\0".as_ptr() as *const _,
+                c"notify::selection-model".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_selection_model_trampoline::<Self, F> as *const (),
                 )),
@@ -348,9 +493,58 @@ pub trait ChipGroupExt: IsA<ChipGroup> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::single-line\0".as_ptr() as *const _,
+                c"notify::single-line".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_single_line_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "mode")]
+    fn connect_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mode_trampoline<P: IsA<ChipGroup>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeChipGroup,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ChipGroup::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::mode".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_mode_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "show-close-buttons")]
+    fn connect_show_close_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_close_buttons_trampoline<
+            P: IsA<ChipGroup>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeChipGroup,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ChipGroup::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::show-close-buttons".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_show_close_buttons_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

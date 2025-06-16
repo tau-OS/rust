@@ -99,7 +99,7 @@ impl LatchScrollable {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::child\0".as_ptr() as *const _,
+                c"notify::child".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<F> as *const (),
                 )),
@@ -122,7 +122,7 @@ impl LatchScrollable {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::maximum-size\0".as_ptr() as *const _,
+                c"notify::maximum-size".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_maximum_size_trampoline::<F> as *const (),
                 )),
@@ -150,7 +150,7 @@ impl LatchScrollable {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::tightening-threshold\0".as_ptr() as *const _,
+                c"notify::tightening-threshold".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tightening_threshold_trampoline::<F> as *const (),
                 )),
@@ -278,6 +278,14 @@ impl LatchScrollableBuilder {
         }
     }
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -400,6 +408,7 @@ impl LatchScrollableBuilder {
     /// Build the [`LatchScrollable`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> LatchScrollable {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

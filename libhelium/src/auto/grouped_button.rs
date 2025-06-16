@@ -3,8 +3,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, Bin};
+use crate::{ffi, GroupedButtonSize};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -12,97 +13,85 @@ use glib::{
 use std::boxed::Box as Box_;
 
 glib::wrapper! {
-    #[doc(alias = "HeNavigationRail")]
-    pub struct NavigationRail(Object<ffi::HeNavigationRail, ffi::HeNavigationRailClass>) @extends Bin, gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    #[doc(alias = "HeGroupedButton")]
+    pub struct GroupedButton(Object<ffi::HeGroupedButton, ffi::HeGroupedButtonClass>) @extends gtk::Widget, @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 
     match fn {
-        type_ => || ffi::he_navigation_rail_get_type(),
+        type_ => || ffi::he_grouped_button_get_type(),
     }
 }
 
-impl NavigationRail {
-    pub const NONE: Option<&'static NavigationRail> = None;
+impl GroupedButton {
+    pub const NONE: Option<&'static GroupedButton> = None;
 
-    #[doc(alias = "he_navigation_rail_new")]
-    pub fn new() -> NavigationRail {
+    #[doc(alias = "he_grouped_button_new")]
+    pub fn new() -> GroupedButton {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::he_navigation_rail_new()) }
+        unsafe { from_glib_none(ffi::he_grouped_button_new()) }
+    }
+
+    #[doc(alias = "he_grouped_button_new_with_size")]
+    pub fn with_size(size: GroupedButtonSize) -> GroupedButton {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::he_grouped_button_new_with_size(size.into_glib())) }
+    }
+
+    #[doc(alias = "he_grouped_button_new_with_names")]
+    pub fn with_names(size_name: &str) -> GroupedButton {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::he_grouped_button_new_with_names(
+                size_name.to_glib_none().0,
+            ))
+        }
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new builder-pattern struct instance to construct [`NavigationRail`] objects.
+    /// Creates a new builder-pattern struct instance to construct [`GroupedButton`] objects.
     ///
-    /// This method returns an instance of [`NavigationRailBuilder`](crate::builders::NavigationRailBuilder) which can be used to create [`NavigationRail`] objects.
-    pub fn builder() -> NavigationRailBuilder {
-        NavigationRailBuilder::new()
+    /// This method returns an instance of [`GroupedButtonBuilder`](crate::builders::GroupedButtonBuilder) which can be used to create [`GroupedButton`] objects.
+    pub fn builder() -> GroupedButtonBuilder {
+        GroupedButtonBuilder::new()
     }
 }
 
-impl Default for NavigationRail {
+impl Default for GroupedButton {
     fn default() -> Self {
         Self::new()
     }
 }
 
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`NavigationRail`] objects.
+/// A [builder-pattern] type to construct [`GroupedButton`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct NavigationRailBuilder {
-    builder: glib::object::ObjectBuilder<'static, NavigationRail>,
+pub struct GroupedButtonBuilder {
+    builder: glib::object::ObjectBuilder<'static, GroupedButton>,
 }
 
-impl NavigationRailBuilder {
+impl GroupedButtonBuilder {
     fn new() -> Self {
         Self {
             builder: glib::object::Object::builder(),
         }
     }
 
-    pub fn stack(self, stack: &gtk::Stack) -> Self {
+    pub fn size(self, size: GroupedButtonSize) -> Self {
         Self {
-            builder: self.builder.property("stack", stack.clone()),
+            builder: self.builder.property("size", size),
         }
     }
 
-    pub fn orientation(self, orientation: gtk::Orientation) -> Self {
+    pub fn size_name(self, size_name: impl Into<glib::GString>) -> Self {
         Self {
-            builder: self.builder.property("orientation", orientation),
+            builder: self.builder.property("size-name", size_name.into()),
         }
     }
 
-    pub fn hide_labels(self, hide_labels: bool) -> Self {
+    pub fn homogeneous(self, homogeneous: bool) -> Self {
         Self {
-            builder: self.builder.property("hide-labels", hide_labels),
-        }
-    }
-
-    pub fn is_expanded(self, is_expanded: bool) -> Self {
-        Self {
-            builder: self.builder.property("is-expanded", is_expanded),
-        }
-    }
-
-    pub fn custom_button(self, custom_button: &impl IsA<gtk::Button>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("custom-button", custom_button.clone().upcast()),
-        }
-    }
-
-    pub fn custom_widget(self, custom_widget: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self
-                .builder
-                .property("custom-widget", custom_widget.clone().upcast()),
-        }
-    }
-
-    pub fn child(self, child: &impl IsA<gtk::Widget>) -> Self {
-        Self {
-            builder: self.builder.property("child", child.clone().upcast()),
+            builder: self.builder.property("homogeneous", homogeneous),
         }
     }
 
@@ -289,285 +278,272 @@ impl NavigationRailBuilder {
     //}
 
     // rustdoc-stripper-ignore-next
-    /// Build the [`NavigationRail`].
+    /// Build the [`GroupedButton`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-    pub fn build(self) -> NavigationRail {
+    pub fn build(self) -> GroupedButton {
         assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-pub trait NavigationRailExt: IsA<NavigationRail> + 'static {
-    #[doc(alias = "he_navigation_rail_get_stack")]
-    #[doc(alias = "get_stack")]
-    fn stack(&self) -> gtk::Stack {
+pub trait GroupedButtonExt: IsA<GroupedButton> + 'static {
+    #[doc(alias = "he_grouped_button_add_widget")]
+    fn add_widget(&self, widget: &impl IsA<gtk::Widget>) {
         unsafe {
-            from_glib_none(ffi::he_navigation_rail_get_stack(
+            ffi::he_grouped_button_add_widget(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "he_grouped_button_remove_widget")]
+    fn remove_widget(&self, widget: &impl IsA<gtk::Widget>) {
+        unsafe {
+            ffi::he_grouped_button_remove_widget(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "he_grouped_button_clear_widgets")]
+    fn clear_widgets(&self) {
+        unsafe {
+            ffi::he_grouped_button_clear_widgets(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_grouped_button_get_widget_at_index")]
+    #[doc(alias = "get_widget_at_index")]
+    fn widget_at_index(&self, index: i32) -> Option<gtk::Widget> {
+        unsafe {
+            from_glib_full(ffi::he_grouped_button_get_widget_at_index(
+                self.as_ref().to_glib_none().0,
+                index,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_grouped_button_get_size")]
+    #[doc(alias = "get_size")]
+    fn size(&self) -> GroupedButtonSize {
+        unsafe {
+            from_glib(ffi::he_grouped_button_get_size(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    #[doc(alias = "he_navigation_rail_set_stack")]
-    fn set_stack(&self, value: &gtk::Stack) {
+    #[doc(alias = "he_grouped_button_set_size")]
+    fn set_size(&self, value: GroupedButtonSize) {
         unsafe {
-            ffi::he_navigation_rail_set_stack(
+            ffi::he_grouped_button_set_size(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_grouped_button_get_size_name")]
+    #[doc(alias = "get_size_name")]
+    fn size_name(&self) -> glib::GString {
+        unsafe {
+            from_glib_none(ffi::he_grouped_button_get_size_name(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_grouped_button_set_size_name")]
+    fn set_size_name(&self, value: &str) {
+        unsafe {
+            ffi::he_grouped_button_set_size_name(
                 self.as_ref().to_glib_none().0,
                 value.to_glib_none().0,
             );
         }
     }
 
-    #[doc(alias = "he_navigation_rail_get_orientation")]
-    #[doc(alias = "get_orientation")]
-    fn orientation(&self) -> gtk::Orientation {
+    #[doc(alias = "he_grouped_button_get_button_count")]
+    #[doc(alias = "get_button_count")]
+    fn button_count(&self) -> i32 {
+        unsafe { ffi::he_grouped_button_get_button_count(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_grouped_button_get_homogeneous")]
+    #[doc(alias = "get_homogeneous")]
+    fn is_homogeneous(&self) -> bool {
         unsafe {
-            from_glib(ffi::he_navigation_rail_get_orientation(
+            from_glib(ffi::he_grouped_button_get_homogeneous(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    #[doc(alias = "he_navigation_rail_set_orientation")]
-    fn set_orientation(&self, value: gtk::Orientation) {
+    #[doc(alias = "he_grouped_button_set_homogeneous")]
+    fn set_homogeneous(&self, value: bool) {
         unsafe {
-            ffi::he_navigation_rail_set_orientation(
+            ffi::he_grouped_button_set_homogeneous(
                 self.as_ref().to_glib_none().0,
                 value.into_glib(),
             );
         }
     }
 
-    #[doc(alias = "he_navigation_rail_get_hide_labels")]
-    #[doc(alias = "get_hide_labels")]
-    fn hides_labels(&self) -> bool {
-        unsafe {
-            from_glib(ffi::he_navigation_rail_get_hide_labels(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "he_navigation_rail_set_hide_labels")]
-    fn set_hide_labels(&self, value: bool) {
-        unsafe {
-            ffi::he_navigation_rail_set_hide_labels(
-                self.as_ref().to_glib_none().0,
-                value.into_glib(),
-            );
-        }
-    }
-
-    #[doc(alias = "he_navigation_rail_get_is_expanded")]
-    #[doc(alias = "get_is_expanded")]
-    fn is_expanded(&self) -> bool {
-        unsafe {
-            from_glib(ffi::he_navigation_rail_get_is_expanded(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "he_navigation_rail_set_is_expanded")]
-    fn set_is_expanded(&self, value: bool) {
-        unsafe {
-            ffi::he_navigation_rail_set_is_expanded(
-                self.as_ref().to_glib_none().0,
-                value.into_glib(),
-            );
-        }
-    }
-
-    #[doc(alias = "he_navigation_rail_get_custom_button")]
-    #[doc(alias = "get_custom_button")]
-    fn custom_button(&self) -> Option<gtk::Button> {
-        unsafe {
-            from_glib_none(ffi::he_navigation_rail_get_custom_button(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "he_navigation_rail_set_custom_button")]
-    fn set_custom_button(&self, value: Option<&impl IsA<gtk::Button>>) {
-        unsafe {
-            ffi::he_navigation_rail_set_custom_button(
-                self.as_ref().to_glib_none().0,
-                value.map(|p| p.as_ref()).to_glib_none().0,
-            );
-        }
-    }
-
-    #[doc(alias = "he_navigation_rail_get_custom_widget")]
-    #[doc(alias = "get_custom_widget")]
-    fn custom_widget(&self) -> Option<gtk::Widget> {
-        unsafe {
-            from_glib_none(ffi::he_navigation_rail_get_custom_widget(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "he_navigation_rail_set_custom_widget")]
-    fn set_custom_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
-        unsafe {
-            ffi::he_navigation_rail_set_custom_widget(
-                self.as_ref().to_glib_none().0,
-                value.map(|p| p.as_ref()).to_glib_none().0,
-            );
-        }
-    }
-
-    #[doc(alias = "stack")]
-    fn connect_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_stack_trampoline<
-            P: IsA<NavigationRail>,
-            F: Fn(&P) + 'static,
+    #[doc(alias = "widget-added")]
+    fn connect_widget_added<F: Fn(&Self, &gtk::Widget) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn widget_added_trampoline<
+            P: IsA<GroupedButton>,
+            F: Fn(&P, &gtk::Widget) + 'static,
         >(
-            this: *mut ffi::HeNavigationRail,
-            _param_spec: glib::ffi::gpointer,
+            this: *mut ffi::HeGroupedButton,
+            widget: *mut gtk::ffi::GtkWidget,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(
+                GroupedButton::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(widget),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::stack".as_ptr() as *const _,
+                c"widget-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_stack_trampoline::<Self, F> as *const (),
+                    widget_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    #[doc(alias = "orientation")]
-    fn connect_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_orientation_trampoline<
-            P: IsA<NavigationRail>,
-            F: Fn(&P) + 'static,
+    #[doc(alias = "widget-removed")]
+    fn connect_widget_removed<F: Fn(&Self, &gtk::Widget) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn widget_removed_trampoline<
+            P: IsA<GroupedButton>,
+            F: Fn(&P, &gtk::Widget) + 'static,
         >(
-            this: *mut ffi::HeNavigationRail,
-            _param_spec: glib::ffi::gpointer,
+            this: *mut ffi::HeGroupedButton,
+            widget: *mut gtk::ffi::GtkWidget,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(
+                GroupedButton::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(widget),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::orientation".as_ptr() as *const _,
+                c"widget-removed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_orientation_trampoline::<Self, F> as *const (),
+                    widget_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    #[doc(alias = "hide-labels")]
-    fn connect_hide_labels_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_hide_labels_trampoline<
-            P: IsA<NavigationRail>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::HeNavigationRail,
+    #[doc(alias = "size")]
+    fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_size_trampoline<P: IsA<GroupedButton>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeGroupedButton,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(GroupedButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::hide-labels".as_ptr() as *const _,
+                c"notify::size".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_hide_labels_trampoline::<Self, F> as *const (),
+                    notify_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    #[doc(alias = "is-expanded")]
-    fn connect_is_expanded_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_is_expanded_trampoline<
-            P: IsA<NavigationRail>,
+    #[doc(alias = "size-name")]
+    fn connect_size_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_size_name_trampoline<
+            P: IsA<GroupedButton>,
             F: Fn(&P) + 'static,
         >(
-            this: *mut ffi::HeNavigationRail,
+            this: *mut ffi::HeGroupedButton,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(GroupedButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::is-expanded".as_ptr() as *const _,
+                c"notify::size-name".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_is_expanded_trampoline::<Self, F> as *const (),
+                    notify_size_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    #[doc(alias = "custom-button")]
-    fn connect_custom_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_custom_button_trampoline<
-            P: IsA<NavigationRail>,
+    #[doc(alias = "button-count")]
+    fn connect_button_count_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_button_count_trampoline<
+            P: IsA<GroupedButton>,
             F: Fn(&P) + 'static,
         >(
-            this: *mut ffi::HeNavigationRail,
+            this: *mut ffi::HeGroupedButton,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(GroupedButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::custom-button".as_ptr() as *const _,
+                c"notify::button-count".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_custom_button_trampoline::<Self, F> as *const (),
+                    notify_button_count_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    #[doc(alias = "custom-widget")]
-    fn connect_custom_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_custom_widget_trampoline<
-            P: IsA<NavigationRail>,
+    #[doc(alias = "homogeneous")]
+    fn connect_homogeneous_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_homogeneous_trampoline<
+            P: IsA<GroupedButton>,
             F: Fn(&P) + 'static,
         >(
-            this: *mut ffi::HeNavigationRail,
+            this: *mut ffi::HeGroupedButton,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(NavigationRail::from_glib_borrow(this).unsafe_cast_ref())
+            f(GroupedButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::custom-widget".as_ptr() as *const _,
+                c"notify::homogeneous".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_custom_widget_trampoline::<Self, F> as *const (),
+                    notify_homogeneous_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -575,4 +551,4 @@ pub trait NavigationRailExt: IsA<NavigationRail> + 'static {
     }
 }
 
-impl<O: IsA<NavigationRail>> NavigationRailExt for O {}
+impl<O: IsA<GroupedButton>> GroupedButtonExt for O {}

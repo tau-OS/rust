@@ -5,6 +5,7 @@
 
 use crate::{ffi, Bin};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -60,6 +61,36 @@ impl SliderBuilder {
         }
     }
 
+    pub fn wave_amplitude(self, wave_amplitude: i32) -> Self {
+        Self {
+            builder: self.builder.property("wave-amplitude", wave_amplitude),
+        }
+    }
+
+    pub fn wave_wavelength(self, wave_wavelength: i32) -> Self {
+        Self {
+            builder: self.builder.property("wave-wavelength", wave_wavelength),
+        }
+    }
+
+    pub fn wave_thickness(self, wave_thickness: i32) -> Self {
+        Self {
+            builder: self.builder.property("wave-thickness", wave_thickness),
+        }
+    }
+
+    pub fn animate(self, animate: bool) -> Self {
+        Self {
+            builder: self.builder.property("animate", animate),
+        }
+    }
+
+    pub fn value(self, value: f64) -> Self {
+        Self {
+            builder: self.builder.property("value", value),
+        }
+    }
+
     pub fn left_icon(self, left_icon: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("left-icon", left_icon.into()),
@@ -77,6 +108,12 @@ impl SliderBuilder {
             builder: self
                 .builder
                 .property("stop-indicator-visibility", stop_indicator_visibility),
+        }
+    }
+
+    pub fn is_wavy(self, is_wavy: bool) -> Self {
+        Self {
+            builder: self.builder.property("is-wavy", is_wavy),
         }
     }
 
@@ -159,6 +196,14 @@ impl SliderBuilder {
     //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
+
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -264,20 +309,98 @@ impl SliderBuilder {
     /// Build the [`Slider`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Slider {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Slider>> Sealed for T {}
-}
-
-pub trait SliderExt: IsA<Slider> + sealed::Sealed + 'static {
+pub trait SliderExt: IsA<Slider> + 'static {
     #[doc(alias = "he_slider_add_mark")]
     fn add_mark(&self, value: f64, text: Option<&str>) {
         unsafe {
             ffi::he_slider_add_mark(self.as_ref().to_glib_none().0, value, text.to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_slider_set_range")]
+    fn set_range(&self, min: f64, max: f64) {
+        unsafe {
+            ffi::he_slider_set_range(self.as_ref().to_glib_none().0, min, max);
+        }
+    }
+
+    #[doc(alias = "he_slider_set_adjustment")]
+    fn set_adjustment(&self, adjustment: &impl IsA<gtk::Adjustment>) {
+        unsafe {
+            ffi::he_slider_set_adjustment(
+                self.as_ref().to_glib_none().0,
+                adjustment.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "he_slider_get_wave_amplitude")]
+    #[doc(alias = "get_wave_amplitude")]
+    fn wave_amplitude(&self) -> i32 {
+        unsafe { ffi::he_slider_get_wave_amplitude(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_slider_set_wave_amplitude")]
+    fn set_wave_amplitude(&self, value: i32) {
+        unsafe {
+            ffi::he_slider_set_wave_amplitude(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
+    #[doc(alias = "he_slider_get_wave_wavelength")]
+    #[doc(alias = "get_wave_wavelength")]
+    fn wave_wavelength(&self) -> i32 {
+        unsafe { ffi::he_slider_get_wave_wavelength(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_slider_set_wave_wavelength")]
+    fn set_wave_wavelength(&self, value: i32) {
+        unsafe {
+            ffi::he_slider_set_wave_wavelength(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
+    #[doc(alias = "he_slider_get_wave_thickness")]
+    #[doc(alias = "get_wave_thickness")]
+    fn wave_thickness(&self) -> i32 {
+        unsafe { ffi::he_slider_get_wave_thickness(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_slider_set_wave_thickness")]
+    fn set_wave_thickness(&self, value: i32) {
+        unsafe {
+            ffi::he_slider_set_wave_thickness(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
+    #[doc(alias = "he_slider_get_animate")]
+    #[doc(alias = "get_animate")]
+    fn is_animate(&self) -> bool {
+        unsafe { from_glib(ffi::he_slider_get_animate(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_slider_set_animate")]
+    fn set_animate(&self, value: bool) {
+        unsafe {
+            ffi::he_slider_set_animate(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_slider_get_value")]
+    #[doc(alias = "get_value")]
+    fn value(&self) -> f64 {
+        unsafe { ffi::he_slider_get_value(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_slider_set_value")]
+    fn set_value(&self, value: f64) {
+        unsafe {
+            ffi::he_slider_set_value(self.as_ref().to_glib_none().0, value);
         }
     }
 
@@ -331,6 +454,165 @@ pub trait SliderExt: IsA<Slider> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_slider_get_is_wavy")]
+    #[doc(alias = "get_is_wavy")]
+    fn is_wavy(&self) -> bool {
+        unsafe { from_glib(ffi::he_slider_get_is_wavy(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_slider_set_is_wavy")]
+    fn set_is_wavy(&self, value: bool) {
+        unsafe {
+            ffi::he_slider_set_is_wavy(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "value-changed")]
+    fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn value_changed_trampoline<P: IsA<Slider>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSlider,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Slider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"value-changed".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    value_changed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "wave-amplitude")]
+    fn connect_wave_amplitude_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wave_amplitude_trampoline<
+            P: IsA<Slider>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeSlider,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Slider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::wave-amplitude".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_wave_amplitude_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "wave-wavelength")]
+    fn connect_wave_wavelength_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wave_wavelength_trampoline<
+            P: IsA<Slider>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeSlider,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Slider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::wave-wavelength".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_wave_wavelength_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "wave-thickness")]
+    fn connect_wave_thickness_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wave_thickness_trampoline<
+            P: IsA<Slider>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeSlider,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Slider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::wave-thickness".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_wave_thickness_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "animate")]
+    fn connect_animate_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_animate_trampoline<P: IsA<Slider>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSlider,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Slider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::animate".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_animate_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "value")]
+    fn connect_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_value_trampoline<P: IsA<Slider>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSlider,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Slider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::value".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_value_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "left-icon")]
     fn connect_left_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_left_icon_trampoline<P: IsA<Slider>, F: Fn(&P) + 'static>(
@@ -345,7 +627,7 @@ pub trait SliderExt: IsA<Slider> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::left-icon\0".as_ptr() as *const _,
+                c"notify::left-icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_left_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -368,7 +650,7 @@ pub trait SliderExt: IsA<Slider> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::right-icon\0".as_ptr() as *const _,
+                c"notify::right-icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_right_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -397,9 +679,32 @@ pub trait SliderExt: IsA<Slider> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stop-indicator-visibility\0".as_ptr() as *const _,
+                c"notify::stop-indicator-visibility".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stop_indicator_visibility_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "is-wavy")]
+    fn connect_is_wavy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_wavy_trampoline<P: IsA<Slider>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeSlider,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Slider::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::is-wavy".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_is_wavy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -193,6 +193,14 @@ impl TabBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -297,16 +305,12 @@ impl TabBuilder {
     /// Build the [`Tab`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Tab {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Tab>> Sealed for T {}
-}
-
-pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
+pub trait TabExt: IsA<Tab> + 'static {
     #[doc(alias = "he_tab_get_label")]
     #[doc(alias = "get_label")]
     fn label(&self) -> glib::GString {
@@ -412,7 +416,7 @@ pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::label\0".as_ptr() as *const _,
+                c"notify::label".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
@@ -435,7 +439,7 @@ pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::tooltip\0".as_ptr() as *const _,
+                c"notify::tooltip".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tooltip_trampoline::<Self, F> as *const (),
                 )),
@@ -458,7 +462,7 @@ pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::pinned\0".as_ptr() as *const _,
+                c"notify::pinned".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pinned_trampoline::<Self, F> as *const (),
                 )),
@@ -481,7 +485,7 @@ pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::can-pin\0".as_ptr() as *const _,
+                c"notify::can-pin".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_pin_trampoline::<Self, F> as *const (),
                 )),
@@ -504,7 +508,7 @@ pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::can-close\0".as_ptr() as *const _,
+                c"notify::can-close".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_close_trampoline::<Self, F> as *const (),
                 )),
@@ -527,7 +531,7 @@ pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::page\0".as_ptr() as *const _,
+                c"notify::page".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_page_trampoline::<Self, F> as *const (),
                 )),
@@ -550,7 +554,7 @@ pub trait TabExt: IsA<Tab> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::menu\0".as_ptr() as *const _,
+                c"notify::menu".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_menu_trampoline::<Self, F> as *const (),
                 )),

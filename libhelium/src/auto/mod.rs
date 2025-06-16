@@ -48,6 +48,9 @@ pub use self::button_content::ButtonContent;
 mod callback_animation_target;
 pub use self::callback_animation_target::CallbackAnimationTarget;
 
+mod card;
+pub use self::card::Card;
+
 mod chip;
 pub use self::chip::Chip;
 
@@ -83,6 +86,9 @@ pub use self::dropdown::Dropdown;
 
 mod empty_page;
 pub use self::empty_page::EmptyPage;
+
+mod grouped_button;
+pub use self::grouped_button::GroupedButton;
 
 mod mini_content_block;
 pub use self::mini_content_block::MiniContentBlock;
@@ -215,10 +221,20 @@ pub use self::enums::AboutWindowLicenses;
 pub use self::enums::AnimationState;
 pub use self::enums::AvatarStatusColor;
 pub use self::enums::BannerStyle;
+pub use self::enums::BottomBarFloatingPosition;
+pub use self::enums::BottomBarMode;
 pub use self::enums::BottomBarPosition;
+pub use self::enums::BottomBarStyle;
+pub use self::enums::ButtonColor;
+pub use self::enums::ButtonSize;
+pub use self::enums::ButtonWidth;
+pub use self::enums::CardLayout;
+pub use self::enums::CardType;
+pub use self::enums::ChipGroupMode;
 pub use self::enums::Colors;
 pub use self::enums::ContentBlockImageClusterImagePosition;
 pub use self::enums::Easing;
+pub use self::enums::GroupedButtonSize;
 pub use self::enums::ModifierBadgeAlignment;
 pub use self::enums::OverlayButtonAlignment;
 pub use self::enums::OverlayButtonSize;
@@ -241,9 +257,9 @@ pub(crate) mod traits {
     pub use super::bottom_sheet::BottomSheetExt;
     pub use super::button::HeButtonExt;
     pub use super::button_content::ButtonContentExt;
+    pub use super::card::CardExt;
     pub use super::chip::ChipExt;
     pub use super::chip_group::ChipGroupExt;
-    pub use super::content_block::ContentBlockExt;
     pub use super::content_block_image::ContentBlockImageExt;
     pub use super::content_block_image_cluster::ContentBlockImageClusterExt;
     pub use super::content_list::ContentListExt;
@@ -252,7 +268,7 @@ pub(crate) mod traits {
     pub use super::dialog::DialogExt;
     pub use super::divider::DividerExt;
     pub use super::empty_page::EmptyPageExt;
-    pub use super::mini_content_block::MiniContentBlockExt;
+    pub use super::grouped_button::GroupedButtonExt;
     pub use super::modifier_badge::ModifierBadgeExt;
     pub use super::navigation_rail::NavigationRailExt;
     pub use super::navigation_section::NavigationSectionExt;
@@ -301,6 +317,7 @@ pub(crate) mod builders {
     pub use super::bottom_sheet::BottomSheetBuilder;
     pub use super::button::ButtonBuilder;
     pub use super::button_content::ButtonContentBuilder;
+    pub use super::card::CardBuilder;
     pub use super::chip::ChipBuilder;
     pub use super::chip_group::ChipGroupBuilder;
     pub use super::content_block::ContentBlockBuilder;
@@ -313,6 +330,7 @@ pub(crate) mod builders {
     pub use super::divider::DividerBuilder;
     pub use super::dropdown::DropdownBuilder;
     pub use super::empty_page::EmptyPageBuilder;
+    pub use super::grouped_button::GroupedButtonBuilder;
     pub use super::mini_content_block::MiniContentBlockBuilder;
     pub use super::modifier_badge::ModifierBadgeBuilder;
     pub use super::navigation_rail::NavigationRailBuilder;

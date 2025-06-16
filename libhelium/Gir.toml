@@ -37,6 +37,9 @@ generate = [
     "He.BannerStyle",
     "He.BottomBar",
     "He.BottomBarPosition",
+    "He.BottomBarMode",
+    "He.BottomBarStyle",
+    "He.BottomBarFloatingPosition",
     "He.Chip",
     "He.ContentBlock",
     "He.ContentBlockImage",
@@ -100,6 +103,15 @@ generate = [
     # "He.TipView",
     "He.AnimationTargetFunc",
     "He.AvatarStatusColor",
+    "He.Card",
+    "He.CardType",
+    "He.CardLayout",
+    "He.ChipGroupMode",
+    "He.ButtonColor",
+    "He.ButtonSize",
+    "He.ButtonWidth",
+    "He.GroupedButton",
+    "He.GroupedButtonSize",
 ]
 
 manual = [
@@ -153,6 +165,8 @@ manual = [
     "Gtk.Grid",
     "Gtk.DropDown",
     "Pango.EllipsizeMode",
+    "Gtk.Adjustment",
+    "Gtk.MenuButton",
 ]
 
 [[object]]

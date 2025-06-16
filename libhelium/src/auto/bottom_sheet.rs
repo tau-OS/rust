@@ -5,6 +5,7 @@
 
 use crate::ffi;
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -184,6 +185,14 @@ impl BottomSheetBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -288,16 +297,12 @@ impl BottomSheetBuilder {
     /// Build the [`BottomSheet`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> BottomSheet {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BottomSheet>> Sealed for T {}
-}
-
-pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
+pub trait BottomSheetExt: IsA<BottomSheet> + 'static {
     #[doc(alias = "he_bottom_sheet_get_sheet")]
     #[doc(alias = "get_sheet")]
     fn sheet(&self) -> Option<gtk::Widget> {
@@ -452,7 +457,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"hidden\0".as_ptr() as *const _,
+                c"hidden".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     hidden_trampoline::<Self, F> as *const (),
                 )),
@@ -475,7 +480,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::sheet\0".as_ptr() as *const _,
+                c"notify::sheet".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sheet_trampoline::<Self, F> as *const (),
                 )),
@@ -501,7 +506,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::sheet-stack\0".as_ptr() as *const _,
+                c"notify::sheet-stack".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sheet_stack_trampoline::<Self, F> as *const (),
                 )),
@@ -524,7 +529,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::button\0".as_ptr() as *const _,
+                c"notify::button".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_button_trampoline::<Self, F> as *const (),
                 )),
@@ -547,7 +552,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
+                c"notify::title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
@@ -573,7 +578,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-sheet\0".as_ptr() as *const _,
+                c"notify::show-sheet".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_sheet_trampoline::<Self, F> as *const (),
                 )),
@@ -596,7 +601,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::modal\0".as_ptr() as *const _,
+                c"notify::modal".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_modal_trampoline::<Self, F> as *const (),
                 )),
@@ -622,7 +627,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-handle\0".as_ptr() as *const _,
+                c"notify::show-handle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_handle_trampoline::<Self, F> as *const (),
                 )),
@@ -651,7 +656,7 @@ pub trait BottomSheetExt: IsA<BottomSheet> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::preferred-sheet-height\0".as_ptr() as *const _,
+                c"notify::preferred-sheet-height".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_preferred_sheet_height_trampoline::<Self, F> as *const (),
                 )),
