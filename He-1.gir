@@ -5,8 +5,8 @@
 <include name="GLib" version="2.0"/>
 <include name="Gtk" version="4.0"/>
 <include name="GObject" version="2.0"/>
-<include name="Pango" version="1.0"/>
 <include name="Gdk" version="4.0"/>
+<include name="Pango" version="1.0"/>
 <package name="libhelium-1"/>
 <c:include name="libhelium-1.h"/>
 <namespace name="He" version="1" c:prefix="He" c:identifier-prefixes="He" c:symbol-prefixes="he" shared-library="libhelium-1.so.1">
@@ -46,6 +46,22 @@
 			</parameter>
 		</parameters>
 	</function>
+	<function name="math_utils_clamp_int" c:identifier="he_math_utils_clamp_int">
+		<return-value transfer-ownership="full">
+			<type name="gint" c:type="gint"/>
+		</return-value>
+		<parameters>
+			<parameter name="min" transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</parameter>
+			<parameter name="max" transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</parameter>
+			<parameter name="input" transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</parameter>
+		</parameters>
+	</function>
 	<function name="math_utils_clamp_double" c:identifier="he_math_utils_clamp_double">
 		<return-value transfer-ownership="full">
 			<type name="gdouble" c:type="gdouble"/>
@@ -67,7 +83,7 @@
 			<type name="gint" c:type="gint"/>
 		</return-value>
 		<parameters>
-			<parameter name="x" transfer-ownership="none">
+			<parameter name="num" transfer-ownership="none">
 				<type name="gdouble" c:type="gdouble"/>
 			</parameter>
 		</parameters>
@@ -287,6 +303,49 @@
 		</parameters>
 	</function>
 	<function name="math_utils_abs" c:identifier="he_math_utils_abs">
+		<return-value transfer-ownership="full">
+			<type name="gdouble" c:type="gdouble"/>
+		</return-value>
+		<parameters>
+			<parameter name="n" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="math_utils_iabs" c:identifier="he_math_utils_iabs">
+		<return-value transfer-ownership="full">
+			<type name="gint" c:type="gint"/>
+		</return-value>
+		<parameters>
+			<parameter name="n" transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="math_utils_pow" c:identifier="he_math_utils_pow">
+		<return-value transfer-ownership="full">
+			<type name="gdouble" c:type="gdouble"/>
+		</return-value>
+		<parameters>
+			<parameter name="b" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+			<parameter name="e" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="math_utils_round" c:identifier="he_math_utils_round">
+		<return-value transfer-ownership="full">
+			<type name="gint" c:type="gint"/>
+		</return-value>
+		<parameters>
+			<parameter name="n" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="math_utils_round_double" c:identifier="he_math_utils_round_double">
 		<return-value transfer-ownership="full">
 			<type name="gdouble" c:type="gdouble"/>
 		</return-value>
@@ -800,9 +859,58 @@ Since: 1.0</doc>
 	</enumeration>
 	<enumeration name="TonePolarity" c:type="HeTonePolarity" glib:type-name="HeTonePolarity" glib:get-type="he_tone_polarity_get_type">
 		<member name="darker" c:identifier="HE_TONE_POLARITY_DARKER" value="0"/>
-		<member name="lighter" c:identifier="HE_TONE_POLARITY_LIGHTER" value="1"/>
-		<member name="nearer" c:identifier="HE_TONE_POLARITY_NEARER" value="2"/>
-		<member name="farther" c:identifier="HE_TONE_POLARITY_FARTHER" value="3"/>
+		<member name="relative_darker" c:identifier="HE_TONE_POLARITY_RELATIVE_DARKER" value="1"/>
+		<member name="lighter" c:identifier="HE_TONE_POLARITY_LIGHTER" value="2"/>
+		<member name="relative_lighter" c:identifier="HE_TONE_POLARITY_RELATIVE_LIGHTER" value="3"/>
+	</enumeration>
+	<enumeration name="ToneResolve" c:type="HeToneResolve" glib:type-name="HeToneResolve" glib:get-type="he_tone_resolve_get_type">
+		<member name="exact" c:identifier="HE_TONE_RESOLVE_EXACT" value="0"/>
+		<member name="nearer" c:identifier="HE_TONE_RESOLVE_NEARER" value="1"/>
+		<member name="farther" c:identifier="HE_TONE_RESOLVE_FARTHER" value="2"/>
+	</enumeration>
+	<enumeration name="ButtonColor" c:type="HeButtonColor" glib:type-name="HeButtonColor" glib:get-type="he_button_color_get_type">
+		<member name="surface" c:identifier="HE_BUTTON_COLOR_SURFACE" value="0"/>
+		<member name="primary" c:identifier="HE_BUTTON_COLOR_PRIMARY" value="1"/>
+		<member name="secondary" c:identifier="HE_BUTTON_COLOR_SECONDARY" value="2"/>
+		<member name="tertiary" c:identifier="HE_BUTTON_COLOR_TERTIARY" value="3"/>
+	</enumeration>
+	<enumeration name="ButtonSize" c:type="HeButtonSize" glib:type-name="HeButtonSize" glib:get-type="he_button_size_get_type">
+		<member name="xsmall" c:identifier="HE_BUTTON_SIZE_XSMALL" value="0"/>
+		<member name="small" c:identifier="HE_BUTTON_SIZE_SMALL" value="1"/>
+		<member name="medium" c:identifier="HE_BUTTON_SIZE_MEDIUM" value="2"/>
+		<member name="large" c:identifier="HE_BUTTON_SIZE_LARGE" value="3"/>
+		<member name="xlarge" c:identifier="HE_BUTTON_SIZE_XLARGE" value="4"/>
+	</enumeration>
+	<enumeration name="ButtonWidth" c:type="HeButtonWidth" glib:type-name="HeButtonWidth" glib:get-type="he_button_width_get_type">
+		<member name="default" c:identifier="HE_BUTTON_WIDTH_DEFAULT" value="0"/>
+		<member name="narrow" c:identifier="HE_BUTTON_WIDTH_NARROW" value="1"/>
+		<member name="wide" c:identifier="HE_BUTTON_WIDTH_WIDE" value="2"/>
+	</enumeration>
+	<enumeration name="CardType" c:type="HeCardType" glib:type-name="HeCardType" glib:get-type="he_card_type_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;Type of card appearance&lt;/para&gt;</doc>
+		<member name="default" c:identifier="HE_CARD_TYPE_DEFAULT" value="0"/>
+		<member name="outline" c:identifier="HE_CARD_TYPE_OUTLINE" value="1"/>
+		<member name="filled" c:identifier="HE_CARD_TYPE_FILLED" value="2"/>
+		<member name="elevated" c:identifier="HE_CARD_TYPE_ELEVATED" value="3"/>
+	</enumeration>
+	<enumeration name="CardLayout" c:type="HeCardLayout" glib:type-name="HeCardLayout" glib:get-type="he_card_layout_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;Layout style of the card&lt;/para&gt;</doc>
+		<member name="vertical" c:identifier="HE_CARD_LAYOUT_VERTICAL" value="0"/>
+		<member name="horizontal" c:identifier="HE_CARD_LAYOUT_HORIZONTAL" value="1"/>
+	</enumeration>
+	<enumeration name="ChipGroupMode" c:type="HeChipGroupMode" glib:type-name="HeChipGroupMode" glib:get-type="he_chip_group_mode_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;Modes for ChipGroup behavior. Selection mode - chips behave as radio buttons, only one can be active. Filtering mode - multiple chips can be
+active simultaneously.&lt;/para&gt;
+
+Since: 1.0</doc>
+		<member name="selection" c:identifier="HE_CHIP_GROUP_MODE_SELECTION" value="0"/>
+		<member name="filtering" c:identifier="HE_CHIP_GROUP_MODE_FILTERING" value="1"/>
+	</enumeration>
+	<enumeration name="GroupedButtonSize" c:type="HeGroupedButtonSize" glib:type-name="HeGroupedButtonSize" glib:get-type="he_grouped_button_size_get_type">
+		<member name="small" c:identifier="HE_GROUPED_BUTTON_SIZE_SMALL" value="0"/>
+		<member name="medium" c:identifier="HE_GROUPED_BUTTON_SIZE_MEDIUM" value="1"/>
+		<member name="large" c:identifier="HE_GROUPED_BUTTON_SIZE_LARGE" value="2"/>
+		<member name="xlarge" c:identifier="HE_GROUPED_BUTTON_SIZE_XLARGE" value="3"/>
 	</enumeration>
 	<class name="AnimationTarget" c:type="HeAnimationTarget" c:symbol-prefix="animation_target" glib:type-name="HeAnimationTarget" glib:get-type="he_animation_target_get_type" glib:type-struct="AnimationTargetClass" parent="GObject.Object" abstract="1">
 		<field name="parent_instance" readable="0" private="1">
@@ -1390,10 +1498,10 @@ Since: 1.0</doc>
 				<parameter name="to" transfer-ownership="none">
 					<type name="gdouble" c:type="gdouble"/>
 				</parameter>
-				<parameter name="sparams" transfer-ownership="full">
+				<parameter name="sparams" transfer-ownership="none">
 					<type name="He.SpringParams" c:type="HeSpringParams*"/>
 				</parameter>
-				<parameter name="target" transfer-ownership="full">
+				<parameter name="target" transfer-ownership="none">
 					<type name="He.AnimationTarget" c:type="HeAnimationTarget*"/>
 				</parameter>
 			</parameters>
@@ -1839,6 +1947,18 @@ Since: 1.0</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="ApplicationPrivate" c:type="HeApplicationPrivate*"/>
 		</field>
+		<method name="get_effective_accent_color" c:identifier="he_application_get_effective_accent_color">
+			<doc xml:whitespace="preserve">&lt;para&gt;Gets the effective accent color that should be used for content drawing. When is_content is true and default_accent_color is set, returns the
+default_accent_color. Otherwise returns the desktop accent color.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full" nullable="1">
+				<type name="He.RGBColor" c:type="HeRGBColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Application" c:type="HeApplication*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
 		<constructor name="new" c:identifier="he_application_new">
 			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new application.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
@@ -2037,6 +2157,12 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<glib:signal name="accent-color-changed">
+			<doc xml:whitespace="preserve">&lt;para&gt;Signal emitted when the effective accent color changes.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
 	</class>
 	<record name="ApplicationClass" c:type="HeApplicationClass" glib:is-gtype-struct-for="Application">
 		<field name="parent_class" readable="0" private="1">
@@ -3174,11 +3300,17 @@ title bar can be made always visible. Has an optional back button. The back butt
 		<field name="palette_target">
 			<type name="gpointer" c:type="gpointer"/>
 		</field>
-		<field name="tonev" writable="1">
+		<field name="palette_target_destroy_notify">
+			<type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+		</field>
+		<field name="tone" writable="1">
 			<type name="He.ToneFunc" c:type="HeToneFunc"/>
 		</field>
-		<field name="tonev_target">
+		<field name="tone_target">
 			<type name="gpointer" c:type="gpointer"/>
+		</field>
+		<field name="tone_target_destroy_notify">
+			<type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
 		</field>
 		<field name="background" writable="1">
 			<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
@@ -3186,17 +3318,26 @@ title bar can be made always visible. Has an optional back button. The back butt
 		<field name="background_target">
 			<type name="gpointer" c:type="gpointer"/>
 		</field>
+		<field name="background_target_destroy_notify">
+			<type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+		</field>
 		<field name="second_background" writable="1">
 			<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
 		</field>
 		<field name="second_background_target">
 			<type name="gpointer" c:type="gpointer"/>
 		</field>
+		<field name="second_background_target_destroy_notify">
+			<type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+		</field>
 		<field name="tone_delta_pair" writable="1">
 			<type name="He.ToneDeltaPairFunc" c:type="HeToneDeltaPairFunc"/>
 		</field>
 		<field name="tone_delta_pair_target">
 			<type name="gpointer" c:type="gpointer"/>
+		</field>
+		<field name="tone_delta_pair_target_destroy_notify">
+			<type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
 		</field>
 		<constructor name="new" c:identifier="he_dynamic_color_new">
 			<return-value transfer-ownership="full">
@@ -3212,22 +3353,25 @@ title bar can be made always visible. Has an optional back button. The back butt
 				<parameter name="palette_target" transfer-ownership="none" nullable="1">
 					<type name="gpointer" c:type="void*"/>
 				</parameter>
-				<parameter name="tonev" transfer-ownership="none" closure="4" scope="call">
+				<parameter name="tone" transfer-ownership="none" nullable="1" closure="4" scope="call">
 					<type name="He.ToneFunc" c:type="HeToneFunc"/>
 				</parameter>
-				<parameter name="tonev_target" transfer-ownership="none" nullable="1">
+				<parameter name="tone_target" transfer-ownership="none" nullable="1">
 					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="chromamult" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
 				</parameter>
 				<parameter name="is_background" transfer-ownership="none" nullable="1">
 					<type name="gboolean" c:type="gboolean*"/>
 				</parameter>
-				<parameter name="background" transfer-ownership="none" nullable="1" closure="7" scope="call">
+				<parameter name="background" transfer-ownership="none" nullable="1" closure="8" scope="call">
 					<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
 				</parameter>
 				<parameter name="background_target" transfer-ownership="none" nullable="1">
 					<type name="gpointer" c:type="void*"/>
 				</parameter>
-				<parameter name="second_background" transfer-ownership="none" nullable="1" closure="9" scope="call">
+				<parameter name="second_background" transfer-ownership="none" nullable="1" closure="10" scope="call">
 					<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
 				</parameter>
 				<parameter name="second_background_target" transfer-ownership="none" nullable="1">
@@ -3236,7 +3380,7 @@ title bar can be made always visible. Has an optional back button. The back butt
 				<parameter name="contrast_curve" transfer-ownership="none" nullable="1">
 					<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
 				</parameter>
-				<parameter name="tone_delta_pair" transfer-ownership="none" nullable="1" closure="12" scope="call">
+				<parameter name="tone_delta_pair" transfer-ownership="none" nullable="1" closure="13" scope="call">
 					<type name="He.ToneDeltaPairFunc" c:type="HeToneDeltaPairFunc"/>
 				</parameter>
 				<parameter name="tone_delta_pair_target" transfer-ownership="none" nullable="1">
@@ -3258,14 +3402,24 @@ title bar can be made always visible. Has an optional back button. The back butt
 				<parameter name="palette_target" transfer-ownership="none" nullable="1">
 					<type name="gpointer" c:type="void*"/>
 				</parameter>
-				<parameter name="tonev" transfer-ownership="none" closure="4" scope="call">
+				<parameter name="tone" transfer-ownership="none" nullable="1" closure="4" scope="call">
 					<type name="He.ToneFunc" c:type="HeToneFunc"/>
 				</parameter>
-				<parameter name="tonev_target" transfer-ownership="none" nullable="1">
+				<parameter name="tone_target" transfer-ownership="none" nullable="1">
 					<type name="gpointer" c:type="void*"/>
 				</parameter>
 			</parameters>
 		</constructor>
+		<method name="build" c:identifier="he_dynamic_color_build">
+			<return-value transfer-ownership="full">
+				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
 		<method name="get_hct" c:identifier="he_dynamic_color_get_hct">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
@@ -3277,8 +3431,59 @@ title bar can be made always visible. Has an optional back button. The back butt
 				<parameter name="scheme" transfer-ownership="none">
 					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
 				</parameter>
+				<parameter name="color" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</parameter>
 				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_hue" c:identifier="he_dynamic_color_get_hue">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="scheme" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_initial_tone_from_background" c:identifier="he_dynamic_color_get_initial_tone_from_background">
+			<return-value transfer-ownership="none" closure="2" scope="notified" destroy="3">
+				<type name="He.ToneFunc" c:type="HeToneFunc"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="background" transfer-ownership="none" nullable="1" closure="1" scope="call">
+					<type name="He.BackgroundFunc" c:type="HeBackgroundFunc"/>
+				</parameter>
+				<parameter name="background_target" transfer-ownership="none" nullable="1">
+					<type name="gpointer" c:type="void*"/>
+				</parameter>
+				<parameter name="result_target" direction="out" transfer-ownership="none" optional="1">
+					<type name="gpointer" c:type="void**"/>
+				</parameter>
+				<parameter name="result_target_destroy_notify" direction="out" transfer-ownership="none" scope="call">
+					<type name="GLib.DestroyNotify" c:type="GDestroyNotify*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_tone_from_scheme" c:identifier="he_dynamic_color_get_tone_from_scheme">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="scheme" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -3292,6 +3497,9 @@ title bar can be made always visible. Has an optional back button. The back butt
 				</instance-parameter>
 				<parameter name="scheme" transfer-ownership="none">
 					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</parameter>
+				<parameter name="color" transfer-ownership="none" nullable="1">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -3394,6 +3602,32 @@ title bar can be made always visible. Has an optional back button. The back butt
 				</parameter>
 			</parameters>
 		</method>
+		<property name="chromamult" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_chromamult" c:identifier="he_dynamic_color_get_chromamult">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_chromamult" c:identifier="he_dynamic_color_set_chromamult">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="contrast-curve" writable="1">
 			<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
 		</property>
@@ -3487,7 +3721,7 @@ title bar can be made always visible. Has an optional back button. The back butt
 				<parameter name="secondary" transfer-ownership="none">
 					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
 				</parameter>
-				<parameter name="tertiary" transfer-ownership="none">
+				<parameter name="tertiary" transfer-ownership="none" nullable="1">
 					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
 				</parameter>
 				<parameter name="neutral" transfer-ownership="none">
@@ -3514,6 +3748,45 @@ title bar can be made always visible. Has an optional back button. The back butt
 				</parameter>
 				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_hue" c:identifier="he_dynamic_scheme_get_hue">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+				<parameter name="dynamic_color" transfer-ownership="none">
+					<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_rotated_hue" c:identifier="he_dynamic_scheme_get_rotated_hue">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+				<parameter name="hb" transfer-ownership="none">
+					<array length="1" c:type="gdouble*">
+						<type name="gdouble" c:type="gdouble"/>
+					</array>
+				</parameter>
+				<parameter name="hb_length1" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+				<parameter name="r" transfer-ownership="none">
+					<array length="3" c:type="gdouble*">
+						<type name="gdouble" c:type="gdouble"/>
+					</array>
+				</parameter>
+				<parameter name="r_length1" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -3575,6 +3848,19 @@ title bar can be made always visible. Has an optional back button. The back butt
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
 				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_background_hct" c:identifier="he_dynamic_scheme_get_background_hct">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				</instance-parameter>
+				<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</parameter>
 			</parameters>
 		</method>
 		<method name="get_on_background" c:identifier="he_dynamic_scheme_get_on_background">
@@ -4329,7 +4615,7 @@ area of the cube.&lt;/para&gt;
 			<type name="DefaultSchemePrivate" c:type="HeDefaultSchemePrivate*"/>
 		</field>
 		<method name="generate" c:identifier="he_default_scheme_generate">
-			<doc xml:whitespace="preserve">&lt;para&gt;The default theme&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;The default theme - Ensor 2025&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
 			</return-value>
@@ -4493,16 +4779,79 @@ area of the cube.&lt;/para&gt;
 				<type name="He.Scheme" c:type="HeScheme*"/>
 			</return-value>
 		</constructor>
-		<method name="highest_surface" c:identifier="he_scheme_highest_surface">
+		<method name="t_max_c" c:identifier="he_scheme_t_max_c">
 			<return-value transfer-ownership="full">
-				<type name="He.DynamicColor" c:type="HeDynamicColor*"/>
+				<type name="gdouble" c:type="gdouble"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.Scheme" c:type="HeScheme*"/>
 				</instance-parameter>
-				<parameter name="s" transfer-ownership="none">
-					<type name="He.DynamicScheme" c:type="HeDynamicScheme*"/>
+				<parameter name="palette" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+				<parameter name="lower_bound" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="upper_bound" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="chroma_multiplier" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="t_min_c" c:identifier="he_scheme_t_min_c">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+				<parameter name="palette" transfer-ownership="none">
+					<type name="He.TonalPalette" c:type="HeTonalPalette*"/>
+				</parameter>
+				<parameter name="lower_bound" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="upper_bound" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="find_best_tone_for_chroma" c:identifier="he_scheme_find_best_tone_for_chroma">
+			<return-value transfer-ownership="full">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+				<parameter name="hue" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="chroma" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="tone" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="by_decreasing_tone" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="get_curve" c:identifier="he_scheme_get_curve">
+			<return-value transfer-ownership="full">
+				<type name="He.ContrastCurve" c:type="HeContrastCurve*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Scheme" c:type="HeScheme*"/>
+				</instance-parameter>
+				<parameter name="def_c" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -5398,6 +5747,9 @@ area of the cube.&lt;/para&gt;
 		<field name="polarity" writable="1">
 			<type name="He.TonePolarity" c:type="HeTonePolarity"/>
 		</field>
+		<field name="resolve" writable="1">
+			<type name="He.ToneResolve" c:type="HeToneResolve"/>
+		</field>
 		<field name="stay_together" writable="1">
 			<type name="gboolean" c:type="gboolean"/>
 		</field>
@@ -5418,8 +5770,8 @@ area of the cube.&lt;/para&gt;
 				<parameter name="polarity" transfer-ownership="none" nullable="1">
 					<type name="He.TonePolarity" c:type="HeTonePolarity*"/>
 				</parameter>
-				<parameter name="stay_together" transfer-ownership="none">
-					<type name="gboolean" c:type="gboolean"/>
+				<parameter name="resolve" transfer-ownership="none" nullable="1">
+					<type name="He.ToneResolve" c:type="HeToneResolve*"/>
 				</parameter>
 			</parameters>
 		</constructor>
@@ -5742,14 +6094,36 @@ area of the cube.&lt;/para&gt;
 		</field>
 	</record>
 	<record name="ViewingConditionsPrivate" c:type="HeViewingConditionsPrivate" disguised="1"/>
-	<class name="AboutWindow" c:type="HeAboutWindow" c:symbol-prefix="about_window" glib:type-name="HeAboutWindow" glib:get-type="he_about_window_get_type" glib:type-struct="AboutWindowClass" parent="He.Window">
-		<doc xml:whitespace="preserve">&lt;para&gt;An AboutWindow is a window that displays information about the application.&lt;/para&gt;</doc>
+	<class name="AboutWindow" c:type="HeAboutWindow" c:symbol-prefix="about_window" glib:type-name="HeAboutWindow" glib:get-type="he_about_window_get_type" glib:type-struct="AboutWindowClass" parent="Gtk.Widget">
+		<doc xml:whitespace="preserve">&lt;para&gt;An AboutWindow is a modal widget that displays information about the application.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Window" c:type="HeWindow"/>
+			<type name="Gtk.Widget" c:type="GtkWidget"/>
 		</field>
 		<field name="priv" readable="0" private="1">
 			<type name="AboutWindowPrivate" c:type="HeAboutWindowPrivate*"/>
 		</field>
+		<method name="present" c:identifier="he_about_window_present">
+			<doc xml:whitespace="preserve">&lt;para&gt;Shows the about window by overlaying it on the parent window.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AboutWindow" c:type="HeAboutWindow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="hide_about" c:identifier="he_about_window_hide_about">
+			<doc xml:whitespace="preserve">&lt;para&gt;Hides the about window.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AboutWindow" c:type="HeAboutWindow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
 		<constructor name="new" c:identifier="he_about_window_new">
 			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new AboutWindow.&lt;/para&gt;
 
@@ -5759,7 +6133,7 @@ Since: 1.0</doc>
 			</return-value>
 			<parameters>
 				<parameter name="parent" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The parent window. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;The parent window. The window must contain a Gtk.Overlay somewhere in its widget hierarchy for modal overlay behavior to work correctly. &lt;/para&gt;</doc>
 					<type name="Gtk.Window" c:type="GtkWindow*"/>
 				</parameter>
 				<parameter name="app_name" transfer-ownership="none">
@@ -5822,6 +6196,32 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</constructor>
+		<property name="visible" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_visible" c:identifier="he_about_window_get_visible">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AboutWindow" c:type="HeAboutWindow*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_visible" c:identifier="he_about_window_set_visible">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.AboutWindow" c:type="HeAboutWindow*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="color" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;The theme color of the AboutWindow.&lt;/para&gt;</doc>
 			<type name="He.Colors" c:type="HeColors"/>
@@ -6170,10 +6570,16 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<glib:signal name="hidden">
+			<doc xml:whitespace="preserve">&lt;para&gt;The hidden signal fires when the about window is hidden.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
 	</class>
 	<record name="AboutWindowClass" c:type="HeAboutWindowClass" glib:is-gtype-struct-for="AboutWindow">
 		<field name="parent_class" readable="0" private="1">
-			<type name="He.WindowClass" c:type="HeWindowClass"/>
+			<type name="Gtk.WidgetClass" c:type="GtkWidgetClass"/>
 		</field>
 	</record>
 	<record name="AboutWindowPrivate" c:type="HeAboutWindowPrivate" disguised="1"/>
@@ -7042,8 +7448,18 @@ Since: 1.0</doc>
 		<member name="error" c:identifier="HE_BANNER_STYLE_ERROR" value="2"/>
 	</enumeration>
 	<class name="BottomBar" c:type="HeBottomBar" c:symbol-prefix="bottom_bar" glib:type-name="HeBottomBar" glib:get-type="he_bottom_bar_get_type" glib:type-struct="BottomBarClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A BottomBar is a toolbar made to make actions on content more visible. It may have up to 5 actions on each side. It has title and description
-labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
+		<doc xml:whitespace="preserve">&lt;para&gt;A BottomBar is a bottom toolbar that displays actions and content labels.&lt;/para&gt;
+&lt;para&gt;The BottomBar can operate in two distinct modes: - **Docked Mode**: Acts as a traditional bottom app bar, attached to the window edge -
+**Floating Mode**: Hovers over content as an overlay with rounded corners and elevation&lt;/para&gt;
+&lt;para&gt;Important Notes&lt;/para&gt;
+&lt;para&gt;- **Button Limitation**: Only accepts `He.Button` widgets as children - **Floating Mode Requirements**: Must set `overlay_widget` when using
+`Mode.FLOATING` - **Automatic Overlay Creation**: If the target widget isn&amp;apos;t in a `Gtk.Overlay`, one is created automatically&lt;/para&gt;
+&lt;para&gt;CSS Classes&lt;/para&gt;
+&lt;para&gt;The BottomBar automatically applies CSS classes for styling: - `bottom-bar`: Always applied to the root element - `docked`: Applied when in
+docked mode - `floating`: Applied when in floating mode - `default`: Applied when using default style - `vibrant`: Applied when using vibrant style
+&lt;/para&gt;
+
+Since: 1.0</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Bin" c:type="HeBin"/>
@@ -7051,30 +7467,49 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 		<field name="priv" readable="0" private="1">
 			<type name="BottomBarPrivate" c:type="HeBottomBarPrivate*"/>
 		</field>
+		<constructor name="new" c:identifier="he_bottom_bar_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Create a new BottomBar in docked mode.&lt;/para&gt;
+&lt;para&gt;The bottom bar will be created without title or description text. Use the `title` and `description` properties to set content after creation.
+&lt;/para&gt;</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.BottomBar" c:type="HeBottomBar*"/>
+			</return-value>
+		</constructor>
 		<constructor name="with_details" c:identifier="he_bottom_bar_new_with_details">
-			<doc xml:whitespace="preserve">&lt;para&gt;Create a new bottom bar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;Create a new BottomBar with title and description text.&lt;/para&gt;
+&lt;para&gt;This is a convenience constructor that sets both the title and description in a single call. The bottom bar will be in docked mode by default.
+&lt;/para&gt;</doc>
 			<return-value transfer-ownership="none">
 				<type name="He.BottomBar" c:type="HeBottomBar*"/>
 			</return-value>
 			<parameters>
 				<parameter name="title" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The title of the bottom bar. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;The main title text to display &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
 				<parameter name="description" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The description of the bottom bar. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;The secondary description text to display &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
 			</parameters>
 		</constructor>
-		<constructor name="new" c:identifier="he_bottom_bar_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Create a new bottom bar.&lt;/para&gt;</doc>
+		<constructor name="floating" c:identifier="he_bottom_bar_new_floating">
+			<doc xml:whitespace="preserve">&lt;para&gt;Create a new BottomBar in floating mode.&lt;/para&gt;
+&lt;para&gt;This convenience constructor automatically sets the mode to FLOATING and configures the overlay widget. The bottom bar will hover over the
+specified widget with elevated styling.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="none">
 				<type name="He.BottomBar" c:type="HeBottomBar*"/>
 			</return-value>
+			<parameters>
+				<parameter name="overlay_widget" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The widget to overlay the bottom bar on top of &lt;/para&gt;</doc>
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
 		</constructor>
 		<method name="append_button" c:identifier="he_bottom_bar_append_button">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add an action to the bottom bar on the end of the bar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a button to the end of the bottom bar.&lt;/para&gt;
+&lt;para&gt;The button is added to the specified position &amp;lpar;left or right side&amp;rpar; after any existing buttons in that position.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7082,18 +7517,19 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.BottomBar" c:type="HeBottomBar*"/>
 				</instance-parameter>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
+				<parameter name="button" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The He.Button to add to the bottom bar &lt;/para&gt;</doc>
 					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;Which side of the bar to add the button to &lt;/para&gt;</doc>
 					<type name="He.BottomBarPosition" c:type="HeBottomBarPosition"/>
 				</parameter>
 			</parameters>
 		</method>
 		<method name="prepend_button" c:identifier="he_bottom_bar_prepend_button">
-			<doc xml:whitespace="preserve">&lt;para&gt;Add an action to the bottom bar on the start of the bar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;Add a button to the beginning of the bottom bar.&lt;/para&gt;
+&lt;para&gt;The button is added to the specified position &amp;lpar;left or right side&amp;rpar; before any existing buttons in that position.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7101,18 +7537,20 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.BottomBar" c:type="HeBottomBar*"/>
 				</instance-parameter>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
+				<parameter name="button" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The He.Button to add to the bottom bar &lt;/para&gt;</doc>
 					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;Which side of the bar to add the button to &lt;/para&gt;</doc>
 					<type name="He.BottomBarPosition" c:type="HeBottomBarPosition"/>
 				</parameter>
 			</parameters>
 		</method>
 		<method name="remove_button" c:identifier="he_bottom_bar_remove_button">
-			<doc xml:whitespace="preserve">&lt;para&gt;Remove an action of the bottom bar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;Remove a button from the bottom bar.&lt;/para&gt;
+&lt;para&gt;The button is removed from whichever position it&amp;apos;s currently in. If the button is not a child of this bottom bar, no action is taken.
+&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7120,18 +7558,15 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.BottomBar" c:type="HeBottomBar*"/>
 				</instance-parameter>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
+				<parameter name="button" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The He.Button to remove from the bottom bar &lt;/para&gt;</doc>
 					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-				<parameter name="position" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
-					<type name="He.BottomBarPosition" c:type="HeBottomBarPosition"/>
 				</parameter>
 			</parameters>
 		</method>
 		<method name="insert_button_after" c:identifier="he_bottom_bar_insert_button_after">
-			<doc xml:whitespace="preserve">&lt;para&gt;Insert an action after another action.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;Insert a button after another button.&lt;/para&gt;
+&lt;para&gt;The new button is inserted immediately after the reference button in the specified position. Both buttons must be in the same position.&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7139,24 +7574,24 @@ labels, which can be part of a menu&amp;apos;s label.&lt;/para&gt;</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.BottomBar" c:type="HeBottomBar*"/>
 				</instance-parameter>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
+				<parameter name="button" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The He.Button to insert &lt;/para&gt;</doc>
 					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="after" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action after which the action is. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;The existing He.Button to insert after &lt;/para&gt;</doc>
 					<type name="He.Button" c:type="HeButton*"/>
 				</parameter>
 				<parameter name="position" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;Which side of the bar to insert the button into &lt;/para&gt;</doc>
 					<type name="He.BottomBarPosition" c:type="HeBottomBarPosition"/>
 				</parameter>
 			</parameters>
 		</method>
-		<method name="reorder_button_after" c:identifier="he_bottom_bar_reorder_button_after">
-			<doc xml:whitespace="preserve">&lt;para&gt;Reorder an action based on another action.&lt;/para&gt;
-
-Since: 1.0</doc>
+		<method name="clear_buttons" c:identifier="he_bottom_bar_clear_buttons">
+			<doc xml:whitespace="preserve">&lt;para&gt;Remove all buttons from the bottom bar.&lt;/para&gt;
+&lt;para&gt;This removes all buttons from both the left and right sides of the bar. The buttons are unparented but not destroyed, so they can be reused.
+&lt;/para&gt;</doc>
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7164,22 +7599,30 @@ Since: 1.0</doc>
 				<instance-parameter name="self" transfer-ownership="none">
 					<type name="He.BottomBar" c:type="HeBottomBar*"/>
 				</instance-parameter>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action. &lt;/para&gt;</doc>
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-				<parameter name="sibling" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The iconicbutton of the action after which the action is. &lt;/para&gt;</doc>
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
+			</parameters>
+		</method>
+		<method name="get_button_count" c:identifier="he_bottom_bar_get_button_count">
+			<doc xml:whitespace="preserve">&lt;para&gt;Get the number of buttons in a specific position.&lt;/para&gt;
+&lt;para&gt;This counts all He.Button widgets currently added to the specified side of the bottom bar.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<doc xml:whitespace="preserve">&lt;para&gt;The number of buttons in the specified position &lt;/para&gt;</doc>
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomBar" c:type="HeBottomBar*"/>
+				</instance-parameter>
 				<parameter name="position" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The position of the action. &lt;/para&gt;</doc>
+					<doc xml:whitespace="preserve">&lt;para&gt;Which side of the bar to count buttons for &lt;/para&gt;</doc>
 					<type name="He.BottomBarPosition" c:type="HeBottomBarPosition"/>
 				</parameter>
 			</parameters>
 		</method>
 		<property name="title" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The title of the bottom bar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;The main title text displayed in the center of the bottom bar. This is ideal for showing the current context or selection state, such as &amp;quot;
+Photos&amp;quot; or &amp;quot;3 items selected&amp;quot;.&lt;/para&gt;&lt;note&gt;
+  &lt;para&gt;Title is hidden when in vertical mode &amp;lpar;LEFT/RIGHT positioning&amp;rpar;. &lt;/para&gt;
+&lt;/note&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
 		</property>
 		<method name="get_title" c:identifier="he_bottom_bar_get_title">
@@ -7205,8 +7648,41 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="overlay-button" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;An optional overlay button that appears near the bottom bar when in floating mode.&lt;/para&gt;
+&lt;para&gt;When set, this button will be positioned 18px away from the floating bottom bar. The positioning depends on the floating_position: - BOTTOM:
+Button appears 18px to the right of the bar - LEFT: Button appears 18px above the bar - RIGHT: Button appears 18px above the bar&lt;/para&gt;
+&lt;para&gt;The overlay button is only visible when the BottomBar is in FLOATING mode. Setting this to null removes the overlay button.&lt;/para&gt;</doc>
+			<type name="He.OverlayButton" c:type="HeOverlayButton*"/>
+		</property>
+		<method name="get_overlay_button" c:identifier="he_bottom_bar_get_overlay_button">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="He.OverlayButton" c:type="HeOverlayButton*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomBar" c:type="HeBottomBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_overlay_button" c:identifier="he_bottom_bar_set_overlay_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomBar" c:type="HeBottomBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="He.OverlayButton" c:type="HeOverlayButton*"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="description" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The description of the bottom bar.&lt;/para&gt;</doc>
+			<doc xml:whitespace="preserve">&lt;para&gt;The secondary description text displayed below the title. This is ideal for showing additional context or action hints, such as &amp;quot;Tap to
+select items&amp;quot; or &amp;quot;Ready to share&amp;quot;.&lt;/para&gt;&lt;note&gt;
+  &lt;para&gt;Description is hidden when in vertical mode &amp;lpar;LEFT/RIGHT positioning&amp;rpar;. &lt;/para&gt;
+&lt;/note&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
 		</property>
 		<method name="get_description" c:identifier="he_bottom_bar_get_description">
@@ -7232,13 +7708,16 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
-		<property name="menu-model" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The menu_model of the bottom bar. If a menu_model is set, show it on the center widget of the bottom bar.&lt;/para&gt;</doc>
-			<type name="Gio.MenuModel" c:type="GMenuModel*"/>
+		<property name="mode" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The current display mode of the bottom bar.&lt;/para&gt;
+&lt;para&gt;Changing this property automatically updates the CSS classes and positioning. When switching to FLOATING mode, ensure `overlay_widget` is set.
+The overlay_button is only shown in FLOATING mode.&lt;/para&gt;
+&lt;para&gt;CSS Classes - `docked` class is applied when mode is DOCKED - `floating` class is applied when mode is FLOATING&lt;/para&gt;</doc>
+			<type name="He.BottomBarMode" c:type="HeBottomBarMode"/>
 		</property>
-		<method name="get_menu_model" c:identifier="he_bottom_bar_get_menu_model">
+		<method name="get_mode" c:identifier="he_bottom_bar_get_mode">
 			<return-value transfer-ownership="none">
-				<type name="Gio.MenuModel" c:type="GMenuModel*"/>
+				<type name="He.BottomBarMode" c:type="HeBottomBarMode"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -7246,7 +7725,7 @@ Since: 1.0</doc>
 				</instance-parameter>
 			</parameters>
 		</method>
-		<method name="set_menu_model" c:identifier="he_bottom_bar_set_menu_model">
+		<method name="set_mode" c:identifier="he_bottom_bar_set_mode">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7255,17 +7734,19 @@ Since: 1.0</doc>
 					<type name="He.BottomBar" c:type="HeBottomBar*"/>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
-					<type name="Gio.MenuModel" c:type="GMenuModel*"/>
+					<type name="He.BottomBarMode" c:type="HeBottomBarMode"/>
 				</parameter>
 			</parameters>
 		</method>
-		<property name="collapse-actions" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Whether to collapse actions into a menu.&lt;/para&gt;</doc>
-			<type name="gboolean" c:type="gboolean"/>
+		<property name="style" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The current visual style of the bottom bar.&lt;/para&gt;
+&lt;para&gt;Changing this property automatically updates the CSS classes to apply the appropriate theming and visual effects.&lt;/para&gt;
+&lt;para&gt;CSS Classes - No additional class is applied when style is DEFAULT - `vibrant` class is applied when style is VIBRANT&lt;/para&gt;</doc>
+			<type name="He.BottomBarStyle" c:type="HeBottomBarStyle"/>
 		</property>
-		<method name="get_collapse_actions" c:identifier="he_bottom_bar_get_collapse_actions">
+		<method name="get_style" c:identifier="he_bottom_bar_get_style">
 			<return-value transfer-ownership="none">
-				<type name="gboolean" c:type="gboolean"/>
+				<type name="He.BottomBarStyle" c:type="HeBottomBarStyle"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -7273,7 +7754,7 @@ Since: 1.0</doc>
 				</instance-parameter>
 			</parameters>
 		</method>
-		<method name="set_collapse_actions" c:identifier="he_bottom_bar_set_collapse_actions">
+		<method name="set_style" c:identifier="he_bottom_bar_set_style">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -7282,7 +7763,68 @@ Since: 1.0</doc>
 					<type name="He.BottomBar" c:type="HeBottomBar*"/>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
-					<type name="gboolean" c:type="gboolean"/>
+					<type name="He.BottomBarStyle" c:type="HeBottomBarStyle"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="floating-position" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The position of the bottom bar when in floating mode.&lt;/para&gt;
+&lt;para&gt;This property determines where the floating bottom bar is positioned relative to the overlay widget. Only affects appearance in FLOATING mode.
+Also repositions the overlay_button if present.&lt;/para&gt;
+&lt;para&gt;Position Behavior - BOTTOM: Positioned at bottom with horizontal layout &amp;lpar;default&amp;rpar; - LEFT: Positioned at left edge with vertical
+layout - RIGHT: Positioned at right edge with vertical layout&lt;/para&gt;</doc>
+			<type name="He.BottomBarFloatingPosition" c:type="HeBottomBarFloatingPosition"/>
+		</property>
+		<method name="get_floating_position" c:identifier="he_bottom_bar_get_floating_position">
+			<return-value transfer-ownership="none">
+				<type name="He.BottomBarFloatingPosition" c:type="HeBottomBarFloatingPosition"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomBar" c:type="HeBottomBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_floating_position" c:identifier="he_bottom_bar_set_floating_position">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomBar" c:type="HeBottomBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.BottomBarFloatingPosition" c:type="HeBottomBarFloatingPosition"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="overlay-widget" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;The widget to overlay when in floating mode.&lt;/para&gt;
+&lt;para&gt;This property is **required** when using FLOATING mode. The bottom bar will be positioned as an overlay on top of this widget.&lt;/para&gt;
+&lt;para&gt;Behavior - If the target widget is not already in a Gtk.Overlay, one will be created automatically - The overlay is inserted into the widget
+hierarchy, preserving the original structure - Setting this to `null` while in FLOATING mode will show a warning&lt;/para&gt;</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_overlay_widget" c:identifier="he_bottom_bar_get_overlay_widget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomBar" c:type="HeBottomBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_overlay_widget" c:identifier="he_bottom_bar_set_overlay_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.BottomBar" c:type="HeBottomBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -7293,8 +7835,37 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="BottomBarPrivate" c:type="HeBottomBarPrivate" disguised="1"/>
+	<enumeration name="BottomBarMode" c:type="HeBottomBarMode" glib:type-name="HeBottomBarMode" glib:get-type="he_bottom_bar_mode_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;Display modes for the BottomBar widget.&lt;/para&gt;
+&lt;para&gt;The mode determines how the bottom bar is positioned and styled:&lt;/para&gt;
+&lt;para&gt;- **DOCKED**: Traditional bottom app bar attached to the window edge. Spans the full width and has a flat appearance with subtle elevation.
+&lt;/para&gt;
+&lt;para&gt;- **FLOATING**: Overlay bar that hovers over content with rounded corners. Requires an `overlay_widget` to be specified for positioning. Has
+higher elevation and appears above other content.&lt;/para&gt;</doc>
+		<member name="docked" c:identifier="HE_BOTTOM_BAR_MODE_DOCKED" value="0"/>
+		<member name="floating" c:identifier="HE_BOTTOM_BAR_MODE_FLOATING" value="1"/>
+	</enumeration>
+	<enumeration name="BottomBarStyle" c:type="HeBottomBarStyle" glib:type-name="HeBottomBarStyle" glib:get-type="he_bottom_bar_style_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;Visual styles for the BottomBar widget.&lt;/para&gt;
+&lt;para&gt;The style determines the visual appearance and theming:&lt;/para&gt;
+&lt;para&gt;- **DEFAULT**: Standard appearance with system colors and styling. Uses the default theme colors and contrast levels.&lt;/para&gt;
+&lt;para&gt;- **VIBRANT**: Enhanced appearance with more vivid colors and effects. Provides higher visual impact and modern styling. Applies &amp;quot;vibrant
+&amp;quot; CSS class.&lt;/para&gt;</doc>
+		<member name="default" c:identifier="HE_BOTTOM_BAR_STYLE_DEFAULT" value="0"/>
+		<member name="vibrant" c:identifier="HE_BOTTOM_BAR_STYLE_VIBRANT" value="1"/>
+	</enumeration>
+	<enumeration name="BottomBarFloatingPosition" c:type="HeBottomBarFloatingPosition" glib:type-name="HeBottomBarFloatingPosition" glib:get-type="he_bottom_bar_floating_position_get_type">
+		<doc xml:whitespace="preserve">&lt;para&gt;Positioning options for floating BottomBar.&lt;/para&gt;
+&lt;para&gt;When in floating mode, the bottom bar can be positioned at different edges:&lt;/para&gt;
+&lt;para&gt;- **BOTTOM**: Default positioning at the bottom edge of the overlay widget. - **LEFT**: Positioned at the left edge with vertical orientation.
+- **RIGHT**: Positioned at the right edge with vertical orientation.&lt;/para&gt;</doc>
+		<member name="bottom" c:identifier="HE_BOTTOM_BAR_FLOATING_POSITION_BOTTOM" value="0"/>
+		<member name="left" c:identifier="HE_BOTTOM_BAR_FLOATING_POSITION_LEFT" value="1"/>
+		<member name="right" c:identifier="HE_BOTTOM_BAR_FLOATING_POSITION_RIGHT" value="2"/>
+	</enumeration>
 	<enumeration name="BottomBarPosition" c:type="HeBottomBarPosition" glib:type-name="HeBottomBarPosition" glib:get-type="he_bottom_bar_position_get_type">
-		<doc xml:whitespace="preserve">&lt;para&gt;An enum to define the position of the bottom bar actions.&lt;/para&gt;</doc>
+		<doc xml:whitespace="preserve">&lt;para&gt;Positioning options for buttons within the BottomBar.&lt;/para&gt;
+&lt;para&gt;Buttons can be placed on either side of the center content area, allowing for a balanced layout of actions.&lt;/para&gt;</doc>
 		<member name="left" c:identifier="HE_BOTTOM_BAR_POSITION_LEFT" value="0"/>
 		<member name="right" c:identifier="HE_BOTTOM_BAR_POSITION_RIGHT" value="1"/>
 	</enumeration>
@@ -7560,12 +8131,38 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</constructor>
-		<property name="color" writable="1">
+		<property name="custom-color" writable="1">
 			<type name="He.Colors" c:type="HeColors"/>
+		</property>
+		<method name="get_custom_color" c:identifier="he_button_get_custom_color">
+			<return-value transfer-ownership="none">
+				<type name="He.Colors" c:type="HeColors"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_custom_color" c:identifier="he_button_set_custom_color">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Colors" c:type="HeColors"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="color" writable="1">
+			<type name="He.ButtonColor" c:type="HeButtonColor"/>
 		</property>
 		<method name="get_color" c:identifier="he_button_get_color">
 			<return-value transfer-ownership="none">
-				<type name="He.Colors" c:type="HeColors"/>
+				<type name="He.ButtonColor" c:type="HeButtonColor"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
@@ -7582,7 +8179,111 @@ Since: 1.0</doc>
 					<type name="He.Button" c:type="HeButton*"/>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
-					<type name="He.Colors" c:type="HeColors"/>
+					<type name="He.ButtonColor" c:type="HeButtonColor"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="size" writable="1">
+			<type name="He.ButtonSize" c:type="HeButtonSize"/>
+		</property>
+		<method name="get_size" c:identifier="he_button_get_size">
+			<return-value transfer-ownership="none">
+				<type name="He.ButtonSize" c:type="HeButtonSize"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_size" c:identifier="he_button_set_size">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.ButtonSize" c:type="HeButtonSize"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="width" writable="1">
+			<type name="He.ButtonWidth" c:type="HeButtonWidth"/>
+		</property>
+		<method name="get_width" c:identifier="he_button_get_width">
+			<return-value transfer-ownership="none">
+				<type name="He.ButtonWidth" c:type="HeButtonWidth"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_width" c:identifier="he_button_set_width">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.ButtonWidth" c:type="HeButtonWidth"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="toggle-mode" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_toggle_mode" c:identifier="he_button_get_toggle_mode">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_toggle_mode" c:identifier="he_button_set_toggle_mode">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="active" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_active" c:identifier="he_button_get_active">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_active" c:identifier="he_button_set_active">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -7820,6 +8521,17 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<glib:signal name="toggled">
+			<doc xml:whitespace="preserve">&lt;para&gt;Signal emitted when toggle state changes&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<parameter name="active" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</glib:signal>
 	</class>
 	<record name="ButtonClass" c:type="HeButtonClass" glib:is-gtype-struct-for="Button">
 		<field name="parent_class" readable="0" private="1">
@@ -7827,6 +8539,556 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ButtonPrivate" c:type="HeButtonPrivate" disguised="1"/>
+	<class name="Card" c:type="HeCard" c:symbol-prefix="card" glib:type-name="HeCard" glib:get-type="he_card_get_type" glib:type-struct="CardClass" parent="He.Bin">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Card displays content with an icon, text and optional buttons. Combines functionality of ContentBlock and MiniContentBlock.&lt;/para&gt;</doc>
+		<implements name="Gtk.Buildable"/>
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Bin" c:type="HeBin"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="CardPrivate" c:type="HeCardPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_card_new">
+			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new Card with vertical layout &amp;lpar;ContentBlock style&amp;rpar;.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.Card" c:type="HeCard*"/>
+			</return-value>
+			<parameters>
+				<parameter name="title" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="subtitle" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="icon" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="primary_button" transfer-ownership="none" nullable="1">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+				<parameter name="secondary_button" transfer-ownership="none" nullable="1">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<constructor name="horizontal" c:identifier="he_card_new_horizontal">
+			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new Card with horizontal layout &amp;lpar;MiniContentBlock style&amp;rpar;.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="none">
+				<type name="He.Card" c:type="HeCard*"/>
+			</return-value>
+			<parameters>
+				<parameter name="title" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="subtitle" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="icon" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="primary_button" transfer-ownership="none" nullable="1">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+				<parameter name="widget" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+		<property name="card-type" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the type of the card for styling.&lt;/para&gt;</doc>
+			<type name="He.CardType" c:type="HeCardType"/>
+		</property>
+		<method name="get_card_type" c:identifier="he_card_get_card_type">
+			<return-value transfer-ownership="none">
+				<type name="He.CardType" c:type="HeCardType"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_card_type" c:identifier="he_card_set_card_type">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.CardType" c:type="HeCardType"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="layout" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the layout of the card.&lt;/para&gt;</doc>
+			<type name="He.CardLayout" c:type="HeCardLayout"/>
+		</property>
+		<method name="get_layout" c:identifier="he_card_get_layout">
+			<return-value transfer-ownership="none">
+				<type name="He.CardLayout" c:type="HeCardLayout"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_layout" c:identifier="he_card_set_layout">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.CardLayout" c:type="HeCardLayout"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="title" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the title of the card.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_title" c:identifier="he_card_get_title">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<virtual-method name="get_title" invoker="get_title">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</virtual-method>
+		<method name="set_title" c:identifier="he_card_set_title">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_title" invoker="set_title">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="subtitle" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the subtitle of the card.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_subtitle" c:identifier="he_card_get_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<virtual-method name="get_subtitle" invoker="get_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</virtual-method>
+		<method name="set_subtitle" c:identifier="he_card_set_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_subtitle" invoker="set_subtitle">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="icon" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the card.&lt;/para&gt;</doc>
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_icon" c:identifier="he_card_get_icon">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<virtual-method name="get_icon" invoker="get_icon">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</virtual-method>
+		<method name="set_icon" c:identifier="he_card_set_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_icon" invoker="set_icon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="gicon" readable="0" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the card, as a GLib.Icon.&lt;/para&gt;</doc>
+			<type name="Gio.Icon" c:type="GIcon*"/>
+		</property>
+		<method name="set_gicon" c:identifier="he_card_set_gicon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gio.Icon" c:type="GIcon*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_gicon" invoker="set_gicon">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gio.Icon" c:type="GIcon*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="paintable" readable="0" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the card as a Gdk.Paintable.&lt;/para&gt;</doc>
+			<type name="Gdk.Paintable" c:type="GdkPaintable*"/>
+		</property>
+		<method name="set_paintable" c:identifier="he_card_set_paintable">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gdk.Paintable" c:type="GdkPaintable*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_paintable" invoker="set_paintable">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="Gdk.Paintable" c:type="GdkPaintable*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="widget" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the widget of the card &amp;lpar;for horizontal layout&amp;rpar;.&lt;/para&gt;</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_widget" c:identifier="he_card_get_widget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<virtual-method name="get_widget" invoker="get_widget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</virtual-method>
+		<method name="set_widget" c:identifier="he_card_set_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_widget" invoker="set_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="secondary-button" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the secondary button of the card.&lt;/para&gt;</doc>
+			<type name="He.Button" c:type="HeButton*"/>
+		</property>
+		<method name="get_secondary_button" c:identifier="he_card_get_secondary_button">
+			<return-value transfer-ownership="none">
+				<type name="He.Button" c:type="HeButton*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<virtual-method name="get_secondary_button" invoker="get_secondary_button">
+			<return-value transfer-ownership="none">
+				<type name="He.Button" c:type="HeButton*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</virtual-method>
+		<method name="set_secondary_button" c:identifier="he_card_set_secondary_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_secondary_button" invoker="set_secondary_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+		<property name="primary-button" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the primary button of the card.&lt;/para&gt;</doc>
+			<type name="He.Button" c:type="HeButton*"/>
+		</property>
+		<method name="get_primary_button" c:identifier="he_card_get_primary_button">
+			<return-value transfer-ownership="none">
+				<type name="He.Button" c:type="HeButton*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<virtual-method name="get_primary_button" invoker="get_primary_button">
+			<return-value transfer-ownership="none">
+				<type name="He.Button" c:type="HeButton*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+			</parameters>
+		</virtual-method>
+		<method name="set_primary_button" c:identifier="he_card_set_primary_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<virtual-method name="set_primary_button" invoker="set_primary_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Card" c:type="HeCard*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</virtual-method>
+	</class>
+	<record name="CardClass" c:type="HeCardClass" glib:is-gtype-struct-for="Card">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.BinClass" c:type="HeBinClass"/>
+		</field>
+	</record>
+	<record name="CardPrivate" c:type="HeCardPrivate" disguised="1"/>
+	<class name="ContentBlock" c:type="HeContentBlock" c:symbol-prefix="content_block" glib:type-name="HeContentBlock" glib:get-type="he_content_block_get_type" glib:type-struct="ContentBlockClass" parent="He.Card">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Card" c:type="HeCard"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="ContentBlockPrivate" c:type="HeContentBlockPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_content_block_new">
+			<return-value transfer-ownership="none">
+				<type name="He.ContentBlock" c:type="HeContentBlock*"/>
+			</return-value>
+			<parameters>
+				<parameter name="title" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="subtitle" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="icon" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="primary_button" transfer-ownership="none" nullable="1">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+				<parameter name="secondary_button" transfer-ownership="none" nullable="1">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+	</class>
+	<record name="ContentBlockClass" c:type="HeContentBlockClass" glib:is-gtype-struct-for="ContentBlock">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.CardClass" c:type="HeCardClass"/>
+		</field>
+	</record>
+	<record name="ContentBlockPrivate" c:type="HeContentBlockPrivate" disguised="1"/>
+	<class name="MiniContentBlock" c:type="HeMiniContentBlock" c:symbol-prefix="mini_content_block" glib:type-name="HeMiniContentBlock" glib:get-type="he_mini_content_block_get_type" glib:type-struct="MiniContentBlockClass" parent="He.Card">
+		<field name="parent_instance" readable="0" private="1">
+			<type name="He.Card" c:type="HeCard"/>
+		</field>
+		<field name="priv" readable="0" private="1">
+			<type name="MiniContentBlockPrivate" c:type="HeMiniContentBlockPrivate*"/>
+		</field>
+		<constructor name="new" c:identifier="he_mini_content_block_new">
+			<return-value transfer-ownership="none">
+				<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+			</return-value>
+		</constructor>
+		<constructor name="with_details" c:identifier="he_mini_content_block_new_with_details">
+			<return-value transfer-ownership="none">
+				<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+			</return-value>
+			<parameters>
+				<parameter name="title" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="subtitle" transfer-ownership="none" nullable="1">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+				<parameter name="primary_button" transfer-ownership="none" nullable="1">
+					<type name="He.Button" c:type="HeButton*"/>
+				</parameter>
+				<parameter name="widget" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</constructor>
+	</class>
+	<record name="MiniContentBlockClass" c:type="HeMiniContentBlockClass" glib:is-gtype-struct-for="MiniContentBlock">
+		<field name="parent_class" readable="0" private="1">
+			<type name="He.CardClass" c:type="HeCardClass"/>
+		</field>
+	</record>
+	<record name="MiniContentBlockPrivate" c:type="HeMiniContentBlockPrivate" disguised="1"/>
 	<class name="Chip" c:type="HeChip" c:symbol-prefix="chip" glib:type-name="HeChip" glib:get-type="he_chip_get_type" glib:type-struct="ChipClass" parent="Gtk.ToggleButton">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Chip is an element that can facilitate entering information, making selections, filtering content, or triggering actions.&lt;/para&gt;</doc>
 		<implements name="Gtk.Actionable"/>
@@ -7876,6 +9138,40 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="show-close-button" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_close_button" c:identifier="he_chip_get_show_close_button">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Chip" c:type="HeChip*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_close_button" c:identifier="he_chip_set_show_close_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Chip" c:type="HeChip*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="close-clicked">
+			<doc xml:whitespace="preserve">&lt;para&gt;Signal emitted when the close button is clicked. Connect to this signal to handle chip removal.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
 	</class>
 	<record name="ChipClass" c:type="HeChipClass" glib:is-gtype-struct-for="Chip">
 		<field name="parent_class" readable="0" private="1">
@@ -7897,8 +9193,80 @@ Since: 1.0</doc>
 				<type name="He.ChipGroup" c:type="HeChipGroup*"/>
 			</return-value>
 		</constructor>
+		<method name="get_active_filters" c:identifier="he_chip_group_get_active_filters">
+			<doc xml:whitespace="preserve">&lt;para&gt;Get the indices of all active chips. Primarily useful in filtering mode to determine which filters are currently applied.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<doc xml:whitespace="preserve">&lt;para&gt;Array of indices representing active chips &lt;/para&gt;</doc>
+				<array length="0" c:type="guint*">
+					<type name="guint" c:type="guint"/>
+				</array>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+				<parameter name="result_length1" direction="out" transfer-ownership="none">
+					<type name="gint" c:type="gint*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="set_active_filters" c:identifier="he_chip_group_set_active_filters">
+			<doc xml:whitespace="preserve">&lt;para&gt;Set which chips should be active by their indices. Useful for programmatically setting filter states or restoring previous selections.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+				<parameter name="indices" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;Array of chip indices to activate &lt;/para&gt;</doc>
+					<array length="1" c:type="guint*">
+						<type name="guint" c:type="guint"/>
+					</array>
+				</parameter>
+				<parameter name="indices_length1" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="clear_filters" c:identifier="he_chip_group_clear_filters">
+			<doc xml:whitespace="preserve">&lt;para&gt;Deactivate all chips, clearing any active filters or selections. Useful for providing a &amp;quot;clear all&amp;quot; functionality to users.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="remove_chip_at" c:identifier="he_chip_group_remove_chip_at">
+			<doc xml:whitespace="preserve">&lt;para&gt;Remove a chip from the group at the specified position. This will also remove the corresponding item from the selection model. Only effective
+in filtering mode.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+				<parameter name="position" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;Index of the chip to remove &lt;/para&gt;</doc>
+					<type name="guint" c:type="guint"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="selection-model" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The selectionmodel that is controlled by this group.&lt;/para&gt;
+			<doc xml:whitespace="preserve">&lt;para&gt;The SelectionModel that is controlled by this group.&lt;/para&gt;
 
 Since: 1.0</doc>
 			<type name="Gtk.SingleSelection" c:type="GtkSingleSelection*"/>
@@ -7952,6 +9320,80 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="mode" writable="1">
+			<type name="He.ChipGroupMode" c:type="HeChipGroupMode"/>
+		</property>
+		<method name="get_mode" c:identifier="he_chip_group_get_mode">
+			<return-value transfer-ownership="none">
+				<type name="He.ChipGroupMode" c:type="HeChipGroupMode"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_mode" c:identifier="he_chip_group_set_mode">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.ChipGroupMode" c:type="HeChipGroupMode"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="show-close-buttons" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_show_close_buttons" c:identifier="he_chip_group_get_show_close_buttons">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_show_close_buttons" c:identifier="he_chip_group_set_show_close_buttons">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ChipGroup" c:type="HeChipGroup*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="filters-changed">
+			<doc xml:whitespace="preserve">&lt;para&gt;Signal emitted when filters change in filtering mode. Connect to this signal to respond to filter state changes.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
+		<glib:signal name="chip-removed">
+			<doc xml:whitespace="preserve">&lt;para&gt;Signal emitted when a chip is removed from the group. Only emitted in filtering mode when close buttons are enabled.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<parameter name="position" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The index of the removed chip &lt;/para&gt;</doc>
+					<type name="guint" c:type="guint"/>
+				</parameter>
+			</parameters>
+		</glib:signal>
 	</class>
 	<record name="ChipGroupClass" c:type="HeChipGroupClass" glib:is-gtype-struct-for="ChipGroup">
 		<field name="parent_class" readable="0" private="1">
@@ -7959,202 +9401,6 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="ChipGroupPrivate" c:type="HeChipGroupPrivate" disguised="1"/>
-	<class name="ContentBlock" c:type="HeContentBlock" c:symbol-prefix="content_block" glib:type-name="HeContentBlock" glib:get-type="he_content_block_get_type" glib:type-struct="ContentBlockClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A ContentBlock displays a single block of content, which contains an icon, text and optional buttons.&lt;/para&gt;</doc>
-		<implements name="Gtk.Buildable"/>
-		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Bin" c:type="HeBin"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="ContentBlockPrivate" c:type="HeContentBlockPrivate*"/>
-		</field>
-		<constructor name="new" c:identifier="he_content_block_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new ContentBlock.&lt;/para&gt;</doc>
-			<return-value transfer-ownership="none">
-				<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-			</return-value>
-			<parameters>
-				<parameter name="title" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The title of the content block. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-				<parameter name="subtitle" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the content block. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-				<parameter name="icon" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The icon of the content block. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-				<parameter name="primary_button" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The primary button of the content block. &lt;/para&gt;</doc>
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-				<parameter name="secondary_button" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The secondary button of the content block. &lt;/para&gt;</doc>
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-			</parameters>
-		</constructor>
-		<property name="title" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the title of the content block.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_title" c:identifier="he_content_block_get_title">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_title" c:identifier="he_content_block_set_title">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="subtitle" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the subtitle of the content block.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_subtitle" c:identifier="he_content_block_get_subtitle">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_subtitle" c:identifier="he_content_block_set_subtitle">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="icon" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the content block.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_icon" c:identifier="he_content_block_get_icon">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_icon" c:identifier="he_content_block_set_icon">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="gicon" readable="0" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the content block, as a GLib.Icon.&lt;/para&gt;</doc>
-			<type name="Gio.Icon" c:type="GIcon*"/>
-		</property>
-		<method name="set_gicon" c:identifier="he_content_block_set_gicon">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="Gio.Icon" c:type="GIcon*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="secondary-button" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the secondary button of the content block.&lt;/para&gt;</doc>
-			<type name="He.Button" c:type="HeButton*"/>
-		</property>
-		<method name="get_secondary_button" c:identifier="he_content_block_get_secondary_button">
-			<return-value transfer-ownership="none">
-				<type name="He.Button" c:type="HeButton*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_secondary_button" c:identifier="he_content_block_set_secondary_button">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="primary-button" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the primary button of the content block.&lt;/para&gt;</doc>
-			<type name="He.Button" c:type="HeButton*"/>
-		</property>
-		<method name="get_primary_button" c:identifier="he_content_block_get_primary_button">
-			<return-value transfer-ownership="none">
-				<type name="He.Button" c:type="HeButton*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_primary_button" c:identifier="he_content_block_set_primary_button">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.ContentBlock" c:type="HeContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-			</parameters>
-		</method>
-	</class>
-	<record name="ContentBlockClass" c:type="HeContentBlockClass" glib:is-gtype-struct-for="ContentBlock">
-		<field name="parent_class" readable="0" private="1">
-			<type name="He.BinClass" c:type="HeBinClass"/>
-		</field>
-	</record>
-	<record name="ContentBlockPrivate" c:type="HeContentBlockPrivate" disguised="1"/>
 	<class name="ContentBlockImage" c:type="HeContentBlockImage" c:symbol-prefix="content_block_image" glib:type-name="HeContentBlockImage" glib:get-type="he_content_block_image_get_type" glib:type-struct="ContentBlockImageClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A ContentBlockImage component is used to render an image inside a ContentBlock.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -8632,10 +9878,10 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="DatePickerPrivate" c:type="HeDatePickerPrivate" disguised="1"/>
-	<class name="Dialog" c:type="HeDialog" c:symbol-prefix="dialog" glib:type-name="HeDialog" glib:get-type="he_dialog_get_type" glib:type-struct="DialogClass" parent="He.Window">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Dialog is a modal window that asks the user for input or shows a message.&lt;/para&gt;</doc>
+	<class name="Dialog" c:type="HeDialog" c:symbol-prefix="dialog" glib:type-name="HeDialog" glib:get-type="he_dialog_get_type" glib:type-struct="DialogClass" parent="Gtk.Widget">
+		<doc xml:whitespace="preserve">&lt;para&gt;A Dialog is a modal widget that asks the user for input or shows a message.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Window" c:type="HeWindow"/>
+			<type name="Gtk.Widget" c:type="GtkWidget"/>
 		</field>
 		<field name="priv" readable="0" private="1">
 			<type name="DialogPrivate" c:type="HeDialogPrivate*"/>
@@ -8660,6 +9906,28 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<method name="present" c:identifier="he_dialog_present">
+			<doc xml:whitespace="preserve">&lt;para&gt;Shows the dialog by overlaying it on the parent window.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dialog" c:type="HeDialog*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="hide_dialog" c:identifier="he_dialog_hide_dialog">
+			<doc xml:whitespace="preserve">&lt;para&gt;Hides the dialog.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dialog" c:type="HeDialog*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
 		<constructor name="new" c:identifier="he_dialog_new">
 			<doc xml:whitespace="preserve">&lt;para&gt;Creates a new dialog.&lt;/para&gt;
 
@@ -8668,27 +9936,20 @@ Since: 1.0</doc>
 				<type name="He.Dialog" c:type="HeDialog*"/>
 			</return-value>
 			<parameters>
-				<parameter name="modal" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;Whether the dialog is modal. &lt;/para&gt;</doc>
-					<type name="gboolean" c:type="gboolean"/>
-				</parameter>
-				<parameter name="parent" transfer-ownership="none" nullable="1">
-					<doc xml:whitespace="preserve">&lt;para&gt;The parent window of the dialog. &lt;/para&gt;</doc>
+				<parameter name="parent" transfer-ownership="none">
+					<doc xml:whitespace="preserve">&lt;para&gt;The parent window of the dialog. The window must contain a Gtk.Overlay somewhere in its widget hierarchy for modal overlay behavior to work
+correctly. &lt;/para&gt;</doc>
 					<type name="Gtk.Window" c:type="GtkWindow*"/>
 				</parameter>
-				<parameter name="title" transfer-ownership="none">
+				<parameter name="title" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The title of the dialog. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="subtitle" transfer-ownership="none">
-					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the dialog. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-				<parameter name="info" transfer-ownership="none">
+				<parameter name="info" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The info text of the dialog. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
-				<parameter name="icon" transfer-ownership="none">
+				<parameter name="icon" transfer-ownership="none" nullable="1">
 					<doc xml:whitespace="preserve">&lt;para&gt;The icon of the dialog. &lt;/para&gt;</doc>
 					<type name="utf8" c:type="const gchar*"/>
 				</parameter>
@@ -8702,6 +9963,32 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</constructor>
+		<property name="visible" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_visible" c:identifier="he_dialog_get_visible">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dialog" c:type="HeDialog*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_visible" c:identifier="he_dialog_set_visible">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Dialog" c:type="HeDialog*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="title" writable="1">
 			<doc xml:whitespace="preserve">&lt;para&gt;Sets the title of the dialog.&lt;/para&gt;</doc>
 			<type name="utf8" c:type="gchar*"/>
@@ -8837,15 +10124,21 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<glib:signal name="hidden">
+			<doc xml:whitespace="preserve">&lt;para&gt;The hidden signal fires when the dialog is hidden.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
 	</class>
 	<record name="DialogClass" c:type="HeDialogClass" glib:is-gtype-struct-for="Dialog">
 		<field name="parent_class" readable="0" private="1">
-			<type name="He.WindowClass" c:type="HeWindowClass"/>
+			<type name="Gtk.WidgetClass" c:type="GtkWidgetClass"/>
 		</field>
 	</record>
 	<record name="DialogPrivate" c:type="HeDialogPrivate" disguised="1"/>
 	<class name="Divider" c:type="HeDivider" c:symbol-prefix="divider" glib:type-name="HeDivider" glib:get-type="he_divider_get_type" glib:type-struct="DividerClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Divider is a thin line that groups content in a view, can be full-width &amp;lpar;default&amp;rpar; or inset&lt;/para&gt;</doc>
+		<doc xml:whitespace="preserve">&lt;para&gt;A Divider is a thin line that groups content in a view, can be full-width &amp;lpar;default&amp;rpar;, inset, or side-inset&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Bin" c:type="HeBin"/>
 		</field>
@@ -8872,6 +10165,32 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<method name="set_is_inset" c:identifier="he_divider_set_is_inset">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-side-inset" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_side_inset" c:identifier="he_divider_get_is_side_inset">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Divider" c:type="HeDivider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_side_inset" c:identifier="he_divider_set_is_side_inset">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -9300,222 +10619,205 @@ Since: 1.0</doc>
 		</field>
 	</record>
 	<record name="EmptyPagePrivate" c:type="HeEmptyPagePrivate" disguised="1"/>
-	<class name="MiniContentBlock" c:type="HeMiniContentBlock" c:symbol-prefix="mini_content_block" glib:type-name="HeMiniContentBlock" glib:get-type="he_mini_content_block_get_type" glib:type-struct="MiniContentBlockClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A MiniContentBlock is a content block that is used to display content in a small area.&lt;/para&gt;</doc>
-		<implements name="Gtk.Buildable"/>
+	<class name="GroupedButton" c:type="HeGroupedButton" c:symbol-prefix="grouped_button" glib:type-name="HeGroupedButton" glib:get-type="he_grouped_button_get_type" glib:type-struct="GroupedButtonClass" parent="Gtk.Widget">
 		<field name="parent_instance" readable="0" private="1">
-			<type name="He.Bin" c:type="HeBin"/>
+			<type name="Gtk.Widget" c:type="GtkWidget"/>
 		</field>
 		<field name="priv" readable="0" private="1">
-			<type name="MiniContentBlockPrivate" c:type="HeMiniContentBlockPrivate*"/>
+			<type name="GroupedButtonPrivate" c:type="HeGroupedButtonPrivate*"/>
 		</field>
-		<constructor name="with_details" c:identifier="he_mini_content_block_new_with_details">
-			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new MiniContentBlock.&lt;/para&gt;</doc>
+		<constructor name="new" c:identifier="he_grouped_button_new">
 			<return-value transfer-ownership="none">
-				<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+				<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+			</return-value>
+		</constructor>
+		<constructor name="with_size" c:identifier="he_grouped_button_new_with_size">
+			<return-value transfer-ownership="none">
+				<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
 			</return-value>
 			<parameters>
-				<parameter name="t" transfer-ownership="none" nullable="1">
-					<doc xml:whitespace="preserve">&lt;para&gt;The title of the content block. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-				<parameter name="s" transfer-ownership="none" nullable="1">
-					<doc xml:whitespace="preserve">&lt;para&gt;The subtitle of the content block. &lt;/para&gt;</doc>
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-				<parameter name="pb" transfer-ownership="none" nullable="1">
-					<doc xml:whitespace="preserve">&lt;para&gt;The primary button of the content block. &lt;/para&gt;</doc>
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-				<parameter name="w" transfer-ownership="none" nullable="1">
-					<doc xml:whitespace="preserve">&lt;para&gt;The widget of the content block. &lt;/para&gt;</doc>
-					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				<parameter name="size" transfer-ownership="none">
+					<type name="He.GroupedButtonSize" c:type="HeGroupedButtonSize"/>
 				</parameter>
 			</parameters>
 		</constructor>
-		<constructor name="new" c:identifier="he_mini_content_block_new">
-			<doc xml:whitespace="preserve">&lt;para&gt;Constructs a new MiniContentBlock.&lt;/para&gt;
-
-Since: 1.0</doc>
+		<constructor name="with_names" c:identifier="he_grouped_button_new_with_names">
 			<return-value transfer-ownership="none">
-				<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+				<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
 			</return-value>
+			<parameters>
+				<parameter name="size_name" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
 		</constructor>
-		<property name="widget" writable="1">
-			<type name="Gtk.Widget" c:type="GtkWidget*"/>
-		</property>
-		<method name="get_widget" c:identifier="he_mini_content_block_get_widget">
-			<return-value transfer-ownership="none" nullable="1">
+		<method name="add_widget" c:identifier="he_grouped_button_add_widget">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+				<parameter name="widget" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="remove_widget" c:identifier="he_grouped_button_remove_widget">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+				<parameter name="widget" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="clear_widgets" c:identifier="he_grouped_button_clear_widgets">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_widget_at_index" c:identifier="he_grouped_button_get_widget_at_index">
+			<return-value transfer-ownership="full" nullable="1">
 				<type name="Gtk.Widget" c:type="GtkWidget*"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+				<parameter name="index" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="size" writable="1">
+			<type name="He.GroupedButtonSize" c:type="HeGroupedButtonSize"/>
+		</property>
+		<method name="get_size" c:identifier="he_grouped_button_get_size">
+			<return-value transfer-ownership="none">
+				<type name="He.GroupedButtonSize" c:type="HeGroupedButtonSize"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
 				</instance-parameter>
 			</parameters>
 		</method>
-		<method name="set_widget" c:identifier="he_mini_content_block_set_widget">
+		<method name="set_size" c:identifier="he_grouped_button_set_size">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
 			<parameters>
 				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
 				</instance-parameter>
-				<parameter name="value" transfer-ownership="none" nullable="1">
+				<parameter name="value" transfer-ownership="none">
+					<type name="He.GroupedButtonSize" c:type="HeGroupedButtonSize"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="size-name" writable="1">
+			<type name="utf8" c:type="gchar*"/>
+		</property>
+		<method name="get_size_name" c:identifier="he_grouped_button_get_size_name">
+			<return-value transfer-ownership="none">
+				<type name="utf8" c:type="const gchar*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_size_name" c:identifier="he_grouped_button_set_size_name">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="button-count">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_button_count" c:identifier="he_grouped_button_get_button_count">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<property name="homogeneous" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_homogeneous" c:identifier="he_grouped_button_get_homogeneous">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_homogeneous" c:identifier="he_grouped_button_set_homogeneous">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.GroupedButton" c:type="HeGroupedButton*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="widget-added">
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<parameter name="widget" transfer-ownership="none">
 					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
-		</method>
-		<property name="title" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the title of the content block.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_title" c:identifier="he_mini_content_block_get_title">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_title" c:identifier="he_mini_content_block_set_title">
-			<return-value transfer-ownership="none">
+		</glib:signal>
+		<glib:signal name="widget-removed">
+			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
 			</return-value>
 			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
+				<parameter name="widget" transfer-ownership="none">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
-		</method>
-		<property name="subtitle" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the subtitle of the content block.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_subtitle" c:identifier="he_mini_content_block_get_subtitle">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_subtitle" c:identifier="he_mini_content_block_set_subtitle">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="icon" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the content block.&lt;/para&gt;</doc>
-			<type name="utf8" c:type="gchar*"/>
-		</property>
-		<method name="get_icon" c:identifier="he_mini_content_block_get_icon">
-			<return-value transfer-ownership="none">
-				<type name="utf8" c:type="const gchar*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_icon" c:identifier="he_mini_content_block_set_icon">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="utf8" c:type="const gchar*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="gicon" readable="0" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the content block as a GLib.Icon.&lt;/para&gt;</doc>
-			<type name="Gio.Icon" c:type="GIcon*"/>
-		</property>
-		<method name="set_gicon" c:identifier="he_mini_content_block_set_gicon">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="Gio.Icon" c:type="GIcon*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="paintable" readable="0" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;Sets the icon of the content block as a Gdk.Paintable.&lt;/para&gt;</doc>
-			<type name="Gdk.Paintable" c:type="GdkPaintable*"/>
-		</property>
-		<method name="set_paintable" c:identifier="he_mini_content_block_set_paintable">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="Gdk.Paintable" c:type="GdkPaintable*"/>
-				</parameter>
-			</parameters>
-		</method>
-		<property name="primary-button" writable="1">
-			<doc xml:whitespace="preserve">&lt;para&gt;The primary button of the content block.&lt;/para&gt;</doc>
-			<type name="He.Button" c:type="HeButton*"/>
-		</property>
-		<method name="get_primary_button" c:identifier="he_mini_content_block_get_primary_button">
-			<return-value transfer-ownership="none">
-				<type name="He.Button" c:type="HeButton*"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-			</parameters>
-		</method>
-		<method name="set_primary_button" c:identifier="he_mini_content_block_set_primary_button">
-			<return-value transfer-ownership="none">
-				<type name="none" c:type="void"/>
-			</return-value>
-			<parameters>
-				<instance-parameter name="self" transfer-ownership="none">
-					<type name="He.MiniContentBlock" c:type="HeMiniContentBlock*"/>
-				</instance-parameter>
-				<parameter name="value" transfer-ownership="none">
-					<type name="He.Button" c:type="HeButton*"/>
-				</parameter>
-			</parameters>
-		</method>
+		</glib:signal>
 	</class>
-	<record name="MiniContentBlockClass" c:type="HeMiniContentBlockClass" glib:is-gtype-struct-for="MiniContentBlock">
+	<record name="GroupedButtonClass" c:type="HeGroupedButtonClass" glib:is-gtype-struct-for="GroupedButton">
 		<field name="parent_class" readable="0" private="1">
-			<type name="He.BinClass" c:type="HeBinClass"/>
+			<type name="Gtk.WidgetClass" c:type="GtkWidgetClass"/>
 		</field>
 	</record>
-	<record name="MiniContentBlockPrivate" c:type="HeMiniContentBlockPrivate" disguised="1"/>
+	<record name="GroupedButtonPrivate" c:type="HeGroupedButtonPrivate" disguised="1"/>
 	<class name="ModifierBadge" c:type="HeModifierBadge" c:symbol-prefix="modifier_badge" glib:type-name="HeModifierBadge" glib:get-type="he_modifier_badge_get_type" glib:type-struct="ModifierBadgeClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A ModiferBadge is a badge that can be used to show that the state of something has changed.&lt;/para&gt;</doc>
 		<field name="parent_instance" readable="0" private="1">
@@ -9779,6 +11081,93 @@ Since: 1.0</doc>
 				</instance-parameter>
 				<parameter name="value" transfer-ownership="none">
 					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-expanded" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Whether the navigation rail is expanded or collapsed.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_expanded" c:identifier="he_navigation_rail_get_is_expanded">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_expanded" c:identifier="he_navigation_rail_set_is_expanded">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="custom-button" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Custom button to show between expand button and navigation buttons.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<type name="Gtk.Button" c:type="GtkButton*"/>
+		</property>
+		<method name="get_custom_button" c:identifier="he_navigation_rail_get_custom_button">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Button" c:type="GtkButton*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_custom_button" c:identifier="he_navigation_rail_set_custom_button">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Button" c:type="GtkButton*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="custom-widget" writable="1">
+			<doc xml:whitespace="preserve">&lt;para&gt;Custom widget to show after navigation buttons &amp;lpar;vertical + expanded only&amp;rpar;.&lt;/para&gt;
+
+Since: 1.0</doc>
+			<type name="Gtk.Widget" c:type="GtkWidget*"/>
+		</property>
+		<method name="get_custom_widget" c:identifier="he_navigation_rail_get_custom_widget">
+			<return-value transfer-ownership="none" nullable="1">
+				<type name="Gtk.Widget" c:type="GtkWidget*"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_custom_widget" c:identifier="he_navigation_rail_set_custom_widget">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.NavigationRail" c:type="HeNavigationRail*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none" nullable="1">
+					<type name="Gtk.Widget" c:type="GtkWidget*"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -10297,7 +11686,8 @@ Since: 1.0</doc>
 		</parameters>
 	</function>
 	<class name="ProgressBar" c:type="HeProgressBar" c:symbol-prefix="progress_bar" glib:type-name="HeProgressBar" glib:get-type="he_progress_bar_get_type" glib:type-struct="ProgressBarClass" parent="He.Bin">
-		<doc xml:whitespace="preserve">&lt;para&gt;A Progressbar indicates the progress of some process and contains a disable-able Stop Indicator for accessibility purposes.&lt;/para&gt;</doc>
+		<doc xml:whitespace="preserve">&lt;para&gt;A Progressbar indicates the progress of some process and contains a disable-able Stop Indicator for accessibility purposes. Can display either
+a standard progressbar or a custom wavy progressbar.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
 		<field name="parent_instance" readable="0" private="1">
 			<type name="He.Bin" c:type="HeBin"/>
@@ -10317,6 +11707,136 @@ Since: 1.0</doc>
 				<type name="He.ProgressBar" c:type="HeProgressBar*"/>
 			</return-value>
 		</constructor>
+		<property name="wave-amplitude" writable="1">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_wave_amplitude" c:identifier="he_progress_bar_get_wave_amplitude">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_wave_amplitude" c:identifier="he_progress_bar_set_wave_amplitude">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="wave-wavelength" writable="1">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_wave_wavelength" c:identifier="he_progress_bar_get_wave_wavelength">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_wave_wavelength" c:identifier="he_progress_bar_set_wave_wavelength">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="wave-thickness" writable="1">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_wave_thickness" c:identifier="he_progress_bar_get_wave_thickness">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_wave_thickness" c:identifier="he_progress_bar_set_wave_thickness">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="animate" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_animate" c:identifier="he_progress_bar_get_animate">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_animate" c:identifier="he_progress_bar_set_animate">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="progress" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_progress" c:identifier="he_progress_bar_get_progress">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_progress" c:identifier="he_progress_bar_set_progress">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
 		<property name="stop-indicator-visibility" writable="1">
 			<type name="gboolean" c:type="gboolean"/>
 		</property>
@@ -10357,6 +11877,32 @@ Since: 1.0</doc>
 			</parameters>
 		</method>
 		<method name="set_is_osd" c:identifier="he_progress_bar_set_is_osd">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="is-wavy" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_wavy" c:identifier="he_progress_bar_get_is_wavy">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.ProgressBar" c:type="HeProgressBar*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_wavy" c:identifier="he_progress_bar_set_is_wavy">
 			<return-value transfer-ownership="none">
 				<type name="none" c:type="void"/>
 			</return-value>
@@ -11171,7 +12717,7 @@ Since: 1.0</doc>
 	<record name="SideBarPrivate" c:type="HeSideBarPrivate" disguised="1"/>
 	<class name="Slider" c:type="HeSlider" c:symbol-prefix="slider" glib:type-name="HeSlider" glib:get-type="he_slider_get_type" glib:type-struct="SliderClass" parent="He.Bin">
 		<doc xml:whitespace="preserve">&lt;para&gt;A Slider is a widget that is used to select a value by means of a dial running across a trough. Contains optional icons for the slider purpose,
-and a disable-able Stop Indicator for accessibility purposes.&lt;/para&gt;
+and a disable-able Stop Indicator for accessibility purposes. Can display either a standard scale or a custom wavy slider.&lt;/para&gt;
 &lt;para&gt;When using the Stop Indicator, it&amp;apos;s advisable to add a mark with the value of 1.0 along the trough of the Slider so that the user can
 discern why the end point is marked.&lt;/para&gt;</doc>
 		<implements name="Gtk.Buildable"/>
@@ -11207,6 +12753,167 @@ Since: 1.0</doc>
 				</parameter>
 				<parameter name="text" transfer-ownership="none" nullable="1">
 					<type name="utf8" c:type="const gchar*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="set_range" c:identifier="he_slider_set_range">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the range of the slider.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="min" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+				<parameter name="max" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="set_adjustment" c:identifier="he_slider_set_adjustment">
+			<doc xml:whitespace="preserve">&lt;para&gt;Sets the adjustment for the slider.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="adjustment" transfer-ownership="none">
+					<type name="Gtk.Adjustment" c:type="GtkAdjustment*"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="wave-amplitude" writable="1">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_wave_amplitude" c:identifier="he_slider_get_wave_amplitude">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_wave_amplitude" c:identifier="he_slider_set_wave_amplitude">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="wave-wavelength" writable="1">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_wave_wavelength" c:identifier="he_slider_get_wave_wavelength">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_wave_wavelength" c:identifier="he_slider_set_wave_wavelength">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="wave-thickness" writable="1">
+			<type name="gint" c:type="gint"/>
+		</property>
+		<method name="get_wave_thickness" c:identifier="he_slider_get_wave_thickness">
+			<return-value transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_wave_thickness" c:identifier="he_slider_set_wave_thickness">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gint" c:type="gint"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="animate" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_animate" c:identifier="he_slider_get_animate">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_animate" c:identifier="he_slider_set_animate">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<property name="value" writable="1">
+			<type name="gdouble" c:type="gdouble"/>
+		</property>
+		<method name="get_value" c:identifier="he_slider_get_value">
+			<return-value transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_value" c:identifier="he_slider_set_value">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
 				</parameter>
 			</parameters>
 		</method>
@@ -11288,6 +12995,38 @@ Since: 1.0</doc>
 				</parameter>
 			</parameters>
 		</method>
+		<property name="is-wavy" writable="1">
+			<type name="gboolean" c:type="gboolean"/>
+		</property>
+		<method name="get_is_wavy" c:identifier="he_slider_get_is_wavy">
+			<return-value transfer-ownership="none">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="set_is_wavy" c:identifier="he_slider_set_is_wavy">
+			<return-value transfer-ownership="none">
+				<type name="none" c:type="void"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none">
+					<type name="He.Slider" c:type="HeSlider*"/>
+				</instance-parameter>
+				<parameter name="value" transfer-ownership="none">
+					<type name="gboolean" c:type="gboolean"/>
+				</parameter>
+			</parameters>
+		</method>
+		<glib:signal name="value-changed">
+			<doc xml:whitespace="preserve">&lt;para&gt;Signal emitted when the value changes.&lt;/para&gt;</doc>
+			<return-value transfer-ownership="full">
+				<type name="none" c:type="void"/>
+			</return-value>
+		</glib:signal>
 	</class>
 	<record name="SliderClass" c:type="HeSliderClass" glib:is-gtype-struct-for="Slider">
 		<field name="parent_class" readable="0" private="1">
@@ -13738,6 +15477,56 @@ Since: 1.0</doc>
 		<field name="a" writable="1">
 			<type name="gint" c:type="gint"/>
 		</field>
+		<method name="to_int" c:identifier="he_hct_color_to_int">
+			<return-value transfer-ownership="full">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none" nullable="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<method name="get_argb" c:identifier="he_hct_color_get_argb">
+			<return-value transfer-ownership="full">
+				<type name="gint" c:type="gint"/>
+			</return-value>
+			<parameters>
+				<instance-parameter name="self" transfer-ownership="none" nullable="1">
+					<type name="He.HCTColor" c:type="HeHCTColor*"/>
+				</instance-parameter>
+			</parameters>
+		</method>
+		<function name="hue_is_yellow" c:identifier="he_hct_color_hue_is_yellow">
+			<return-value transfer-ownership="full">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<parameter name="hue" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="hue_is_blue" c:identifier="he_hct_color_hue_is_blue">
+			<return-value transfer-ownership="full">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<parameter name="hue" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
+		<function name="hue_is_cyan" c:identifier="he_hct_color_hue_is_cyan">
+			<return-value transfer-ownership="full">
+				<type name="gboolean" c:type="gboolean"/>
+			</return-value>
+			<parameters>
+				<parameter name="hue" transfer-ownership="none">
+					<type name="gdouble" c:type="gdouble"/>
+				</parameter>
+			</parameters>
+		</function>
 	</record>
 	<record name="LABColor" c:type="HeLABColor" c:symbol-prefix="lab_color" glib:type-name="HeLABColor" glib:get-type="he_lab_color_get_type">
 		<field name="l" writable="1">
@@ -14021,6 +15810,19 @@ Since: 1.0</doc>
 			</parameter>
 		</parameters>
 	</function>
+	<function name="set_internal_state" c:identifier="he_set_internal_state">
+		<return-value transfer-ownership="none">
+			<type name="none" c:type="void"/>
+		</return-value>
+		<parameters>
+			<parameter name="argb" transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</parameter>
+			<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+				<type name="He.HCTColor" c:type="HeHCTColor*"/>
+			</parameter>
+		</parameters>
+	</function>
 	<function name="from_params" c:identifier="he_from_params">
 		<return-value transfer-ownership="none">
 			<type name="none" c:type="void"/>
@@ -14034,6 +15836,22 @@ Since: 1.0</doc>
 			</parameter>
 			<parameter name="tone" transfer-ownership="none">
 				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+			<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
+				<type name="He.HCTColor" c:type="HeHCTColor*"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="in_vc" c:identifier="he_in_vc">
+		<return-value transfer-ownership="none">
+			<type name="none" c:type="void"/>
+		</return-value>
+		<parameters>
+			<parameter name="hct" transfer-ownership="none">
+				<type name="He.HCTColor" c:type="HeHCTColor*"/>
+			</parameter>
+			<parameter name="vc" transfer-ownership="none">
+				<type name="He.ViewingConditions" c:type="HeViewingConditions*"/>
 			</parameter>
 			<parameter name="result" direction="out" transfer-ownership="full" caller-allocates="1">
 				<type name="He.HCTColor" c:type="HeHCTColor*"/>
@@ -14152,8 +15970,8 @@ Since: 1.0</doc>
 			<type name="gdouble" c:type="gdouble"/>
 		</return-value>
 		<parameters>
-			<parameter name="hue" transfer-ownership="none">
-				<type name="gdouble" c:type="gdouble"/>
+			<parameter name="hct" transfer-ownership="none">
+				<type name="He.HCTColor" c:type="HeHCTColor*"/>
 			</parameter>
 			<parameter name="hues" transfer-ownership="none">
 				<array length="2" c:type="gdouble*">
@@ -14169,6 +15987,32 @@ Since: 1.0</doc>
 				</array>
 			</parameter>
 			<parameter name="rotations_length1" transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="piecewise_val" c:identifier="he_piecewise_val">
+		<return-value transfer-ownership="full">
+			<type name="gdouble" c:type="gdouble"/>
+		</return-value>
+		<parameters>
+			<parameter name="hct" transfer-ownership="none">
+				<type name="He.HCTColor" c:type="HeHCTColor*"/>
+			</parameter>
+			<parameter name="huebps" transfer-ownership="none">
+				<array length="2" c:type="gdouble*">
+					<type name="gdouble" c:type="gdouble"/>
+				</array>
+			</parameter>
+			<parameter name="huebps_length1" transfer-ownership="none">
+				<type name="gint" c:type="gint"/>
+			</parameter>
+			<parameter name="hues" transfer-ownership="none">
+				<array length="4" c:type="gdouble*">
+					<type name="gdouble" c:type="gdouble"/>
+				</array>
+			</parameter>
+			<parameter name="hues_length1" transfer-ownership="none">
 				<type name="gint" c:type="gint"/>
 			</parameter>
 		</parameters>
@@ -14201,6 +16045,22 @@ Since: 1.0</doc>
 			</parameter>
 			<parameter name="linrgb_length1" transfer-ownership="none">
 				<type name="gint" c:type="gint"/>
+			</parameter>
+		</parameters>
+	</function>
+	<function name="from_solved" c:identifier="he_from_solved">
+		<return-value transfer-ownership="full">
+			<type name="gint" c:type="gint"/>
+		</return-value>
+		<parameters>
+			<parameter name="h" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+			<parameter name="c" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
+			</parameter>
+			<parameter name="lstar" transfer-ownership="none">
+				<type name="gdouble" c:type="gdouble"/>
 			</parameter>
 		</parameters>
 	</function>

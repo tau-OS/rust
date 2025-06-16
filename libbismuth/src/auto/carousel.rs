@@ -5,6 +5,7 @@
 
 use crate::{ffi, SpringParams, Swipeable};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -237,7 +238,7 @@ impl Carousel {
     pub fn connect_page_changed<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn page_changed_trampoline<F: Fn(&Carousel, u32) + 'static>(
             this: *mut ffi::BisCarousel,
-            index: libc::c_uint,
+            index: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -247,7 +248,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"page-changed\0".as_ptr() as *const _,
+                c"page-changed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     page_changed_trampoline::<F> as *const (),
                 )),
@@ -273,7 +274,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-long-swipes\0".as_ptr() as *const _,
+                c"notify::allow-long-swipes".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_long_swipes_trampoline::<F> as *const (),
                 )),
@@ -296,7 +297,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-mouse-drag\0".as_ptr() as *const _,
+                c"notify::allow-mouse-drag".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_mouse_drag_trampoline::<F> as *const (),
                 )),
@@ -322,7 +323,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-scroll-wheel\0".as_ptr() as *const _,
+                c"notify::allow-scroll-wheel".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_scroll_wheel_trampoline::<F> as *const (),
                 )),
@@ -345,7 +346,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::interactive\0".as_ptr() as *const _,
+                c"notify::interactive".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_interactive_trampoline::<F> as *const (),
                 )),
@@ -368,7 +369,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::n-pages\0".as_ptr() as *const _,
+                c"notify::n-pages".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_n_pages_trampoline::<F> as *const (),
                 )),
@@ -391,7 +392,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::position\0".as_ptr() as *const _,
+                c"notify::position".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_position_trampoline::<F> as *const (),
                 )),
@@ -414,7 +415,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::reveal-duration\0".as_ptr() as *const _,
+                c"notify::reveal-duration".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_reveal_duration_trampoline::<F> as *const (),
                 )),
@@ -437,7 +438,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::scroll-params\0".as_ptr() as *const _,
+                c"notify::scroll-params".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scroll_params_trampoline::<F> as *const (),
                 )),
@@ -460,7 +461,7 @@ impl Carousel {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::spacing\0".as_ptr() as *const _,
+                c"notify::spacing".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spacing_trampoline::<F> as *const (),
                 )),
@@ -616,6 +617,14 @@ impl CarouselBuilder {
         }
     }
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -722,6 +731,7 @@ impl CarouselBuilder {
     /// Build the [`Carousel`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Carousel {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

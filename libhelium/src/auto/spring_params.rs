@@ -94,16 +94,12 @@ impl SpringParamsBuilder {
     /// Build the [`SpringParams`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SpringParams {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::SpringParams>> Sealed for T {}
-}
-
-pub trait SpringParamsExt: IsA<SpringParams> + sealed::Sealed + 'static {
+pub trait SpringParamsExt: IsA<SpringParams> + 'static {
     #[doc(alias = "he_spring_params_get_damping")]
     #[doc(alias = "get_damping")]
     fn damping(&self) -> f64 {
@@ -173,7 +169,7 @@ pub trait SpringParamsExt: IsA<SpringParams> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::damping\0".as_ptr() as *const _,
+                c"notify::damping".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_damping_trampoline::<Self, F> as *const (),
                 )),
@@ -199,7 +195,7 @@ pub trait SpringParamsExt: IsA<SpringParams> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::damping-ratio\0".as_ptr() as *const _,
+                c"notify::damping-ratio".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_damping_ratio_trampoline::<Self, F> as *const (),
                 )),
@@ -222,7 +218,7 @@ pub trait SpringParamsExt: IsA<SpringParams> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::mass\0".as_ptr() as *const _,
+                c"notify::mass".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mass_trampoline::<Self, F> as *const (),
                 )),
@@ -248,7 +244,7 @@ pub trait SpringParamsExt: IsA<SpringParams> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stiffness\0".as_ptr() as *const _,
+                c"notify::stiffness".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stiffness_trampoline::<Self, F> as *const (),
                 )),

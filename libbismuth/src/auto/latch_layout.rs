@@ -82,7 +82,7 @@ impl LatchLayout {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::maximum-size\0".as_ptr() as *const _,
+                c"notify::maximum-size".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_maximum_size_trampoline::<F> as *const (),
                 )),
@@ -110,7 +110,7 @@ impl LatchLayout {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::tightening-threshold\0".as_ptr() as *const _,
+                c"notify::tightening-threshold".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tightening_threshold_trampoline::<F> as *const (),
                 )),
@@ -164,6 +164,7 @@ impl LatchLayoutBuilder {
     /// Build the [`LatchLayout`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> LatchLayout {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

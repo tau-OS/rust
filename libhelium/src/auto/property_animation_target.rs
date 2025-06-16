@@ -96,7 +96,7 @@ impl PropertyAnimationTarget {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::object\0".as_ptr() as *const _,
+                c"notify::object".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_object_trampoline::<F> as *const (),
                 )),
@@ -119,7 +119,7 @@ impl PropertyAnimationTarget {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::pspec\0".as_ptr() as *const _,
+                c"notify::pspec".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pspec_trampoline::<F> as *const (),
                 )),
@@ -167,6 +167,7 @@ impl PropertyAnimationTargetBuilder {
     /// Build the [`PropertyAnimationTarget`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> PropertyAnimationTarget {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

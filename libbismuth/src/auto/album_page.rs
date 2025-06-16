@@ -78,7 +78,7 @@ impl AlbumPage {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::name\0".as_ptr() as *const _,
+                c"notify::name".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_name_trampoline::<F> as *const (),
                 )),
@@ -101,7 +101,7 @@ impl AlbumPage {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::navigatable\0".as_ptr() as *const _,
+                c"notify::navigatable".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_navigatable_trampoline::<F> as *const (),
                 )),
@@ -149,6 +149,7 @@ impl AlbumPageBuilder {
     /// Build the [`AlbumPage`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AlbumPage {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

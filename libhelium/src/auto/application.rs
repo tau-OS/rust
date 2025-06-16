@@ -5,6 +5,7 @@
 
 use crate::{ffi, RGBColor};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -160,12 +161,17 @@ impl ApplicationBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Application>> Sealed for T {}
-}
+pub trait HeApplicationExt: IsA<Application> + 'static {
+    #[doc(alias = "he_application_get_effective_accent_color")]
+    #[doc(alias = "get_effective_accent_color")]
+    fn effective_accent_color(&self) -> Option<RGBColor> {
+        unsafe {
+            from_glib_full(ffi::he_application_get_effective_accent_color(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
-pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
     #[doc(alias = "he_application_get_default_accent_color")]
     #[doc(alias = "get_default_accent_color")]
     fn default_accent_color(&self) -> Option<RGBColor> {
@@ -283,6 +289,31 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "accent-color-changed")]
+    fn connect_accent_color_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn accent_color_changed_trampoline<
+            P: IsA<Application>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeApplication,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Application::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"accent-color-changed".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    accent_color_changed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "default-accent-color")]
     fn connect_default_accent_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_default_accent_color_trampoline<
@@ -300,7 +331,7 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::default-accent-color\0".as_ptr() as *const _,
+                c"notify::default-accent-color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_accent_color_trampoline::<Self, F> as *const (),
                 )),
@@ -329,7 +360,7 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::override-accent-color\0".as_ptr() as *const _,
+                c"notify::override-accent-color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_override_accent_color_trampoline::<Self, F> as *const (),
                 )),
@@ -355,7 +386,7 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::override-dark-style\0".as_ptr() as *const _,
+                c"notify::override-dark-style".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_override_dark_style_trampoline::<Self, F> as *const (),
                 )),
@@ -381,7 +412,7 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::override-contrast\0".as_ptr() as *const _,
+                c"notify::override-contrast".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_override_contrast_trampoline::<Self, F> as *const (),
                 )),
@@ -407,7 +438,7 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::default-contrast\0".as_ptr() as *const _,
+                c"notify::default-contrast".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_contrast_trampoline::<Self, F> as *const (),
                 )),
@@ -433,7 +464,7 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-content\0".as_ptr() as *const _,
+                c"notify::is-content".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_content_trampoline::<Self, F> as *const (),
                 )),
@@ -456,7 +487,7 @@ pub trait HeApplicationExt: IsA<Application> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-mono\0".as_ptr() as *const _,
+                c"notify::is-mono".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_mono_trampoline::<Self, F> as *const (),
                 )),

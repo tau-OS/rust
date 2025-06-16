@@ -155,6 +155,11 @@ impl SettingsWindowBuilder {
         }
     }
 
+    //    #[cfg(feature = "gtk_v4_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_20")))]
+    //pub fn gravity(self, gravity: /*Ignored*/gtk::WindowGravity) -> Self {
+    //    Self { builder: self.builder.property("gravity", gravity), }
+    //}
     #[cfg(feature = "gtk_v4_2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
     pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
@@ -305,6 +310,14 @@ impl SettingsWindowBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -409,16 +422,12 @@ impl SettingsWindowBuilder {
     /// Build the [`SettingsWindow`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SettingsWindow {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::SettingsWindow>> Sealed for T {}
-}
-
-pub trait SettingsWindowExt: IsA<SettingsWindow> + sealed::Sealed + 'static {
+pub trait SettingsWindowExt: IsA<SettingsWindow> + 'static {
     #[doc(alias = "he_settings_window_add_page")]
     fn add_page(&self, page: &impl IsA<SettingsPage>) {
         unsafe {

@@ -96,16 +96,12 @@ impl DesktopBuilder {
     /// Build the [`Desktop`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Desktop {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Desktop>> Sealed for T {}
-}
-
-pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
+pub trait DesktopExt: IsA<Desktop> + 'static {
     //#[doc(alias = "he_desktop_get_prefers_color_scheme")]
     //#[doc(alias = "get_prefers_color_scheme")]
     //fn prefers_color_scheme(&self) -> /*Ignored*/DesktopColorScheme {
@@ -199,7 +195,7 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::prefers-color-scheme\0".as_ptr() as *const _,
+                c"notify::prefers-color-scheme".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_prefers_color_scheme_trampoline::<Self, F> as *const (),
                 )),
@@ -225,7 +221,7 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::ensor-scheme\0".as_ptr() as *const _,
+                c"notify::ensor-scheme".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ensor_scheme_trampoline::<Self, F> as *const (),
                 )),
@@ -251,7 +247,7 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::accent-color\0".as_ptr() as *const _,
+                c"notify::accent-color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_accent_color_trampoline::<Self, F> as *const (),
                 )),
@@ -274,7 +270,7 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::font-weight\0".as_ptr() as *const _,
+                c"notify::font-weight".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_font_weight_trampoline::<Self, F> as *const (),
                 )),
@@ -297,7 +293,7 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::roundness\0".as_ptr() as *const _,
+                c"notify::roundness".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_roundness_trampoline::<Self, F> as *const (),
                 )),
@@ -320,7 +316,7 @@ pub trait DesktopExt: IsA<Desktop> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::contrast\0".as_ptr() as *const _,
+                c"notify::contrast".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_contrast_trampoline::<Self, F> as *const (),
                 )),

@@ -160,6 +160,11 @@ impl ApplicationWindowBuilder {
         }
     }
 
+    //    #[cfg(feature = "gtk_v4_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_20")))]
+    //pub fn gravity(self, gravity: /*Ignored*/gtk::WindowGravity) -> Self {
+    //    Self { builder: self.builder.property("gravity", gravity), }
+    //}
     #[cfg(feature = "gtk_v4_2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_2")))]
     pub fn handle_menubar_accel(self, handle_menubar_accel: bool) -> Self {
@@ -310,6 +315,14 @@ impl ApplicationWindowBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -414,16 +427,12 @@ impl ApplicationWindowBuilder {
     /// Build the [`ApplicationWindow`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ApplicationWindow {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ApplicationWindow>> Sealed for T {}
-}
-
-pub trait ApplicationWindowExt: IsA<ApplicationWindow> + sealed::Sealed + 'static {
+pub trait ApplicationWindowExt: IsA<ApplicationWindow> + 'static {
     #[doc(alias = "he_application_window_get_has_title")]
     #[doc(alias = "get_has_title")]
     fn has_title(&self) -> bool {
@@ -481,7 +490,7 @@ pub trait ApplicationWindowExt: IsA<ApplicationWindow> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::has-title\0".as_ptr() as *const _,
+                c"notify::has-title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_title_trampoline::<Self, F> as *const (),
                 )),
@@ -507,7 +516,7 @@ pub trait ApplicationWindowExt: IsA<ApplicationWindow> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::has-back-button\0".as_ptr() as *const _,
+                c"notify::has-back-button".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_back_button_trampoline::<Self, F> as *const (),
                 )),

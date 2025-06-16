@@ -5,6 +5,7 @@
 
 use crate::{ffi, Fuse};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -32,12 +33,7 @@ impl FusesManager {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FusesManager>> Sealed for T {}
-}
-
-pub trait FusesManagerExt: IsA<FusesManager> + sealed::Sealed + 'static {
+pub trait FusesManagerExt: IsA<FusesManager> + 'static {
     #[doc(alias = "fusebox_fuses_manager_has_fuses")]
     fn has_fuses(&self) -> bool {
         unsafe {
@@ -77,7 +73,7 @@ pub trait FusesManagerExt: IsA<FusesManager> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"fuse-added\0".as_ptr() as *const _,
+                c"fuse-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     fuse_added_trampoline::<Self, F> as *const (),
                 )),

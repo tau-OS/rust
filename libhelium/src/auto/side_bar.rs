@@ -205,6 +205,14 @@ impl SideBarBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -309,16 +317,12 @@ impl SideBarBuilder {
     /// Build the [`SideBar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> SideBar {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::SideBar>> Sealed for T {}
-}
-
-pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
+pub trait SideBarExt: IsA<SideBar> + 'static {
     #[doc(alias = "he_side_bar_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> Option<gtk::Widget> {
@@ -490,7 +494,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
+                c"notify::title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
@@ -513,7 +517,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::titlewidget\0".as_ptr() as *const _,
+                c"notify::titlewidget".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_titlewidget_trampoline::<Self, F> as *const (),
                 )),
@@ -536,7 +540,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::subtitle\0".as_ptr() as *const _,
+                c"notify::subtitle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_subtitle_trampoline::<Self, F> as *const (),
                 )),
@@ -565,7 +569,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-right-title-buttons\0".as_ptr() as *const _,
+                c"notify::show-right-title-buttons".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_right_title_buttons_trampoline::<Self, F> as *const (),
                 )),
@@ -594,7 +598,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-left-title-buttons\0".as_ptr() as *const _,
+                c"notify::show-left-title-buttons".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_left_title_buttons_trampoline::<Self, F> as *const (),
                 )),
@@ -617,7 +621,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-back\0".as_ptr() as *const _,
+                c"notify::show-back".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_back_trampoline::<Self, F> as *const (),
                 )),
@@ -640,7 +644,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stack\0".as_ptr() as *const _,
+                c"notify::stack".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stack_trampoline::<Self, F> as *const (),
                 )),
@@ -663,7 +667,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::scroller\0".as_ptr() as *const _,
+                c"notify::scroller".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scroller_trampoline::<Self, F> as *const (),
                 )),
@@ -686,7 +690,7 @@ pub trait SideBarExt: IsA<SideBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::has-margins\0".as_ptr() as *const _,
+                c"notify::has-margins".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_margins_trampoline::<Self, F> as *const (),
                 )),

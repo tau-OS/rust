@@ -164,6 +164,14 @@ impl ViewAuxBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -268,16 +276,12 @@ impl ViewAuxBuilder {
     /// Build the [`ViewAux`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ViewAux {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ViewAux>> Sealed for T {}
-}
-
-pub trait ViewAuxExt: IsA<ViewAux> + sealed::Sealed + 'static {
+pub trait ViewAuxExt: IsA<ViewAux> + 'static {
     #[doc(alias = "he_view_aux_get_show_aux")]
     #[doc(alias = "get_show_aux")]
     fn shows_aux(&self) -> bool {
@@ -309,7 +313,7 @@ pub trait ViewAuxExt: IsA<ViewAux> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-aux\0".as_ptr() as *const _,
+                c"notify::show-aux".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_aux_trampoline::<Self, F> as *const (),
                 )),

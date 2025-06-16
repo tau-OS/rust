@@ -428,6 +428,202 @@ impl From<BannerStyle> for glib::Value {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HeBottomBarFloatingPosition")]
+pub enum BottomBarFloatingPosition {
+    #[doc(alias = "HE_BOTTOM_BAR_FLOATING_POSITION_BOTTOM")]
+    Bottom,
+    #[doc(alias = "HE_BOTTOM_BAR_FLOATING_POSITION_LEFT")]
+    Left,
+    #[doc(alias = "HE_BOTTOM_BAR_FLOATING_POSITION_RIGHT")]
+    Right,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for BottomBarFloatingPosition {
+    type GlibType = ffi::HeBottomBarFloatingPosition;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeBottomBarFloatingPosition {
+        match self {
+            Self::Bottom => ffi::HE_BOTTOM_BAR_FLOATING_POSITION_BOTTOM,
+            Self::Left => ffi::HE_BOTTOM_BAR_FLOATING_POSITION_LEFT,
+            Self::Right => ffi::HE_BOTTOM_BAR_FLOATING_POSITION_RIGHT,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeBottomBarFloatingPosition> for BottomBarFloatingPosition {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeBottomBarFloatingPosition) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_BOTTOM_BAR_FLOATING_POSITION_BOTTOM => Self::Bottom,
+            ffi::HE_BOTTOM_BAR_FLOATING_POSITION_LEFT => Self::Left,
+            ffi::HE_BOTTOM_BAR_FLOATING_POSITION_RIGHT => Self::Right,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for BottomBarFloatingPosition {
+    #[inline]
+    #[doc(alias = "he_bottom_bar_floating_position_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_bottom_bar_floating_position_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BottomBarFloatingPosition {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for BottomBarFloatingPosition {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for BottomBarFloatingPosition {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for BottomBarFloatingPosition {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<BottomBarFloatingPosition> for glib::Value {
+    #[inline]
+    fn from(v: BottomBarFloatingPosition) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeBottomBarMode")]
+pub enum BottomBarMode {
+    #[doc(alias = "HE_BOTTOM_BAR_MODE_DOCKED")]
+    Docked,
+    #[doc(alias = "HE_BOTTOM_BAR_MODE_FLOATING")]
+    Floating,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for BottomBarMode {
+    type GlibType = ffi::HeBottomBarMode;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeBottomBarMode {
+        match self {
+            Self::Docked => ffi::HE_BOTTOM_BAR_MODE_DOCKED,
+            Self::Floating => ffi::HE_BOTTOM_BAR_MODE_FLOATING,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeBottomBarMode> for BottomBarMode {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeBottomBarMode) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_BOTTOM_BAR_MODE_DOCKED => Self::Docked,
+            ffi::HE_BOTTOM_BAR_MODE_FLOATING => Self::Floating,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for BottomBarMode {
+    #[inline]
+    #[doc(alias = "he_bottom_bar_mode_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_bottom_bar_mode_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BottomBarMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for BottomBarMode {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for BottomBarMode {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for BottomBarMode {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<BottomBarMode> for glib::Value {
+    #[inline]
+    fn from(v: BottomBarMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "HeBottomBarPosition")]
 pub enum BottomBarPosition {
     #[doc(alias = "HE_BOTTOM_BAR_POSITION_LEFT")]
@@ -517,6 +713,710 @@ impl ToValue for BottomBarPosition {
 impl From<BottomBarPosition> for glib::Value {
     #[inline]
     fn from(v: BottomBarPosition) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeBottomBarStyle")]
+pub enum BottomBarStyle {
+    #[doc(alias = "HE_BOTTOM_BAR_STYLE_DEFAULT")]
+    Default,
+    #[doc(alias = "HE_BOTTOM_BAR_STYLE_VIBRANT")]
+    Vibrant,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for BottomBarStyle {
+    type GlibType = ffi::HeBottomBarStyle;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeBottomBarStyle {
+        match self {
+            Self::Default => ffi::HE_BOTTOM_BAR_STYLE_DEFAULT,
+            Self::Vibrant => ffi::HE_BOTTOM_BAR_STYLE_VIBRANT,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeBottomBarStyle> for BottomBarStyle {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeBottomBarStyle) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_BOTTOM_BAR_STYLE_DEFAULT => Self::Default,
+            ffi::HE_BOTTOM_BAR_STYLE_VIBRANT => Self::Vibrant,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for BottomBarStyle {
+    #[inline]
+    #[doc(alias = "he_bottom_bar_style_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_bottom_bar_style_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BottomBarStyle {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for BottomBarStyle {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for BottomBarStyle {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for BottomBarStyle {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<BottomBarStyle> for glib::Value {
+    #[inline]
+    fn from(v: BottomBarStyle) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeButtonColor")]
+pub enum ButtonColor {
+    #[doc(alias = "HE_BUTTON_COLOR_SURFACE")]
+    Surface,
+    #[doc(alias = "HE_BUTTON_COLOR_PRIMARY")]
+    Primary,
+    #[doc(alias = "HE_BUTTON_COLOR_SECONDARY")]
+    Secondary,
+    #[doc(alias = "HE_BUTTON_COLOR_TERTIARY")]
+    Tertiary,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for ButtonColor {
+    type GlibType = ffi::HeButtonColor;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeButtonColor {
+        match self {
+            Self::Surface => ffi::HE_BUTTON_COLOR_SURFACE,
+            Self::Primary => ffi::HE_BUTTON_COLOR_PRIMARY,
+            Self::Secondary => ffi::HE_BUTTON_COLOR_SECONDARY,
+            Self::Tertiary => ffi::HE_BUTTON_COLOR_TERTIARY,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeButtonColor> for ButtonColor {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeButtonColor) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_BUTTON_COLOR_SURFACE => Self::Surface,
+            ffi::HE_BUTTON_COLOR_PRIMARY => Self::Primary,
+            ffi::HE_BUTTON_COLOR_SECONDARY => Self::Secondary,
+            ffi::HE_BUTTON_COLOR_TERTIARY => Self::Tertiary,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for ButtonColor {
+    #[inline]
+    #[doc(alias = "he_button_color_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_button_color_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ButtonColor {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for ButtonColor {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for ButtonColor {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for ButtonColor {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<ButtonColor> for glib::Value {
+    #[inline]
+    fn from(v: ButtonColor) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeButtonSize")]
+pub enum ButtonSize {
+    #[doc(alias = "HE_BUTTON_SIZE_XSMALL")]
+    Xsmall,
+    #[doc(alias = "HE_BUTTON_SIZE_SMALL")]
+    Small,
+    #[doc(alias = "HE_BUTTON_SIZE_MEDIUM")]
+    Medium,
+    #[doc(alias = "HE_BUTTON_SIZE_LARGE")]
+    Large,
+    #[doc(alias = "HE_BUTTON_SIZE_XLARGE")]
+    Xlarge,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for ButtonSize {
+    type GlibType = ffi::HeButtonSize;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeButtonSize {
+        match self {
+            Self::Xsmall => ffi::HE_BUTTON_SIZE_XSMALL,
+            Self::Small => ffi::HE_BUTTON_SIZE_SMALL,
+            Self::Medium => ffi::HE_BUTTON_SIZE_MEDIUM,
+            Self::Large => ffi::HE_BUTTON_SIZE_LARGE,
+            Self::Xlarge => ffi::HE_BUTTON_SIZE_XLARGE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeButtonSize> for ButtonSize {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeButtonSize) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_BUTTON_SIZE_XSMALL => Self::Xsmall,
+            ffi::HE_BUTTON_SIZE_SMALL => Self::Small,
+            ffi::HE_BUTTON_SIZE_MEDIUM => Self::Medium,
+            ffi::HE_BUTTON_SIZE_LARGE => Self::Large,
+            ffi::HE_BUTTON_SIZE_XLARGE => Self::Xlarge,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for ButtonSize {
+    #[inline]
+    #[doc(alias = "he_button_size_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_button_size_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ButtonSize {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for ButtonSize {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for ButtonSize {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for ButtonSize {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<ButtonSize> for glib::Value {
+    #[inline]
+    fn from(v: ButtonSize) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeButtonWidth")]
+pub enum ButtonWidth {
+    #[doc(alias = "HE_BUTTON_WIDTH_DEFAULT")]
+    Default,
+    #[doc(alias = "HE_BUTTON_WIDTH_NARROW")]
+    Narrow,
+    #[doc(alias = "HE_BUTTON_WIDTH_WIDE")]
+    Wide,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for ButtonWidth {
+    type GlibType = ffi::HeButtonWidth;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeButtonWidth {
+        match self {
+            Self::Default => ffi::HE_BUTTON_WIDTH_DEFAULT,
+            Self::Narrow => ffi::HE_BUTTON_WIDTH_NARROW,
+            Self::Wide => ffi::HE_BUTTON_WIDTH_WIDE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeButtonWidth> for ButtonWidth {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeButtonWidth) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_BUTTON_WIDTH_DEFAULT => Self::Default,
+            ffi::HE_BUTTON_WIDTH_NARROW => Self::Narrow,
+            ffi::HE_BUTTON_WIDTH_WIDE => Self::Wide,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for ButtonWidth {
+    #[inline]
+    #[doc(alias = "he_button_width_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_button_width_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ButtonWidth {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for ButtonWidth {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for ButtonWidth {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for ButtonWidth {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<ButtonWidth> for glib::Value {
+    #[inline]
+    fn from(v: ButtonWidth) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeCardLayout")]
+pub enum CardLayout {
+    #[doc(alias = "HE_CARD_LAYOUT_VERTICAL")]
+    Vertical,
+    #[doc(alias = "HE_CARD_LAYOUT_HORIZONTAL")]
+    Horizontal,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for CardLayout {
+    type GlibType = ffi::HeCardLayout;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeCardLayout {
+        match self {
+            Self::Vertical => ffi::HE_CARD_LAYOUT_VERTICAL,
+            Self::Horizontal => ffi::HE_CARD_LAYOUT_HORIZONTAL,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeCardLayout> for CardLayout {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeCardLayout) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_CARD_LAYOUT_VERTICAL => Self::Vertical,
+            ffi::HE_CARD_LAYOUT_HORIZONTAL => Self::Horizontal,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for CardLayout {
+    #[inline]
+    #[doc(alias = "he_card_layout_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_card_layout_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for CardLayout {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for CardLayout {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for CardLayout {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for CardLayout {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<CardLayout> for glib::Value {
+    #[inline]
+    fn from(v: CardLayout) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeCardType")]
+pub enum CardType {
+    #[doc(alias = "HE_CARD_TYPE_DEFAULT")]
+    Default,
+    #[doc(alias = "HE_CARD_TYPE_OUTLINE")]
+    Outline,
+    #[doc(alias = "HE_CARD_TYPE_FILLED")]
+    Filled,
+    #[doc(alias = "HE_CARD_TYPE_ELEVATED")]
+    Elevated,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for CardType {
+    type GlibType = ffi::HeCardType;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeCardType {
+        match self {
+            Self::Default => ffi::HE_CARD_TYPE_DEFAULT,
+            Self::Outline => ffi::HE_CARD_TYPE_OUTLINE,
+            Self::Filled => ffi::HE_CARD_TYPE_FILLED,
+            Self::Elevated => ffi::HE_CARD_TYPE_ELEVATED,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeCardType> for CardType {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeCardType) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_CARD_TYPE_DEFAULT => Self::Default,
+            ffi::HE_CARD_TYPE_OUTLINE => Self::Outline,
+            ffi::HE_CARD_TYPE_FILLED => Self::Filled,
+            ffi::HE_CARD_TYPE_ELEVATED => Self::Elevated,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for CardType {
+    #[inline]
+    #[doc(alias = "he_card_type_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_card_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for CardType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for CardType {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for CardType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for CardType {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<CardType> for glib::Value {
+    #[inline]
+    fn from(v: CardType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeChipGroupMode")]
+pub enum ChipGroupMode {
+    #[doc(alias = "HE_CHIP_GROUP_MODE_SELECTION")]
+    Selection,
+    #[doc(alias = "HE_CHIP_GROUP_MODE_FILTERING")]
+    Filtering,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for ChipGroupMode {
+    type GlibType = ffi::HeChipGroupMode;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeChipGroupMode {
+        match self {
+            Self::Selection => ffi::HE_CHIP_GROUP_MODE_SELECTION,
+            Self::Filtering => ffi::HE_CHIP_GROUP_MODE_FILTERING,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeChipGroupMode> for ChipGroupMode {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeChipGroupMode) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_CHIP_GROUP_MODE_SELECTION => Self::Selection,
+            ffi::HE_CHIP_GROUP_MODE_FILTERING => Self::Filtering,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for ChipGroupMode {
+    #[inline]
+    #[doc(alias = "he_chip_group_mode_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_chip_group_mode_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ChipGroupMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for ChipGroupMode {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for ChipGroupMode {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for ChipGroupMode {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<ChipGroupMode> for glib::Value {
+    #[inline]
+    fn from(v: ChipGroupMode) -> Self {
         skip_assert_initialized!();
         ToValue::to_value(&v)
     }
@@ -861,6 +1761,110 @@ impl ToValue for Easing {
 impl From<Easing> for glib::Value {
     #[inline]
     fn from(v: Easing) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "HeGroupedButtonSize")]
+pub enum GroupedButtonSize {
+    #[doc(alias = "HE_GROUPED_BUTTON_SIZE_SMALL")]
+    Small,
+    #[doc(alias = "HE_GROUPED_BUTTON_SIZE_MEDIUM")]
+    Medium,
+    #[doc(alias = "HE_GROUPED_BUTTON_SIZE_LARGE")]
+    Large,
+    #[doc(alias = "HE_GROUPED_BUTTON_SIZE_XLARGE")]
+    Xlarge,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for GroupedButtonSize {
+    type GlibType = ffi::HeGroupedButtonSize;
+
+    #[inline]
+    fn into_glib(self) -> ffi::HeGroupedButtonSize {
+        match self {
+            Self::Small => ffi::HE_GROUPED_BUTTON_SIZE_SMALL,
+            Self::Medium => ffi::HE_GROUPED_BUTTON_SIZE_MEDIUM,
+            Self::Large => ffi::HE_GROUPED_BUTTON_SIZE_LARGE,
+            Self::Xlarge => ffi::HE_GROUPED_BUTTON_SIZE_XLARGE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::HeGroupedButtonSize> for GroupedButtonSize {
+    #[inline]
+    unsafe fn from_glib(value: ffi::HeGroupedButtonSize) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::HE_GROUPED_BUTTON_SIZE_SMALL => Self::Small,
+            ffi::HE_GROUPED_BUTTON_SIZE_MEDIUM => Self::Medium,
+            ffi::HE_GROUPED_BUTTON_SIZE_LARGE => Self::Large,
+            ffi::HE_GROUPED_BUTTON_SIZE_XLARGE => Self::Xlarge,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for GroupedButtonSize {
+    #[inline]
+    #[doc(alias = "he_grouped_button_size_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::he_grouped_button_size_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GroupedButtonSize {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for GroupedButtonSize {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for GroupedButtonSize {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for GroupedButtonSize {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<GroupedButtonSize> for glib::Value {
+    #[inline]
+    fn from(v: GroupedButtonSize) -> Self {
         skip_assert_initialized!();
         ToValue::to_value(&v)
     }

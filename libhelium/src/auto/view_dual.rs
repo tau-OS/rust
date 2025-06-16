@@ -167,6 +167,14 @@ impl ViewDualBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -271,16 +279,12 @@ impl ViewDualBuilder {
     /// Build the [`ViewDual`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ViewDual {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ViewDual>> Sealed for T {}
-}
-
-pub trait ViewDualExt: IsA<ViewDual> + sealed::Sealed + 'static {
+pub trait ViewDualExt: IsA<ViewDual> + 'static {
     #[doc(alias = "he_view_dual_get_orientation")]
     #[doc(alias = "get_orientation")]
     fn orientation(&self) -> gtk::Orientation {
@@ -372,7 +376,7 @@ pub trait ViewDualExt: IsA<ViewDual> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::orientation\0".as_ptr() as *const _,
+                c"notify::orientation".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_orientation_trampoline::<Self, F> as *const (),
                 )),
@@ -398,7 +402,7 @@ pub trait ViewDualExt: IsA<ViewDual> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::show-handle\0".as_ptr() as *const _,
+                c"notify::show-handle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_handle_trampoline::<Self, F> as *const (),
                 )),
@@ -424,7 +428,7 @@ pub trait ViewDualExt: IsA<ViewDual> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::child-start\0".as_ptr() as *const _,
+                c"notify::child-start".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_start_trampoline::<Self, F> as *const (),
                 )),
@@ -447,7 +451,7 @@ pub trait ViewDualExt: IsA<ViewDual> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::child-end\0".as_ptr() as *const _,
+                c"notify::child-end".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_end_trampoline::<Self, F> as *const (),
                 )),

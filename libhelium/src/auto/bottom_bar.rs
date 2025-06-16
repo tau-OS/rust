@@ -3,7 +3,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, Bin, BottomBarPosition, Button};
+use crate::{
+    ffi, Bin, BottomBarFloatingPosition, BottomBarMode, BottomBarPosition, BottomBarStyle, Button,
+    OverlayButton,
+};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,6 +26,12 @@ glib::wrapper! {
 impl BottomBar {
     pub const NONE: Option<&'static BottomBar> = None;
 
+    #[doc(alias = "he_bottom_bar_new")]
+    pub fn new() -> BottomBar {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::he_bottom_bar_new()) }
+    }
+
     #[doc(alias = "he_bottom_bar_new_with_details")]
     pub fn with_details(title: &str, description: &str) -> BottomBar {
         assert_initialized_main_thread!();
@@ -34,10 +43,14 @@ impl BottomBar {
         }
     }
 
-    #[doc(alias = "he_bottom_bar_new")]
-    pub fn new() -> BottomBar {
+    #[doc(alias = "he_bottom_bar_new_floating")]
+    pub fn floating(overlay_widget: &impl IsA<gtk::Widget>) -> BottomBar {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::he_bottom_bar_new()) }
+        unsafe {
+            from_glib_none(ffi::he_bottom_bar_new_floating(
+                overlay_widget.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     // rustdoc-stripper-ignore-next
@@ -77,23 +90,45 @@ impl BottomBarBuilder {
         }
     }
 
+    pub fn overlay_button(self, overlay_button: &impl IsA<OverlayButton>) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("overlay-button", overlay_button.clone().upcast()),
+        }
+    }
+
     pub fn description(self, description: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("description", description.into()),
         }
     }
 
-    pub fn menu_model(self, menu_model: &impl IsA<gio::MenuModel>) -> Self {
+    pub fn mode(self, mode: BottomBarMode) -> Self {
         Self {
-            builder: self
-                .builder
-                .property("menu-model", menu_model.clone().upcast()),
+            builder: self.builder.property("mode", mode),
         }
     }
 
-    pub fn collapse_actions(self, collapse_actions: bool) -> Self {
+    pub fn style(self, style: BottomBarStyle) -> Self {
         Self {
-            builder: self.builder.property("collapse-actions", collapse_actions),
+            builder: self.builder.property("style", style),
+        }
+    }
+
+    pub fn floating_position(self, floating_position: BottomBarFloatingPosition) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("floating-position", floating_position),
+        }
+    }
+
+    pub fn overlay_widget(self, overlay_widget: &impl IsA<gtk::Widget>) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("overlay-widget", overlay_widget.clone().upcast()),
         }
     }
 
@@ -176,6 +211,14 @@ impl BottomBarBuilder {
     //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
+
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -281,45 +324,40 @@ impl BottomBarBuilder {
     /// Build the [`BottomBar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> BottomBar {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BottomBar>> Sealed for T {}
-}
-
-pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
+pub trait BottomBarExt: IsA<BottomBar> + 'static {
     #[doc(alias = "he_bottom_bar_append_button")]
-    fn append_button(&self, icon: &impl IsA<Button>, position: BottomBarPosition) {
+    fn append_button(&self, button: &impl IsA<Button>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_append_button(
                 self.as_ref().to_glib_none().0,
-                icon.as_ref().to_glib_none().0,
+                button.as_ref().to_glib_none().0,
                 position.into_glib(),
             );
         }
     }
 
     #[doc(alias = "he_bottom_bar_prepend_button")]
-    fn prepend_button(&self, icon: &impl IsA<Button>, position: BottomBarPosition) {
+    fn prepend_button(&self, button: &impl IsA<Button>, position: BottomBarPosition) {
         unsafe {
             ffi::he_bottom_bar_prepend_button(
                 self.as_ref().to_glib_none().0,
-                icon.as_ref().to_glib_none().0,
+                button.as_ref().to_glib_none().0,
                 position.into_glib(),
             );
         }
     }
 
     #[doc(alias = "he_bottom_bar_remove_button")]
-    fn remove_button(&self, icon: &impl IsA<Button>, position: BottomBarPosition) {
+    fn remove_button(&self, button: &impl IsA<Button>) {
         unsafe {
             ffi::he_bottom_bar_remove_button(
                 self.as_ref().to_glib_none().0,
-                icon.as_ref().to_glib_none().0,
-                position.into_glib(),
+                button.as_ref().to_glib_none().0,
             );
         }
     }
@@ -327,34 +365,35 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
     #[doc(alias = "he_bottom_bar_insert_button_after")]
     fn insert_button_after(
         &self,
-        icon: &impl IsA<Button>,
+        button: &impl IsA<Button>,
         after: &impl IsA<Button>,
         position: BottomBarPosition,
     ) {
         unsafe {
             ffi::he_bottom_bar_insert_button_after(
                 self.as_ref().to_glib_none().0,
-                icon.as_ref().to_glib_none().0,
+                button.as_ref().to_glib_none().0,
                 after.as_ref().to_glib_none().0,
                 position.into_glib(),
             );
         }
     }
 
-    #[doc(alias = "he_bottom_bar_reorder_button_after")]
-    fn reorder_button_after(
-        &self,
-        icon: &impl IsA<Button>,
-        sibling: &impl IsA<Button>,
-        position: BottomBarPosition,
-    ) {
+    #[doc(alias = "he_bottom_bar_clear_buttons")]
+    fn clear_buttons(&self) {
         unsafe {
-            ffi::he_bottom_bar_reorder_button_after(
+            ffi::he_bottom_bar_clear_buttons(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_bottom_bar_get_button_count")]
+    #[doc(alias = "get_button_count")]
+    fn button_count(&self, position: BottomBarPosition) -> i32 {
+        unsafe {
+            ffi::he_bottom_bar_get_button_count(
                 self.as_ref().to_glib_none().0,
-                icon.as_ref().to_glib_none().0,
-                sibling.as_ref().to_glib_none().0,
                 position.into_glib(),
-            );
+            )
         }
     }
 
@@ -368,6 +407,26 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
     fn set_title(&self, value: &str) {
         unsafe {
             ffi::he_bottom_bar_set_title(self.as_ref().to_glib_none().0, value.to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "he_bottom_bar_get_overlay_button")]
+    #[doc(alias = "get_overlay_button")]
+    fn overlay_button(&self) -> Option<OverlayButton> {
+        unsafe {
+            from_glib_none(ffi::he_bottom_bar_get_overlay_button(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_bottom_bar_set_overlay_button")]
+    fn set_overlay_button(&self, value: Option<&impl IsA<OverlayButton>>) {
+        unsafe {
+            ffi::he_bottom_bar_set_overlay_button(
+                self.as_ref().to_glib_none().0,
+                value.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
@@ -391,42 +450,68 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "he_bottom_bar_get_menu_model")]
-    #[doc(alias = "get_menu_model")]
-    fn menu_model(&self) -> gio::MenuModel {
+    #[doc(alias = "he_bottom_bar_get_mode")]
+    #[doc(alias = "get_mode")]
+    fn mode(&self) -> BottomBarMode {
+        unsafe { from_glib(ffi::he_bottom_bar_get_mode(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_bottom_bar_set_mode")]
+    fn set_mode(&self, value: BottomBarMode) {
         unsafe {
-            from_glib_none(ffi::he_bottom_bar_get_menu_model(
+            ffi::he_bottom_bar_set_mode(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_bottom_bar_get_style")]
+    #[doc(alias = "get_style")]
+    fn style(&self) -> BottomBarStyle {
+        unsafe { from_glib(ffi::he_bottom_bar_get_style(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_bottom_bar_set_style")]
+    fn set_style(&self, value: BottomBarStyle) {
+        unsafe {
+            ffi::he_bottom_bar_set_style(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_bottom_bar_get_floating_position")]
+    #[doc(alias = "get_floating_position")]
+    fn floating_position(&self) -> BottomBarFloatingPosition {
+        unsafe {
+            from_glib(ffi::he_bottom_bar_get_floating_position(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    #[doc(alias = "he_bottom_bar_set_menu_model")]
-    fn set_menu_model(&self, value: &impl IsA<gio::MenuModel>) {
+    #[doc(alias = "he_bottom_bar_set_floating_position")]
+    fn set_floating_position(&self, value: BottomBarFloatingPosition) {
         unsafe {
-            ffi::he_bottom_bar_set_menu_model(
+            ffi::he_bottom_bar_set_floating_position(
                 self.as_ref().to_glib_none().0,
-                value.as_ref().to_glib_none().0,
+                value.into_glib(),
             );
         }
     }
 
-    #[doc(alias = "he_bottom_bar_get_collapse_actions")]
-    #[doc(alias = "get_collapse_actions")]
-    fn is_collapse_actions(&self) -> bool {
+    #[doc(alias = "he_bottom_bar_get_overlay_widget")]
+    #[doc(alias = "get_overlay_widget")]
+    fn overlay_widget(&self) -> Option<gtk::Widget> {
         unsafe {
-            from_glib(ffi::he_bottom_bar_get_collapse_actions(
+            from_glib_none(ffi::he_bottom_bar_get_overlay_widget(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    #[doc(alias = "he_bottom_bar_set_collapse_actions")]
-    fn set_collapse_actions(&self, value: bool) {
+    #[doc(alias = "he_bottom_bar_set_overlay_widget")]
+    fn set_overlay_widget(&self, value: Option<&impl IsA<gtk::Widget>>) {
         unsafe {
-            ffi::he_bottom_bar_set_collapse_actions(
+            ffi::he_bottom_bar_set_overlay_widget(
                 self.as_ref().to_glib_none().0,
-                value.into_glib(),
+                value.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }
@@ -445,9 +530,35 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
+                c"notify::title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "overlay-button")]
+    fn connect_overlay_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_overlay_button_trampoline<
+            P: IsA<BottomBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeBottomBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(BottomBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::overlay-button".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_overlay_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -471,7 +582,7 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::description\0".as_ptr() as *const _,
+                c"notify::description".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_description_trampoline::<Self, F> as *const (),
                 )),
@@ -480,12 +591,9 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "menu-model")]
-    fn connect_menu_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_menu_model_trampoline<
-            P: IsA<BottomBar>,
-            F: Fn(&P) + 'static,
-        >(
+    #[doc(alias = "mode")]
+    fn connect_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mode_trampoline<P: IsA<BottomBar>, F: Fn(&P) + 'static>(
             this: *mut ffi::HeBottomBar,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
@@ -497,18 +605,41 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::menu-model\0".as_ptr() as *const _,
+                c"notify::mode".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_menu_model_trampoline::<Self, F> as *const (),
+                    notify_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
 
-    #[doc(alias = "collapse-actions")]
-    fn connect_collapse_actions_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_collapse_actions_trampoline<
+    #[doc(alias = "style")]
+    fn connect_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_style_trampoline<P: IsA<BottomBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeBottomBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(BottomBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::style".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_style_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "floating-position")]
+    fn connect_floating_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_floating_position_trampoline<
             P: IsA<BottomBar>,
             F: Fn(&P) + 'static,
         >(
@@ -523,9 +654,35 @@ pub trait BottomBarExt: IsA<BottomBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::collapse-actions\0".as_ptr() as *const _,
+                c"notify::floating-position".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    notify_collapse_actions_trampoline::<Self, F> as *const (),
+                    notify_floating_position_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "overlay-widget")]
+    fn connect_overlay_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_overlay_widget_trampoline<
+            P: IsA<BottomBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeBottomBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(BottomBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::overlay-widget".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_overlay_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

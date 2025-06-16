@@ -24,12 +24,7 @@ impl Fuse {
     pub const NONE: Option<&'static Fuse> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Fuse>> Sealed for T {}
-}
-
-pub trait FuseExt: IsA<Fuse> + sealed::Sealed + 'static {
+pub trait FuseExt: IsA<Fuse> + 'static {
     #[doc(alias = "fusebox_fuse_get_widget")]
     #[doc(alias = "get_widget")]
     fn widget(&self) -> gtk::Widget {
@@ -154,7 +149,7 @@ pub trait FuseExt: IsA<Fuse> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::can-show\0".as_ptr() as *const _,
+                c"notify::can-show".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_show_trampoline::<Self, F> as *const (),
                 )),

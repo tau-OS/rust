@@ -100,16 +100,12 @@ impl TipBuilder {
     /// Build the [`Tip`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Tip {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Tip>> Sealed for T {}
-}
-
-pub trait TipExt: IsA<Tip> + sealed::Sealed + 'static {
+pub trait TipExt: IsA<Tip> + 'static {
     #[doc(alias = "he_tip_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> glib::GString {
@@ -176,7 +172,7 @@ pub trait TipExt: IsA<Tip> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::title\0".as_ptr() as *const _,
+                c"notify::title".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
@@ -199,7 +195,7 @@ pub trait TipExt: IsA<Tip> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::image\0".as_ptr() as *const _,
+                c"notify::image".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_image_trampoline::<Self, F> as *const (),
                 )),
@@ -222,7 +218,7 @@ pub trait TipExt: IsA<Tip> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::message\0".as_ptr() as *const _,
+                c"notify::message".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_message_trampoline::<Self, F> as *const (),
                 )),
@@ -245,7 +241,7 @@ pub trait TipExt: IsA<Tip> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::action-label\0".as_ptr() as *const _,
+                c"notify::action-label".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_action_label_trampoline::<Self, F> as *const (),
                 )),

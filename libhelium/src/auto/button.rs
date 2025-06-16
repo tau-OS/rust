@@ -3,8 +3,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files.git)
 // DO NOT EDIT
 
-use crate::{ffi, Colors};
+use crate::{ffi, ButtonColor, ButtonSize, ButtonWidth, Colors};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -65,9 +66,39 @@ impl ButtonBuilder {
         }
     }
 
-    pub fn color(self, color: Colors) -> Self {
+    pub fn custom_color(self, custom_color: Colors) -> Self {
+        Self {
+            builder: self.builder.property("custom-color", custom_color),
+        }
+    }
+
+    pub fn color(self, color: ButtonColor) -> Self {
         Self {
             builder: self.builder.property("color", color),
+        }
+    }
+
+    pub fn size(self, size: ButtonSize) -> Self {
+        Self {
+            builder: self.builder.property("size", size),
+        }
+    }
+
+    pub fn width(self, width: ButtonWidth) -> Self {
+        Self {
+            builder: self.builder.property("width", width),
+        }
+    }
+
+    pub fn toggle_mode(self, toggle_mode: bool) -> Self {
+        Self {
+            builder: self.builder.property("toggle-mode", toggle_mode),
+        }
+    }
+
+    pub fn active(self, active: bool) -> Self {
+        Self {
+            builder: self.builder.property("active", active),
         }
     }
 
@@ -237,6 +268,14 @@ impl ButtonBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -355,26 +394,95 @@ impl ButtonBuilder {
     /// Build the [`Button`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Button {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Button>> Sealed for T {}
-}
+pub trait HeButtonExt: IsA<Button> + 'static {
+    #[doc(alias = "he_button_get_custom_color")]
+    #[doc(alias = "get_custom_color")]
+    fn custom_color(&self) -> Colors {
+        unsafe {
+            from_glib(ffi::he_button_get_custom_color(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
-pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
+    #[doc(alias = "he_button_set_custom_color")]
+    fn set_custom_color(&self, value: Colors) {
+        unsafe {
+            ffi::he_button_set_custom_color(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
     #[doc(alias = "he_button_get_color")]
     #[doc(alias = "get_color")]
-    fn color(&self) -> Colors {
+    fn color(&self) -> ButtonColor {
         unsafe { from_glib(ffi::he_button_get_color(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "he_button_set_color")]
-    fn set_color(&self, value: Colors) {
+    fn set_color(&self, value: ButtonColor) {
         unsafe {
             ffi::he_button_set_color(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_button_get_size")]
+    #[doc(alias = "get_size")]
+    fn size(&self) -> ButtonSize {
+        unsafe { from_glib(ffi::he_button_get_size(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_button_set_size")]
+    fn set_size(&self, value: ButtonSize) {
+        unsafe {
+            ffi::he_button_set_size(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_button_get_width")]
+    #[doc(alias = "get_width")]
+    fn width(&self) -> ButtonWidth {
+        unsafe { from_glib(ffi::he_button_get_width(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_button_set_width")]
+    fn set_width(&self, value: ButtonWidth) {
+        unsafe {
+            ffi::he_button_set_width(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_button_get_toggle_mode")]
+    #[doc(alias = "get_toggle_mode")]
+    fn is_toggle_mode(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_button_get_toggle_mode(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_button_set_toggle_mode")]
+    fn set_toggle_mode(&self, value: bool) {
+        unsafe {
+            ffi::he_button_set_toggle_mode(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_button_get_active")]
+    #[doc(alias = "get_active")]
+    fn is_active(&self) -> bool {
+        unsafe { from_glib(ffi::he_button_get_active(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[doc(alias = "he_button_set_active")]
+    fn set_active(&self, value: bool) {
+        unsafe {
+            ffi::he_button_set_active(self.as_ref().to_glib_none().0, value.into_glib());
         }
     }
 
@@ -507,6 +615,55 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "toggled")]
+    fn connect_toggled<F: Fn(&Self, bool) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn toggled_trampoline<P: IsA<Button>, F: Fn(&P, bool) + 'static>(
+            this: *mut ffi::HeButton,
+            active: glib::ffi::gboolean,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                Button::from_glib_borrow(this).unsafe_cast_ref(),
+                from_glib(active),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"toggled".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    toggled_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "custom-color")]
+    fn connect_custom_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_custom_color_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Button::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::custom-color".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_custom_color_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "color")]
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_color_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
@@ -521,9 +678,101 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::color\0".as_ptr() as *const _,
+                c"notify::color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "size")]
+    fn connect_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_size_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Button::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::size".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_size_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "width")]
+    fn connect_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_width_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Button::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::width".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_width_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "toggle-mode")]
+    fn connect_toggle_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_toggle_mode_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Button::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::toggle-mode".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_toggle_mode_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "active")]
+    fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_active_trampoline<P: IsA<Button>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeButton,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(Button::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::active".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_active_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -547,7 +796,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-disclosure\0".as_ptr() as *const _,
+                c"notify::is-disclosure".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_disclosure_trampoline::<Self, F> as *const (),
                 )),
@@ -570,7 +819,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-iconic\0".as_ptr() as *const _,
+                c"notify::is-iconic".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_iconic_trampoline::<Self, F> as *const (),
                 )),
@@ -593,7 +842,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-outline\0".as_ptr() as *const _,
+                c"notify::is-outline".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_outline_trampoline::<Self, F> as *const (),
                 )),
@@ -616,7 +865,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-tint\0".as_ptr() as *const _,
+                c"notify::is-tint".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_tint_trampoline::<Self, F> as *const (),
                 )),
@@ -639,7 +888,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-fill\0".as_ptr() as *const _,
+                c"notify::is-fill".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_fill_trampoline::<Self, F> as *const (),
                 )),
@@ -662,7 +911,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-pill\0".as_ptr() as *const _,
+                c"notify::is-pill".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_pill_trampoline::<Self, F> as *const (),
                 )),
@@ -685,7 +934,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-textual\0".as_ptr() as *const _,
+                c"notify::is-textual".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_textual_trampoline::<Self, F> as *const (),
                 )),
@@ -708,7 +957,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::icon\0".as_ptr() as *const _,
+                c"notify::icon".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_trampoline::<Self, F> as *const (),
                 )),
@@ -731,7 +980,7 @@ pub trait HeButtonExt: IsA<Button> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::text\0".as_ptr() as *const _,
+                c"notify::text".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
                 )),

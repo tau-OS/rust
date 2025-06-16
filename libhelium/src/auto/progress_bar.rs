@@ -60,6 +60,36 @@ impl ProgressBarBuilder {
         }
     }
 
+    pub fn wave_amplitude(self, wave_amplitude: i32) -> Self {
+        Self {
+            builder: self.builder.property("wave-amplitude", wave_amplitude),
+        }
+    }
+
+    pub fn wave_wavelength(self, wave_wavelength: i32) -> Self {
+        Self {
+            builder: self.builder.property("wave-wavelength", wave_wavelength),
+        }
+    }
+
+    pub fn wave_thickness(self, wave_thickness: i32) -> Self {
+        Self {
+            builder: self.builder.property("wave-thickness", wave_thickness),
+        }
+    }
+
+    pub fn animate(self, animate: bool) -> Self {
+        Self {
+            builder: self.builder.property("animate", animate),
+        }
+    }
+
+    pub fn progress(self, progress: f64) -> Self {
+        Self {
+            builder: self.builder.property("progress", progress),
+        }
+    }
+
     pub fn stop_indicator_visibility(self, stop_indicator_visibility: bool) -> Self {
         Self {
             builder: self
@@ -71,6 +101,12 @@ impl ProgressBarBuilder {
     pub fn is_osd(self, is_osd: bool) -> Self {
         Self {
             builder: self.builder.property("is-osd", is_osd),
+        }
+    }
+
+    pub fn is_wavy(self, is_wavy: bool) -> Self {
+        Self {
+            builder: self.builder.property("is-wavy", is_wavy),
         }
     }
 
@@ -153,6 +189,14 @@ impl ProgressBarBuilder {
     //pub fn layout_manager(self, layout_manager: &impl IsA</*Ignored*/gtk::LayoutManager>) -> Self {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
+
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
 
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
@@ -258,16 +302,81 @@ impl ProgressBarBuilder {
     /// Build the [`ProgressBar`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> ProgressBar {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ProgressBar>> Sealed for T {}
-}
+pub trait ProgressBarExt: IsA<ProgressBar> + 'static {
+    #[doc(alias = "he_progress_bar_get_wave_amplitude")]
+    #[doc(alias = "get_wave_amplitude")]
+    fn wave_amplitude(&self) -> i32 {
+        unsafe { ffi::he_progress_bar_get_wave_amplitude(self.as_ref().to_glib_none().0) }
+    }
 
-pub trait ProgressBarExt: IsA<ProgressBar> + sealed::Sealed + 'static {
+    #[doc(alias = "he_progress_bar_set_wave_amplitude")]
+    fn set_wave_amplitude(&self, value: i32) {
+        unsafe {
+            ffi::he_progress_bar_set_wave_amplitude(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
+    #[doc(alias = "he_progress_bar_get_wave_wavelength")]
+    #[doc(alias = "get_wave_wavelength")]
+    fn wave_wavelength(&self) -> i32 {
+        unsafe { ffi::he_progress_bar_get_wave_wavelength(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_progress_bar_set_wave_wavelength")]
+    fn set_wave_wavelength(&self, value: i32) {
+        unsafe {
+            ffi::he_progress_bar_set_wave_wavelength(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
+    #[doc(alias = "he_progress_bar_get_wave_thickness")]
+    #[doc(alias = "get_wave_thickness")]
+    fn wave_thickness(&self) -> i32 {
+        unsafe { ffi::he_progress_bar_get_wave_thickness(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_progress_bar_set_wave_thickness")]
+    fn set_wave_thickness(&self, value: i32) {
+        unsafe {
+            ffi::he_progress_bar_set_wave_thickness(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
+    #[doc(alias = "he_progress_bar_get_animate")]
+    #[doc(alias = "get_animate")]
+    fn is_animate(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_progress_bar_get_animate(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_progress_bar_set_animate")]
+    fn set_animate(&self, value: bool) {
+        unsafe {
+            ffi::he_progress_bar_set_animate(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "he_progress_bar_get_progress")]
+    #[doc(alias = "get_progress")]
+    fn progress(&self) -> f64 {
+        unsafe { ffi::he_progress_bar_get_progress(self.as_ref().to_glib_none().0) }
+    }
+
+    #[doc(alias = "he_progress_bar_set_progress")]
+    fn set_progress(&self, value: f64) {
+        unsafe {
+            ffi::he_progress_bar_set_progress(self.as_ref().to_glib_none().0, value);
+        }
+    }
+
     #[doc(alias = "he_progress_bar_get_stop_indicator_visibility")]
     #[doc(alias = "get_stop_indicator_visibility")]
     fn is_stop_indicator_visibility(&self) -> bool {
@@ -305,6 +414,150 @@ pub trait ProgressBarExt: IsA<ProgressBar> + sealed::Sealed + 'static {
         }
     }
 
+    #[doc(alias = "he_progress_bar_get_is_wavy")]
+    #[doc(alias = "get_is_wavy")]
+    fn is_wavy(&self) -> bool {
+        unsafe {
+            from_glib(ffi::he_progress_bar_get_is_wavy(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "he_progress_bar_set_is_wavy")]
+    fn set_is_wavy(&self, value: bool) {
+        unsafe {
+            ffi::he_progress_bar_set_is_wavy(self.as_ref().to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[doc(alias = "wave-amplitude")]
+    fn connect_wave_amplitude_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wave_amplitude_trampoline<
+            P: IsA<ProgressBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeProgressBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::wave-amplitude".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_wave_amplitude_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "wave-wavelength")]
+    fn connect_wave_wavelength_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wave_wavelength_trampoline<
+            P: IsA<ProgressBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeProgressBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::wave-wavelength".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_wave_wavelength_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "wave-thickness")]
+    fn connect_wave_thickness_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wave_thickness_trampoline<
+            P: IsA<ProgressBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeProgressBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::wave-thickness".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_wave_thickness_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "animate")]
+    fn connect_animate_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_animate_trampoline<P: IsA<ProgressBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeProgressBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::animate".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_animate_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "progress")]
+    fn connect_progress_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_progress_trampoline<
+            P: IsA<ProgressBar>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HeProgressBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::progress".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_progress_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "stop-indicator-visibility")]
     fn connect_stop_indicator_visibility_notify<F: Fn(&Self) + 'static>(
         &self,
@@ -325,7 +578,7 @@ pub trait ProgressBarExt: IsA<ProgressBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stop-indicator-visibility\0".as_ptr() as *const _,
+                c"notify::stop-indicator-visibility".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stop_indicator_visibility_trampoline::<Self, F> as *const (),
                 )),
@@ -348,9 +601,32 @@ pub trait ProgressBarExt: IsA<ProgressBar> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-osd\0".as_ptr() as *const _,
+                c"notify::is-osd".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_osd_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "is-wavy")]
+    fn connect_is_wavy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_wavy_trampoline<P: IsA<ProgressBar>, F: Fn(&P) + 'static>(
+            this: *mut ffi::HeProgressBar,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::is-wavy".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_is_wavy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

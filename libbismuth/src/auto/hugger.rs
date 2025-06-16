@@ -226,7 +226,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-none\0".as_ptr() as *const _,
+                c"notify::allow-none".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_none_trampoline::<F> as *const (),
                 )),
@@ -249,7 +249,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::homogeneous\0".as_ptr() as *const _,
+                c"notify::homogeneous".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_homogeneous_trampoline::<F> as *const (),
                 )),
@@ -272,7 +272,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::interpolate-size\0".as_ptr() as *const _,
+                c"notify::interpolate-size".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_interpolate_size_trampoline::<F> as *const (),
                 )),
@@ -295,7 +295,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::pages\0".as_ptr() as *const _,
+                c"notify::pages".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pages_trampoline::<F> as *const (),
                 )),
@@ -321,7 +321,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::switch-threshold-policy\0".as_ptr() as *const _,
+                c"notify::switch-threshold-policy".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_switch_threshold_policy_trampoline::<F> as *const (),
                 )),
@@ -347,7 +347,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::transition-duration\0".as_ptr() as *const _,
+                c"notify::transition-duration".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transition_duration_trampoline::<F> as *const (),
                 )),
@@ -373,7 +373,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::transition-running\0".as_ptr() as *const _,
+                c"notify::transition-running".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transition_running_trampoline::<F> as *const (),
                 )),
@@ -396,7 +396,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::transition-type\0".as_ptr() as *const _,
+                c"notify::transition-type".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transition_type_trampoline::<F> as *const (),
                 )),
@@ -419,7 +419,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::visible-child\0".as_ptr() as *const _,
+                c"notify::visible-child".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_visible_child_trampoline::<F> as *const (),
                 )),
@@ -442,7 +442,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::xalign\0".as_ptr() as *const _,
+                c"notify::xalign".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_xalign_trampoline::<F> as *const (),
                 )),
@@ -465,7 +465,7 @@ impl Hugger {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::yalign\0".as_ptr() as *const _,
+                c"notify::yalign".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_yalign_trampoline::<F> as *const (),
                 )),
@@ -625,6 +625,14 @@ impl HuggerBuilder {
         }
     }
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -731,6 +739,7 @@ impl HuggerBuilder {
     /// Build the [`Hugger`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Hugger {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }

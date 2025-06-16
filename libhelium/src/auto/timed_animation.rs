@@ -144,16 +144,12 @@ impl TimedAnimationBuilder {
     /// Build the [`TimedAnimation`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> TimedAnimation {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TimedAnimation>> Sealed for T {}
-}
-
-pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
+pub trait TimedAnimationExt: IsA<TimedAnimation> + 'static {
     #[doc(alias = "he_timed_animation_get_value_from")]
     #[doc(alias = "get_value_from")]
     fn value_from(&self) -> f64 {
@@ -277,7 +273,7 @@ pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::value-from\0".as_ptr() as *const _,
+                c"notify::value-from".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_from_trampoline::<Self, F> as *const (),
                 )),
@@ -303,7 +299,7 @@ pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::value-to\0".as_ptr() as *const _,
+                c"notify::value-to".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_to_trampoline::<Self, F> as *const (),
                 )),
@@ -329,7 +325,7 @@ pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::duration\0".as_ptr() as *const _,
+                c"notify::duration".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
@@ -355,7 +351,7 @@ pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::easing\0".as_ptr() as *const _,
+                c"notify::easing".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_easing_trampoline::<Self, F> as *const (),
                 )),
@@ -381,7 +377,7 @@ pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::repeat-count\0".as_ptr() as *const _,
+                c"notify::repeat-count".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_repeat_count_trampoline::<Self, F> as *const (),
                 )),
@@ -407,7 +403,7 @@ pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::reverse\0".as_ptr() as *const _,
+                c"notify::reverse".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_reverse_trampoline::<Self, F> as *const (),
                 )),
@@ -433,7 +429,7 @@ pub trait TimedAnimationExt: IsA<TimedAnimation> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::alternate\0".as_ptr() as *const _,
+                c"notify::alternate".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alternate_trampoline::<Self, F> as *const (),
                 )),

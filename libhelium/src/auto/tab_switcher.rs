@@ -5,6 +5,7 @@
 
 use crate::{ffi, Bin, Tab, TabSwitcherTabBarBehavior};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -196,6 +197,14 @@ impl TabSwitcherBuilder {
     //    Self { builder: self.builder.property("layout-manager", layout_manager.clone().upcast()), }
     //}
 
+    #[cfg(feature = "gtk_v4_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "gtk_v4_18")))]
+    pub fn limit_events(self, limit_events: bool) -> Self {
+        Self {
+            builder: self.builder.property("limit-events", limit_events),
+        }
+    }
+
     pub fn margin_bottom(self, margin_bottom: i32) -> Self {
         Self {
             builder: self.builder.property("margin-bottom", margin_bottom),
@@ -300,16 +309,12 @@ impl TabSwitcherBuilder {
     /// Build the [`TabSwitcher`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> TabSwitcher {
+        assert_initialized_main_thread!();
         self.builder.build()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TabSwitcher>> Sealed for T {}
-}
-
-pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
+pub trait TabSwitcherExt: IsA<TabSwitcher> + 'static {
     #[doc(alias = "he_tab_switcher_get_tab_position")]
     #[doc(alias = "get_tab_position")]
     fn tab_position(&self, tab: &impl IsA<Tab>) -> i32 {
@@ -539,7 +544,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"tab-added\0".as_ptr() as *const _,
+                c"tab-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tab_added_trampoline::<Self, F> as *const (),
                 )),
@@ -568,7 +573,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"tab-removed\0".as_ptr() as *const _,
+                c"tab-removed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tab_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -602,7 +607,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"tab-switched\0".as_ptr() as *const _,
+                c"tab-switched".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tab_switched_trampoline::<Self, F> as *const (),
                 )),
@@ -631,7 +636,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"tab-moved\0".as_ptr() as *const _,
+                c"tab-moved".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tab_moved_trampoline::<Self, F> as *const (),
                 )),
@@ -660,7 +665,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"tab-duplicated\0".as_ptr() as *const _,
+                c"tab-duplicated".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tab_duplicated_trampoline::<Self, F> as *const (),
                 )),
@@ -685,7 +690,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"new-tab-requested\0".as_ptr() as *const _,
+                c"new-tab-requested".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     new_tab_requested_trampoline::<Self, F> as *const (),
                 )),
@@ -718,7 +723,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"close-tab-requested\0".as_ptr() as *const _,
+                c"close-tab-requested".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     close_tab_requested_trampoline::<Self, F> as *const (),
                 )),
@@ -741,7 +746,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::n-tabs\0".as_ptr() as *const _,
+                c"notify::n-tabs".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_n_tabs_trampoline::<Self, F> as *const (),
                 )),
@@ -764,7 +769,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::tabs\0".as_ptr() as *const _,
+                c"notify::tabs".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tabs_trampoline::<Self, F> as *const (),
                 )),
@@ -790,7 +795,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::tab-bar-behavior\0".as_ptr() as *const _,
+                c"notify::tab-bar-behavior".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tab_bar_behavior_trampoline::<Self, F> as *const (),
                 )),
@@ -816,7 +821,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-duplicate-tabs\0".as_ptr() as *const _,
+                c"notify::allow-duplicate-tabs".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_duplicate_tabs_trampoline::<Self, F> as *const (),
                 )),
@@ -842,7 +847,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-drag\0".as_ptr() as *const _,
+                c"notify::allow-drag".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_drag_trampoline::<Self, F> as *const (),
                 )),
@@ -868,7 +873,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-pinning\0".as_ptr() as *const _,
+                c"notify::allow-pinning".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_pinning_trampoline::<Self, F> as *const (),
                 )),
@@ -894,7 +899,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-closing\0".as_ptr() as *const _,
+                c"notify::allow-closing".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_closing_trampoline::<Self, F> as *const (),
                 )),
@@ -920,7 +925,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::allow-new-window\0".as_ptr() as *const _,
+                c"notify::allow-new-window".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_allow_new_window_trampoline::<Self, F> as *const (),
                 )),
@@ -943,7 +948,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::current\0".as_ptr() as *const _,
+                c"notify::current".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_trampoline::<Self, F> as *const (),
                 )),
@@ -966,7 +971,7 @@ pub trait TabSwitcherExt: IsA<TabSwitcher> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::menu\0".as_ptr() as *const _,
+                c"notify::menu".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_menu_trampoline::<Self, F> as *const (),
                 )),
