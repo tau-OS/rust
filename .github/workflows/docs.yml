@@ -19,7 +19,7 @@ jobs:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     container:
-      image: registry.fedoraproject.org/fedora-minimal:40
+      image: registry.fedoraproject.org/fedora-minimal:42
     steps:
       - name: Install required packages
         run: |
