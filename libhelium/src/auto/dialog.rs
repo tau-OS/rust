@@ -302,7 +302,7 @@ impl DialogBuilder {
     }
 }
 
-pub trait DialogExt: IsA<Dialog> + 'static {
+pub trait HeDialogExt: IsA<Dialog> + 'static {
     #[doc(alias = "he_dialog_add")]
     fn add(&self, widget: &impl IsA<gtk::Widget>) {
         unsafe {
@@ -563,4 +563,4 @@ pub trait DialogExt: IsA<Dialog> + 'static {
     }
 }
 
-impl<O: IsA<Dialog>> DialogExt for O {}
+impl<O: IsA<Dialog>> HeDialogExt for O {}

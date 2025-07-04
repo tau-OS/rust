@@ -46,7 +46,6 @@ generate = [
     "He.ContentBlockImageCluster",
     "He.ContentBlockImageClusterImagePosition",
     "He.ContentList",
-    "He.Dialog",
     "He.EmptyPage",
     "He.MiniContentBlock",
     "He.ModifierBadge",
@@ -200,3 +199,9 @@ manual = true
 name = "He.Button"
 status = "generate"
 trait_name = "HeButtonExt"
+
+# Disambiguate from gtk::DialogExt
+[[object]]
+name = "He.Dialog"
+status = "generate"
+trait_name = "HeDialogExt"
