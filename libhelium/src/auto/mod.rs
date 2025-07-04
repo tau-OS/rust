@@ -265,7 +265,7 @@ pub(crate) mod traits {
     pub use super::content_list::ContentListExt;
     pub use super::date_picker::DatePickerExt;
     pub use super::desktop::DesktopExt;
-    pub use super::dialog::DialogExt;
+    pub use super::dialog::HeDialogExt;
     pub use super::divider::DividerExt;
     pub use super::empty_page::EmptyPageExt;
     pub use super::grouped_button::GroupedButtonExt;
